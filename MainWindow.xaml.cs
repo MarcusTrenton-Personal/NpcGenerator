@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Microsoft.Win32;
+
 namespace NpcGenerator
 {
     /// <summary>
@@ -23,6 +25,17 @@ namespace NpcGenerator
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ChooseConfiguration(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "CSV (*.csv)|*.txt|All files (*.*)|*.*";
+            bool? filePicked = openFileDialog.ShowDialog();
+            if(filePicked == true)
+            {
+                configurationPath.Text = openFileDialog.FileName;
+            }
         }
     }
 }
