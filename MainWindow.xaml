@@ -9,11 +9,18 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="100,100,0,0">
-                <TextBlock x:Name="configurationLabel" Margin="10" Text="Configuration File" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                <Button x:Name="configurationButton" Margin="10" Click="ChooseConfiguration">
+                <TextBlock x:Name="configurationLabel" Margin="10" Text="Configuration File" VerticalAlignment="Center"/>
+                <Button x:Name="configurationButton" Margin="10" Click="ChooseConfiguration" VerticalAlignment="Center">
                     <TextBlock x:Name="configurationButtonText" Margin="1" Text="Choose"/>
                 </Button>
-                <TextBlock x:Name="configurationPath" Margin="10" Text="..." TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <TextBlock x:Name="configurationPath" Margin="10" Text="..." TextWrapping="Wrap" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
+                <TextBlock x:Name="npcQuantityLabel" Margin="10" Text="Quantity" VerticalAlignment="Center"/>
+                <TextBox x:Name="npcQuantity" Margin="10" Text="1" PreviewTextInput="NpcQuantityInput" DataObject.Pasting="NpcQuantityPasting" VerticalAlignment="Center"/>
+                <Button x:Name="generateButton" Margin="10" Click="GenerateNpcs" VerticalAlignment="Center">
+                    <TextBlock x:Name="generateButtonText" Margin="1" Text="Generate"/>
+                </Button>
             </StackPanel>
             
         </StackPanel>
