@@ -42,7 +42,7 @@ namespace NpcGenerator
             bool? filePicked = openFileDialog.ShowDialog();
             if(filePicked == true)
             {
-                configurationPath.Text = openFileDialog.FileName;
+                configurationPath.Content = openFileDialog.FileName;
             }
         }
 

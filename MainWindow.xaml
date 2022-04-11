@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NpcGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="NPC Generator" Height="450" Width="800">
+    <Grid Background="LightBlue">
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="100,100,0,0">
                 <TextBlock x:Name="configurationLabel" Margin="10" Text="Configuration File" VerticalAlignment="Center"/>
                 <Button x:Name="configurationButton" Margin="10" Click="ChooseConfiguration" VerticalAlignment="Center">
                     <TextBlock x:Name="configurationButtonText" Margin="1" Text="Choose"/>
                 </Button>
-                <TextBlock x:Name="configurationPath" Margin="10" Text="..." TextWrapping="Wrap" VerticalAlignment="Center"/>
+                <Label x:Name="configurationPath" Content="..." Background="White" VerticalAlignment="Center" BorderThickness="1" BorderBrush="Black" Margin="10"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
                 <TextBlock x:Name="npcQuantityLabel" Margin="10" Text="Quantity" VerticalAlignment="Center"/>
