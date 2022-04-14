@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NpcGenerator"
         mc:Ignorable="d"
-        Title="NPC Generator" Height="450" Width="800">
+        Title="NPC Generator" Height="1000" Width="1600">
     <Grid Background="LightBlue">
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="100,100,0,0">
