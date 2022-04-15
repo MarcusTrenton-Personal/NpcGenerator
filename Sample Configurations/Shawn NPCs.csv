@@ -6,7 +6,7 @@ Pansexual,1,Trans Female,1,,,Filipino,1,Christian,1,Scoliosis,1,Bravo,1,Bravo,1,
 Asexual,1,Genderfluid,1,,,Korean,1,Hindu,1,Degenerative Disc Disease,1,Capitalist,1,Capitalist,1,Big Cat,80
 Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Caregiver,1,Caregiver,1,Dragon,80
 ,,,,,,United Kingdom/British,1,Indigenous Traditional Religions,1,Getting Disability for Spinal Cord Injury or Paralysis,1,Celebrant,1,Celebrant,1,Mythical,40
-,,,,,,Denmark/Danish,1,Islam,1,"Bulging, Ruptured, or Herniated Spinal Disc",1,Chameleon,1,Chameleon,1,Small Cat,40
+,,,,,,Denmark/Danish,1,Islam,1,Bulging Ruptured or Herniated Spinal Disc,1,Chameleon,1,Chameleon,1,Small Cat,40
 ,,,,,,Netherlands/Dutch,1,Judiasm,1,Arachnoiditis of the Spine,1,Child,1,Child,1,Other,30
 ,,,,,,France/French (incl. Acadian),1,Left Hand Path,1,Ankylosing Spondylitis,1,Competitor,1,Competitor,1,Rodent,30
 ,,,,,,Germany/German,1,Mesoamerican Religions,1,Spina Bifida Available,1,Conformist,1,Conformist,1,Rabbit,20
@@ -20,7 +20,7 @@ Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Car
 ,,,,,,Spain/Spanish,1,Wiccan,1,Post Traumatic Stress Disorder (PTSD),1,Eye of the Storm,1,Eye of the Storm,1,Hyena,10
 ,,,,,,Sweden/Swedish,1,Other,1,Obsessive Compulsive Disorder,1,Fanatic,1,Fanatic,1,Skunk,10
 ,,,,,,Switzerland/Swiss,1,Batuque,1,Panic Disorder,1,Gallant,1,Gallant,1,Marsupial,10
-,,,,,,Ukraine/Ukrainian,1,Candomblé,1,Anorexia,1,Guru,1,Guru,1,Dinosaur,10
+,,,,,,Ukraine/Ukrainian,1,Candomble,1,Anorexia,1,Guru,1,Guru,1,Dinosaur,10
 ,,,,,,Wales/Welsh,1,Dahomey mythology,1,Autism,1,Idealist,1,Idealist,1,Deer,10
 ,,,,,,Afghanistan,1,Haitian mythology,1,ADD/ADHD,1,Judge,1,Judge,1,Feline,10
 ,,,,,,Bangladesh,1,Kumina,1,Sensory Integration Disorder,1,Loner,1,Loner,1,Squirrel,10
@@ -33,7 +33,7 @@ Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Car
 ,,,,,,Cantonese,1,Lucumi,1,Coronary Heart Disease,1,Rebel,1,Rebel,1,,
 ,,,,,,Mandarin,1,Hudu,1,Congestive Heart Failure,1,Rogue,1,Rogue,1,,
 ,,,,,,Taiwanese,1,Quimbanda,1,Mitral Valve Prolapse,1,Sadist,1,Sadist,1,,
-,,,,,,Shanghai,1,Santería (Lukumi),1,Congenital Heart Disease,1,Scientist,1,Scientist,1,,
+,,,,,,Shanghai,1,Santeria (Lukumi),1,Congenital Heart Disease,1,Scientist,1,Scientist,1,,
 ,,,,,,Argentina,1,Umbanda,1,Arrhythmia,1,Sociopath,1,Sociopath,1,,
 ,,,,,,Bolivia,1,Vodou,1,Valvular Heart Disease,1,Soldier,1,Soldier,1,,
 ,,,,,,Brazil,1,Non-Denominational Christian,1,Coronary Artery Disease,1,Survivor,1,Survivor,1,,
@@ -82,7 +82,7 @@ Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Car
 ,,,,,,Cocos Islands,1,Theistic Satanism,1,Pick's Disease,1,,,,,,
 ,,,,,,Turkey,1,Aztec religion,1,Corticobasal Degeneration,1,,,,,,
 ,,,,,,Iran,1,Maya religion,1,Progressive Supranuclear Palsy,1,,,,,,
-,,,,,,Armenia,1,Mixtec religion,1,Creutzfeldt–Jakob Disease,1,,,,,,
+,,,,,,Armenia,1,Mixtec religion,1,Creutzfeldt-Jakob Disease,1,,,,,,
 ,,,,,,Azerbaijan,1,Olmec religion,1,Hydrocephalus,1,,,,,,
 ,,,,,,Georgia,1,Purepecha religion,1,Arnold-Chiari Malformation,1,,,,,,
 ,,,,,,Lebanon,1,Totonac religion,1,Pseudobulbar Affect,1,,,,,,
@@ -94,7 +94,7 @@ Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Car
 ,,,,,,Saudi Arabia,1,Konkokyo,1,Parkinson's Disease,1,,,,,,
 ,,,,,,Cyprus,1,Oomoto,1,Huntington's Disease,1,,,,,,
 ,,,,,,Oman,1,PL Kyodan,1,Vascular Dementia or Dementia With Lewy Bodies (DLB),1,,,,,,
-,,,,,,Yemen,1,Raëlism,1,Amyotrophic Lateral Sclerosis (ALS),1,,,,,,
+,,,,,,Yemen,1,Raelism,1,Amyotrophic Lateral Sclerosis (ALS),1,,,,,,
 ,,,,,,First Nations,1,Scientology,1,Muscular Atrophy,1,,,,,,
 ,,,,,,Metis,1,Seicho-no-Ie,1,Multiple System Atrophy (MSA),1,,,,,,
 ,,,,,,Inuit,1,Tenrikyo,1,Shy Drager Syndrome,1,,,,,,
@@ -104,11 +104,11 @@ Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Car
 ,,,,,,,,Feraferia,1,Spinal Cord Injury or Paralysis,1,,,,,,
 ,,,,,,,,Koshinto,1,Syringomyelia,1,,,,,,
 ,,,,,,,,Neo-Druidism,1,Transverse Myelitis,1,,,,,,
-,,,,,,,,Ár nDraíocht Féin,1,Peripheral Neuropathy,1,,,,,,
-,,,,,,,,"Order of Bards, Ovates, and Druids",1,Charcot-Marie-Tooth,1,,,,,,
+,,,,,,,,Ar nDraiocht Fein,1,Peripheral Neuropathy,1,,,,,,
+,,,,,,,,Order of Bards Ovates and Druids,1,Charcot-Marie-Tooth,1,,,,,,
 ,,,,,,,,Reformed Druids of North America,1,Myasthenia Gravis,1,,,,,,
 ,,,,,,,,Neoshamanism,1,Dysautonomia,1,,,,,,
-,,,,,,,,Neo-völkisch movements,1,Acoustic Neuroma,1,,,,,,
+,,,,,,,,Neo-volkisch movements,1,Acoustic Neuroma,1,,,,,,
 ,,,,,,,,Technopaganism,1,Bell's Palsy,1,,,,,,
 ,,,,,,,,Church of Euthanasia,1,Ilioinguinal Neuralgia,1,,,,,,
 ,,,,,,,,The Church of the Flying Spaghetti Monster,1,Shingles and Postherpetic Neuralgia (PHN),1,,,,,,
@@ -149,11 +149,11 @@ Questioning,1,Agender,1,,,Japanese,1,Historical Polytheism,1,Spinal Fusion,1,Car
 ,,,,,,,,Odyssean Wicca,1,Kidney Failure,1,,,,,,
 ,,,,,,,,Babi Movement,1,Hearing Loss,1,,,,,,
 ,,,,,,,,Bhakti Movement,1,Balance Loss,1,,,,,,
-,,,,,,,,Confucianism,1,"Tinnitus, and hearing loss",1,,,,,,
+,,,,,,,,Confucianism,1,Tinnitus and hearing loss,1,,,,,,
 ,,,,,,,,Din-e Ilahi,1,Speech Disorder,1,,,,,,
 ,,,,,,,,Gnostic Religions,1,Total Blindness: An Overview,1,,,,,,
 ,,,,,,,,Jainism,1,Partial Blindness or Total Blindness,1,,,,,,
 ,,,,,,,,Meivazhi,1,Loss of Peripheral Vision (Visual Field),1,,,,,,
 ,,,,,,,,Shinto,1,,,,,,,,
-,,,,,,,,Yazdânism,1,,,,,,,,
+,,,,,,,,Yazdanism,1,,,,,,,,
 ,,,,,,,,Zoroastrianism,1,,,,,,,,
