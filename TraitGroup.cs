@@ -16,7 +16,7 @@ namespace NpcGenerator
         public int Weight { get; }
     }
 
-    class TraitGroup
+    public class TraitGroup
     {
         public TraitGroup(string name)
         {

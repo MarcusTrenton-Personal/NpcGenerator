@@ -140,48 +140,12 @@ namespace NpcGenerator
             try
             {
                 List<TraitGroup> traitGroups = Configuration.Parse(configurationPath);
-
-                StringBuilder text = new StringBuilder();
-                GenerateTitles(traitGroups, text);
-                text.Append("\n");
-                for (int i = 0; i < npcQuantity; ++i)
-                {
-                    GenerateNpc(traitGroups, text);
-                    if (i + 1 < npcQuantity)
-                    {
-                        text.Append("\n");
-                    }
-                }
-
-                GeneratedText.Text = text.ToString();
+                NpcGroup npcGroup = new NpcGroup(traitGroups, npcQuantity);
+                GeneratedText.Text = npcGroup.ToCsv();
             }
             catch(Exception exception)
             {
                 MessageBox.Show(exception.Message);
-            }
-        }
-
-        private void GenerateTitles(List<TraitGroup> traitGroups, StringBuilder text)
-        {
-            for (int i = 0; i < traitGroups.Count; ++i)
-            {
-                text.Append(traitGroups[i].Name);
-                if (i + 1 < traitGroups.Count)
-                {
-                    text.Append(", ");
-                }
-            }
-        }
-
-        private void GenerateNpc(List<TraitGroup> traitGroups, StringBuilder text)
-        {
-            for(int i = 0; i < traitGroups.Count; ++i)
-            {
-                text.Append(traitGroups[i].Choose());
-                if (i + 1 < traitGroups.Count)
-                {
-                    text.Append(", ");
-                }
             }
         }
     }
