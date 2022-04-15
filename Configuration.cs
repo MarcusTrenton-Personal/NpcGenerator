@@ -52,6 +52,11 @@ namespace NpcGenerator
                 string traitName = cells[i * 2];
                 if(!string.IsNullOrEmpty(traitName))
                 {
+                    if(i >= traitGroups.Count)
+                    {
+                        throw new FormatException("Trait " + traitName + " is missing a column title.");
+                    }
+
                     string traitWeightString = cells[i * 2 + 1];
                     if(!string.IsNullOrEmpty(traitWeightString))
                     {

@@ -25,9 +25,6 @@
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
                 <TextBlock x:Name="GeneratedText" Margin="10" Padding="3" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Background="White"/>
             </StackPanel>
-            
         </StackPanel>
-        
-
     </Grid>
 </Window>
