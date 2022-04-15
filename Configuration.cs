@@ -64,7 +64,7 @@ namespace NpcGenerator
                         bool isInteger = int.TryParse(traitWeightString, out weight);
                         if(!isInteger || weight < 0)
                         {
-                            throw new ArithmeticException("Weight " + traitWeightString + " is not a whole number of at least 0");
+                            throw new ArithmeticException("Weight for " + traitWeightString + " is not a whole number of at least 0");
                         }
                         traitGroups[i].Add(new Trait(traitName, weight));
                     }

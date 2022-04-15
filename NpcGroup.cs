@@ -16,6 +16,11 @@ namespace NpcGenerator
             return traits[index];
         }
 
+        public string[] GetTraits()
+        {
+            return traits.ToArray();
+        }
+
         public void ToCsvRow(StringBuilder stringBuilder)
         {
             for(int i = 0; i < traits.Count; ++i)

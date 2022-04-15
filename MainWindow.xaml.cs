@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -141,7 +142,17 @@ namespace NpcGenerator
             {
                 List<TraitGroup> traitGroups = Configuration.Parse(configurationPath);
                 NpcGroup npcGroup = new NpcGroup(traitGroups, npcQuantity);
-                GeneratedText.Text = npcGroup.ToCsv();
+
+                System.Data.DataTable table = new DataTable("Npc Table");
+                for(int i = 0; i < npcGroup.TraitGroupCount; ++i)
+                {
+                    table.Columns.Add(npcGroup.GetTraitGroupNameAtIndex(i));
+                } 
+                for(int i = 0; i < npcGroup.NpcCount; ++i)
+                {
+                    table.Rows.Add(npcGroup.GetNpcAtIndex(i).GetTraits());
+                }
+                generatedNpcTable.DataContext = table;
             }
             catch(Exception exception)
             {
