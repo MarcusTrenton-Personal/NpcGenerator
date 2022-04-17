@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using System.Windows.Navigation;
 using Microsoft.Win32;
 
 namespace NpcGenerator
@@ -21,20 +21,6 @@ namespace NpcGenerator
             InitializeComponent();
         }
 
-        bool TryParsePositiveNumber(string text, out int result)
-        {
-            bool isInt = int.TryParse(text, out result);
-            bool isNaturalNumber = isInt && result > 0;
-            return isNaturalNumber;
-        }
-
-        bool TryParseDigit(string text, out int result)
-        {
-            bool isInt = int.TryParse(text, out result);
-            bool isDigit = isInt && result >= 0 && result < 10;
-            return isDigit;
-        }
-
         void UpdateGenerateButtonEnabled()
         {
             if(generateButton != null && configurationPathText != null && npcQuantityText != null)
@@ -42,7 +28,8 @@ namespace NpcGenerator
                 bool isFilePicked = File.Exists(configurationPathText.Content.ToString());
 
                 int npcQuantity;
-                bool isNpcQuantityPositiveInteger = TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
+                bool isNpcQuantityPositiveInteger = 
+                    NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
 
                 generateButton.IsEnabled = isFilePicked && isNpcQuantityPositiveInteger;
             }
@@ -64,7 +51,7 @@ namespace NpcGenerator
         private void NpcQuantityInput(object sender, TextCompositionEventArgs e)
         {
             int unusedResult;
-            e.Handled = !TryParseDigit(e.Text, out unusedResult);
+            e.Handled = !NumberHelper.TryParseDigit(e.Text, out unusedResult);
             UpdateGenerateButtonEnabled();
         }
 
@@ -79,7 +66,7 @@ namespace NpcGenerator
             {
                 String text = (String)e.DataObject.GetData(typeof(String));
                 int unusedResult;
-                if (!TryParsePositiveNumber(text, out unusedResult))
+                if (!NumberHelper.TryParsePositiveNumber(text, out unusedResult))
                 {
                     e.CancelCommand();
                 }
@@ -90,6 +77,11 @@ namespace NpcGenerator
             }
 
             UpdateGenerateButtonEnabled();
+        }
+
+        private void OpenBrowserToUri(object sender, RequestNavigateEventArgs e)
+        {
+            e.Handled = UriHelper.OpenUri(e.Uri.AbsoluteUri);
         }
 
         private bool ValidateInput(out int npcQuantity, ref string configurationPath)
@@ -118,7 +110,7 @@ namespace NpcGenerator
                 return false;
             }
 
-            bool isNpcQuantityValid = TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
+            bool isNpcQuantityValid = NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
             if (!isNpcQuantityValid)
             {
                 MessageBox.Show("NPC Quantity must be at least 1");
