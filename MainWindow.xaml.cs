@@ -21,7 +21,7 @@ namespace NpcGenerator
             InitializeComponent();
         }
 
-        void UpdateGenerateButtonEnabled()
+        private void UpdateGenerateButtonEnabled()
         {
             if(generateButton != null && configurationPathText != null && npcQuantityText != null)
             {
