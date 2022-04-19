@@ -182,7 +182,7 @@ namespace NpcGenerator
             }
         }
 
-        Settings m_settings = null;
-        string m_settingsPath;
+        private Settings m_settings = null;
+        private string m_settingsPath;
     }
 }
