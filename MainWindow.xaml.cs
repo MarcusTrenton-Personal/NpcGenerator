@@ -16,9 +16,27 @@ namespace NpcGenerator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string SAVE_FOLDER = "NpcGenerator";
+        private const string SETTING_FILE = "Settings.json";
+        
         public MainWindow()
         {
             InitializeComponent();
+
+            ReadSettings();
+            configurationPathText.Content = m_settings.configurationsPath;
+            npcQuantityText.Text = m_settings.npcQuantity.ToString();
+        }
+
+        private void ReadSettings()
+        {
+            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            m_settingsPath = Path.Combine(commonAppData, SAVE_FOLDER, SETTING_FILE);
+            m_settings = Settings.Load(m_settingsPath);
+            if (m_settings == null)
+            {
+                m_settings = new Settings();
+            }
         }
 
         private void UpdateGenerateButtonEnabled()
@@ -45,6 +63,9 @@ namespace NpcGenerator
 
                 configurationPathText.Content = openFileDialog.FileName;
                 UpdateGenerateButtonEnabled();
+
+                m_settings.configurationsPath = openFileDialog.FileName;
+                m_settings.Save(m_settingsPath);
             }
         }
 
@@ -53,11 +74,20 @@ namespace NpcGenerator
             int unusedResult;
             e.Handled = !NumberHelper.TryParseDigit(e.Text, out unusedResult);
             UpdateGenerateButtonEnabled();
+
+            m_settings.npcQuantity = int.Parse(npcQuantityText.Text);
+            m_settings.Save(m_settingsPath);
         }
 
         private void NpcQuantityInputChanged(object sender, TextChangedEventArgs args)
         {
             UpdateGenerateButtonEnabled();
+
+            if(m_settings != null)
+            {
+                m_settings.npcQuantity = int.Parse(npcQuantityText.Text);
+                m_settings.Save(m_settingsPath);
+            }
         }
 
         private void NpcQuantityPasting(object sender, DataObjectPastingEventArgs e)
@@ -151,5 +181,8 @@ namespace NpcGenerator
                 MessageBox.Show(exception.Message);
             }
         }
+
+        Settings m_settings = null;
+        string m_settingsPath;
     }
 }
