@@ -15,10 +15,7 @@ namespace NpcGenerator
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        private const string SAVE_FOLDER = "NpcGenerator";
-        private const string SETTING_FILE = "Settings.json";
-        
+    {   
         public MainWindow()
         {
             InitializeComponent();
@@ -30,8 +27,7 @@ namespace NpcGenerator
 
         private void ReadSettings()
         {
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            m_settingsPath = Path.Combine(commonAppData, SAVE_FOLDER, SETTING_FILE);
+            m_settingsPath = FilePathHelper.SettingsFilePath();
             m_settings = Settings.Load(m_settingsPath);
             if (m_settings == null)
             {
@@ -125,20 +121,6 @@ namespace NpcGenerator
                 MessageBox.Show("Configuration path is not valid");
                 return false;
             }
-            try
-            {
-                string text = File.ReadAllText(configurationPath);
-            }
-            catch (IOException exception)
-            {
-                MessageBox.Show(exception.Message);
-                return false;
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Problem with configuration file: " + exception.Message);
-                return false;
-            }
 
             bool isNpcQuantityValid = NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
             if (!isNpcQuantityValid)
@@ -162,7 +144,8 @@ namespace NpcGenerator
 
             try
             {
-                List<TraitGroup> traitGroups = Configuration.Parse(configurationPath);
+                string cachedConfigurationPath = FilePathHelper.CacheConfigurationFile(configurationPath);
+                List<TraitGroup> traitGroups = Configuration.Parse(cachedConfigurationPath);
                 NpcGroup npcGroup = new NpcGroup(traitGroups, npcQuantity);
 
                 System.Data.DataTable table = new DataTable("Npc Table");
