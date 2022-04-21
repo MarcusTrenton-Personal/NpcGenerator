@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -146,18 +145,19 @@ namespace NpcGenerator
             {
                 string cachedConfigurationPath = FilePathHelper.CacheConfigurationFile(configurationPath);
                 List<TraitGroup> traitGroups = Configuration.Parse(cachedConfigurationPath);
-                NpcGroup npcGroup = new NpcGroup(traitGroups, npcQuantity);
+                m_npcGroup = new NpcGroup(traitGroups, npcQuantity);
 
                 System.Data.DataTable table = new DataTable("Npc Table");
-                for(int i = 0; i < npcGroup.TraitGroupCount; ++i)
+                for(int i = 0; i < m_npcGroup.TraitGroupCount; ++i)
                 {
-                    table.Columns.Add(npcGroup.GetTraitGroupNameAtIndex(i));
+                    table.Columns.Add(m_npcGroup.GetTraitGroupNameAtIndex(i));
                 } 
-                for(int i = 0; i < npcGroup.NpcCount; ++i)
+                for(int i = 0; i < m_npcGroup.NpcCount; ++i)
                 {
-                    table.Rows.Add(npcGroup.GetNpcAtIndex(i).GetTraits());
+                    table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).GetTraits());
                 }
                 generatedNpcTable.DataContext = table;
+                saveNpcsButton.IsEnabled = true;
             }
             catch(Exception exception)
             {
@@ -165,7 +165,14 @@ namespace NpcGenerator
             }
         }
 
+        private void SaveNpcs(object sender, RoutedEventArgs e)
+        {
+            string npcCsv = m_npcGroup.ToCsv();
+            FilePathHelper.SaveToPickedFile(npcCsv, "csv");
+        }
+
         private Settings m_settings = null;
         private string m_settingsPath;
+        private NpcGroup m_npcGroup = null;
     }
 }
