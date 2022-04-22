@@ -144,8 +144,8 @@ namespace NpcGenerator
             try
             {
                 string cachedConfigurationPath = FilePathHelper.CacheConfigurationFile(configurationPath);
-                List<TraitGroup> traitGroups = Configuration.Parse(cachedConfigurationPath);
-                m_npcGroup = new NpcGroup(traitGroups, npcQuantity);
+                TraitSchema traitSchema = Configuration.Parse(cachedConfigurationPath);
+                m_npcGroup = new NpcGroup(traitSchema, npcQuantity);
 
                 System.Data.DataTable table = new DataTable("Npc Table");
                 for(int i = 0; i < m_npcGroup.TraitGroupCount; ++i)

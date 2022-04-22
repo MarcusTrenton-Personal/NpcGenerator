@@ -7,7 +7,7 @@ namespace NpcGenerator
 {
     static class Configuration
     {
-        public static List<TraitGroup> Parse(string path)
+        public static TraitSchema Parse(string path)
         {
             IEnumerable<string> lines = File.ReadLines(path);
             IEnumerator<string> enumerator = lines.GetEnumerator();
@@ -17,17 +17,17 @@ namespace NpcGenerator
                 throw new IOException("The file is empty: " + path);
             }
 
-            List<TraitGroup> traitGroups = ParseTitles(enumerator.Current);
+            TraitSchema traitSchema = ParseTitles(enumerator.Current);
 
             while(enumerator.MoveNext())
             {
-                ParseOptionsRow(traitGroups, enumerator.Current);
+                ParseOptionsRow(traitSchema, enumerator.Current);
             }
 
-            return traitGroups;
+            return traitSchema;
         }
 
-        private static List<TraitGroup> ParseTitles(string titleRow)
+        private static TraitSchema ParseTitles(string titleRow)
         {
             string[] titleCells = titleRow.Split(',');
             bool hasMatchingTraitWeightPairs = titleCells.Length % 2 == 0;
@@ -36,15 +36,15 @@ namespace NpcGenerator
                 throw new IOException("The configuration file must have an equal number of trait and weight columns with no empty columns in between.");
             }
 
-            List<TraitGroup> traitGroups = new List<TraitGroup>();
+            TraitSchema traitSchema = new TraitSchema();
             for(int i = 0; i < titleCells.Length; i += 2)
             {
-                traitGroups.Add(new TraitGroup(titleCells[i]));
+                traitSchema.Add(new TraitCategory(titleCells[i]));
             }
-            return traitGroups;
+            return traitSchema;
         }
 
-        private static void ParseOptionsRow(List<TraitGroup> traitGroups, string optionsRow)
+        private static void ParseOptionsRow(TraitSchema traitSchema, string optionsRow)
         {
             string[] cells = optionsRow.Split(',');
             for(int i = 0; i*2 < cells.Length; ++i)
@@ -52,7 +52,7 @@ namespace NpcGenerator
                 string traitName = cells[i * 2];
                 if(!string.IsNullOrEmpty(traitName))
                 {
-                    if(i >= traitGroups.Count)
+                    if(i >= traitSchema.TraitCategoryCount)
                     {
                         throw new FormatException("Trait " + traitName + " is missing a column title.");
                     }
@@ -66,7 +66,7 @@ namespace NpcGenerator
                         {
                             throw new ArithmeticException("Weight for " + traitWeightString + " is not a whole number of at least 0");
                         }
-                        traitGroups[i].Add(new Trait(traitName, weight));
+                        traitSchema.GetAtIndex(i).Add(new Trait(traitName, weight));
                     }
                     else
                     {

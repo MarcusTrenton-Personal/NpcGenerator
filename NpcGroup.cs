@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace NpcGenerator
@@ -40,19 +39,19 @@ namespace NpcGenerator
 
     public class NpcGroup
     {
-        public NpcGroup(List<TraitGroup> traitGroups, int npcCount)
+        public NpcGroup(TraitSchema traitSchema, int npcCount)
         {
-            for(int i = 0; i < traitGroups.Count; ++i)
+            for(int i = 0; i < traitSchema.TraitCategoryCount; ++i)
             {
-                traitGroupNames.Add(traitGroups[i].Name);
+                traitGroupNames.Add(traitSchema.GetAtIndex(i).Name);
             }
 
             for(int i = 0; i < npcCount; ++i)
             {
                 Npc npc = new Npc();
-                for(int j = 0; j < traitGroups.Count; ++j)
+                for(int j = 0; j < traitSchema.TraitCategoryCount; ++j)
                 {
-                    string trait = traitGroups[j].Choose();
+                    string trait = traitSchema.GetAtIndex(j).Choose();
                     npc.AddTrait(trait);
                 }
                 npcs.Add(npc);

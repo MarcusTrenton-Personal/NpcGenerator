@@ -16,9 +16,9 @@ namespace NpcGenerator
         public int Weight { get; }
     }
 
-    public class TraitGroup
+    public class TraitCategory
     {
-        public TraitGroup(string name)
+        public TraitCategory(string name)
         {
             Name = name;
         }
@@ -29,6 +29,11 @@ namespace NpcGenerator
             m_totalWeight += trait.Weight;
         }
 
+        public void SetRandomizer(Random random)
+        {
+            m_random = random;
+        }
+
         public string Choose()
         {
             if(traits.Count == 0)
@@ -36,6 +41,10 @@ namespace NpcGenerator
                 throw new InvalidOperationException("Cannot choose trait from empty Trait Group " + Name);
             }
 
+            if(m_random == null)
+            {
+                m_random = new Random();
+            }
             int randomSelection = m_random.Next(0, m_totalWeight) + 1;
             int selectedIndex = -1;
             int weightCount = 0;
@@ -60,6 +69,31 @@ namespace NpcGenerator
 
         private List<Trait> traits = new List<Trait>();
         private int m_totalWeight = 0;
+        private Random m_random;
+    }
+
+    public class TraitSchema
+    {
+        public int TraitCategoryCount 
+        { 
+            get 
+            {
+                return m_categories.Count;
+            } 
+        }
+
+        public void Add(TraitCategory traitCategory)
+        {
+            m_categories.Add(traitCategory);
+            traitCategory.SetRandomizer(m_random);
+        }
+
+        public TraitCategory GetAtIndex(int index)
+        {
+            return m_categories[index];
+        }
+
+        private List<TraitCategory> m_categories = new List<TraitCategory>();
         private Random m_random = new Random();
     }
 }
