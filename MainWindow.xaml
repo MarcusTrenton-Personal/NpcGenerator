@@ -23,7 +23,7 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
-                <DataGrid x:Name="generatedNpcTable" Margin="10" Padding="3" Height="600" Width="1400" 
+                <DataGrid x:Name="generatedNpcTable" Margin="10" Padding="3" Height="600" Width="1400" IsReadOnly="True"
                           ItemsSource="{Binding}" AlternatingRowBackground="LightBlue" AlternationCount="2" VerticalAlignment="Top" Background="White"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
