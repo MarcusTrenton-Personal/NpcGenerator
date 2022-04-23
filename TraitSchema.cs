@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NpcGenerator
 {
-    readonly public struct Trait
+    public class Trait
     {
         public Trait(string name, int weight)
         {
