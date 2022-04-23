@@ -8,7 +8,8 @@ namespace NpcGenerator
 {
     public static class FilePathHelper
     {
-        private const string APP_DATA_FOLDER = "NpcGenerator";
+        public const string APP_DATA_FOLDER = "NpcGenerator";
+
         private const string CONFIGUATION_CACHE_FOLDER = "Cache";
         private const string SETTINGS_FILE = "Settings.json";
 

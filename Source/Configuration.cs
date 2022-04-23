@@ -5,7 +5,7 @@ using System.IO;
 
 namespace NpcGenerator
 {
-    static class Configuration
+    public static class Configuration
     {
         public static TraitSchema Parse(string path)
         {
@@ -39,7 +39,13 @@ namespace NpcGenerator
             TraitSchema traitSchema = new TraitSchema();
             for(int i = 0; i < titleCells.Length; i += 2)
             {
-                traitSchema.Add(new TraitCategory(titleCells[i]));
+                string title = titleCells[i];
+                bool isEmpty = string.IsNullOrEmpty(title);
+                if(isEmpty)
+                {
+                    throw new FormatException("Missing title for trait column");
+                }
+                traitSchema.Add(new TraitCategory(title));
             }
             return traitSchema;
         }
