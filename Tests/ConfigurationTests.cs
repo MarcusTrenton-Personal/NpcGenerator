@@ -15,18 +15,6 @@ namespace Tests
             Directory.CreateDirectory(m_testDirectory);
         }
 
-        //[TestInitialize]
-        //public void CreateTestDirectory()
-        //{
-            
-        //}
-
-        //[TestCleanup]
-        //public void DeleteTestDirectory()
-        //{
-        //    Directory.Delete(m_testDirectory, recursive: true);
-        //}
-
         [TestMethod]
         public void GeneratesTraitSchema()
         {
