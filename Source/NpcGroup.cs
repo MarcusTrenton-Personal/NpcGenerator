@@ -27,7 +27,7 @@ namespace NpcGenerator
                 stringBuilder.Append(traits[i]);
                 if (i + 1 < traits.Count)
                 {
-                    stringBuilder.Append(", ");
+                    stringBuilder.Append(",");
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace NpcGenerator
                 text.Append(traitGroupNames[i]);
                 if (i + 1 < traitGroupNames.Count)
                 {
-                    text.Append(", ");
+                    text.Append(",");
                 }
             }
         }
