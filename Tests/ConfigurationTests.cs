@@ -98,8 +98,7 @@ namespace Tests
 
             Assert.IsTrue(threwException, "Missing title failed to throw exception");
 
-            //This delete always fails because "the file is in use by another process". The exception is somehow responsible.
-            //File.Delete(path); 
+            File.Delete(path); 
         }
 
         [TestMethod]
@@ -123,8 +122,7 @@ namespace Tests
 
             Assert.IsTrue(threwException, "Missing title failed to throw exception");
 
-            //This delete always fails because "the file is in use by another process". The exception is somehow responsible.
-            //File.Delete(path); 
+            File.Delete(path); 
         }
 
         private void WriteTestFile(string path, string content)

@@ -9,7 +9,7 @@ namespace NpcGenerator
     {
         public static TraitSchema Parse(string path)
         {
-            IEnumerable<string> lines = File.ReadLines(path);
+            IEnumerable<string> lines = File.ReadAllLines(path);
             IEnumerator<string> enumerator = lines.GetEnumerator();
             bool hasTitleRow = enumerator.MoveNext();
             if(!hasTitleRow)
