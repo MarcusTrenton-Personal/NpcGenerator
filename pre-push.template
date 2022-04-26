@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#Tests must pass to allow push.
+#To use:
+#1) Copy this file into the projects .git\hooks\ folder and rename the file to pre-push (no extension)
+#2) Build Solution
+#3) Replace the paths below to the machine's path to the vstest.console.exe and Tests.dll
+
+remote="$1"
+url="$2"
+
+echo %remote%
+echo %url%
+
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" "D:\BackThisUp\ProgrammingProjects\Workspace\NpcGenerator\Tests\bin\Debug\netcoreapp3.1\Tests.dll"

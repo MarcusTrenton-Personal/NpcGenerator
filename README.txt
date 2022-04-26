@@ -4,3 +4,5 @@ https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-3.1
 
 For developers, the .Net Core 3.1 Console Runtime is needed to run the presubmit tests
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-3.1.24-windows-x64-installer
+
+For developers, to run automated tests before each push, follow the instructions in pre-push.template.
