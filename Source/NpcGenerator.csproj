@@ -5,10 +5,25 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>1200px-2-Dice-Icon.svg.ico</ApplicationIcon>
+    <Authors>Marcus Trenton</Authors>
+    <Company />
+    <Description>Randomly generate NPCs' demographics</Description>
+    <Copyright>Marcus Trenton</Copyright>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags></PackageTags>
+    <RepositoryUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</RepositoryUrl>
+    <PackageIcon>1200px-2-Dice-Icon.svg.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="1200px-2-Dice-Icon.svg.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
