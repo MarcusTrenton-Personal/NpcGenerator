@@ -26,4 +26,12 @@
     </None>
   </ItemGroup>
 
+  <Target Name="Test" AfterTargets="Publish">
+    <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" />
+    <ItemGroup>
+      <Sample Include="..\Sample Configurations\*.csv" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Sample)" DestinationFolder="D:\BackThisUp\Dropbox\Urthsark\NPC Generator\Sample Configurations" />
+  </Target>
+
 </Project>
