@@ -79,7 +79,7 @@ namespace Tests
             {
                 TraitSchema schema = Configuration.Parse(path);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 threwException = true;
             }
@@ -103,7 +103,7 @@ namespace Tests
             {
                 TraitSchema schema = Configuration.Parse(path);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 threwException = true;
             }
