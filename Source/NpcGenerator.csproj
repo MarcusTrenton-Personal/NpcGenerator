@@ -26,7 +26,16 @@
     </None>
   </ItemGroup>
 
-  <Target Name="Test" AfterTargets="Publish">
+  <Target Name="TestBeforePublish" BeforeTargets="Publish">
+    <Message Text="Running tests before allowing publishing" Importance="high" />
+    <Exec Command="dotnet restore ..\Tests\Tests.csproj" ConsoleToMsBuild="true"/>
+    <Exec Command="dotnet msbuild ..\Tests\Tests.csproj -p:Configuration=Debug" ConsoleToMsBuild="true"/>
+    <Exec Command='"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" ..\Tests\bin\Debug\netcoreapp3.1\Tests.dll' 
+          ConsoleToMsBuild="true"
+          />
+  </Target>
+
+  <Target Name="PublishSampleFiles" AfterTargets="Publish">
     <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" />
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv" />
