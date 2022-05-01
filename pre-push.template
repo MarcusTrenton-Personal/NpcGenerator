@@ -9,4 +9,6 @@
 remote="$1"
 url="$2"
 
+dotnet restore "D:\BackThisUp\ProgrammingProjects\Workspace\NpcGenerator\Tests\Tests.csproj"
+dotnet msbuild "D:\BackThisUp\ProgrammingProjects\Workspace\NpcGenerator\Tests\Tests.csproj" -p:Configuration=Debug
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" "D:\BackThisUp\ProgrammingProjects\Workspace\NpcGenerator\Tests\bin\Debug\netcoreapp3.1\Tests.dll"
