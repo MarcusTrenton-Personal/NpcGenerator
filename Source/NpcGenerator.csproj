@@ -36,7 +36,7 @@
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv" />
     </ItemGroup>
-    <Copy SourceFiles="@(Sample)" DestinationFolder="D:\BackThisUp\Dropbox\Urthsark\NPC Generator\Sample Configurations" />
+    <Copy SourceFiles="@(Sample)" DestinationFolder="$(Dropbox)\Urthsark\NPC Generator\Sample Configurations" />
   </Target>
 
 </Project>

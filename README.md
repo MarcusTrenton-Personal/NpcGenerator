@@ -18,6 +18,10 @@ Find those executables using the `where` command:
 
 `where /R C:\ msbuild` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
 
+## Environmental Variables
+
+Add a variable "Dropbox" for Dropbox's folder. This variable is used in the Dropbox publishing profile. You must set environmental variables before starting Visual Studio.
+
 ## Git Hooks
 
 To run automated tests before each push, follow the instructions in pre-push.template.
