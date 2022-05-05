@@ -6,8 +6,9 @@ namespace NpcGenerator
 {
     public class Settings
     {
-        public string configurationsPath = "...";
-        public int npcQuantity = 1;
+        public string ConfigurationPath { get; set; } = "...";
+
+        public int NpcQuantity { get; set; } = 1;
 
         public void Save(string path)
         {

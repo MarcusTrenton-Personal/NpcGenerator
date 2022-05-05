@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using Microsoft.Win32;
 
+[assembly: CLSCompliant(true)]
 namespace NpcGenerator
 {
     /// <summary>
@@ -20,8 +21,9 @@ namespace NpcGenerator
             InitializeComponent();
 
             ReadSettings();
-            configurationPathText.Content = m_settings.configurationsPath;
-            npcQuantityText.Text = m_settings.npcQuantity.ToString();
+            configurationPathText.Content = m_settings.ConfigurationPath;
+            npcQuantityText.Text = m_settings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
+            UpdateGenerateButtonEnabled();
         }
 
         private void ReadSettings()
@@ -59,7 +61,7 @@ namespace NpcGenerator
                 configurationPathText.Content = openFileDialog.FileName;
                 UpdateGenerateButtonEnabled();
 
-                m_settings.configurationsPath = openFileDialog.FileName;
+                m_settings.ConfigurationPath = openFileDialog.FileName;
                 m_settings.Save(m_settingsPath);
             }
         }
@@ -68,19 +70,17 @@ namespace NpcGenerator
         {
             int unusedResult;
             e.Handled = !NumberHelper.TryParseDigit(e.Text, out unusedResult);
-            UpdateGenerateButtonEnabled();
-
-            m_settings.npcQuantity = int.Parse(npcQuantityText.Text);
-            m_settings.Save(m_settingsPath);
         }
 
         private void NpcQuantityInputChanged(object sender, TextChangedEventArgs args)
         {
+            int newQuantity;
+            bool isInt = int.TryParse(npcQuantityText.Text, out newQuantity);
             UpdateGenerateButtonEnabled();
 
-            if(m_settings != null)
+            if(m_settings != null && isInt)
             {
-                m_settings.npcQuantity = int.Parse(npcQuantityText.Text);
+                m_settings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
                 m_settings.Save(m_settingsPath);
             }
         }
@@ -106,7 +106,7 @@ namespace NpcGenerator
 
         private void OpenBrowserToUri(object sender, RequestNavigateEventArgs e)
         {
-            e.Handled = UriHelper.OpenUri(e.Uri.AbsoluteUri);
+            e.Handled = UriHelper.OpenUri(e.Uri);
         }
 
         private bool ValidateInput(out int npcQuantity, ref string configurationPath)
@@ -144,7 +144,7 @@ namespace NpcGenerator
             try
             {
                 string cachedConfigurationPath = FilePathHelper.CacheConfigurationFile(configurationPath);
-                TraitSchema traitSchema = Configuration.Parse(cachedConfigurationPath);
+                TraitSchema traitSchema = ConfigurationFile.Parse(cachedConfigurationPath);
                 m_npcGroup = new NpcGroup(traitSchema, npcQuantity);
 
                 System.Data.DataTable table = new DataTable("Npc Table");
@@ -159,7 +159,15 @@ namespace NpcGenerator
                 generatedNpcTable.DataContext = table;
                 saveNpcsButton.IsEnabled = true;
             }
-            catch(Exception exception)
+            catch(IOException exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+            catch(FormatException exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+            catch (ArithmeticException exception)
             {
                 MessageBox.Show(exception.Message);
             }
@@ -171,8 +179,8 @@ namespace NpcGenerator
             FilePathHelper.SaveToPickedFile(npcCsv, "csv");
         }
 
-        private Settings m_settings = null;
+        private Settings m_settings;
         private string m_settingsPath;
-        private NpcGroup m_npcGroup = null;
+        private NpcGroup m_npcGroup;
     }
 }

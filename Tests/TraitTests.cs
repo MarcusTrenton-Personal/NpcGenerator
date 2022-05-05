@@ -16,7 +16,6 @@ namespace Tests
             TraitCategory category = new TraitCategory("Coin");
             category.Add(new Trait(HEADS, 1));
             category.Add(new Trait(TAILS, 1));
-            category.SetRandomizer(new Random());
 
             int headCount = 0;
             int tailCount = 0;
@@ -51,7 +50,6 @@ namespace Tests
             TraitCategory category = new TraitCategory("Coin");
             category.Add(new Trait(HEADS, 2));
             category.Add(new Trait(TAILS, 1));
-            category.SetRandomizer(new Random());
 
             int headCount = 0;
             int tailCount = 0;

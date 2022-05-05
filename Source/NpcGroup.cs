@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace NpcGenerator
@@ -22,12 +23,17 @@ namespace NpcGenerator
 
         public void ToCsvRow(StringBuilder stringBuilder)
         {
+            if(stringBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(stringBuilder));
+            }
+
             for(int i = 0; i < traits.Count; ++i)
             {
                 stringBuilder.Append(traits[i]);
                 if (i + 1 < traits.Count)
                 {
-                    stringBuilder.Append(",");
+                    stringBuilder.Append(',');
                 }
             }
         }
@@ -41,6 +47,11 @@ namespace NpcGenerator
     {
         public NpcGroup(TraitSchema traitSchema, int npcCount)
         {
+            if(traitSchema == null)
+            {
+                throw new ArgumentNullException(nameof(traitSchema));
+            }
+
             for(int i = 0; i < traitSchema.TraitCategoryCount; ++i)
             {
                 traitGroupNames.Add(traitSchema.GetAtIndex(i).Name);
@@ -63,14 +74,14 @@ namespace NpcGenerator
             StringBuilder text = new StringBuilder();
             
             TraitGroupNamesToCsv(text);
-            text.Append("\n");
+            text.Append('\n');
 
             for(int i = 0; i < npcs.Count; ++i)
             {
                 npcs[i].ToCsvRow(text);
                 if (i + 1 < npcs.Count)
                 {
-                    text.Append("\n");
+                    text.Append('\n');
                 }
             }
 
@@ -84,7 +95,7 @@ namespace NpcGenerator
                 text.Append(traitGroupNames[i]);
                 if (i + 1 < traitGroupNames.Count)
                 {
-                    text.Append(",");
+                    text.Append(',');
                 }
             }
         }

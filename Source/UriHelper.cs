@@ -6,25 +6,20 @@ namespace NpcGenerator
 {
     public static class UriHelper
     {
-        //Taken from https://stackoverflow.com/questions/502199/how-to-open-a-web-page-from-my-application
-        public static bool IsValidUri(string uri)
+        //Adapted from https://stackoverflow.com/questions/502199/how-to-open-a-web-page-from-my-application
+        public static bool OpenUri(Uri uri)
         {
-            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-                return false;
-            Uri tmp;
-            if (!Uri.TryCreate(uri, UriKind.Absolute, out tmp))
-                return false;
-            return tmp.Scheme == Uri.UriSchemeHttp || tmp.Scheme == Uri.UriSchemeHttps;
-        }
+            if(uri == null)
+            {
+                throw new ArgumentNullException(nameof(uri));
+            }
 
-        public static bool OpenUri(string uri)
-        {
-            bool isValid = IsValidUri(uri);
+            bool isValid = uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
             if (isValid)
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = uri,
+                    FileName = uri.ToString(),
                     UseShellExecute = true
                 });
             }

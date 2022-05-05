@@ -5,7 +5,7 @@ using System.IO;
 
 namespace NpcGenerator
 {
-    public static class Configuration
+    public static class ConfigurationFile
     {
         public static TraitSchema Parse(string path)
         {

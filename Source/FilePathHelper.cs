@@ -8,15 +8,15 @@ namespace NpcGenerator
 {
     public static class FilePathHelper
     {
-        public const string APP_DATA_FOLDER = "NpcGenerator";
+        public const string AppDataFolder = "NpcGenerator";
 
-        private const string CONFIGUATION_CACHE_FOLDER = "Cache";
-        private const string SETTINGS_FILE = "Settings.json";
+        private const string ConfigurationCacheFolder = "Cache";
+        private const string SettingsFile = "Settings.json";
 
         public static string SettingsFilePath()
         {
             string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(commonAppData, APP_DATA_FOLDER, SETTINGS_FILE);
+            return Path.Combine(commonAppData, AppDataFolder, SettingsFile);
         }
 
         //Cache a copy of a configuration file so it can already be open with a read/write lock at the same time 
@@ -25,7 +25,7 @@ namespace NpcGenerator
         {
             string fileName = Path.GetFileName(originalPath);
             string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string cachePath = Path.Combine(commonAppData, APP_DATA_FOLDER, CONFIGUATION_CACHE_FOLDER, fileName);
+            string cachePath = Path.Combine(commonAppData, AppDataFolder, ConfigurationCacheFolder, fileName);
 
             string directory = Path.GetDirectoryName(cachePath);
             Directory.CreateDirectory(directory);
@@ -52,7 +52,7 @@ namespace NpcGenerator
                         stream.Close();
                     }
                 }
-                catch (Exception exception)
+                catch (IOException exception)
                 {
                     MessageBox.Show(exception.Message);
                 }
