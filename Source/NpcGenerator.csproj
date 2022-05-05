@@ -31,7 +31,8 @@
     <Exec Command="..\Tests\BuildAndRunTests.bat" WorkingDirectory="..\Tests" ConsoleToMsBuild="true"/>
   </Target>
 
-  <Target Name="PublishSampleFiles" AfterTargets="Publish">
+  <!-- If the PublishDir in DropboxFolder.pubxml changes then this Condition must change too. Sadly there's no way to reference a publish profile by name. -->
+  <Target Name="PublishSampleFiles" AfterTargets="Publish" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'">
     <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" />
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv" />
