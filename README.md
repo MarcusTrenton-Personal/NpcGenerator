@@ -18,9 +18,25 @@ Find those executables using the `where` command:
 
 `where /R C:\ msbuild` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
 
+### Release Managers Only
+
+Release Managers will also need to use Sign Tool for security.
+
+`where /R C:\ signtool` will yield a result like C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe
+
 ## Environmental Variables
 
-Add a variable "Dropbox" for Dropbox's folder. This variable is used in the Dropbox publishing profile. You must set environmental variables before starting Visual Studio.
+You must set environmental variables before starting Visual Studio or the command line prompt.
+
+Add a variable "Dropbox" for Dropbox's folder. This variable is used in the Dropbox publishing profile. 
+
+### Release Managers Only
+
+Release Managers will need to setup environmental variables for "SigningKey" file path and "SigningKeyPassword" for the password.
+
+How do you actually get the signing key and password? Email MarcusTrenton@gmail.com with a good reason why you want to sign software in his name.
+
+Without the signing key and password, the publishing targets will not succeed.
 
 ## Git Hooks
 

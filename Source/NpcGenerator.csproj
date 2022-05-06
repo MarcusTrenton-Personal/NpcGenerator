@@ -13,6 +13,9 @@
     <PackageTags></PackageTags>
     <RepositoryUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</RepositoryUrl>
     <PackageIcon>1200px-2-Dice-Icon.svg.ico</PackageIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,16 +35,17 @@
 
   <Target Name="TestBeforePublish" BeforeTargets="Publish">
     <Message Text="Running tests before allowing publishing" Importance="high" />
-    <Exec Command="..\Tests\BuildAndRunTests.bat" WorkingDirectory="..\Tests" ConsoleToMsBuild="true"/>
+    <Exec Command="..\Tests\BuildAndRunTests.bat" WorkingDirectory="..\Tests" ConsoleToMsBuild="true" />
   </Target>
 
-  <!-- If the PublishDir in DropboxFolder.pubxml changes then this Condition must change too. Sadly there's no way to reference a publish profile by name. -->
-  <Target Name="PublishSampleFiles" AfterTargets="Publish" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'">
-    <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" />
+  <!-- If the PublishDir in DropboxFolder.pubxml changes then these Conditions must change too. Sadly there's no way to reference a publish profile by name. -->
+  <Target Name="PublishSampleFiles" AfterTargets="Publish" >
+    <Message Text="$(PublishDir)$(TargetName).exe" Importance="high" />
+    <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv" />
     </ItemGroup>
-    <Copy SourceFiles="@(Sample)" DestinationFolder="$(Dropbox)\Urthsark\NPC Generator\Sample Configurations" />
+    <Copy SourceFiles="@(Sample)" DestinationFolder="$(Dropbox)\Urthsark\NPC Generator\Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
   </Target>
 
 </Project>
