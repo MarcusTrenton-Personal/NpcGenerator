@@ -1,4 +1,19 @@
-﻿<Window x:Class="NpcGenerator.MainWindow"
+﻿<!--(C) 2022  Marcus Trenton, marcus.trenton@gmail.com
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.If not, see<https://www.gnu.org/licenses/> .-->
+
+<Window x:Class="NpcGenerator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -32,6 +47,13 @@
                 </TextBlock>
                 <Button x:Name="saveNpcsButton" Margin="10" Click="SaveNpcs" VerticalAlignment="Center" IsEnabled="False">
                     <TextBlock x:Name="saveNpcsButtonText" Margin="1" Text="Save"/>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="licenseButton" Margin="10" Click="ShowLicensePopup">
+                    <TextBlock x:Name="licenseButtonText" Margin="1" Text="License"/>
                 </Button>
             </StackPanel>
         </StackPanel>
