@@ -27,6 +27,7 @@ namespace NpcGenerator
 
         private const string ConfigurationCacheFolder = "Cache";
         private const string SettingsFile = "Settings.json";
+        private const string LicenseFile = "GNU License.rtf";
 
         public static string SettingsFilePath()
         {
@@ -72,6 +73,11 @@ namespace NpcGenerator
                     MessageBox.Show(exception.Message);
                 }
             }
+        }
+
+        public static string LicensePath()
+        {
+            return LicenseFile;
         }
     }
 }

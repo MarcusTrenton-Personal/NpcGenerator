@@ -27,9 +27,6 @@ using Microsoft.Win32;
 [assembly: CLSCompliant(true)]
 namespace NpcGenerator
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {   
         public MainWindow()
@@ -197,13 +194,11 @@ namespace NpcGenerator
 
         private void ShowLicensePopup(object sender, RoutedEventArgs e)
         {
-            //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"GNU License.rtf");
-            //USE FLOW DOCUMENT
-            //string text = File.ReadAllText(path);
-
-            //USE A MODAL WITH A SCROLL BAR.
-            //MessageBox.Show(text);
-            MessageBox.Show("INSERT LICENSE HERE");
+            //Lazily create the data as it's unlikely that this button will be clicked. 
+            //It's almost unheard of that anyone would click it twice.
+            LicenseWindow licenseWindow = new LicenseWindow();
+            licenseWindow.Owner = this;
+            licenseWindow.Show();
         }
 
         private Settings m_settings;
