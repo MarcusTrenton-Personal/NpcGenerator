@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
+  <Import Project="$(TextTemplating)" />
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -17,6 +19,11 @@
     <AssemblyOriginatorKeyFile>MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
     <PackageLicenseFile>GNU License.rtf</PackageLicenseFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TransformOnBuild>true</TransformOnBuild>
+    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +45,30 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AssemblyInfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
+    </None>
+    <None Update="AssemblyInfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssemblyInfo.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AssemblyInfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssemblyInfo.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
     <ItemGroup>
       <License Include="..\GNU License.rtf" />
@@ -52,14 +83,13 @@
 
   <!-- If the PublishDir in DropboxFolder.pubxml changes then these Conditions must change too. Sadly there's no way to reference a publish profile by name. -->
   <Target Name="PublishSampleFiles" AfterTargets="Publish">
-    <Message Text="$(PublishDir)$(TargetName).exe" Importance="high" />
     <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv" />
     </ItemGroup>
     <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <Copy SourceFiles="@(License)" DestinationFolder="$(PublishDir)" />
-    <Exec Command='signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 "$(PublishDir)$(TargetName).exe"' ConsoleToMsBuild="true" />
+    <Exec Command="signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 &quot;$(PublishDir)$(TargetName).exe" ConsoleToMsBuild="true" />
   </Target>
 
 </Project>

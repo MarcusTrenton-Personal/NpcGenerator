@@ -11,7 +11,9 @@ This repo assumes Windows x64.
 
 ## Path
 
-Both vstest.console.exe and msbuild.exe must be in system path for the included scripts to function.
+All the following must be in system path for the included scripts to function:
+* vstest.console.exe (For running tests)
+* msbuild.exe	(For building the tests before pushing)
 Find those executables using the `where` command:
 
 `where /R C:\ vstest.console` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe
@@ -29,6 +31,9 @@ Release Managers will also need to use Sign Tool for security.
 You must set environmental variables before starting Visual Studio or the command line prompt.
 
 Add a variable "Dropbox" for Dropbox's folder. This variable is used in the Dropbox publishing profile. 
+
+Add a variable "TextTemplating" for the file path of Microsoft.TextTemplating.targets, which is needed for auto-incrementing the AssemblyFileVersion.
+`where /R C:\ Microsoft.TextTemplating.targets` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VisualStudio\v16.0\TextTemplating\Microsoft.TextTemplating.targets
 
 ### Release Managers Only
 
