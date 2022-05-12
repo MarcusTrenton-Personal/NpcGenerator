@@ -81,9 +81,8 @@ namespace NpcGenerator
                     string traitWeightString = cells[i * 2 + 1];
                     if(!string.IsNullOrEmpty(traitWeightString))
                     {
-                        int weight;
-                        bool isInteger = int.TryParse(traitWeightString, out weight);
-                        if(!isInteger || weight < 0)
+                        bool isInteger = int.TryParse(traitWeightString, out int weight);
+                        if (!isInteger || weight < 0)
                         {
                             throw new ArithmeticException("Weight for " + traitWeightString + " is not a whole number of at least 0");
                         }
