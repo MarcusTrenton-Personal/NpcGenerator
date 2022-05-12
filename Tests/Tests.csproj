@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Source\NpcGenerator.csproj" />
+    <ProjectReference Include="..\NpcGenerator\NpcGenerator.csproj" />
   </ItemGroup>
 
 </Project>
