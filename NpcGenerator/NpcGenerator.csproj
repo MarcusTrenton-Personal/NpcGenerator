@@ -66,8 +66,8 @@
 
   <!--Despite the docs https://docs.microsoft.com/en-us/visualstudio/modeling/code-generation-in-a-build-process?view=vs-2022, 
   T4 text templating is NOT invoked automatically through PropertyGroups. Instead, it must be invoked explicitly.-->
-  <Target Name="AutogenerateCode" BeforeTargets="Compile">
-    <Exec Command="msbuild NpcGenerator.csproj /t:TransformAll" ConsoleToMsBuild="true"/>
+  <Target Name="AutogenerateCode" BeforeTargets="PreBuildEvent">
+    <Exec Command="msbuild NpcGenerator.csproj /t:TransformAll" ConsoleToMsBuild="true" />
   </Target>
 
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
