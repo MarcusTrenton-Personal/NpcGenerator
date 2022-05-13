@@ -15,6 +15,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -33,10 +34,19 @@ namespace NpcGenerator
         {
             InitializeComponent();
 
+            SetVersionText();
+
             ReadSettings();
             configurationPathText.Content = m_settings.ConfigurationPath;
             npcQuantityText.Text = m_settings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
+        }
+
+        private void SetVersionText()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            VersionText.Text = fvi.FileVersion;
         }
 
         private void ReadSettings()
