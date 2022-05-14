@@ -90,7 +90,7 @@
     </ItemGroup>
     <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <Copy SourceFiles="@(License)" DestinationFolder="$(PublishDir)" />
-    <Exec Command="signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 &quot;$(PublishDir)$(TargetName).exe" ConsoleToMsBuild="true" />
+    <Exec Command="signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 /du 'https://github.com/MarcusTrenton-Personal/NpcGenerator' /d NpcGenerator $(PublishDir)$(TargetName).exe" ConsoleToMsBuild="true" />
   </Target>
 
 </Project>
