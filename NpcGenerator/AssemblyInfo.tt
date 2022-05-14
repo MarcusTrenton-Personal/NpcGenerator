@@ -4,6 +4,10 @@
 using System.Reflection;
 
 [assembly: AssemblyVersion("<#= this.Major #>.<#= this.Minor #>.<#= this.DaysSinceProjectStarted #>.<#= this.MinutesSinceMidnight  #>")]
+[assembly: AssemblyDescription("Randomly generate NPCs' demographics")]
+[assembly: AssemblyCopyright("Marcus Trenton 2022")]
+[assembly: AssemblyProduct("NPC Generator")]
+[assembly: AssemblyTitle("NPC Generator") ]
 
 <#+
 
