@@ -50,3 +50,15 @@ To run automated tests before each push, follow the instructions in pre-push.tem
 # Automated Testing
 
 Successful tests are automatically required before every publish. The publish action will compile and run the tests. Assuming the pre-push Git Hook was setup (see above), the tests are also built and run in the same way.
+
+# Dev Procedure
+
+## Versioning
+
+Versioning has the format Major.Minor.Day.Minute. 
+- Major: Increment when backwards compatiblity is broken.
+- Minor: Increment for feature additions and bug fixes. Recent to 0 when the Major number increments
+- Day: Part of the build timestamp. It measures days since 2020/01/01. Automatically incremented per build.
+- Minute: Part of the build timestamp. It measures minutes since midnight UTC time. Automatically incremented per build.
+
+All of these are set in NpcGenerator/AssemblyInfo.tt. Set the Major and Minor versions in that file, not in the .csproj.
