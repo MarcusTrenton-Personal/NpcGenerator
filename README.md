@@ -14,11 +14,14 @@ This repo assumes Windows x64.
 All the following must be in system path for the included scripts to function:
 * vstest.console.exe (For running tests)
 * msbuild.exe	(For building the tests before pushing)
+* git.exe (For a tagging script)
 Find those executables using the `where` command:
 
 `where /R C:\ vstest.console` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe
 
 `where /R C:\ msbuild` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
+
+`where /R C:\ git` will yield a result like C:\Users\Marcus\AppData\Local\Atlassian\SourceTree\git_local\bin\git.exe, if you use SourceTree for source control.
 
 ### Release Managers Only
 
@@ -62,3 +65,5 @@ Versioning has the format Major.Minor.Day.Minute.
 - Minute: Part of the build timestamp. It measures minutes since midnight UTC time. Automatically incremented per build.
 
 All of these are set in NpcGenerator/AssemblyInfo.tt. Set the Major and Minor versions in that file, not in the .csproj.
+
+To publish, run PublishAndTag.bat. That script will automatically publish to Dropbox and tag the last commit.
