@@ -28,5 +28,12 @@ namespace NpcGenerator
     /// </summary>
     public partial class App : Application
     {
+        App()
+        {
+            AppSettings appSettings = AppSettings.Load("Settings\\AppSettings.json"); //TODO: Get name from FilePathHelper
+            m_googleAnalytics = new GoogleAnalytics(appSettings);
+        }
+
+        GoogleAnalytics m_googleAnalytics;
     }
 }

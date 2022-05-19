@@ -62,6 +62,8 @@
     </None>
   </ItemGroup>
 
+  <!-- ######## Build Events ######## -->
+  
   <!--Despite the docs https://docs.microsoft.com/en-us/visualstudio/modeling/code-generation-in-a-build-process?view=vs-2022, 
   T4 text templating is NOT invoked automatically through PropertyGroups. Instead, it must be invoked explicitly.-->
   <Target Name="AutogenerateCode" BeforeTargets="PreBuildEvent">
@@ -73,8 +75,14 @@
       <License Include="..\GNU License.rtf" />
     </ItemGroup>
     <Copy SourceFiles="@(License)" DestinationFolder="$(OutDir)" />
+    <ItemGroup>
+      <AppSettings Include="AppSettings.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(OutDir)/Settings" />
   </Target>
 
+  <!-- ######## Publish Events ######## -->  
+  
   <Target Name="TestBeforePublish" BeforeTargets="Publish">
     <Message Text="Running tests before allowing publishing" Importance="high" />
     <Exec Command="..\Tests\BuildAndRunTests.bat" WorkingDirectory="..\Tests" ConsoleToMsBuild="true" />
@@ -88,7 +96,8 @@
     </ItemGroup>
     <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <Copy SourceFiles="@(License)" DestinationFolder="$(PublishDir)" />
-    <Exec Command="signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 /du 'https://github.com/MarcusTrenton-Personal/NpcGenerator' /d NpcGenerator $(PublishDir)$(TargetName).exe" ConsoleToMsBuild="true" />
+    <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(PublishDir)\Settings" />
+    <Exec Command='signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 /du https://github.com/MarcusTrenton-Personal/NpcGenerator /d NpcGenerator "$(PublishDir)$(TargetName).exe"' ConsoleToMsBuild="true" />
   </Target>
 
 </Project>
