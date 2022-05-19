@@ -29,15 +29,6 @@ public class GoogleAnalytics
     public GoogleAnalytics(AppSettings appSettings)
     {
         m_appSettings = appSettings;
-        //int key = -485227;
-        //string scrambled = Encryption.XorEncryptDecrypt(secret, key);
-        //string original = Encryption.XorEncryptDecrypt(scrambled, key);
-        //Console.WriteLine(original);
-
-        //string scrambled2 = Encryption.XorEncryptDecrypt("zFQhZQx6QwWDg0rBv4yf-Q", key);
-        //string original2 = Encryption.XorEncryptDecrypt(scrambled2, key);
-        //Console.WriteLine(original2);
-
         //TODO: Subscribe to events.
 
         //TODO call event via subscription instead of directly.
@@ -86,15 +77,16 @@ public class GoogleAnalytics
 #endif
 
         /*
-         * Don't laugh. Doing security on a client-only app distributed to the public is not easy. There are no good solutions.
-         * Basic techniques have been thwarted. No obvious variable names. The plain text is not in source control.
-         * There is no line to set a break point on an view the precious data. 
+         * Don't laugh. Doing security on a public source code, client-only app distributed to the public is not easy. 
+         * There are no good solutions. This is why anything needing serious security is server authoritative.
+         * Basic techniques have been thwarted. No obvious variable names. The plain text ID is not in source control.
+         * There is no line to set a break point on to view the precious data. 
          * Text scrapers and casual inspection are insufficient to break the protection.
          * Either editing the source code or advanced sniffers are needed to break this.
          */
         using(StringContent content = new StringContent(body))
         {
-            HttpResponseMessage response = await client.PostAsync(
+            HttpResponseMessage response = await s_client.PostAsync(
                 new Uri(
                     string.Format(
                         "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}",
@@ -106,6 +98,6 @@ public class GoogleAnalytics
         }
     }
 
-    static readonly HttpClient client = new HttpClient();
+    static readonly HttpClient s_client = new HttpClient();
     AppSettings m_appSettings;
 }
