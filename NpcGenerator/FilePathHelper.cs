@@ -24,15 +24,22 @@ namespace NpcGenerator
     public static class FilePathHelper
     {
         public const string AppDataFolder = "NpcGenerator";
+        public const string AppSettingsFolder = "Settings";
 
         private const string ConfigurationCacheFolder = "Cache";
         private const string SettingsFile = "Settings.json";
+        private const string AppSettingsFile = "AppSettings.json";
         private const string LicenseFile = "GNU License.rtf";
 
         public static string SettingsFilePath()
         {
             string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             return Path.Combine(commonAppData, AppDataFolder, SettingsFile);
+        }
+
+        public static string AppSettingsFilePath()
+        {
+            return Path.Combine(AppSettingsFolder, AppSettingsFile);
         }
 
         //Cache a copy of a configuration file so it can already be open with a read/write lock at the same time 

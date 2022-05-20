@@ -30,7 +30,8 @@ namespace NpcGenerator
     {
         App()
         {
-            AppSettings appSettings = AppSettings.Load("Settings\\AppSettings.json"); //TODO: Get name from FilePathHelper
+            string appSettingsPath = FilePathHelper.AppSettingsFilePath();
+            AppSettings appSettings = AppSettings.Load(appSettingsPath); //TODO: Get name from FilePathHelper
             m_googleAnalytics = new GoogleAnalytics(appSettings);
         }
 
