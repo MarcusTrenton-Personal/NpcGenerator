@@ -16,22 +16,25 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using System.Diagnostics;
 using System.Text;
 
-public static class Encryption
+namespace NpcGenerator
 {
-    //Take from https://www.codingame.com/playgrounds/11117/simple-encryption-using-c-and-xor-technique
-
-    [DebuggerHidden] //Thwart basic debugger attack. Try harder, hacker!
-    public static string XorEncryptDecrypt(string text, int key)
+    public static class Encryption
     {
-        StringBuilder inputSb = new StringBuilder(text);
-        StringBuilder outputSb = new StringBuilder(text.Length);
-        char character;
-        for (int i = 0; i < text.Length; i++)
+        //Take from https://www.codingame.com/playgrounds/11117/simple-encryption-using-c-and-xor-technique
+
+        [DebuggerHidden] //Thwart basic debugger attack. Try harder, hacker!
+        public static string XorEncryptDecrypt(string text, int key)
         {
-            character = inputSb[i];
-            character = (char)(character ^ key);
-            outputSb.Append(character);
+            StringBuilder inputSb = new StringBuilder(text);
+            StringBuilder outputSb = new StringBuilder(text.Length);
+            char character;
+            for (int i = 0; i < text.Length; i++)
+            {
+                character = inputSb[i];
+                character = (char)(character ^ key);
+                outputSb.Append(character);
+            }
+            return outputSb.ToString();
         }
-        return outputSb.ToString();
     }
 }

@@ -31,8 +31,17 @@ namespace NpcGenerator
         App()
         {
             string appSettingsPath = FilePathHelper.AppSettingsFilePath();
-            AppSettings appSettings = AppSettings.Load(appSettingsPath); //TODO: Get name from FilePathHelper
-            m_googleAnalytics = new GoogleAnalytics(appSettings);
+            AppSettings appSettings = AppSettings.Load(appSettingsPath);
+
+            string profilePath = FilePathHelper.TrackingProfileFilePath();
+            TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
+            if(trackingProfile == null)
+            {
+                trackingProfile = new TrackingProfile();
+                trackingProfile.Save(profilePath);
+            }
+
+            m_googleAnalytics = new GoogleAnalytics(appSettings, trackingProfile);
         }
 
         GoogleAnalytics m_googleAnalytics;

@@ -16,24 +16,27 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Newtonsoft.Json;
 using System.IO;
 
-public class GoogleAnalyticsSettings
+namespace NpcGenerator
 {
-    public string MeasurementIdDev { get; set; } = "...";
-    public string MeasurementIdProd { get; set; } = "...";
-    public string AdditionalIdDev { get; set; } = "...";
-    public string AdditionalIdProd { get; set; } = "...";
-}
-
-public class AppSettings
-{
-    public GoogleAnalyticsSettings GoogleAnalytics { get; set; }
-
-    public int EncryptionKey { get; set; }
-    public static AppSettings Load(string path)
+    public class GoogleAnalyticsSettings
     {
-        //TODO: Get path from constructor parameter
-        string text = File.ReadAllText(path);
-        AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
-        return settings;
+        public string MeasurementIdDev { get; set; } = "...";
+        public string MeasurementIdProd { get; set; } = "...";
+        public string AdditionalIdDev { get; set; } = "...";
+        public string AdditionalIdProd { get; set; } = "...";
+    }
+
+    public class AppSettings
+    {
+        public GoogleAnalyticsSettings GoogleAnalytics { get; set; }
+
+        public int EncryptionKey { get; set; }
+        public static AppSettings Load(string path)
+        {
+            //TODO: Get path from constructor parameter
+            string text = File.ReadAllText(path);
+            AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
+            return settings;
+        }
     }
 }

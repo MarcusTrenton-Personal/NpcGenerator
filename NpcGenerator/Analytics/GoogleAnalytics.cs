@@ -15,89 +15,93 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
-public class GoogleAnalytics
+namespace NpcGenerator
 {
-    public GoogleAnalytics(AppSettings appSettings)
+    public class GoogleAnalytics
     {
-        m_appSettings = appSettings;
-        //TODO: Subscribe to events.
-
-        //TODO call event via subscription instead of directly.
-        TrackEvent();
-    }
-
-    ~GoogleAnalytics()
-    {
-        //TODO: unsubscribe from events
-    }
-
-    private async void TrackEvent()
-    {
-        StringBuilder sb = new StringBuilder();
-        StringWriter sw = new StringWriter(sb);
-        using (JsonWriter writer = new JsonTextWriter(sw))
+        public GoogleAnalytics(AppSettings appSettings, TrackingProfile trackingProfile)
         {
-            writer.WriteStartObject();
-                writer.WritePropertyName("client_id");
-                writer.WriteValue("Postman Test");
-                writer.WritePropertyName("events");
-                writer.WriteStartArray();
-                    writer.WriteStartObject();
-                        writer.WritePropertyName("name");
-                        writer.WriteValue("login");
-                        writer.WritePropertyName("params");
-                        writer.WriteStartObject();
-                            writer.WritePropertyName("method");
-                            writer.WriteValue("ClientApp");
-                        writer.WriteEnd();
-                    writer.WriteEnd();
-                writer.WriteEnd();
-            writer.WriteEndObject();
-            
+            m_appSettings = appSettings;
+            m_trackingProfile = trackingProfile;
+            //TODO: Subscribe to events.
+
+            //TODO call event via subscription instead of directly.
+            TrackEvent();
         }
 
-        string body = sw.ToString();
+        ~GoogleAnalytics()
+        {
+            //TODO: unsubscribe from events
+        }
 
-        
+        private async void TrackEvent()
+        {
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("client_id");
+                writer.WriteValue(m_trackingProfile.ClientId.ToString());
+                writer.WritePropertyName("events");
+                writer.WriteStartArray();
+                writer.WriteStartObject();
+                writer.WritePropertyName("name");
+                writer.WriteValue("login");
+                writer.WritePropertyName("params");
+                writer.WriteStartObject();
+                writer.WritePropertyName("method");
+                writer.WriteValue("ClientApp");
+                writer.WriteEnd();
+                writer.WriteEnd();
+                writer.WriteEnd();
+                writer.WriteEndObject();
+
+            }
+
+            string body = sw.ToString();
+
+
 #if DEBUG
-        string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdDev;
-        string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdDev;
+            string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdDev;
+            string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdDev;
 #else
         string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdProd;
         string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdProd;
 #endif
 
-        /*
-         * Don't laugh. Doing security on a public source code, client-only app distributed to the public is not easy. 
-         * There are no good solutions. This is why anything needing serious security is server authoritative.
-         * Basic techniques have been thwarted. No obvious variable names. The plain text ID is not in source control.
-         * There is no line to set a break point on to view the precious data. 
-         * Text scrapers and casual inspection are insufficient to break the protection.
-         * Either editing the source code or advanced sniffers are needed to break this.
-         */
-        using(StringContent content = new StringContent(body))
-        {
-            HttpResponseMessage response = await s_client.PostAsync(
-                new Uri(
-                    string.Format(
-                        "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}",
-                        Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey),
-                        measurementId)
-                    ), 
-                content);
-            Console.WriteLine("Analytics response: " + response.StatusCode);
+            /*
+             * Don't laugh. Doing security on a public source code, client-only app distributed to the public is not easy. 
+             * There are no good solutions. This is why anything needing serious security is server authoritative.
+             * Basic techniques have been thwarted. No obvious variable names. The plain text ID is not in source control.
+             * There is no line to set a break point on to view the precious data. 
+             * Text scrapers and casual inspection are insufficient to break the protection.
+             * Either editing the source code or advanced sniffers are needed to break this.
+             */
+            using (StringContent content = new StringContent(body))
+            {
+                HttpResponseMessage response = await s_client.PostAsync(
+                    new Uri(
+                        string.Format(
+                            "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}",
+                            Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey),
+                            measurementId)
+                        ),
+                    content);
+                if(!response.IsSuccessStatusCode)
+                {
+                    //TODO: Write to warning log.
+                    Console.Error.WriteLine("Failed analytics response: " + response.StatusCode);
+                }
+            }
         }
-    }
 
-    static readonly HttpClient s_client = new HttpClient();
-    AppSettings m_appSettings;
+        static readonly HttpClient s_client = new HttpClient();
+        AppSettings m_appSettings;
+        TrackingProfile m_trackingProfile;
+    }
 }
