@@ -27,15 +27,15 @@ namespace NpcGenerator
         public const string AppSettingsFolder = "Settings";
 
         private const string ConfigurationCacheFolder = "Cache";
-        private const string SettingsFile = "Settings.json";
+        private const string UserSettingsFile = "UserSettings.json";
         private const string AppSettingsFile = "AppSettings.json";
         private const string TrackingProfileFile = "TrackingProfile.json";
         private const string LicenseFile = "GNU License.rtf";
 
-        public static string SettingsFilePath()
+        public static string UserSettingsFilePath()
         {
             string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(commonAppData, AppDataFolder, SettingsFile);
+            return Path.Combine(commonAppData, AppDataFolder, UserSettingsFile);
         }
 
         public static string AppSettingsFilePath()

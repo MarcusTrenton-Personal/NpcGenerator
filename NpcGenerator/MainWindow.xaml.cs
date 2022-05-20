@@ -37,8 +37,8 @@ namespace NpcGenerator
             SetVersionText();
 
             ReadSettings();
-            configurationPathText.Content = m_settings.ConfigurationPath;
-            npcQuantityText.Text = m_settings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
+            configurationPathText.Content = m_userSettings.ConfigurationPath;
+            npcQuantityText.Text = m_userSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
         }
 
@@ -51,11 +51,11 @@ namespace NpcGenerator
 
         private void ReadSettings()
         {
-            m_settingsPath = FilePathHelper.SettingsFilePath();
-            m_settings = Settings.Load(m_settingsPath);
-            if (m_settings == null)
+            m_userSettingsPath = FilePathHelper.UserSettingsFilePath();
+            m_userSettings = UserSettings.Load(m_userSettingsPath);
+            if (m_userSettings == null)
             {
-                m_settings = new Settings();
+                m_userSettings = new UserSettings();
             }
         }
 
@@ -84,8 +84,8 @@ namespace NpcGenerator
                 configurationPathText.Content = openFileDialog.FileName;
                 UpdateGenerateButtonEnabled();
 
-                m_settings.ConfigurationPath = openFileDialog.FileName;
-                m_settings.Save(m_settingsPath);
+                m_userSettings.ConfigurationPath = openFileDialog.FileName;
+                m_userSettings.Save(m_userSettingsPath);
             }
         }
 
@@ -101,10 +101,10 @@ namespace NpcGenerator
             bool isInt = int.TryParse(npcQuantityText.Text, out newQuantity);
             UpdateGenerateButtonEnabled();
 
-            if(m_settings != null && isInt)
+            if(m_userSettings != null && isInt)
             {
-                m_settings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
-                m_settings.Save(m_settingsPath);
+                m_userSettings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
+                m_userSettings.Save(m_userSettingsPath);
             }
         }
 
@@ -211,8 +211,8 @@ namespace NpcGenerator
             licenseWindow.Show();
         }
 
-        private Settings m_settings;
-        private string m_settingsPath;
+        private UserSettings m_userSettings;
+        private string m_userSettingsPath;
         private NpcGroup m_npcGroup;
     }
 }

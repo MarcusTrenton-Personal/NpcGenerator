@@ -19,7 +19,7 @@ using System.Text;
 
 namespace NpcGenerator
 {
-    public class Settings
+    public class UserSettings
     {
         public string ConfigurationPath { get; set; } = "...";
 
@@ -38,13 +38,13 @@ namespace NpcGenerator
             }
         }
 
-        public static Settings Load(string path)
+        public static UserSettings Load(string path)
         {
             bool fileExists = File.Exists(path);
             if(fileExists)
             {
                 string text = File.ReadAllText(path);
-                Settings settings = JsonConvert.DeserializeObject<Settings>(text);
+                UserSettings settings = JsonConvert.DeserializeObject<UserSettings>(text);
                 return settings;
             }
             return null;
