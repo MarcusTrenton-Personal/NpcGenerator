@@ -77,7 +77,7 @@
     </ItemGroup>
     <Copy SourceFiles="@(License)" DestinationFolder="$(OutDir)" />
     <ItemGroup>
-      <AppSettings Include="AppSettings.json" />
+      <AppSettings Include="Settings\AppSettings.json" />
     </ItemGroup>
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(OutDir)/Settings" />
   </Target>

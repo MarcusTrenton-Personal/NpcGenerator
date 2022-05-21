@@ -84,6 +84,7 @@ namespace NpcGenerator
              */
             using (StringContent content = new StringContent(body))
             {
+                //TODO: Catch exceptions. This can fail silently.
                 HttpResponseMessage response = await s_client.PostAsync(
                     new Uri(
                         string.Format(
