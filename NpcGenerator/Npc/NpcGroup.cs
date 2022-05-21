@@ -19,45 +19,6 @@ using System.Text;
 
 namespace NpcGenerator
 {
-    public class Npc
-    {
-        public void AddTrait(string name)
-        {
-            traits.Add(name);
-        }
-
-        public string GetTraitAtIndex(int index)
-        {
-            return traits[index];
-        }
-
-        public string[] GetTraits()
-        {
-            return traits.ToArray();
-        }
-
-        public void ToCsvRow(StringBuilder stringBuilder)
-        {
-            if(stringBuilder == null)
-            {
-                throw new ArgumentNullException(nameof(stringBuilder));
-            }
-
-            for(int i = 0; i < traits.Count; ++i)
-            {
-                stringBuilder.Append(traits[i]);
-                if (i + 1 < traits.Count)
-                {
-                    stringBuilder.Append(',');
-                }
-            }
-        }
-
-        public int TraitCount { get { return traits.Count; } }
-
-        private List<string> traits = new List<string>();
-    }
-
     public class NpcGroup
     {
         public NpcGroup(TraitSchema traitSchema, int npcCount)

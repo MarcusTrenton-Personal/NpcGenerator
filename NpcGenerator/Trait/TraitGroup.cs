@@ -1,4 +1,4 @@
-﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,18 +19,6 @@ using System.Security.Cryptography;
 
 namespace NpcGenerator
 {
-    public class Trait
-    {
-        public Trait(string name, int weight)
-        {
-            Name = name;
-            Weight = weight;
-        }
-
-        public string Name { get; }
-        public int Weight { get; }
-    }
-
     public class TraitCategory
     {
         public TraitCategory(string name)
@@ -40,7 +28,7 @@ namespace NpcGenerator
 
         public void Add(Trait trait)
         {
-            if(trait == null)
+            if (trait == null)
             {
                 throw new ArgumentNullException(nameof(trait));
             }
@@ -51,7 +39,7 @@ namespace NpcGenerator
 
         public string Choose()
         {
-            if(traits.Count == 0)
+            if (traits.Count == 0)
             {
                 throw new InvalidOperationException("Cannot choose trait from empty Trait Group " + Name);
             }
@@ -59,10 +47,10 @@ namespace NpcGenerator
             int randomSelection = RandomNumberGenerator.GetInt32(0, m_totalWeight) + 1;
             int selectedIndex = -1;
             int weightCount = 0;
-            for(int i = 0; i < traits.Count; ++i)
+            for (int i = 0; i < traits.Count; ++i)
             {
                 weightCount += traits[i].Weight;
-                if(randomSelection <= weightCount)
+                if (randomSelection <= weightCount)
                 {
                     selectedIndex = i;
                     break;
@@ -80,28 +68,5 @@ namespace NpcGenerator
 
         private List<Trait> traits = new List<Trait>();
         private int m_totalWeight;
-    }
-
-    public class TraitSchema
-    {
-        public int TraitCategoryCount 
-        { 
-            get 
-            {
-                return m_categories.Count;
-            } 
-        }
-
-        public void Add(TraitCategory traitCategory)
-        {
-            m_categories.Add(traitCategory);
-        }
-
-        public TraitCategory GetAtIndex(int index)
-        {
-            return m_categories[index];
-        }
-
-        private List<TraitCategory> m_categories = new List<TraitCategory>();
     }
 }
