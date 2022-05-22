@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using NpcGenerator.Message;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -23,7 +24,7 @@ namespace NpcGenerator
 {
     public class GoogleAnalytics
     {
-        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessageCenter messageCenter)
+        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessager messageCenter)
         {
             m_appSettings = appSettings;
             m_trackingProfile = trackingProfile;
@@ -140,6 +141,6 @@ namespace NpcGenerator
         private static readonly HttpClient s_client = new HttpClient();
         private IAppSettings m_appSettings;
         private ITrackingProfile m_trackingProfile;
-        private IMessageCenter m_messageCenter;
+        private IMessager m_messageCenter;
     }
 }

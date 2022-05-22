@@ -15,18 +15,18 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
 
-namespace NpcGenerator
+namespace NpcGenerator.Message
 {
     //I don't want to create each one of these individually.
     //If anyone tells the message system to subscribe to event t, that event queue should exist then.
-    public class MessageQueue<T> : IPublisher<T> //Is this a Publisher or a MessageQueue?
+    public class Channel<T> : IChannel<T> //Is this a Publisher or a Channel?
     {
-        public void Subscribe(IPublisher<T>.Callback callback)
+        public void Subscribe(IChannel<T>.Callback callback)
         {
             Callbacks += callback;
         }
 
-        public void Unsubscribe(IPublisher<T>.Callback callback)
+        public void Unsubscribe(IChannel<T>.Callback callback)
         {
             Callbacks -= callback;
         }
@@ -41,6 +41,6 @@ namespace NpcGenerator
             return typeof(T);
         }
 
-        private event IPublisher<T>.Callback Callbacks;
+        private event IChannel<T>.Callback Callbacks;
     }
 }

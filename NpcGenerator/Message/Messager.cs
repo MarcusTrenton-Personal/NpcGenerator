@@ -16,9 +16,9 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using System;
 using System.Collections.Generic;
 
-namespace NpcGenerator
+namespace NpcGenerator.Message
 {
-    public class MessageCenter : IMessageCenter
+    public class Messager : IMessager
     {
         public void Send<T>(object sender, T message)
         {
@@ -27,26 +27,26 @@ namespace NpcGenerator
             if (m_queues.TryGetValue(type, out uncastQueue))
             {
                 //This cast shouldn't fail. If it does, let it crash.
-                MessageQueue<T> queue = (MessageQueue<T>)uncastQueue;
+                Message.Channel<T> queue = (Message.Channel<T>)uncastQueue;
                 queue.Publish(sender, message);
             }
         }
 
-        public void Subscribe<T>(IPublisher<T>.Callback callback)
+        public void Subscribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
             object uncastQueue = null;
             if(!m_queues.TryGetValue(type, out uncastQueue))
             {
-                uncastQueue = new MessageQueue<T>();
+                uncastQueue = new Message.Channel<T>();
                 m_queues[type] = uncastQueue;
             }
             //This cast shouldn't fail. If it does, let it crash.
-            MessageQueue<T> queue = (MessageQueue<T>)uncastQueue;
+            Message.Channel<T> queue = (Message.Channel<T>)uncastQueue;
             queue.Subscribe(callback);
         }
 
-        public void Unsubcribe<T>(IPublisher<T>.Callback callback)
+        public void Unsubcribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
             object uncastQueue = null;
@@ -56,7 +56,7 @@ namespace NpcGenerator
                     " that was not already subscribed");
             }
             //This cast shouldn't fail. If it does, let it crash.
-            MessageQueue<T> queue = (MessageQueue<T>)uncastQueue;
+            Message.Channel<T> queue = (Message.Channel<T>)uncastQueue;
             queue.Unsubscribe(callback);
         }
 

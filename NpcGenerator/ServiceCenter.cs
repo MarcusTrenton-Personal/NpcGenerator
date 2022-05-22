@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using NpcGenerator.Message;
+
 namespace NpcGenerator
 {
     //This class is an implementation of the toolbox pattern.
@@ -33,11 +35,11 @@ namespace NpcGenerator
             trackingProfile.Save(profilePath);
             Profile = trackingProfile;
 
-            MessageCenter = new MessageCenter();
+            MessageCenter = new Messager();
         }
 
         public ITrackingProfile Profile { get; private set; }
         public IAppSettings ApplicationSettings { get; private set; }
-        public IMessageCenter MessageCenter { get; private set; }
+        public IMessager MessageCenter { get; private set; }
     }
 }
