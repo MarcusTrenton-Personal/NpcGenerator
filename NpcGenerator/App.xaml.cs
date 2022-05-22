@@ -30,20 +30,15 @@ namespace NpcGenerator
     {
         App()
         {
-            string appSettingsPath = FilePathHelper.AppSettingsFilePath();
-            AppSettings appSettings = AppSettings.Load(appSettingsPath);
+             m_googleAnalytics = new GoogleAnalytics(
+                 m_serviceCenter.ApplicationSettings, 
+                 m_serviceCenter.Profile, 
+                 m_serviceCenter.MessageCenter);
 
-            string profilePath = FilePathHelper.TrackingProfileFilePath();
-            TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
-            if(trackingProfile == null)
-            {
-                trackingProfile = new TrackingProfile();
-                trackingProfile.Save(profilePath);
-            }
-
-            m_googleAnalytics = new GoogleAnalytics(appSettings, trackingProfile);
+            m_serviceCenter.MessageCenter.Send(sender: this, new Message.Login());
         }
 
-        GoogleAnalytics m_googleAnalytics;
+        private ServiceCenter m_serviceCenter = new ServiceCenter();
+        private GoogleAnalytics m_googleAnalytics;
     }
 }

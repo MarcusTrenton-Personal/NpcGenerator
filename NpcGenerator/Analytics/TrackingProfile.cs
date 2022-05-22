@@ -15,20 +15,40 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace NpcGenerator
 {
-    public class TrackingProfile
+    public class TrackingProfile : ITrackingProfile
     {
         public TrackingProfile()
         {
             ClientId = Guid.NewGuid();
+
+            Update();
         }
 
+        private void Update()
+        {
+            Language = CultureInfo.CurrentCulture.Name;
+
+            AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        //Excess surveillance and tracking is a problem with modern technology. 
+        //Each bit of tracked data must be for a user-friendly purpose.
+
+        //How often does the same user use this software? Using but once indicates a usability problem.
         public Guid ClientId { get; set; }
+
+        //Which languages should be supported?
+        public string Language { get; set; }
+
+        //Are the deployed versions reaching users?
+        public string AppVersion { get; set; }
 
         public void Save(string path)
         {
@@ -50,6 +70,7 @@ namespace NpcGenerator
             {
                 string text = File.ReadAllText(path);
                 TrackingProfile profile = JsonConvert.DeserializeObject<TrackingProfile>(text);
+                profile.Update();
                 return profile;
             }
             return null;

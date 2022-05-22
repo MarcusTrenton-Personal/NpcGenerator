@@ -13,22 +13,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
-using System.IO;
+using System;
 
 namespace NpcGenerator
 {
-    public class AppSettings : IAppSettings
+    public interface IPublisher<T>
     {
-        public GoogleAnalyticsSettings GoogleAnalytics { get; set; }
-
-        public int EncryptionKey { get; set; }
-
-        public static AppSettings Load(string path)
-        {
-            string text = File.ReadAllText(path);
-            AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
-            return settings;
-        }
+        public delegate void Callback(object sender, T message);
+        public void Subscribe(Callback callback);
+        public void Unsubscribe(Callback callback);
+        public void Publish(object sender, T message);
+        public Type GetMessageType();
     }
 }

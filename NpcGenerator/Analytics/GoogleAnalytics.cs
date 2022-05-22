@@ -23,22 +23,23 @@ namespace NpcGenerator
 {
     public class GoogleAnalytics
     {
-        public GoogleAnalytics(AppSettings appSettings, TrackingProfile trackingProfile)
+        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessageCenter messageCenter)
         {
             m_appSettings = appSettings;
             m_trackingProfile = trackingProfile;
-            //TODO: Subscribe to events.
+            m_messageCenter = messageCenter;
 
-            //TODO call event via subscription instead of directly.
-            TrackEvent();
+            m_messageCenter.Subscribe<Message.Login>(OnLogin);           
+
+            //TODO: subscribe to page_view and select_content
         }
 
         ~GoogleAnalytics()
         {
-            //TODO: unsubscribe from events
+            m_messageCenter.Unsubcribe<Message.Login>(OnLogin);
         }
 
-        private async void TrackEvent()
+        private async void TrackEvent(WriteGoogleEvent googleEvent)
         {
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
@@ -47,24 +48,20 @@ namespace NpcGenerator
                 writer.WriteStartObject();
                 writer.WritePropertyName("client_id");
                 writer.WriteValue(m_trackingProfile.ClientId.ToString());
+
+                WriteUserProperties(writer);
+
+                //Writing the event should be through a callback.
                 writer.WritePropertyName("events");
                 writer.WriteStartArray();
-                writer.WriteStartObject();
-                writer.WritePropertyName("name");
-                writer.WriteValue("login");
-                writer.WritePropertyName("params");
-                writer.WriteStartObject();
-                writer.WritePropertyName("method");
-                writer.WriteValue("ClientApp");
-                writer.WriteEnd();
-                writer.WriteEnd();
-                writer.WriteEnd();
-                writer.WriteEndObject();
+
+                googleEvent(writer);
+
+                writer.WriteEnd(); //End of array
+                writer.WriteEndObject(); //End of json
 
             }
-
             string body = sw.ToString();
-
 
 #if DEBUG
             string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdDev;
@@ -101,8 +98,48 @@ namespace NpcGenerator
             }
         }
 
-        static readonly HttpClient s_client = new HttpClient();
-        AppSettings m_appSettings;
-        TrackingProfile m_trackingProfile;
+        private void WriteUserProperties(JsonWriter writer)
+        {
+            writer.WritePropertyName("user_properties");
+            writer.WriteStartObject();
+            
+            writer.WritePropertyName("language");
+            writer.WriteValue(m_trackingProfile.Language);
+
+            writer.WritePropertyName("app_version");
+            writer.WriteValue(m_trackingProfile.AppVersion);
+
+            writer.WriteEnd(); //End of user_properties object
+        }
+
+        private void OnLogin(object sender, Message.Login login)
+        {
+            TrackEvent(WriteLoginEvent);
+        }
+
+        private void WriteLoginEvent(JsonWriter writer)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("login");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("method");
+            writer.WriteValue("ClientApp");
+
+            writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private delegate void WriteGoogleEvent(JsonWriter writer);
+
+        private static readonly HttpClient s_client = new HttpClient();
+        private IAppSettings m_appSettings;
+        private ITrackingProfile m_trackingProfile;
+        private IMessageCenter m_messageCenter;
     }
 }

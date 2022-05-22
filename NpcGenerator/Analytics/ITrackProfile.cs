@@ -13,22 +13,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
-using System.IO;
+using System;
 
 namespace NpcGenerator
 {
-    public class AppSettings : IAppSettings
+    public interface ITrackingProfile
     {
-        public GoogleAnalyticsSettings GoogleAnalytics { get; set; }
+        //Excess surveillance and tracking is a problem with modern technology. 
+        //Each bit of tracked data must be for a user-friendly purpose.
 
-        public int EncryptionKey { get; set; }
+        //How often does the same user use this software? Using but once indicates a usability problem.
+        public Guid ClientId { get; set; }
 
-        public static AppSettings Load(string path)
-        {
-            string text = File.ReadAllText(path);
-            AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
-            return settings;
-        }
+        //Which languages should be supported?
+        public string Language { get; set; }
+
+        //Are the deployed versions reaching users?
+        public string AppVersion { get; set; }
     }
 }
