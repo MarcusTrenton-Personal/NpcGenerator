@@ -18,21 +18,39 @@ using System.Windows;
 namespace NpcGenerator
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for App.xaml. 
+    /// Singleton holder since there is no other way to pass data to the other window classes.
     /// </summary>
     public partial class App : Application
     {
         App()
         {
-             m_googleAnalytics = new GoogleAnalytics(
-                 m_serviceCenter.ApplicationSettings, 
-                 m_serviceCenter.Profile, 
-                 m_serviceCenter.MessageCenter);
+            string appSettingsPath = FilePathHelper.AppSettingsFilePath();
+            AppSettings appSettings = AppSettings.Load(appSettingsPath);
 
-            m_serviceCenter.MessageCenter.Send(sender: this, new Message.Login());
+            string profilePath = FilePathHelper.TrackingProfileFilePath();
+            TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
+            if (trackingProfile == null)
+            {
+                trackingProfile = new TrackingProfile();
+            }
+            trackingProfile.Save(profilePath);
+
+            Message.Messager messager = new Message.Messager();
+
+            ServiceCenter = new ServiceCenter(profile: trackingProfile, appSettings: appSettings, messager: messager);
+
+            //Only pass the part of the ServiceCenter that are needed, rather than the entire class.
+            //Coupling should always be deliberate and minimized.
+            m_googleAnalytics = new GoogleAnalytics(
+                 appSettings: ServiceCenter.AppSettings,
+                 trackingProfile: ServiceCenter.Profile,
+                 messager: ServiceCenter.Messager);
+
+            ServiceCenter.Messager.Send(sender: this, message: new Message.Login());
         }
 
-        private ServiceCenter m_serviceCenter = new ServiceCenter();
-        private GoogleAnalytics m_googleAnalytics;
+        public static ServiceCenter ServiceCenter { get; private set; }
+        private readonly GoogleAnalytics m_googleAnalytics;
     }
 }

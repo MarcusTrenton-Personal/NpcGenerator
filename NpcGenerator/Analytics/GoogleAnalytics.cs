@@ -24,20 +24,20 @@ namespace NpcGenerator
 {
     public class GoogleAnalytics
     {
-        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessager messageCenter)
+        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessager messager)
         {
             m_appSettings = appSettings;
             m_trackingProfile = trackingProfile;
-            m_messageCenter = messageCenter;
+            m_messager = messager;
 
-            m_messageCenter.Subscribe<Message.Login>(OnLogin);           
+            m_messager.Subscribe<Message.Login>(OnLogin);           
 
             //TODO: subscribe to page_view and select_content
         }
 
         ~GoogleAnalytics()
         {
-            m_messageCenter.Unsubcribe<Message.Login>(OnLogin);
+            m_messager.Unsubcribe<Message.Login>(OnLogin);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
@@ -139,8 +139,8 @@ namespace NpcGenerator
         private delegate void WriteGoogleEvent(JsonWriter writer);
 
         private static readonly HttpClient s_client = new HttpClient();
-        private IAppSettings m_appSettings;
-        private ITrackingProfile m_trackingProfile;
-        private IMessager m_messageCenter;
+        private readonly IAppSettings m_appSettings;
+        private readonly ITrackingProfile m_trackingProfile;
+        private readonly IMessager m_messager;
     }
 }

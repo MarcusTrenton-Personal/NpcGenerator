@@ -21,25 +21,15 @@ namespace NpcGenerator
     //Instead of a singleton, all the wanna-be global state is passed in a single, giant container: the toolbox.
     public class ServiceCenter
     {
-        public ServiceCenter()
+        public ServiceCenter(ITrackingProfile profile, IAppSettings appSettings, IMessager messager)
         {
-            string appSettingsPath = FilePathHelper.AppSettingsFilePath();
-            ApplicationSettings = AppSettings.Load(appSettingsPath);
-
-            string profilePath = FilePathHelper.TrackingProfileFilePath();
-            TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
-            if (trackingProfile == null)
-            {
-                trackingProfile = new TrackingProfile();
-            }
-            trackingProfile.Save(profilePath);
-            Profile = trackingProfile;
-
-            MessageCenter = new Messager();
+            Profile = profile;
+            AppSettings = appSettings;
+            Messager = messager;
         }
 
         public ITrackingProfile Profile { get; private set; }
-        public IAppSettings ApplicationSettings { get; private set; }
-        public IMessager MessageCenter { get; private set; }
+        public IAppSettings AppSettings { get; private set; }
+        public IMessager Messager { get; private set; }
     }
 }
