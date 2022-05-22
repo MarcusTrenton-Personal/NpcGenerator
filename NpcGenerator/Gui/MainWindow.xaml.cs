@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using Microsoft.Win32;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -23,7 +24,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using Microsoft.Win32;
 
 [assembly: CLSCompliant(true)]
 namespace NpcGenerator
@@ -40,6 +40,8 @@ namespace NpcGenerator
             configurationPathText.Content = m_userSettings.ConfigurationPath;
             npcQuantityText.Text = m_userSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
+
+            App.ServiceCenter.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
         }
 
         private void SetVersionText()
@@ -86,6 +88,8 @@ namespace NpcGenerator
 
                 m_userSettings.ConfigurationPath = openFileDialog.FileName;
                 m_userSettings.Save(m_userSettingsPath);
+
+                App.ServiceCenter.Messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
         }
 
@@ -181,6 +185,8 @@ namespace NpcGenerator
                 }
                 generatedNpcTable.DataContext = table;
                 saveNpcsButton.IsEnabled = true;
+
+                App.ServiceCenter.Messager.Send(sender: this, message: new Message.GenerateNpcs(npcQuantity));
             }
             catch(IOException exception)
             {
@@ -200,6 +206,8 @@ namespace NpcGenerator
         {
             string npcCsv = m_npcGroup.ToCsv();
             FilePathHelper.SaveToPickedFile(npcCsv, "csv");
+
+            App.ServiceCenter.Messager.Send(sender: this, message: new Message.SaveNpcs());
         }
 
         private void ShowLicensePopup(object sender, RoutedEventArgs e)

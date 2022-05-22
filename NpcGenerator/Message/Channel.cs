@@ -31,7 +31,7 @@ namespace NpcGenerator.Message
             Callbacks -= callback;
         }
         
-        public void Publish(object sender, T message)
+        public void Send(object sender, T message)
         {
             Callbacks?.Invoke(sender, message);
         }

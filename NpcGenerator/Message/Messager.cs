@@ -27,37 +27,37 @@ namespace NpcGenerator.Message
             if (m_queues.TryGetValue(type, out uncastQueue))
             {
                 //This cast shouldn't fail. If it does, let it crash.
-                Message.Channel<T> queue = (Message.Channel<T>)uncastQueue;
-                queue.Publish(sender, message);
+                Message.Channel<T> channel = (Message.Channel<T>)uncastQueue;
+                channel.Send(sender, message);
             }
         }
 
         public void Subscribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
-            object uncastQueue = null;
-            if(!m_queues.TryGetValue(type, out uncastQueue))
+            object uncastChannel = null;
+            if(!m_queues.TryGetValue(type, out uncastChannel))
             {
-                uncastQueue = new Message.Channel<T>();
-                m_queues[type] = uncastQueue;
+                uncastChannel = new Message.Channel<T>();
+                m_queues[type] = uncastChannel;
             }
             //This cast shouldn't fail. If it does, let it crash.
-            Message.Channel<T> queue = (Message.Channel<T>)uncastQueue;
-            queue.Subscribe(callback);
+            Message.Channel<T> channel = (Message.Channel<T>)uncastChannel;
+            channel.Subscribe(callback);
         }
 
         public void Unsubcribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
-            object uncastQueue = null;
-            if (!m_queues.TryGetValue(type, out uncastQueue))
+            object uncastChannel = null;
+            if (!m_queues.TryGetValue(type, out uncastChannel))
             {
                 throw new ArgumentException("Cannot unsubscribe to messages of type " + type + 
                     " that was not already subscribed");
             }
             //This cast shouldn't fail. If it does, let it crash.
-            Message.Channel<T> queue = (Message.Channel<T>)uncastQueue;
-            queue.Unsubscribe(callback);
+            Message.Channel<T> channel = (Message.Channel<T>)uncastChannel;
+            channel.Unsubscribe(callback);
         }
 
         private Dictionary<Type, object> m_queues = new Dictionary<Type, object>();

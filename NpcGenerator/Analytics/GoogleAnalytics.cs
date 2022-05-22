@@ -30,14 +30,20 @@ namespace NpcGenerator
             m_trackingProfile = trackingProfile;
             m_messager = messager;
 
-            m_messager.Subscribe<Message.Login>(OnLogin);           
-
-            //TODO: subscribe to page_view and select_content
+            m_messager.Subscribe<Login>(OnLogin);
+            m_messager.Subscribe<PageView>(OnPageView);
+            m_messager.Subscribe<SelectConfiguration>(OnSelectConfiguration);
+            m_messager.Subscribe<GenerateNpcs>(OnGenerateNpcs);
+            m_messager.Subscribe<SaveNpcs>(OnSaveNpcs);
         }
 
         ~GoogleAnalytics()
         {
-            m_messager.Unsubcribe<Message.Login>(OnLogin);
+            m_messager.Unsubcribe<Login>(OnLogin);
+            m_messager.Unsubcribe<PageView>(OnPageView);
+            m_messager.Unsubcribe<SelectConfiguration>(OnSelectConfiguration);
+            m_messager.Unsubcribe<GenerateNpcs>(OnGenerateNpcs);
+            m_messager.Unsubcribe<SaveNpcs>(OnSaveNpcs);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
@@ -132,6 +138,84 @@ namespace NpcGenerator
             writer.WriteValue("ClientApp");
 
             writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnPageView(object sender, PageView pageView)
+        {
+            WriteGoogleEvent googlePageViewEvent = delegate (JsonWriter writer) { WritePageViewEvent(writer, pageView.Title); };
+            TrackEvent(googlePageViewEvent);
+        }
+
+        private void WritePageViewEvent(JsonWriter writer, string title)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("page_view");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("title");
+            writer.WriteValue(title);
+
+            writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnSelectConfiguration(object sender, SelectConfiguration selectConfiguration)
+        {
+            TrackEvent(WriteSelectConfigurationEvent);
+        }
+
+        private void WriteSelectConfigurationEvent(JsonWriter writer)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("select_configuration");
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnGenerateNpcs(object sender, GenerateNpcs generateNpcs)
+        {
+            WriteGoogleEvent googleGenerateNpcsEvent = delegate (JsonWriter writer) { WriteGenerateNpcsEvent(writer, generateNpcs.Quantity); };
+            TrackEvent(googleGenerateNpcsEvent);
+        }
+
+        private void WriteGenerateNpcsEvent(JsonWriter writer, int quantity)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("generate_npcs");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("quantity");
+            writer.WriteValue(quantity);
+
+            writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnSaveNpcs(object sender, SaveNpcs saveNpcs)
+        {
+            TrackEvent(WriteSaveNpcsEvent);
+        }
+
+        private void WriteSaveNpcsEvent(JsonWriter writer)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("save_npcs");
 
             writer.WriteEnd(); //End of event object
         }
