@@ -13,10 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
-using System.IO;
-using System.Text;
-
 namespace NpcGenerator
 {
     public interface IUserSettings
