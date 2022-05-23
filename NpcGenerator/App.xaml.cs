@@ -25,7 +25,8 @@ namespace NpcGenerator
     {
         App()
         {
-            FilePathProvider filePathProvider = new FilePathProvider(); 
+            FilePathProvider filePathProvider = new FilePathProvider();
+            FileIO fileIO = new FileIO(filePathProvider);
 
             string appSettingsPath = filePathProvider.AppSettingsFilePath;
             AppSettings appSettings = AppSettings.Load(appSettingsPath);
@@ -41,7 +42,8 @@ namespace NpcGenerator
                 appSettings: appSettings, 
                 messager: messager,
                 userSettings: userSettings,
-                filePathProvider: filePathProvider);
+                filePathProvider: filePathProvider,
+                fileIO: fileIO);
 
             //Only pass the part of the ServiceCenter that are needed, rather than the entire class.
             //Coupling should always be deliberate and minimized.

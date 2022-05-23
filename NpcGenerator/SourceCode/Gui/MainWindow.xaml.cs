@@ -164,7 +164,7 @@ namespace NpcGenerator
 
             try
             {
-                string cachedConfigurationPath = m_serviceCenter.FilePathProvider.CacheFile(configurationPath);
+                string cachedConfigurationPath = m_serviceCenter.FileIO.CacheFile(configurationPath);
                 TraitSchema traitSchema = ConfigurationFile.Parse(cachedConfigurationPath);
                 m_npcGroup = new NpcGroup(traitSchema, npcQuantity);
 
@@ -199,7 +199,7 @@ namespace NpcGenerator
         private void SaveNpcs(object sender, RoutedEventArgs e)
         {
             string npcCsv = m_npcGroup.ToCsv();
-            m_serviceCenter.FilePathProvider.SaveToPickedFile(npcCsv, "csv");
+            m_serviceCenter.FileIO.SaveToPickedFile(npcCsv, "csv");
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.SaveNpcs());
         }

@@ -13,21 +13,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Microsoft.Win32;
-using System;
-using System.IO;
-using System.Text;
-using System.Windows;
-
 namespace NpcGenerator
 {
-    public interface IFilePathProvider
+    public interface IFileIO
     {
-        public string AppDataFolder { get; }
-        public string AppSettingsFolder { get; }
-        public string LicensePath { get; }
-        public string UserSettingsFilePath { get; }
-        public string AppSettingsFilePath { get; }
-        public string TrackingProfileFilePath { get; }
+        //Cache a copy of a file so it can already be open with a read/write lock at the same time 
+        //it is read by this program.
+        public string CacheFile(string originalPath);
+
+        public void SaveToPickedFile(string content, string fileType);
     }
 }
