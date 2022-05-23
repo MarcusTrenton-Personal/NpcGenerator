@@ -37,6 +37,7 @@ namespace NpcGenerator
             PopulateText();
 
             App.ServiceCenter.Messager.Send(sender: this, message: new Message.PageView("License"));
+            //App.ServiceCenter.Messager.Send(sender: this, message: new Message.PageView("License"));
         }
 
         private void PopulateText()

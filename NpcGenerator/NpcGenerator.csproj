@@ -6,22 +6,23 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>1200px-2-Dice-Icon.svg.ico</ApplicationIcon>
+    <ApplicationIcon>SourceAssets\1200px-2-Dice-Icon.svg.ico</ApplicationIcon>
     <Authors>Marcus Trenton</Authors>
     <Company />
     <RepositoryType>Git</RepositoryType>
     <PackageTags></PackageTags>
     <RepositoryUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</RepositoryUrl>
-    <PackageIcon>1200px-2-Dice-Icon.svg.ico</PackageIcon>
+    <PackageIcon>SourceAssets\1200px-2-Dice-Icon.svg.ico</PackageIcon>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SourceAssets\MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
-    <PackageLicenseFile>GNU License.rtf</PackageLicenseFile>
+    <PackageLicenseFile>..\GNU License.rtf</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TransformOnBuild>true</TransformOnBuild>
     <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
     <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +39,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </License>
-    <None Include="1200px-2-Dice-Icon.svg.ico">
+    <None Include="SourceAssets\1200px-2-Dice-Icon.svg.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
@@ -49,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="AssemblyInfo.cs">
+    <Compile Update="SourceCode\AssemblyInfo.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>AssemblyInfo.tt</DependentUpon>
@@ -57,11 +58,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="AssemblyInfo.tt">
+    <None Update="SourceCode\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="GeneratedCode\" />
+  </ItemGroup>
+
+  <!-- ######## Clean Events ######## -->
+  <Target Name="CleanGeneratedCode" AfterTargets="Clean">
+    <ItemGroup>
+      <GeneratedCode Include="GeneratedCode\*" />
+      <!-- In case some runs the manual T4 tool, which doesn't move the output to the correct folder. -->
+      <ManualInvokeGeneratedCode Include="SourceCode\AssemblyInfo.cs" />
+    </ItemGroup>
+    <Delete Files="@(GeneratedCode)" />
+    <Delete Files="@(ManualInvokeGeneratedCode)" />
+  </Target>
 
   <!-- ######## Build Events ######## -->
   
@@ -69,6 +85,10 @@
   T4 text templating is NOT invoked automatically through PropertyGroups. Instead, it must be invoked explicitly.-->
   <Target Name="AutogenerateCode" BeforeTargets="PreBuildEvent">
     <Exec Command="msbuild NpcGenerator.csproj /t:TransformAll" ConsoleToMsBuild="true" />
+    <ItemGroup>
+      <GeneratedAssemblyInfo Include="SourceCode\AssemblyInfo.cs" />
+    </ItemGroup>
+    <Move SourceFiles="@(GeneratedAssemblyInfo)" DestinationFolder="GeneratedCode" />
   </Target>
 
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
@@ -77,7 +97,7 @@
     </ItemGroup>
     <Copy SourceFiles="@(License)" DestinationFolder="$(OutDir)" />
     <ItemGroup>
-      <AppSettings Include="Settings\AppSettings.json" />
+      <AppSettings Include="SourceAssets\AppSettings.json" />
     </ItemGroup>
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(OutDir)/Settings" />
   </Target>
