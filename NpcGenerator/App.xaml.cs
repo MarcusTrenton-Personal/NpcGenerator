@@ -25,32 +25,61 @@ namespace NpcGenerator
     {
         App()
         {
-            string appSettingsPath = FilePathHelper.AppSettingsFilePath();
+            FilePathProvider filePathProvider = new FilePathProvider(); 
+
+            string appSettingsPath = filePathProvider.AppSettingsFilePath;
             AppSettings appSettings = AppSettings.Load(appSettingsPath);
 
-            string profilePath = FilePathHelper.TrackingProfileFilePath();
+            TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
+
+            Message.Messager messager = new Message.Messager();
+
+            UserSettings userSettings = ReadUserSettings(filePathProvider);
+
+            m_serviceCenter = new ServiceCenter(
+                profile: trackingProfile, 
+                appSettings: appSettings, 
+                messager: messager,
+                userSettings: userSettings,
+                filePathProvider: filePathProvider);
+
+            //Only pass the part of the ServiceCenter that are needed, rather than the entire class.
+            //Coupling should always be deliberate and minimized.
+            m_googleAnalytics = new GoogleAnalytics(
+                 appSettings: m_serviceCenter.AppSettings,
+                 trackingProfile: m_serviceCenter.Profile,
+                 messager: m_serviceCenter.Messager);
+
+            m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
+
+            Current.MainWindow = new MainWindow(m_serviceCenter);
+            Current.MainWindow.Show();
+        }
+
+        private TrackingProfile ReadTrackingProfile(FilePathProvider filePathProvider)
+        {
+            string profilePath = filePathProvider.TrackingProfileFilePath;
             TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
             if (trackingProfile == null)
             {
                 trackingProfile = new TrackingProfile();
             }
             trackingProfile.Save(profilePath);
-
-            Message.Messager messager = new Message.Messager();
-
-            ServiceCenter = new ServiceCenter(profile: trackingProfile, appSettings: appSettings, messager: messager);
-
-            //Only pass the part of the ServiceCenter that are needed, rather than the entire class.
-            //Coupling should always be deliberate and minimized.
-            m_googleAnalytics = new GoogleAnalytics(
-                 appSettings: ServiceCenter.AppSettings,
-                 trackingProfile: ServiceCenter.Profile,
-                 messager: ServiceCenter.Messager);
-
-            ServiceCenter.Messager.Send(sender: this, message: new Message.Login());
+            return trackingProfile;
         }
 
-        public static ServiceCenter ServiceCenter { get; private set; }
+        private UserSettings ReadUserSettings(FilePathProvider filePathProvider)
+        {
+            string userSettingsPath = filePathProvider.UserSettingsFilePath;
+            UserSettings userSettings = UserSettings.Load(userSettingsPath);
+            if (userSettings == null)
+            {
+                userSettings = new UserSettings();
+            }
+            return userSettings;
+        }
+
+        private readonly ServiceCenter m_serviceCenter;
         private readonly GoogleAnalytics m_googleAnalytics;
     }
 }

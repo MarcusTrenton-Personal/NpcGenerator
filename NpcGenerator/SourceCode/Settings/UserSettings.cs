@@ -19,7 +19,7 @@ using System.Text;
 
 namespace NpcGenerator
 {
-    public class UserSettings
+    public class UserSettings : IUserSettings
     {
         public string ConfigurationPath { get; set; } = "...";
 

@@ -30,18 +30,22 @@ namespace NpcGenerator
 {
     public partial class MainWindow : Window
     {   
-        public MainWindow()
+        //Normally, only the needed services would be passed, 
+        //but since this window can spawn other windows that is too restricting.
+        public MainWindow(ServiceCenter serviceCenter)
         {
+            m_serviceCenter = serviceCenter;
+            m_userSettingsPath = m_serviceCenter.FilePathProvider.UserSettingsFilePath; //Must come before InitializeComponent()
+
             InitializeComponent();
 
-            SetVersionText();
+            SetVersionText(); 
 
-            ReadSettings();
-            configurationPathText.Content = m_userSettings.ConfigurationPath;
-            npcQuantityText.Text = m_userSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
+            configurationPathText.Content = m_serviceCenter.UserSettings.ConfigurationPath;
+            npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
 
-            App.ServiceCenter.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
+            serviceCenter?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
         }
 
         private void SetVersionText()
@@ -49,16 +53,6 @@ namespace NpcGenerator
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionText.Text = fvi.FileVersion;
-        }
-
-        private void ReadSettings()
-        {
-            m_userSettingsPath = FilePathHelper.UserSettingsFilePath();
-            m_userSettings = UserSettings.Load(m_userSettingsPath);
-            if (m_userSettings == null)
-            {
-                m_userSettings = new UserSettings();
-            }
         }
 
         private void UpdateGenerateButtonEnabled()
@@ -86,10 +80,10 @@ namespace NpcGenerator
                 configurationPathText.Content = openFileDialog.FileName;
                 UpdateGenerateButtonEnabled();
 
-                m_userSettings.ConfigurationPath = openFileDialog.FileName;
-                m_userSettings.Save(m_userSettingsPath);
+                m_serviceCenter.UserSettings.ConfigurationPath = openFileDialog.FileName;
+                m_serviceCenter.UserSettings.Save(m_userSettingsPath);
 
-                App.ServiceCenter.Messager.Send(sender: this, message: new Message.SelectConfiguration());
+                m_serviceCenter.Messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
         }
 
@@ -105,10 +99,10 @@ namespace NpcGenerator
             bool isInt = int.TryParse(npcQuantityText.Text, out newQuantity);
             UpdateGenerateButtonEnabled();
 
-            if(m_userSettings != null && isInt)
+            if(m_serviceCenter.UserSettings != null && isInt)
             {
-                m_userSettings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
-                m_userSettings.Save(m_userSettingsPath);
+                m_serviceCenter.UserSettings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
+                m_serviceCenter.UserSettings.Save(m_userSettingsPath);
             }
         }
 
@@ -170,7 +164,7 @@ namespace NpcGenerator
 
             try
             {
-                string cachedConfigurationPath = FilePathHelper.CacheConfigurationFile(configurationPath);
+                string cachedConfigurationPath = m_serviceCenter.FilePathProvider.CacheFile(configurationPath);
                 TraitSchema traitSchema = ConfigurationFile.Parse(cachedConfigurationPath);
                 m_npcGroup = new NpcGroup(traitSchema, npcQuantity);
 
@@ -186,7 +180,7 @@ namespace NpcGenerator
                 generatedNpcTable.DataContext = table;
                 saveNpcsButton.IsEnabled = true;
 
-                App.ServiceCenter.Messager.Send(sender: this, message: new Message.GenerateNpcs(npcQuantity));
+                m_serviceCenter.Messager.Send(sender: this, message: new Message.GenerateNpcs(npcQuantity));
             }
             catch(IOException exception)
             {
@@ -205,22 +199,22 @@ namespace NpcGenerator
         private void SaveNpcs(object sender, RoutedEventArgs e)
         {
             string npcCsv = m_npcGroup.ToCsv();
-            FilePathHelper.SaveToPickedFile(npcCsv, "csv");
+            m_serviceCenter.FilePathProvider.SaveToPickedFile(npcCsv, "csv");
 
-            App.ServiceCenter.Messager.Send(sender: this, message: new Message.SaveNpcs());
+            m_serviceCenter.Messager.Send(sender: this, message: new Message.SaveNpcs());
         }
 
         private void ShowLicensePopup(object sender, RoutedEventArgs e)
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
-            LicenseWindow licenseWindow = new LicenseWindow();
+            LicenseWindow licenseWindow = new LicenseWindow(m_serviceCenter.Messager, m_serviceCenter.FilePathProvider);
             licenseWindow.Owner = this;
             licenseWindow.Show();
         }
 
-        private UserSettings m_userSettings;
-        private string m_userSettingsPath;
+        private readonly ServiceCenter m_serviceCenter;
+        private readonly string m_userSettingsPath;
         private NpcGroup m_npcGroup;
     }
 }

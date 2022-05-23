@@ -32,7 +32,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
                 <TextBlock x:Name="npcQuantityLabel" Margin="10" Text="Quantity" VerticalAlignment="Center"/>
-                <TextBox x:Name="npcQuantityText" Margin="10" Text="1" Padding="3" PreviewTextInput="NpcQuantityInput" TextChanged="NpcQuantityInputChanged" DataObject.Pasting="NpcQuantityPasting" VerticalAlignment="Center"/>
+                <TextBox x:Name="npcQuantityText" Margin="10" Padding="3" PreviewTextInput="NpcQuantityInput" TextChanged="NpcQuantityInputChanged" DataObject.Pasting="NpcQuantityPasting" VerticalAlignment="Center"/>
                 <Button x:Name="generateButton" Margin="10" Click="GenerateNpcs" VerticalAlignment="Center" IsEnabled="False">
                     <TextBlock x:Name="generateButtonText" Margin="1" Text="Generate"/>
                 </Button>

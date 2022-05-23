@@ -30,21 +30,20 @@ namespace NpcGenerator
 {
     public partial class LicenseWindow : Window
     {
-        public LicenseWindow()
+        public LicenseWindow(Message.IMessager messager, IFilePathProvider filePathProvider)
         {
             InitializeComponent();
 
-            PopulateText();
+            PopulateText(filePathProvider);
 
-            App.ServiceCenter.Messager.Send(sender: this, message: new Message.PageView("License"));
-            //App.ServiceCenter.Messager.Send(sender: this, message: new Message.PageView("License"));
+            messager?.Send(sender: this, message: new Message.PageView("License"));
         }
 
-        private void PopulateText()
+        private void PopulateText(IFilePathProvider filePathProvider)
         {
             try
             {
-                string path = FilePathHelper.LicensePath();
+                string path = filePathProvider.LicensePath;
                 using (FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     FlowDocument flowDocument = new FlowDocument();

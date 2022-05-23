@@ -21,41 +21,45 @@ using System.Windows;
 
 namespace NpcGenerator
 {
-    public static class FilePathHelper
+    public class FilePathProvider : IFilePathProvider
     {
-        public const string AppDataFolder = "NpcGenerator";
-        public const string AppSettingsFolder = "Settings";
+        public string AppDataFolder { get; } = "NpcGenerator";
+        public string AppSettingsFolder { get; } = "Settings";
+        public string LicensePath { get; } = "GNU License.rtf";
 
-        private const string ConfigurationCacheFolder = "Cache";
-        private const string UserSettingsFile = "UserSettings.json";
-        private const string AppSettingsFile = "AppSettings.json";
-        private const string TrackingProfileFile = "TrackingProfile.json";
-        private const string LicenseFile = "GNU License.rtf";
-
-        public static string UserSettingsFilePath()
+        public string UserSettingsFilePath 
         {
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(commonAppData, AppDataFolder, UserSettingsFile);
+            get
+            {
+                string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                return Path.Combine(commonAppData, AppDataFolder, UserSettingsFile);
+            }
         }
 
-        public static string AppSettingsFilePath()
+        public string AppSettingsFilePath
         {
-            return Path.Combine(AppSettingsFolder, AppSettingsFile);
+            get
+            {
+                return Path.Combine(AppSettingsFolder, AppSettingsFile);
+            }
         }
 
-        public static string TrackingProfileFilePath()
+        public string TrackingProfileFilePath
         {
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(commonAppData, AppDataFolder, TrackingProfileFile);
+            get
+            {
+                string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                return Path.Combine(commonAppData, AppDataFolder, TrackingProfileFile);
+            }
         }
 
         //Cache a copy of a configuration file so it can already be open with a read/write lock at the same time 
         //it is read by this program.
-        public static string CacheConfigurationFile(string originalPath)
+        public string CacheFile(string originalPath)
         {
             string fileName = Path.GetFileName(originalPath);
             string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string cachePath = Path.Combine(commonAppData, AppDataFolder, ConfigurationCacheFolder, fileName);
+            string cachePath = Path.Combine(commonAppData, AppDataFolder, CacheFolder, fileName);
 
             string directory = Path.GetDirectoryName(cachePath);
             Directory.CreateDirectory(directory);
@@ -64,7 +68,7 @@ namespace NpcGenerator
             return cachePath;
         }
 
-        public static void SaveToPickedFile(string content, string fileType)
+        public void SaveToPickedFile(string content, string fileType)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
@@ -89,9 +93,9 @@ namespace NpcGenerator
             }
         }
 
-        public static string LicensePath()
-        {
-            return LicenseFile;
-        }
+        private const string CacheFolder = "Cache";
+        private const string UserSettingsFile = "UserSettings.json";
+        private const string AppSettingsFile = "AppSettings.json";
+        private const string TrackingProfileFile = "TrackingProfile.json";
     }
 }
