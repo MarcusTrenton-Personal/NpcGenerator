@@ -13,13 +13,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace NpcGenerator
 {
-    static class NumberHelper
+    public static class NumberHelper
     {
         public static bool TryParsePositiveNumber(string text, out int result)
         {
