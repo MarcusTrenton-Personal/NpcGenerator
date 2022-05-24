@@ -15,7 +15,6 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
-using System;
 
 namespace Tests
 {
