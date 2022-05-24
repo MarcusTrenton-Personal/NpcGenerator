@@ -18,7 +18,6 @@ namespace NpcGenerator
     public interface IFilePathProvider
     {
         public string AppDataFolder { get; }
-        public string AppSettingsFolder { get; }
         public string LicensePath { get; }
         public string UserSettingsFilePath { get; }
         public string AppSettingsFilePath { get; }

@@ -21,7 +21,6 @@ namespace NpcGenerator
     public class FilePathProvider : IFilePathProvider
     {
         public string AppDataFolder { get; } = "NpcGenerator";
-        public string AppSettingsFolder { get; } = "Settings";
         public string LicensePath { get; } = "GNU License.rtf";
 
         public string UserSettingsFilePath 
@@ -51,6 +50,7 @@ namespace NpcGenerator
         }
 
         private const string UserSettingsFile = "UserSettings.json";
+        private const string AppSettingsFolder = "Settings";
         private const string AppSettingsFile = "AppSettings.json";
         private const string TrackingProfileFile = "TrackingProfile.json";
     }
