@@ -17,9 +17,7 @@ using System;
 
 namespace NpcGenerator.Message
 {
-    //I don't want to create each one of these individually.
-    //If anyone tells the message system to subscribe to event t, that event queue should exist then.
-    public class Channel<T> : IChannel<T> //Is this a Publisher or a Channel?
+    public class Channel<T> : IChannel<T>
     {
         public void Subscribe(IChannel<T>.Callback callback)
         {
