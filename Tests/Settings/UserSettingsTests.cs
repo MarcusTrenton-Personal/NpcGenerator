@@ -31,7 +31,7 @@ namespace Tests
             const string configurationPath = "Config.csv";
             const int npcQuantity = 1;
 
-            //Create the original AppSettings
+            //Create the original UserSettings
             UserSettings original = new UserSettings();
             original.ConfigurationPath = configurationPath;
             original.NpcQuantity = npcQuantity;
