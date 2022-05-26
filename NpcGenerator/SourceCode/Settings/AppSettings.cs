@@ -20,7 +20,7 @@ namespace NpcGenerator
 {
     public class AppSettings : IAppSettings
     {
-        public GoogleAnalyticsSettings GoogleAnalytics { get; set; }
+        public GoogleAnalyticsSettings GoogleAnalytics { get; set; } = new GoogleAnalyticsSettings();
 
         public int EncryptionKey { get; set; }
 
