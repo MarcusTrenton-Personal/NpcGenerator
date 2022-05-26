@@ -46,7 +46,7 @@ namespace NpcGenerator.Message
             channel.Subscribe(callback);
         }
 
-        public void Unsubcribe<T>(IChannel<T>.Callback callback)
+        public void Unsubscribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
             object uncastChannel = null;

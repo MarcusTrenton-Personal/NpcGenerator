@@ -21,6 +21,6 @@ namespace NpcGenerator.Message
 
         public void Subscribe<T>(IChannel<T>.Callback callback);
 
-        public void Unsubcribe<T>(IChannel<T>.Callback callback);
+        public void Unsubscribe<T>(IChannel<T>.Callback callback);
     }
 }

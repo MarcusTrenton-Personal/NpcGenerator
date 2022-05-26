@@ -15,23 +15,26 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator.Message;
-using System;
 
 namespace Tests
 {
     [TestClass]
-    public class ChannelTests
+    public class MessagerTests
     {
-        private class MockEvent
+        private class MockEvent1
         {
             public int Number { get; set; }
+        }
+
+        private class MockEvent2
+        {
             public string Text { get; set; }
         }
 
         [TestInitialize]
-        public void CreateChannel()
+        public void CreateMessenger()
         {
-            m_channel = new Channel<MockEvent>();
+            m_messager = new Messager();
         }
 
         [TestMethod]
@@ -39,37 +42,65 @@ namespace Tests
         {
             bool subscribeCalledback = false;
 
-            m_channel.Subscribe((object sender, MockEvent message) => 
+            m_messager.Subscribe((object sender, MockEvent1 message) =>
             {
                 Assert.AreEqual(this, sender, "Message sender is not correct");
                 Assert.AreEqual(3, message.Number, "Message has incorrect value");
-                Assert.AreEqual("Test", message.Text, "Message has incorrect value");
 
                 subscribeCalledback = true;
             });
 
-            m_channel.Send(this, new MockEvent { Number = 3, Text = "Test" });
+            m_messager.Send(this, new MockEvent1 { Number = 3 });
 
             Assert.IsTrue(subscribeCalledback, "Subscribe callback was not called.");
         }
 
         [TestMethod]
-        public void MultipleSubscribe()
+        public void MultipleSubscribeToSameEvent()
         {
             bool firstCallbackHappened = false;
             bool secondCallbackHappened = false;
 
-            m_channel.Subscribe((object sender, MockEvent message) =>
+            m_messager.Subscribe((object sender, MockEvent1 message) =>
             {
                 firstCallbackHappened = true;
             });
 
-            m_channel.Subscribe((object sender, MockEvent message) =>
+            m_messager.Subscribe((object sender, MockEvent1 message) =>
             {
                 secondCallbackHappened = true;
             });
 
-            m_channel.Send(this, new MockEvent { Number = 3, Text = "Test" });
+            m_messager.Send(this, new MockEvent1 { Number = 3 });
+
+            Assert.IsTrue(firstCallbackHappened, "First subscribe callback was not called.");
+            Assert.IsTrue(secondCallbackHappened, "Second subscribe callback was not called.");
+        }
+
+        [TestMethod]
+        public void MultipleSubscribeToDifferentEvents()
+        {
+            bool firstCallbackHappened = false;
+            bool secondCallbackHappened = false;
+
+            m_messager.Subscribe((object sender, MockEvent1 message) =>
+            {
+                firstCallbackHappened = true;
+
+                Assert.AreEqual(this, sender, "Message sender is not correct");
+                Assert.AreEqual(3, message.Number, "Message has incorrect value");
+            });
+
+            m_messager.Subscribe((object sender, MockEvent2 message) =>
+            {
+                secondCallbackHappened = true;
+
+                Assert.AreEqual(this, sender, "Message sender is not correct");
+                Assert.AreEqual("Test", message.Text, "Message has incorrect value");
+            });
+
+            m_messager.Send(this, new MockEvent1 { Number = 3 });
+            m_messager.Send(this, new MockEvent2 { Text = "Test" });
 
             Assert.IsTrue(firstCallbackHappened, "First subscribe callback was not called.");
             Assert.IsTrue(secondCallbackHappened, "Second subscribe callback was not called.");
@@ -80,14 +111,14 @@ namespace Tests
         {
             bool subscribeCalledback = false;
 
-            IChannel<MockEvent>.Callback callback = (object sender, MockEvent message) =>
+            IChannel<MockEvent1>.Callback callback = (object sender, MockEvent1 message) =>
             {
                 subscribeCalledback = true;
             };
-            m_channel.Subscribe(callback);
-            m_channel.Unsubscribe(callback);
+            m_messager.Subscribe(callback);
+            m_messager.Unsubscribe(callback);
 
-            m_channel.Send(this, new MockEvent { Number = 3, Text = "Test" });
+            m_messager.Send(this, new MockEvent1 { Number = 3 });
 
             Assert.IsFalse(subscribeCalledback, "Subscribe callback was called despite being unsubscribed.");
         }
@@ -97,26 +128,19 @@ namespace Tests
         {
             int callbackCount = 0;
 
-            IChannel<MockEvent>.Callback callback = (object sender, MockEvent message) =>
+            IChannel<MockEvent1>.Callback callback = (object sender, MockEvent1 message) =>
             {
                 callbackCount++;
             };
-            m_channel.Subscribe(callback);
-            m_channel.Unsubscribe(callback);
-            m_channel.Subscribe(callback);
+            m_messager.Subscribe(callback);
+            m_messager.Unsubscribe(callback);
+            m_messager.Subscribe(callback);
 
-            m_channel.Send(this, new MockEvent { Number = 3, Text = "Test" });
+            m_messager.Send(this, new MockEvent1 { Number = 3 });
 
             Assert.AreEqual(1, callbackCount, "Resubscribed callback is not called just once.");
         }
 
-        [TestMethod]
-        public void GetMessageType()
-        {
-            Type type = m_channel.GetMessageType();
-            Assert.AreEqual(typeof(MockEvent), type, "Message type is incorrect");
-        }
-
-        Channel<MockEvent> m_channel;
+        Messager m_messager;
     }
 }

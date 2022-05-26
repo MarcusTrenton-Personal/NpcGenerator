@@ -39,11 +39,11 @@ namespace NpcGenerator
 
         ~GoogleAnalytics()
         {
-            m_messager.Unsubcribe<Login>(OnLogin);
-            m_messager.Unsubcribe<PageView>(OnPageView);
-            m_messager.Unsubcribe<SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Unsubcribe<GenerateNpcs>(OnGenerateNpcs);
-            m_messager.Unsubcribe<SaveNpcs>(OnSaveNpcs);
+            m_messager.Unsubscribe<Login>(OnLogin);
+            m_messager.Unsubscribe<PageView>(OnPageView);
+            m_messager.Unsubscribe<SelectConfiguration>(OnSelectConfiguration);
+            m_messager.Unsubscribe<GenerateNpcs>(OnGenerateNpcs);
+            m_messager.Unsubscribe<SaveNpcs>(OnSaveNpcs);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
