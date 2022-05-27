@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
@@ -23,6 +24,11 @@ namespace NpcGenerator
     {
         public LicenseWindow(Message.IMessager messager, IFilePathProvider filePathProvider)
         {
+            if (filePathProvider == null)
+            {
+                throw new ArgumentNullException(nameof(filePathProvider));
+            }
+
             InitializeComponent();
 
             PopulateText(filePathProvider);

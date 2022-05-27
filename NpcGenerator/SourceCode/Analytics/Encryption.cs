@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using System;
 using System.Diagnostics;
 using System.Text;
 
@@ -25,6 +26,11 @@ namespace NpcGenerator
         [DebuggerHidden] //Thwart basic debugger attack. Try harder, hacker!
         public static string XorEncryptDecrypt(string text, int key)
         {
+            if(text == null)
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
+
             StringBuilder inputSb = new StringBuilder(text);
             StringBuilder outputSb = new StringBuilder(text.Length);
             char character;
