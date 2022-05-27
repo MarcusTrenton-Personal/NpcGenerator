@@ -20,10 +20,10 @@ namespace NpcGenerator
 {
     public class GoogleAnalyticsSettings : IGoogleAnalyticsSettings
     {
-        new public string MeasurementIdDev { get; set; }
-        new public string MeasurementIdProd { get; set; }
-        new public string AdditionalIdDev { get; set; }
-        new public string AdditionalIdProd { get; set; }
+        public string MeasurementIdDev { get; set; }
+        public string MeasurementIdProd { get; set; }
+        public string AdditionalIdDev { get; set; }
+        public string AdditionalIdProd { get; set; }
     }
 
     public class AppSettings : IAppSettings

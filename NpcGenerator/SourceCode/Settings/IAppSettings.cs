@@ -15,7 +15,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public class IGoogleAnalyticsSettings
+    public interface IGoogleAnalyticsSettings
     {
         public string MeasurementIdDev { get; }
         public string MeasurementIdProd { get; }
