@@ -66,7 +66,7 @@ namespace NpcGenerator
             private set;
         }
 
-        private List<Trait> traits = new List<Trait>();
+        private readonly List<Trait> traits = new List<Trait>();
         private int m_totalWeight;
     }
 }

@@ -15,7 +15,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public interface IFileIO
+    public interface ILocalFileIO
     {
         //Cache a copy of a file so it can already be open with a read/write lock at the same time 
         //it is read by this program.

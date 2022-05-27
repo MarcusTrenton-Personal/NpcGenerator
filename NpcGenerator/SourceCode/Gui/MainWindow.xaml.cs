@@ -60,10 +60,7 @@ namespace NpcGenerator
             if(generateButton != null && configurationPathText != null && npcQuantityText != null)
             {
                 bool isFilePicked = File.Exists(configurationPathText.Content.ToString());
-
-                int npcQuantity;
-                bool isNpcQuantityPositiveInteger = 
-                    NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
+                bool isNpcQuantityPositiveInteger = NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out _);
 
                 generateButton.IsEnabled = isFilePicked && isNpcQuantityPositiveInteger;
             }
@@ -71,8 +68,10 @@ namespace NpcGenerator
 
         private void ChooseConfiguration(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text CSV (*.csv)|*.csv|All files (*.*)|*.*";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Text CSV (*.csv)|*.csv|All files (*.*)|*.*"
+            };
             bool? filePicked = openFileDialog.ShowDialog();
             if(filePicked == true)
             {
@@ -89,14 +88,12 @@ namespace NpcGenerator
 
         private void NpcQuantityInput(object sender, TextCompositionEventArgs e)
         {
-            int unusedResult;
-            e.Handled = !NumberHelper.TryParseDigit(e.Text, out unusedResult);
+            e.Handled = !NumberHelper.TryParseDigit(e.Text, out _);
         }
 
         private void NpcQuantityInputChanged(object sender, TextChangedEventArgs args)
         {
-            int newQuantity;
-            bool isInt = int.TryParse(npcQuantityText.Text, out newQuantity);
+            bool isInt = int.TryParse(npcQuantityText.Text, out _);
             UpdateGenerateButtonEnabled();
 
             if(m_serviceCenter.UserSettings != null && isInt)
@@ -111,8 +108,7 @@ namespace NpcGenerator
             if (e.DataObject.GetDataPresent(typeof(String)))
             {
                 String text = (String)e.DataObject.GetData(typeof(String));
-                int unusedResult;
-                if (!NumberHelper.TryParsePositiveNumber(text, out unusedResult))
+                if (!NumberHelper.TryParsePositiveNumber(text, out _))
                 {
                     e.CancelCommand();
                 }
@@ -154,9 +150,8 @@ namespace NpcGenerator
 
         private void GenerateNpcs(object sender, RoutedEventArgs e)
         {
-            int npcQuantity;
             string configurationPath = "";
-            bool isValid = ValidateInput(out npcQuantity, ref configurationPath);
+            bool isValid = ValidateInput(out int npcQuantity, ref configurationPath);
             if(!isValid)
             {
                 return;
@@ -208,8 +203,10 @@ namespace NpcGenerator
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
-            LicenseWindow licenseWindow = new LicenseWindow(m_serviceCenter.Messager, m_serviceCenter.FilePathProvider);
-            licenseWindow.Owner = this;
+            LicenseWindow licenseWindow = new LicenseWindow(m_serviceCenter.Messager, m_serviceCenter.FilePathProvider)
+            {
+                Owner = this
+            };
             licenseWindow.Show();
         }
 

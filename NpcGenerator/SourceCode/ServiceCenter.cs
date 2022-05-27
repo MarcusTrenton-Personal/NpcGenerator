@@ -27,7 +27,7 @@ namespace NpcGenerator
             IMessager messager, 
             IUserSettings userSettings, 
             IFilePathProvider filePathProvider,
-            IFileIO fileIO)
+            ILocalFileIO fileIO)
         {
             Profile = profile;
             AppSettings = appSettings;
@@ -42,6 +42,6 @@ namespace NpcGenerator
         public IMessager Messager { get; private set; }
         public IUserSettings UserSettings { get; private set; }
         public IFilePathProvider FilePathProvider { get; private set; }
-        public IFileIO FileIO { get; private set; }
+        public ILocalFileIO FileIO { get; private set; }
     }
 }

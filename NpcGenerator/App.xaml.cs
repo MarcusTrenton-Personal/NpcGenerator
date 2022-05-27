@@ -26,7 +26,7 @@ namespace NpcGenerator
         App()
         {
             FilePathProvider filePathProvider = new FilePathProvider();
-            FileIO fileIO = new FileIO(filePathProvider);
+            LocalFileIO fileIO = new LocalFileIO(filePathProvider);
 
             string appSettingsPath = filePathProvider.AppSettingsFilePath;
             AppSettings appSettings = AppSettings.Load(appSettingsPath);

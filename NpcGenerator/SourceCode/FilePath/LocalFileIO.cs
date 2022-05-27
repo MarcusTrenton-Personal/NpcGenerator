@@ -21,9 +21,9 @@ using System.Windows;
 
 namespace NpcGenerator
 {
-    public class FileIO : IFileIO
+    public class LocalFileIO : ILocalFileIO
     {
-        public FileIO(IFilePathProvider filePathProvider)
+        public LocalFileIO(IFilePathProvider filePathProvider)
         {
             m_filePathProvider = filePathProvider;
         }

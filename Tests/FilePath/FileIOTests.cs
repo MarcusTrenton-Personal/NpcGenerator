@@ -35,7 +35,7 @@ namespace Tests
         public void CreateMockFileProvider()
         {
             MockFilePathProvider mockFilePathProvider = new MockFilePathProvider();
-            m_fileIO = new FileIO(mockFilePathProvider);
+            m_fileIO = new LocalFileIO(mockFilePathProvider);
         }
 
         [TestMethod]
@@ -83,6 +83,6 @@ namespace Tests
             File.Delete(originalFile);
         }
 
-        private FileIO m_fileIO;
+        private LocalFileIO m_fileIO;
     }
 }

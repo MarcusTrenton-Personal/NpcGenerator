@@ -37,6 +37,6 @@ namespace NpcGenerator
             return m_categories[index];
         }
 
-        private List<TraitCategory> m_categories = new List<TraitCategory>();
+        private readonly List<TraitCategory> m_categories = new List<TraitCategory>();
     }
 }
