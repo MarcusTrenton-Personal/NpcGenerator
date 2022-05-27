@@ -111,6 +111,10 @@
 
   <!-- If the PublishDir in Public.pubxml changes then these Conditions must change too. Sadly there's no way to reference a publish profile by name. -->
   <Target Name="PublishSampleFiles" AfterTargets="Publish">
+    <ItemGroup>
+      <Symbols Include="$(PublishDir)\*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(Symbols)" />
     <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv" />
