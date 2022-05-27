@@ -56,11 +56,9 @@ namespace NpcGenerator
             Directory.CreateDirectory(directory);
 
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            using (FileStream fs = File.Create(path))
-            {
-                byte[] info = new UTF8Encoding(true).GetBytes(json);
-                fs.Write(info, 0, info.Length);
-            }
+            using FileStream fs = File.Create(path);
+            byte[] info = new UTF8Encoding(true).GetBytes(json);
+            fs.Write(info, 0, info.Length);
         }
 
         public static TrackingProfile Load(string path)

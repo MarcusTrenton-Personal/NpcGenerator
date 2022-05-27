@@ -23,12 +23,12 @@ namespace NpcGenerator
         //Each bit of tracked data must be for a user-friendly purpose.
 
         //How often does the same user use this software? Using but once indicates a usability problem.
-        public Guid ClientId { get; set; }
+        public Guid ClientId { get; }
 
         //Which languages should be supported?
-        public string Language { get; set; }
+        public string Language { get; }
 
         //Are the deployed versions reaching users?
-        public string AppVersion { get; set; }
+        public string AppVersion { get; }
     }
 }

@@ -24,8 +24,7 @@ namespace Tests
         [TestMethod]
         public void TryParsePositveNumberWithPositiveNumber()
         {
-            int result;
-            bool successful = NumberHelper.TryParsePositiveNumber("1234", out result);
+            bool successful = NumberHelper.TryParsePositiveNumber("1234", out int result);
             Assert.IsTrue(successful, "Could not parse 1234");
             Assert.AreEqual(1234, result, "Parsed incorrect number");
         }
@@ -33,48 +32,42 @@ namespace Tests
         [TestMethod]
         public void TryParsePositveNumberWithZero()
         {
-            int result;
-            bool successful = NumberHelper.TryParsePositiveNumber("0", out result);
+            bool successful = NumberHelper.TryParsePositiveNumber("0", out _);
             Assert.IsFalse(successful, "Parsed 0 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberWithNegativeNumber()
         {
-            int result;
-            bool successful = NumberHelper.TryParsePositiveNumber("-1234", out result);
+            bool successful = NumberHelper.TryParsePositiveNumber("-1234", out _);
             Assert.IsFalse(successful, "Parsed -1234 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberWithNonNumeric()
         {
-            int result;
-            bool successful = NumberHelper.TryParsePositiveNumber("123abc", out result);
+            bool successful = NumberHelper.TryParsePositiveNumber("123abc", out _);
             Assert.IsFalse(successful, "Parsed 123abc when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberWithNumericWords()
         {
-            int result;
-            bool successful = NumberHelper.TryParsePositiveNumber("one", out result);
+            bool successful = NumberHelper.TryParsePositiveNumber("one", out _);
             Assert.IsFalse(successful, "Parsed 'one' when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberDecimal()
         {
-            int result;
-            bool successful = NumberHelper.TryParsePositiveNumber("1.23", out result);
+            bool successful = NumberHelper.TryParsePositiveNumber("1.23", out _);
             Assert.IsFalse(successful, "Parsed 1.23 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParseDigitZero()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("0", out result);
+            bool successful = NumberHelper.TryParseDigit("0", out int result);
             Assert.IsTrue(successful, "Could not parse 0");
             Assert.AreEqual(0, result, "Parsed incorrect number");
         }
@@ -82,8 +75,7 @@ namespace Tests
         [TestMethod]
         public void TryParseDigitOne()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("1", out result);
+            bool successful = NumberHelper.TryParseDigit("1", out int result);
             Assert.IsTrue(successful, "Could not parse 1");
             Assert.AreEqual(1, result, "Parsed incorrect number");
         }
@@ -91,40 +83,35 @@ namespace Tests
         [TestMethod]
         public void TryParseDigitNegativeOne()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("-1", out result);
+            bool successful = NumberHelper.TryParseDigit("-1", out _);
             Assert.IsFalse(successful, "Parsed -1 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParseDigitTen()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("10", out result);
+            bool successful = NumberHelper.TryParseDigit("10", out _);
             Assert.IsFalse(successful, "Parsed 10 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParseDigitDecimal()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("1.23", out result);
+            bool successful = NumberHelper.TryParseDigit("1.23", out _);
             Assert.IsFalse(successful, "Parsed 1.23 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParseDigitNonNumeric()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("a", out result);
+            bool successful = NumberHelper.TryParseDigit("a", out _);
             Assert.IsFalse(successful, "Parsed 'a' when it shouldn't");
         }
 
         [TestMethod]
         public void TryParseDigitNumericWord()
         {
-            int result;
-            bool successful = NumberHelper.TryParseDigit("zero", out result);
+            bool successful = NumberHelper.TryParseDigit("zero", out _);
             Assert.IsFalse(successful, "Parsed zero when it shouldn't");
         }
     }

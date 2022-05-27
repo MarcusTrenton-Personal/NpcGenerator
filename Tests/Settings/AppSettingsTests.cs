@@ -35,12 +35,19 @@ namespace Tests
             const string measurementIdProd = "Measure Prod";
 
             //Create the original AppSettings
-            AppSettings original = new AppSettings();
-            original.EncryptionKey = encryptionKey;
-            original.GoogleAnalytics.AdditionalIdDev = additionalIdDev;
-            original.GoogleAnalytics.AdditionalIdProd = additionalIdProd;
-            original.GoogleAnalytics.MeasurementIdDev = measurementIdDev;
-            original.GoogleAnalytics.MeasurementIdProd = measurementIdProd;
+            GoogleAnalyticsSettings googleAnalytics = new GoogleAnalyticsSettings
+            {
+                AdditionalIdDev = additionalIdDev,
+                AdditionalIdProd = additionalIdProd,
+                MeasurementIdDev = measurementIdDev,
+                MeasurementIdProd = measurementIdProd
+            };
+
+            AppSettings original = new AppSettings
+            {
+                EncryptionKey = encryptionKey,
+                GoogleAnalytics = googleAnalytics
+            };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
             using (FileStream fs = File.Create(fileName))

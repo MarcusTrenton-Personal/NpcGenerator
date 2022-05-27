@@ -86,22 +86,18 @@ namespace NpcGenerator
              * Text scrapers and casual inspection are insufficient to break the protection.
              * Either editing the source code or advanced sniffers are needed to break this.
              */
-            using (StringContent content = new StringContent(body))
+            using StringContent content = new StringContent(body);
+            HttpResponseMessage response = await s_client.PostAsync(
+                new Uri(
+                    string.Format(
+                        "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}",
+                        Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey),
+                        measurementId)
+                    ),
+                content).ConfigureAwait(false);
+            if(!response.IsSuccessStatusCode)
             {
-                //TODO: Catch exceptions. This can fail silently.
-                HttpResponseMessage response = await s_client.PostAsync(
-                    new Uri(
-                        string.Format(
-                            "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}",
-                            Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey),
-                            measurementId)
-                        ),
-                    content);
-                if(!response.IsSuccessStatusCode)
-                {
-                    //TODO: Write to warning log.
-                    Console.Error.WriteLine("Failed analytics response: " + response.StatusCode);
-                }
+                Console.Error.WriteLine("Failed analytics response: " + response.StatusCode);
             }
         }
 
@@ -144,8 +140,12 @@ namespace NpcGenerator
 
         private void OnPageView(object sender, PageView pageView)
         {
-            WriteGoogleEvent googlePageViewEvent = delegate (JsonWriter writer) { WritePageViewEvent(writer, pageView.Title); };
-            TrackEvent(googlePageViewEvent);
+            TrackEvent(Callback);
+
+            void Callback(JsonWriter writer)
+            {
+                WritePageViewEvent(writer, pageView.Title);
+            }
         }
 
         private void WritePageViewEvent(JsonWriter writer, string title)
@@ -183,8 +183,12 @@ namespace NpcGenerator
 
         private void OnGenerateNpcs(object sender, GenerateNpcs generateNpcs)
         {
-            WriteGoogleEvent googleGenerateNpcsEvent = delegate (JsonWriter writer) { WriteGenerateNpcsEvent(writer, generateNpcs.Quantity); };
-            TrackEvent(googleGenerateNpcsEvent);
+            TrackEvent(Callback);
+
+            void Callback(JsonWriter writer)
+            {
+                WriteGenerateNpcsEvent(writer, generateNpcs.Quantity);
+            }
         }
 
         private void WriteGenerateNpcsEvent(JsonWriter writer, int quantity)

@@ -45,21 +45,20 @@ namespace NpcGenerator
 
         public void SaveToPickedFile(string content, string fileType)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = fileType + " files (*." + fileType + ")|*." + fileType;
-            saveFileDialog1.RestoreDirectory = true;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = fileType + " files (*." + fileType + ")|*." + fileType,
+                RestoreDirectory = true
+            };
 
             if (saveFileDialog1.ShowDialog() == true)
             {
                 try
                 {
-                    using (Stream stream = saveFileDialog1.OpenFile())
-                    {
-                        byte[] info = new UTF8Encoding(true).GetBytes(content);
-                        stream.Write(info, 0, info.Length);
-                        stream.Close();
-                    }
+                    using Stream stream = saveFileDialog1.OpenFile();
+                    byte[] info = new UTF8Encoding(true).GetBytes(content);
+                    stream.Write(info, 0, info.Length);
+                    stream.Close();
                 }
                 catch (IOException exception)
                 {
@@ -70,6 +69,6 @@ namespace NpcGenerator
 
         private const string CacheFolder = "Cache";
 
-        private IFilePathProvider m_filePathProvider;
+        private readonly IFilePathProvider m_filePathProvider;
     }
 }

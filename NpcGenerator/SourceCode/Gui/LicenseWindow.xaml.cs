@@ -35,13 +35,11 @@ namespace NpcGenerator
             try
             {
                 string path = filePathProvider.LicensePath;
-                using (FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    FlowDocument flowDocument = new FlowDocument();
-                    TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-                    textRange.Load(fileStream, DataFormats.Rtf);
-                    FlowViewer.Document = flowDocument;
-                }
+                using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                FlowDocument flowDocument = new FlowDocument();
+                TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+                textRange.Load(fileStream, DataFormats.Rtf);
+                FlowViewer.Document = flowDocument;
             }
             catch(IOException exception)
             {

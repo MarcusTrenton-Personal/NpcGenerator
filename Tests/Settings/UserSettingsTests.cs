@@ -32,9 +32,11 @@ namespace Tests
             const int npcQuantity = 1;
 
             //Create the original UserSettings
-            UserSettings original = new UserSettings();
-            original.ConfigurationPath = configurationPath;
-            original.NpcQuantity = npcQuantity;
+            UserSettings original = new UserSettings
+            {
+                ConfigurationPath = configurationPath,
+                NpcQuantity = npcQuantity
+            };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
             using (FileStream fs = File.Create(fileName))

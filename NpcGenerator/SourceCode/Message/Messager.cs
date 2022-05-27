@@ -23,8 +23,7 @@ namespace NpcGenerator.Message
         public void Send<T>(object sender, T message)
         {
             Type type = typeof(T);
-            object uncastQueue = null;
-            if (m_queues.TryGetValue(type, out uncastQueue))
+            if (m_queues.TryGetValue(type, out object uncastQueue))
             {
                 //This cast shouldn't fail. If it does, let it crash.
                 Message.Channel<T> channel = (Message.Channel<T>)uncastQueue;
@@ -35,8 +34,7 @@ namespace NpcGenerator.Message
         public void Subscribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
-            object uncastChannel = null;
-            if(!m_queues.TryGetValue(type, out uncastChannel))
+            if (!m_queues.TryGetValue(type, out object uncastChannel))
             {
                 uncastChannel = new Message.Channel<T>();
                 m_queues[type] = uncastChannel;
@@ -49,8 +47,7 @@ namespace NpcGenerator.Message
         public void Unsubscribe<T>(IChannel<T>.Callback callback)
         {
             Type type = typeof(T);
-            object uncastChannel = null;
-            if (!m_queues.TryGetValue(type, out uncastChannel))
+            if (!m_queues.TryGetValue(type, out object uncastChannel))
             {
                 throw new ArgumentException("Cannot unsubscribe to messages of type " + type + 
                     " that was not already subscribed");
@@ -60,6 +57,6 @@ namespace NpcGenerator.Message
             channel.Unsubscribe(callback);
         }
 
-        private Dictionary<Type, object> m_queues = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> m_queues = new Dictionary<Type, object>();
     }
 }

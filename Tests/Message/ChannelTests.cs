@@ -80,16 +80,17 @@ namespace Tests
         {
             bool subscribeCalledback = false;
 
-            IChannel<MockEvent>.Callback callback = (object sender, MockEvent message) =>
-            {
-                subscribeCalledback = true;
-            };
-            m_channel.Subscribe(callback);
-            m_channel.Unsubscribe(callback);
+            m_channel.Subscribe(Callback);
+            m_channel.Unsubscribe(Callback);
 
             m_channel.Send(this, new MockEvent { Number = 3, Text = "Test" });
 
             Assert.IsFalse(subscribeCalledback, "Subscribe callback was called despite being unsubscribed.");
+
+            void Callback(object sender, MockEvent message)
+            {
+                subscribeCalledback = true;
+            }
         }
 
         [TestMethod]
@@ -97,17 +98,18 @@ namespace Tests
         {
             int callbackCount = 0;
 
-            IChannel<MockEvent>.Callback callback = (object sender, MockEvent message) =>
-            {
-                callbackCount++;
-            };
-            m_channel.Subscribe(callback);
-            m_channel.Unsubscribe(callback);
-            m_channel.Subscribe(callback);
+            m_channel.Subscribe(Callback);
+            m_channel.Unsubscribe(Callback);
+            m_channel.Subscribe(Callback);
 
             m_channel.Send(this, new MockEvent { Number = 3, Text = "Test" });
 
             Assert.AreEqual(1, callbackCount, "Resubscribed callback is not called just once.");
+
+            void Callback(object sender, MockEvent message)
+            {
+                callbackCount++;
+            }
         }
 
         [TestMethod]
@@ -117,6 +119,6 @@ namespace Tests
             Assert.AreEqual(typeof(MockEvent), type, "Message type is incorrect");
         }
 
-        Channel<MockEvent> m_channel;
+        private Channel<MockEvent> m_channel;
     }
 }

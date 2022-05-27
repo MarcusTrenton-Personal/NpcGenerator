@@ -15,18 +15,18 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public class GoogleAnalyticsSettings
+    public class IGoogleAnalyticsSettings
     {
-        public string MeasurementIdDev { get; set; } = "...";
-        public string MeasurementIdProd { get; set; } = "...";
-        public string AdditionalIdDev { get; set; } = "...";
-        public string AdditionalIdProd { get; set; } = "...";
+        public string MeasurementIdDev { get; }
+        public string MeasurementIdProd { get; }
+        public string AdditionalIdDev { get; }
+        public string AdditionalIdProd { get; }
     }
 
     public interface IAppSettings
     {
-        public GoogleAnalyticsSettings GoogleAnalytics { get; set; }
+        public IGoogleAnalyticsSettings GoogleAnalytics { get; }
 
-        public int EncryptionKey { get; set; }
+        public int EncryptionKey { get; }
     }
 }

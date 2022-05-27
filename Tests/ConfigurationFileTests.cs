@@ -131,13 +131,11 @@ namespace Tests
 
         private void WriteTestFile(string path, string content)
         {
-            using(StreamWriter writer = File.CreateText(path))
-            {
-                writer.Write(content);
-                writer.Close();
-            }
+            using StreamWriter writer = File.CreateText(path);
+            writer.Write(content);
+            writer.Close();
         }
 
-        string m_testDirectory;
+        private readonly string m_testDirectory;
     }
 }

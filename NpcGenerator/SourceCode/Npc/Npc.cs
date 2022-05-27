@@ -55,6 +55,6 @@ namespace NpcGenerator
 
         public int TraitCount { get { return traits.Count; } }
 
-        private List<string> traits = new List<string>();
+        private readonly List<string> traits = new List<string>();
     }
 }

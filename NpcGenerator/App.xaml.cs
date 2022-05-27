@@ -81,7 +81,11 @@ namespace NpcGenerator
             return userSettings;
         }
 
+        
         private readonly ServiceCenter m_serviceCenter;
+#pragma warning disable IDE0052 // Remove unread private members. 
+        //This warning is stupid. The subscriber object only need to be created to be useful. It does not need to be read.
         private readonly GoogleAnalytics m_googleAnalytics;
+#pragma warning restore IDE0052 // Remove unread private members
     }
 }

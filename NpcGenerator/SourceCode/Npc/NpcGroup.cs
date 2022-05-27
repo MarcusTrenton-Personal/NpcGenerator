@@ -89,7 +89,7 @@ namespace NpcGenerator
         public int TraitGroupCount { get { return traitGroupNames.Count; } }
         public int NpcCount { get { return npcs.Count; } }
 
-        private List<string> traitGroupNames = new List<string>();
-        private List<Npc> npcs = new List<Npc>();
+        private readonly List<string> traitGroupNames = new List<string>();
+        private readonly List<Npc> npcs = new List<Npc>();
     }
 }

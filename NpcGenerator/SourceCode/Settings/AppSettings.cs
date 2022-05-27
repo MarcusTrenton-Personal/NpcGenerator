@@ -18,9 +18,17 @@ using System.IO;
 
 namespace NpcGenerator
 {
+    public class GoogleAnalyticsSettings : IGoogleAnalyticsSettings
+    {
+        new public string MeasurementIdDev { get; set; }
+        new public string MeasurementIdProd { get; set; }
+        new public string AdditionalIdDev { get; set; }
+        new public string AdditionalIdProd { get; set; }
+    }
+
     public class AppSettings : IAppSettings
     {
-        public GoogleAnalyticsSettings GoogleAnalytics { get; set; } = new GoogleAnalyticsSettings();
+        public IGoogleAnalyticsSettings GoogleAnalytics { get; set; } = new GoogleAnalyticsSettings();
 
         public int EncryptionKey { get; set; }
 
