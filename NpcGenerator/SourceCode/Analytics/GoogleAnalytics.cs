@@ -112,6 +112,9 @@ namespace NpcGenerator
             writer.WritePropertyName("app_version");
             writer.WriteValue(m_trackingProfile.AppVersion);
 
+            writer.WritePropertyName("os_version");
+            writer.WriteValue(m_trackingProfile.OSVersion);
+
             writer.WriteEnd(); //End of user_properties object
         }
 

@@ -31,11 +31,26 @@ namespace NpcGenerator
             Update();
         }
 
+        //Adapted from https://stackoverflow.com/questions/577634/how-to-get-the-friendly-os-version-name
+        private static string GetOSName()
+        {
+            string productName = OSHelper.HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName");
+            string csdVersion = OSHelper.HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CSDVersion");
+            if (!string.IsNullOrEmpty(productName))
+            {
+                return (productName.StartsWith("Microsoft") ? "" : "Microsoft ") + productName +
+                    (!string.IsNullOrEmpty(csdVersion) ? " " + csdVersion : "");
+            }
+            return string.Empty;
+        }
+
         private void Update()
         {
             Language = CultureInfo.CurrentCulture.Name;
 
             AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            OSVersion = GetOSName();
         }
 
         //Excess surveillance and tracking is a problem with modern technology. 
@@ -49,6 +64,9 @@ namespace NpcGenerator
 
         //Are the deployed versions reaching users?
         public string AppVersion { get; set; }
+
+        //What OS versions need to be supported?
+        public string OSVersion { get; set; }
 
         public void Save(string path)
         {

@@ -30,5 +30,8 @@ namespace NpcGenerator
 
         //Are the deployed versions reaching users?
         public string AppVersion { get; }
+
+        //What OS versions need to be supported?
+        public string OSVersion { get; }
     }
 }
