@@ -105,59 +105,71 @@ namespace Tests
         [TestMethod]
         public void EndToEnd()
         {
+            bool uncaughtException = false;
+            bool configPathMatches = false;
+            bool npcQuantityLabelMachesUserSettings = false;
+            bool generatedNpcQuantityMatchesUserSettings = false;
+
+            MockLocalFileIO fileIO = new MockLocalFileIO();
+
             Thread t = new Thread(new ThreadStart(delegate ()
             {
-                //********* Setup Variables ********************
-                const string configFileName = "TestConfig.csv";
-                string configPath = Path.Combine(m_testDirectory, configFileName);
-                string text = "Colour,Weight\n" +
-                    "Green,1\n" +
-                    "Red,1";
-                File.WriteAllText(configPath, text);
-
-                MockUserSettings testUserSettings = new MockUserSettings
+                try
                 {
-                    ConfigurationPath = configPath,
-                    NpcQuantity = 5
-                };
+                    //********* Setup Variables ********************
+                    const string configFileName = "TestConfig.csv";
+                    string configPath = Path.Combine(m_testDirectory, configFileName);
+                    string text = "Colour,Weight\n" +
+                        "Green,1\n" +
+                        "Red,1";
+                    File.WriteAllText(configPath, text);
 
-                MockLocalFileIO fileIO = new MockLocalFileIO();
+                    MockUserSettings testUserSettings = new MockUserSettings
+                    {
+                        ConfigurationPath = configPath,
+                        NpcQuantity = 5
+                    };
 
-                ServiceCenter serviceCenter = new ServiceCenter(
-                    profile: new MockTrackingProfile(),
-                    appSettings: new MockAppSettings(),
-                    messager: new MockMessager(),
-                    userSettings: testUserSettings,
-                    filePathProvider: new MockFilePathProvider(),
-                    fileIO: fileIO
-                );
-                MainWindow mainWindow = new MainWindow(serviceCenter);
+                    ServiceCenter serviceCenter = new ServiceCenter(
+                        profile: new MockTrackingProfile(),
+                        appSettings: new MockAppSettings(),
+                        messager: new MockMessager(),
+                        userSettings: testUserSettings,
+                        filePathProvider: new MockFilePathProvider(),
+                        fileIO: fileIO
+                    );
+                    MainWindow mainWindow = new MainWindow(serviceCenter);
 
-                //********* Test Initial Window ********************
-                Label configLabel = (Label)mainWindow.FindName("configurationPathText");
-                Assert.AreEqual(configPath, configLabel.Content, "Configuration file was changed by Main Window");
+                    //********* Test Initial Window ********************
+                    Label configLabel = (Label)mainWindow.FindName("configurationPathText");
+                    configPathMatches = configPath == configLabel.Content.ToString();
 
-                TextBox quantityLabel = (TextBox)mainWindow.FindName("npcQuantityText");
-                int quantity = int.Parse(quantityLabel.Text);
-                Assert.AreEqual(testUserSettings.NpcQuantity, quantity, "NPC Quantity was changed by Main Window");
+                    TextBox quantityLabel = (TextBox)mainWindow.FindName("npcQuantityText");
+                    int quantity = int.Parse(quantityLabel.Text);
+                    npcQuantityLabelMachesUserSettings = testUserSettings.NpcQuantity == quantity;
 
-                //********* Test Generate ********************
-                Button generate = (Button)mainWindow.FindName("generateButton");
-                generate.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                    //********* Test Generate ********************
+                    Button generate = (Button)mainWindow.FindName("generateButton");
+                    generate.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
-                DataGrid dataGrid = (DataGrid)mainWindow.FindName("generatedNpcTable");
-                DataTable dataTable = (DataTable)dataGrid.DataContext;
-                Assert.AreEqual(testUserSettings.NpcQuantity, dataTable.Rows.Count, "Incorrect number of NPCs generated");
+                    DataGrid dataGrid = (DataGrid)mainWindow.FindName("generatedNpcTable");
+                    DataTable dataTable = (DataTable)dataGrid.DataContext;
+                    generatedNpcQuantityMatchesUserSettings = testUserSettings.NpcQuantity == dataTable.Rows.Count;
 
-                //********* Test Save ********************
-                Button save = (Button)mainWindow.FindName("saveNpcsButton");
-                save.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                    //********* Test Save ********************
+                    Button save = (Button)mainWindow.FindName("saveNpcsButton");
+                    save.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                    //Track the result of event through fileIO.SavedCalled.
 
-                Assert.IsTrue(fileIO.SaveCalled, "saveNpcsButton did not invoke ILocalFileIO.SaveToPickedFile");
-
-                //********* Clean Up ********************
-                File.Delete(configPath);
-
+                    //********* Clean Up ********************
+                    File.Delete(configPath);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and explicitly marked as failure.
+                catch (Exception)
+                {
+                    uncaughtException = true;
+                }
             }));
 
             t.SetApartmentState(ApartmentState.STA);
@@ -165,6 +177,11 @@ namespace Tests
             t.Start();
             t.Join();
 
+            Assert.IsTrue(configPathMatches, "Configuration file was changed by Main Window");
+            Assert.IsTrue(npcQuantityLabelMachesUserSettings, "NPC Quantity was changed by Main Window");
+            Assert.IsTrue(generatedNpcQuantityMatchesUserSettings, "Incorrect number of NPCs generated");
+            Assert.IsTrue(fileIO.SaveCalled, "saveNpcsButton did not invoke ILocalFileIO.SaveToPickedFile");
+            Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
 
         private readonly string m_testDirectory;

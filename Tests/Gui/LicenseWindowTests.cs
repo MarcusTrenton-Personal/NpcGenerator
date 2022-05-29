@@ -59,36 +59,52 @@ namespace Tests
         [TestMethod]
         public void EndToEnd()
         {
+            bool scrollDocumentExists = false;
+            bool uncaughtException = false;
+
             Thread t = new Thread(new ThreadStart(delegate ()
             {
-                //********* Setup Variables ********************
-                const string licenseFileName = "TestLicense.rtf";
-                string licensePath = Path.Combine(m_testDirectory, licenseFileName);
-                //From https://en.wikipedia.org/wiki/Rich_Text_Format
-                string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
+                try
+                {
+                    //********* Setup Variables ********************
+                    const string licenseFileName = "TestLicense.rtf";
+                    string licensePath = Path.Combine(m_testDirectory, licenseFileName);
+                    //From https://en.wikipedia.org/wiki/Rich_Text_Format
+                    string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
                     This is some {\b bold} text.\par
                     }";
-                File.WriteAllText(licensePath, text);
+                    //string text = "";
+                    File.WriteAllText(licensePath, text);
 
-                MockFilePathProvider filePathProvider = new MockFilePathProvider()
+                    MockFilePathProvider filePathProvider = new MockFilePathProvider()
+                    {
+                        LicensePath = licensePath
+                    };
+
+                    LicenseWindow licenseWindow = new LicenseWindow(new MockMessager(), filePathProvider);
+
+                    //********* Test Initial Window ********************
+                    FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");
+                    scrollDocumentExists = scrollViewer.Document != null;
+
+                    //********* Clean Up ********************
+                    File.Delete(licensePath);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and explicitly marked as failure.
+                catch (Exception)
                 {
-                    LicensePath = licensePath
-                };
-
-                LicenseWindow licenseWindow = new LicenseWindow(new MockMessager(), filePathProvider);
-
-                //********* Test Initial Window ********************
-                FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");
-                Assert.IsNotNull(scrollViewer.Document, "License scroll viewer is empty");
-
-                //********* Clean Up ********************
-                File.Delete(licensePath);
+                    uncaughtException = true;
+                }
             }));
 
             t.SetApartmentState(ApartmentState.STA);
 
             t.Start();
             t.Join();
+
+            Assert.IsTrue(scrollDocumentExists, "License scroll viewer is empty");
+            Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
 
         private readonly string m_testDirectory;

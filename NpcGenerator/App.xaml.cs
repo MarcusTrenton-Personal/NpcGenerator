@@ -58,7 +58,7 @@ namespace NpcGenerator
             Current.MainWindow.Show();
         }
 
-        private TrackingProfile ReadTrackingProfile(FilePathProvider filePathProvider)
+        private static TrackingProfile ReadTrackingProfile(FilePathProvider filePathProvider)
         {
             string profilePath = filePathProvider.TrackingProfileFilePath;
             TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
