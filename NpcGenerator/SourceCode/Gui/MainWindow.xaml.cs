@@ -163,7 +163,7 @@ namespace NpcGenerator
                 TraitSchema traitSchema = ConfigurationFile.Parse(cachedConfigurationPath);
                 m_npcGroup = new NpcGroup(traitSchema, npcQuantity);
 
-                System.Data.DataTable table = new DataTable("Npc Table");
+                DataTable table = new DataTable("Npc Table");
                 for(int i = 0; i < m_npcGroup.TraitGroupCount; ++i)
                 {
                     table.Columns.Add(m_npcGroup.GetTraitGroupNameAtIndex(i));

@@ -35,10 +35,10 @@ namespace Tests
             int tailCount = 0;
             const int ROLL_COUNT = 100;
 
-            for(int i = 0; i < ROLL_COUNT; ++i)
+            for (int i = 0; i < ROLL_COUNT; ++i)
             {
                 string choice = category.Choose();
-                switch(choice)
+                switch (choice)
                 {
                     case HEADS:
                         headCount++;
@@ -88,7 +88,7 @@ namespace Tests
                 }
             }
 
-            Assert.IsTrue(headCount >= tailCount, "Double weighted " + HEADS + " occured less often than "+ TAILS + 
+            Assert.IsTrue(headCount >= tailCount, "Double weighted " + HEADS + " occured less often than " + TAILS +
                 "after " + ROLL_COUNT + "flips, defying astronomical odds.");
         }
     }

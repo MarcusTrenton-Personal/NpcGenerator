@@ -38,7 +38,7 @@ namespace Tests
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
-            WriteTestFile(path, text);
+            File.WriteAllText(path, text);
 
             TraitSchema schema = ConfigurationFile.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
@@ -60,7 +60,7 @@ namespace Tests
             string text = CATEGORY1_TITLE + ",Weight," + CATEGORY2_TITLE + ",Weight\n" +
                 CATEGORY1_TRAIT1 + ",1," + CATEGORY2_TRAIT1 + ",1\n" +
                 CATEGORY1_TRAIT2 + ",1," + CATEGORY2_TRAIT2 + ",1";
-            WriteTestFile(path, text);
+            File.WriteAllText(path, text);
 
             TraitSchema schema = ConfigurationFile.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
@@ -88,7 +88,7 @@ namespace Tests
             string text = ",Weight\n" +
                "Green,1\n" +
                "Red,1";
-            WriteTestFile(path, text);
+            File.WriteAllText(path, text);
 
             bool threwException = false;
             try 
@@ -112,7 +112,7 @@ namespace Tests
             string text = "Colour,Weight\n" +
                 "Green,1,Gorilla,1\n" +
                 "Red,1,Rhino,1";
-            WriteTestFile(path, text);
+            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -127,13 +127,6 @@ namespace Tests
             Assert.IsTrue(threwException, "Missing title failed to throw exception");
 
             File.Delete(path); 
-        }
-
-        private void WriteTestFile(string path, string content)
-        {
-            using StreamWriter writer = File.CreateText(path);
-            writer.Write(content);
-            writer.Close();
         }
 
         private readonly string m_testDirectory;
