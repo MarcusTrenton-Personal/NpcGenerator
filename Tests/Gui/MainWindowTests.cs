@@ -31,24 +31,24 @@ namespace Tests
     {
         private class MockTrackingProfile : ITrackingProfile
         {
-            public Guid ClientId { get; } = Guid.Empty;
-            public string Language { get; } = null;
-            public string AppVersion { get; } = null;
-            public string OSVersion { get; } = null;
+            public Guid ClientId { get; set; } = Guid.Empty;
+            public string Language { get; set; } = null;
+            public string AppVersion { get; set; } = null;
+            public string OSVersion { get; set; } = null;
         }
 
         private class MockGoogleAnalyticsSettings : IGoogleAnalyticsSettings
         {
-            public string MeasurementIdDev { get; } = null;
-            public string MeasurementIdProd { get; } = null;
-            public string AdditionalIdDev { get; } = null;
-            public string AdditionalIdProd { get; } = null;
+            public string MeasurementIdDev { get; set; } = null;
+            public string MeasurementIdProd { get; set; } = null;
+            public string AdditionalIdDev { get; set; } = null;
+            public string AdditionalIdProd { get; set; } = null;
         }
 
         private class MockAppSettings : IAppSettings
         {
-            public IGoogleAnalyticsSettings GoogleAnalytics { get; } = new MockGoogleAnalyticsSettings();
-            public int EncryptionKey { get; } = 0;
+            public IGoogleAnalyticsSettings GoogleAnalytics { get; set; } = new MockGoogleAnalyticsSettings();
+            public int EncryptionKey { get; set; } = 0;
         }
 
         private class MockMessager : IMessager
@@ -71,11 +71,11 @@ namespace Tests
 
         private class MockFilePathProvider : IFilePathProvider
         {
-            public string AppDataFolder { get; } = null;
-            public string LicensePath { get; } = null;
-            public string UserSettingsFilePath { get; } = null;
-            public string AppSettingsFilePath { get; } = null;
-            public string TrackingProfileFilePath { get; } = null;
+            public string AppDataFolder { get; set; } = null;
+            public string LicensePath { get; set; } = null;
+            public string UserSettingsFilePath { get; set; } = null;
+            public string AppSettingsFilePath { get; set; } = null;
+            public string TrackingProfileFilePath { get; set; } = null;
         }
 
         private class MockLocalFileIO : ILocalFileIO
@@ -101,6 +101,7 @@ namespace Tests
             Directory.CreateDirectory(m_testDirectory);
         }
 
+        //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
         {

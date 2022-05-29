@@ -45,7 +45,7 @@ namespace NpcGenerator
                 FlowDocument flowDocument = new FlowDocument();
                 TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
                 textRange.Load(fileStream, DataFormats.Rtf);
-                FlowViewer.Document = flowDocument;
+                flowViewer.Document = flowDocument;
             }
             catch(IOException exception)
             {
