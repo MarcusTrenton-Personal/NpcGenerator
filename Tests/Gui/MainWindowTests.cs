@@ -27,7 +27,7 @@ using System.Windows.Controls.Primitives;
 namespace Tests
 {
     [TestClass]
-    public class MainWindowTests
+    public class MainWindowTests : FileCreatingTests
     {
         private class MockTrackingProfile : ITrackingProfile
         {
@@ -93,14 +93,6 @@ namespace Tests
             public bool SaveCalled { get; set; } = false;
         }
 
-        public MainWindowTests()
-        {
-            FilePathProvider filePathProvider = new FilePathProvider();
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            m_testDirectory = Path.Combine(commonAppData, filePathProvider.AppDataFolder, "UnitTestInput");
-            Directory.CreateDirectory(m_testDirectory);
-        }
-
         //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
@@ -118,7 +110,7 @@ namespace Tests
                 {
                     //********* Setup Variables ********************
                     const string configFileName = "TestConfig.csv";
-                    string configPath = Path.Combine(m_testDirectory, configFileName);
+                    string configPath = Path.Combine(TestDirectory, configFileName);
                     string text = "Colour,Weight\n" +
                         "Green,1\n" +
                         "Red,1";
@@ -183,7 +175,5 @@ namespace Tests
             Assert.IsTrue(fileIO.SaveCalled, "saveNpcsButton did not invoke ILocalFileIO.SaveToPickedFile");
             Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
-
-        private readonly string m_testDirectory;
     }
 }

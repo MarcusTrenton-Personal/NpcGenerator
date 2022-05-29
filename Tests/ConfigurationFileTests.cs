@@ -21,20 +21,12 @@ using System.IO;
 namespace Tests
 {
     [TestClass]
-    public class ConfigurationFileTests
+    public class ConfigurationFileTests : FileCreatingTests
     {
-        public ConfigurationFileTests()
-        {
-            FilePathProvider filePathProvider = new FilePathProvider();
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            m_testDirectory = Path.Combine(commonAppData, filePathProvider.AppDataFolder, "UnitTestInput");
-            Directory.CreateDirectory(m_testDirectory);
-        }
-
         [TestMethod]
         public void GeneratesTraitSchema()
         {
-            string path = Path.Combine(m_testDirectory, "colour.csv");
+            string path = Path.Combine(TestDirectory, "colour.csv");
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
@@ -56,7 +48,7 @@ namespace Tests
             const string CATEGORY2_TRAIT1 = "Gorilla";
             const string CATEGORY2_TRAIT2 = "Rhino";
 
-            string path = Path.Combine(m_testDirectory, "colourAndAnimal.csv");
+            string path = Path.Combine(TestDirectory, "colourAndAnimal.csv");
             string text = CATEGORY1_TITLE + ",Weight," + CATEGORY2_TITLE + ",Weight\n" +
                 CATEGORY1_TRAIT1 + ",1," + CATEGORY2_TRAIT1 + ",1\n" +
                 CATEGORY1_TRAIT2 + ",1," + CATEGORY2_TRAIT2 + ",1";
@@ -84,7 +76,7 @@ namespace Tests
         [TestMethod]
         public void MissingFirstTitleThrowsException()
         {
-            string path = Path.Combine(m_testDirectory, "missingFirstTitle.csv");
+            string path = Path.Combine(TestDirectory, "missingFirstTitle.csv");
             string text = ",Weight\n" +
                "Green,1\n" +
                "Red,1";
@@ -108,7 +100,7 @@ namespace Tests
         [TestMethod]
         public void MissingSecondTitleThrowsException()
         {
-            string path = Path.Combine(m_testDirectory, "missingSecondTitle.csv");
+            string path = Path.Combine(TestDirectory, "missingSecondTitle.csv");
             string text = "Colour,Weight\n" +
                 "Green,1,Gorilla,1\n" +
                 "Red,1,Rhino,1";
@@ -128,7 +120,5 @@ namespace Tests
 
             File.Delete(path); 
         }
-
-        private readonly string m_testDirectory;
     }
 }

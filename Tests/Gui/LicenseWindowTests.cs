@@ -17,17 +17,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using NpcGenerator.Message;
 using System;
-using System.Data;
 using System.IO;
 using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace Tests
 {
     [TestClass]
-    public class LicenseWindowTests
+    public class LicenseWindowTests : FileCreatingTests
     {
         private class MockMessager : IMessager
         {
@@ -47,14 +44,6 @@ namespace Tests
             public string TrackingProfileFilePath { get; set; } = null;
         }
 
-        public LicenseWindowTests()
-        {
-            FilePathProvider filePathProvider = new FilePathProvider();
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            m_testDirectory = Path.Combine(commonAppData, filePathProvider.AppDataFolder, "UnitTestInput");
-            Directory.CreateDirectory(m_testDirectory);
-        }
-
         //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
@@ -68,11 +57,11 @@ namespace Tests
                 {
                     //********* Setup Variables ********************
                     const string licenseFileName = "TestLicense.rtf";
-                    string licensePath = Path.Combine(m_testDirectory, licenseFileName);
+                    string licensePath = Path.Combine(TestDirectory, licenseFileName);
                     //From https://en.wikipedia.org/wiki/Rich_Text_Format
                     string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
-                    This is some {\b bold} text.\par
-                    }";
+                        This is some {\b bold} text.\par
+                        }";
                     //string text = "";
                     File.WriteAllText(licensePath, text);
 
@@ -106,7 +95,5 @@ namespace Tests
             Assert.IsTrue(scrollDocumentExists, "License scroll viewer is empty");
             Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
-
-        private readonly string m_testDirectory;
     }
 }
