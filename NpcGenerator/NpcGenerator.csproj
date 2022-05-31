@@ -120,9 +120,16 @@
       <Sample Include="..\Sample Configurations\*.csv" />
     </ItemGroup>
     <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
+    <Message Text="Copying app data" Importance="high" />
     <Copy SourceFiles="@(License)" DestinationFolder="$(PublishDir)" />
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(PublishDir)\Settings" />
+    <Message Text="Signing exe" Importance="high" />
     <Exec Command="signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 /du https://github.com/MarcusTrenton-Personal/NpcGenerator /d NpcGenerator &quot;$(PublishDir)$(TargetName).exe&quot;" ConsoleToMsBuild="true" />
+    <Message Text="Caching exe" Importance="high" />
+    <ItemGroup>
+      <AppExe Include="$(PublishDir)\NpcGenerator.exe" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AppExe)" DestinationFolder="../ExeCache" />
   </Target>
 
 </Project>
