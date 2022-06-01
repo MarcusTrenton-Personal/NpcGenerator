@@ -4,6 +4,18 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Authors>Marcus Trenton</Authors>
+
+    <Company />
+
+    <Copyright>Marcus Trenton 2022</Copyright>
+
+    <Description>The unit and end-to-end tests for the NpcGenerator solution</Description>
+
+    <RepositoryUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</RepositoryUrl>
+
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
