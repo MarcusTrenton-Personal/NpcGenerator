@@ -33,8 +33,7 @@ namespace NpcGenerator
         public string CacheFile(string originalPath)
         {
             string fileName = Path.GetFileName(originalPath);
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string cachePath = Path.Combine(commonAppData, m_filePathProvider.AppDataFolder, CacheFolder, fileName);
+            string cachePath = Path.Combine(m_filePathProvider.AppDataFolderPath, CacheFolder, fileName);
 
             string directory = Path.GetDirectoryName(cachePath);
             Directory.CreateDirectory(directory);
@@ -45,17 +44,17 @@ namespace NpcGenerator
 
         public void SaveToPickedFile(string content, string fileType)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = fileType + " files (*." + fileType + ")|*." + fileType,
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog1.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 try
                 {
-                    using Stream stream = saveFileDialog1.OpenFile();
+                    using Stream stream = saveFileDialog.OpenFile();
                     byte[] info = new UTF8Encoding(true).GetBytes(content);
                     stream.Write(info, 0, info.Length);
                     stream.Close();

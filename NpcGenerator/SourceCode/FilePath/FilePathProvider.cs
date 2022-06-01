@@ -20,15 +20,21 @@ namespace NpcGenerator
 {
     public class FilePathProvider : IFilePathProvider
     {
-        public string AppDataFolder { get; } = "NpcGenerator";
+        public string AppDataFolderPath 
+        { 
+            get
+            {
+                string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                return Path.Combine(commonAppData, appDataFolder);
+            }
+        }
         public string LicensePath { get; } = "GNU License.rtf";
 
         public string UserSettingsFilePath 
         {
             get
             {
-                string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                return Path.Combine(commonAppData, AppDataFolder, UserSettingsFile);
+                return Path.Combine(AppDataFolderPath, userSettingsFile);
             }
         }
 
@@ -36,7 +42,7 @@ namespace NpcGenerator
         {
             get
             {
-                return Path.Combine(AppSettingsFolder, AppSettingsFile);
+                return Path.Combine(appSettingsFolder, appSettingsFile);
             }
         }
 
@@ -44,14 +50,14 @@ namespace NpcGenerator
         {
             get
             {
-                string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                return Path.Combine(commonAppData, AppDataFolder, TrackingProfileFile);
+                return Path.Combine(AppDataFolderPath, trackingProfileFile);
             }
         }
 
-        private const string UserSettingsFile = "UserSettings.json";
-        private const string AppSettingsFolder = "Settings";
-        private const string AppSettingsFile = "AppSettings.json";
-        private const string TrackingProfileFile = "TrackingProfile.json";
+        private const string appDataFolder = "NpcGenerator";
+        private const string userSettingsFile = "UserSettings.json";
+        private const string appSettingsFolder = "Settings";
+        private const string appSettingsFile = "AppSettings.json";
+        private const string trackingProfileFile = "TrackingProfile.json";
     }
 }

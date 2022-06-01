@@ -24,7 +24,7 @@ namespace Tests
     {
         private class MockFilePathProvider : IFilePathProvider
         {
-            public string AppDataFolder { get; } = "App";
+            public string AppDataFolderPath { get; } = "App";
             public string LicensePath { get; } = "License.txt";
             public string UserSettingsFilePath { get; } = "UserSettings.txt";
             public string AppSettingsFilePath { get; } = "AppSettings.txt";

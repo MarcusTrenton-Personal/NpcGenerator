@@ -37,7 +37,7 @@ namespace Tests
 
         private class MockFilePathProvider : IFilePathProvider
         {
-            public string AppDataFolder { get; set; } = null;
+            public string AppDataFolderPath { get; set; } = null;
             public string LicensePath { get; set; } = null;
             public string UserSettingsFilePath { get; set; } = null;
             public string AppSettingsFilePath { get; set; } = null;

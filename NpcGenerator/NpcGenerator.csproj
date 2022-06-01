@@ -127,6 +127,10 @@
     <Exec Command="signtool sign /f %SigningKey% /p %SigningKeyPassword% /fd SHA1 /du https://github.com/MarcusTrenton-Personal/NpcGenerator /d NpcGenerator &quot;$(PublishDir)$(TargetName).exe&quot;" ConsoleToMsBuild="true" />
     <Message Text="Caching exe" Importance="high" />
     <ItemGroup>
+      <UninstallExe Include="..\Uninstall\bin\Release\netcoreapp3.1\publish\Uninstall.exe" />
+    </ItemGroup>
+    <Copy SourceFiles="@(UninstallExe)" DestinationFolder="$(PublishDir)" />
+    <ItemGroup>
       <AppExe Include="$(PublishDir)\NpcGenerator.exe" />
     </ItemGroup>
     <Copy SourceFiles="@(AppExe)" DestinationFolder="../ExeCache" />

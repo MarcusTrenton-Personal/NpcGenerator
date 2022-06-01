@@ -24,8 +24,7 @@ namespace Tests
         public FileCreatingTests()
         {
             FilePathProvider filePathProvider = new FilePathProvider();
-            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            TestDirectory = Path.Combine(commonAppData, filePathProvider.AppDataFolder, "UnitTestInput");
+            TestDirectory = Path.Combine(filePathProvider.AppDataFolderPath, "UnitTestInput");
             Directory.CreateDirectory(TestDirectory);
         }
 
