@@ -16,7 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using System;
 using System.Collections.Generic;
 
-namespace NpcGenerator.Message
+namespace Services.Message
 {
     public class Messager : IMessager
     {

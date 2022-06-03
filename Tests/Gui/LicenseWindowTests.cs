@@ -13,9 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
-using NpcGenerator.Message;
+using Services.Message;
 using System;
 using System.IO;
 using System.Threading;

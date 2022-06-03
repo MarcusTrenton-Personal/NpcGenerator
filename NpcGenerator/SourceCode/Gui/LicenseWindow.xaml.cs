@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using CoupledServices;
+using Services.Message;
 using System;
 using System.IO;
 using System.Windows;
@@ -22,7 +24,7 @@ namespace NpcGenerator
 {
     public partial class LicenseWindow : Window
     {
-        public LicenseWindow(Message.IMessager messager, IFilePathProvider filePathProvider)
+        public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider)
         {
             if (filePathProvider == null)
             {

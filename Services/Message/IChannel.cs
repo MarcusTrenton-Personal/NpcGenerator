@@ -13,14 +13,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-namespace NpcGenerator.Message
+using System;
+
+[assembly: CLSCompliant(true)]
+namespace Services.Message
 {
-    public interface IMessager
+    public interface IChannel<T>
     {
-        public void Send<T>(object sender, T message);
-
-        public void Subscribe<T>(IChannel<T>.Callback callback);
-
-        public void Unsubscribe<T>(IChannel<T>.Callback callback);
+        public delegate void Callback(object sender, T message);
+        public void Subscribe(Callback callback);
+        public void Unsubscribe(Callback callback);
+        public void Send(object sender, T message);
+        public Type GetMessageType();
     }
 }

@@ -13,8 +13,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using CoupledServices;
+using Services.Message;
+using System;
 using System.Windows;
 
+[assembly: CLSCompliant(true)]
 namespace NpcGenerator
 {
     /// <summary>
@@ -33,7 +37,7 @@ namespace NpcGenerator
 
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
 
-            Message.Messager messager = new Message.Messager();
+            Messager messager = new Messager();
 
             UserSettings userSettings = ReadUserSettings(filePathProvider);
 
@@ -45,12 +49,14 @@ namespace NpcGenerator
                 filePathProvider: filePathProvider,
                 fileIO: fileIO);
 
-            //Only pass the part of the ServiceCenter that are needed, rather than the entire class.
-            //Coupling should always be deliberate and minimized.
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            bool analyticsDryRun = Array.IndexOf(commandLineArgs, "-analyticsDryRun") >= 0;
+
             m_googleAnalytics = new GoogleAnalytics(
                  appSettings: m_serviceCenter.AppSettings,
                  trackingProfile: m_serviceCenter.Profile,
-                 messager: m_serviceCenter.Messager);
+                 messager: m_serviceCenter.Messager,
+                 dryRunValidation: analyticsDryRun);
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
 

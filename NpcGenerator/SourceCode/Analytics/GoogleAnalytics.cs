@@ -13,37 +13,54 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using NpcGenerator.Message;
+using Services;
+using Services.Message;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Windows;
 
 namespace NpcGenerator
 {
     public class GoogleAnalytics
     {
-        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessager messager)
+#pragma warning disable CS0649 //Field is never assigned.  In this case, it's written by JSON conversion.
+        private class ValidationContent
+        {
+            public string fieldPath;
+            public string description;
+            public string validationCode;
+        }
+
+        private class ValidationResponse
+        {
+            public ValidationContent[] validationMessages;
+        }
+#pragma warning disable CS0649 //Field is never assigned. 
+
+        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessager messager, bool dryRunValidation)
         {
             m_appSettings = appSettings;
             m_trackingProfile = trackingProfile;
             m_messager = messager;
+            m_dryRunValidation = dryRunValidation;
 
-            m_messager.Subscribe<Login>(OnLogin);
-            m_messager.Subscribe<PageView>(OnPageView);
-            m_messager.Subscribe<SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Subscribe<GenerateNpcs>(OnGenerateNpcs);
-            m_messager.Subscribe<SaveNpcs>(OnSaveNpcs);
+            m_messager.Subscribe<Message.Login>(OnLogin);
+            m_messager.Subscribe<Message.PageView>(OnPageView);
+            m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
+            m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
+            m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
         }
 
         ~GoogleAnalytics()
         {
-            m_messager.Unsubscribe<Login>(OnLogin);
-            m_messager.Unsubscribe<PageView>(OnPageView);
-            m_messager.Unsubscribe<SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Unsubscribe<GenerateNpcs>(OnGenerateNpcs);
-            m_messager.Unsubscribe<SaveNpcs>(OnSaveNpcs);
+            m_messager.Unsubscribe<Message.Login>(OnLogin);
+            m_messager.Unsubscribe<Message.PageView>(OnPageView);
+            m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
+            m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
+            m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
@@ -74,9 +91,11 @@ namespace NpcGenerator
             string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdDev;
             string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdDev;
 #else
-        string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdProd;
-        string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdProd;
+            string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdProd;
+            string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdProd;
 #endif
+            string url = m_dryRunValidation ?   "https://www.google-analytics.com/debug/mp/collect?api_secret={0}&measurement_id={1}" :
+                                                "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}";
 
             /*
              * Don't laugh. Doing security on a public source code, client-only app distributed to the public is not easy. 
@@ -86,34 +105,50 @@ namespace NpcGenerator
              * Text scrapers and casual inspection are insufficient to break the protection.
              * Either editing the source code or advanced sniffers are needed to break this.
              */
-            using StringContent content = new StringContent(body);
+            using StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await s_client.PostAsync(
-                new Uri(
-                    string.Format(
-                        "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}",
-                        Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey),
-                        measurementId)
-                    ),
-                content).ConfigureAwait(false);
+                new Uri(string.Format(url, Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey), measurementId)),
+                content
+            ).ConfigureAwait(false);
             if(!response.IsSuccessStatusCode)
             {
                 Console.Error.WriteLine("Failed analytics response: " + response.StatusCode);
             }
+            else if (m_dryRunValidation)
+            {
+                string resopnseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ValidationResponse validationResponse = JsonConvert.DeserializeObject<ValidationResponse>(resopnseText);
+                bool haveErrorInfo = validationResponse != null && 
+                    validationResponse.validationMessages != null && 
+                    validationResponse.validationMessages.Length > 0;
+                if (haveErrorInfo)
+                {
+                    ValidationContent validation = validationResponse.validationMessages[0];
+                    MessageBox.Show("Analytics failed validation.\n" + validation.fieldPath + "\n" +
+                        validation.description + "\n" + validation.validationCode + "\n\nOriginal Message:\n" +
+                        body);
+                }
+            }
+        }
+
+        private static void WriteUserProperty(JsonWriter writer, string name, string value)
+        {
+            writer.WritePropertyName(name);
+            
+            writer.WriteStartObject();
+            writer.WritePropertyName("value");
+            writer.WriteValue(value);
+            writer.WriteEnd();
         }
 
         private void WriteUserProperties(JsonWriter writer)
         {
             writer.WritePropertyName("user_properties");
             writer.WriteStartObject();
-            
-            writer.WritePropertyName("language");
-            writer.WriteValue(m_trackingProfile.Language);
 
-            writer.WritePropertyName("app_version");
-            writer.WriteValue(m_trackingProfile.AppVersion);
-
-            writer.WritePropertyName("os_version");
-            writer.WriteValue(m_trackingProfile.OSVersion);
+            WriteUserProperty(writer, "language", m_trackingProfile.Language);
+            WriteUserProperty(writer, "app_version", m_trackingProfile.AppVersion);
+            WriteUserProperty(writer, "os_version", m_trackingProfile.OSVersion);
 
             writer.WriteEnd(); //End of user_properties object
         }
@@ -141,7 +176,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnPageView(object sender, PageView pageView)
+        private void OnPageView(object sender, Message.PageView pageView)
         {
             TrackEvent(Callback);
 
@@ -169,7 +204,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnSelectConfiguration(object sender, SelectConfiguration selectConfiguration)
+        private void OnSelectConfiguration(object sender, Message.SelectConfiguration selectConfiguration)
         {
             TrackEvent(WriteSelectConfigurationEvent);
         }
@@ -184,7 +219,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnGenerateNpcs(object sender, GenerateNpcs generateNpcs)
+        private void OnGenerateNpcs(object sender, Message.GenerateNpcs generateNpcs)
         {
             TrackEvent(Callback);
 
@@ -212,7 +247,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnSaveNpcs(object sender, SaveNpcs saveNpcs)
+        private void OnSaveNpcs(object sender, Message.SaveNpcs saveNpcs)
         {
             TrackEvent(WriteSaveNpcsEvent);
         }
@@ -233,5 +268,6 @@ namespace NpcGenerator
         private readonly IAppSettings m_appSettings;
         private readonly ITrackingProfile m_trackingProfile;
         private readonly IMessager m_messager;
+        private readonly bool m_dryRunValidation;
     }
 }

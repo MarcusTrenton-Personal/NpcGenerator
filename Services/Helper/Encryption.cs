@@ -17,7 +17,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace NpcGenerator
+namespace Services
 {
     public static class Encryption
     {

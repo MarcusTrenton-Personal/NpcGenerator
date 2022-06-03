@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NpcGenerator\NpcGenerator.csproj" />
+    <ProjectReference Include="..\CoupledServices\CoupledServices.csproj" />
   </ItemGroup>
 
 </Project>

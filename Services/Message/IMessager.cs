@@ -1,4 +1,4 @@
-﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,22 +13,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-namespace NpcGenerator
+namespace Services.Message
 {
-    public static class NumberHelper
+    public interface IMessager
     {
-        public static bool TryParsePositiveNumber(string text, out int result)
-        {
-            bool isInt = int.TryParse(text, out result);
-            bool isNaturalNumber = isInt && result > 0;
-            return isNaturalNumber;
-        }
+        public void Send<T>(object sender, T message);
 
-        public static bool TryParseDigit(string text, out int result)
-        {
-            bool isInt = int.TryParse(text, out result);
-            bool isDigit = isInt && result >= 0 && result < 10;
-            return isDigit;
-        }
+        public void Subscribe<T>(IChannel<T>.Callback callback);
+
+        public void Unsubscribe<T>(IChannel<T>.Callback callback);
     }
 }

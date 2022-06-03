@@ -14,6 +14,8 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.Win32;
+using Services;
+using Services.Message;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -25,7 +27,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-[assembly: CLSCompliant(true)]
 namespace NpcGenerator
 {
     public partial class MainWindow : Window

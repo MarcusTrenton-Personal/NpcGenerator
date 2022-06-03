@@ -18,6 +18,11 @@ REM The two builds could have been built with different minute-granular timestam
 REM The public Dropbox version is the later one desired for tagging. 
 REM Rather than recreate its complex, env-variable-based path, use the cached exe, as it will always be the last built exe.
 REM Sadly batch files cannot directly assign the output of a command to a variable. This is an industry-standard work-around hack.
+cd ExeVersion
+dotnet restore
+dotnet msbuild -p:Configuration=Release
+if errorlevel 1 exit /B errorlevel
+cd ..
 for /f %%i in ('ExeVersion\bin\Release\netcoreapp3.1\ExeVersion ExeCache\NpcGenerator.exe') do set VERSION=%%i
 
 echo Pushing a Git tag with the version number v%VERSION%

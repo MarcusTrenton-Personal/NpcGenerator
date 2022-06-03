@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Marcus Trenton</Authors>
+    <Description>NpcGenerator-specific services needed by several executables</Description>
+    <Copyright>2022 Marcus Trenton</Copyright>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+    <PackageProjectUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>

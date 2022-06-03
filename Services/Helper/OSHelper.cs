@@ -18,7 +18,7 @@ using System;
 using System.IO;
 using System.Security;
 
-namespace NpcGenerator
+namespace Services
 {
     public static class OSHelper
     {

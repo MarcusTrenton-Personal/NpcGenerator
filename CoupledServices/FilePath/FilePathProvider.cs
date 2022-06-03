@@ -16,7 +16,8 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using System;
 using System.IO;
 
-namespace NpcGenerator
+[assembly: CLSCompliant(true)]
+namespace CoupledServices
 {
     public class FilePathProvider : IFilePathProvider
     {
