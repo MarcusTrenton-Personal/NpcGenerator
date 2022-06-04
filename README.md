@@ -56,6 +56,9 @@ Successful tests are automatically required before every publish. The publish ac
 
 # Dev Procedure
 
+## Command Line Parameters
+`-analyticsDryRun` will send Google Analytics to the validation server instead, providing a list of any errors with the message's json.
+
 ## Versioning
 
 Versioning has the format Major.Minor.Day.Minute. 
