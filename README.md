@@ -46,6 +46,8 @@ How do you actually get the signing key and password? Email MarcusTrenton@gmail.
 
 Without the signing key and password, the publishing targets will not succeed.
 
+The public publishing profile will create a zipped file. Junction that folder to wherever you want the output to go (for example `mklink /J "D:\BackThisUp\ProgrammingProjects\Workspace\NpcGenerator\Zipped"  "H:\My Drive\Freeware\NpcGenerator"`. For the original author, the uncompressed files went to beta users in Dropbox while the zipped file was uploaded to Google Drive for public use.
+
 ## Git Hooks
 
 To run automated tests before each push, follow the instructions in pre-push.template.
