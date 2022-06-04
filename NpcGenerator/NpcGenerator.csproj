@@ -115,7 +115,7 @@
   </Target>
 
   <!-- If the PublishDir in Public.pubxml changes then these Conditions must change too. Sadly there's no way to reference a publish profile by name. -->
-  <Target Name="PublishSampleFiles" AfterTargets="Publish">
+  <Target Name="PublishAccessoryFiles" AfterTargets="Publish">
     <ItemGroup>
       <Symbols Include="$(PublishDir)\*.pdb" />
     </ItemGroup>
@@ -143,6 +143,10 @@
       <AppExe Include="$(PublishDir)\NpcGenerator.exe" />
     </ItemGroup>
     <Copy SourceFiles="@(AppExe)" DestinationFolder="../ExeCache" />
+
+    <Message Text="Compressing into a .zip for Google Drive Upload" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'"/>
+    <MakeDir Directories="../Zipped/" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'"/>
+    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="../Zipped/NpcGenerator.zip" Overwrite="true" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'"/>
   </Target>
 
 </Project>
