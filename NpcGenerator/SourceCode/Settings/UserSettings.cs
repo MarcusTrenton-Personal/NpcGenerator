@@ -25,6 +25,8 @@ namespace NpcGenerator
 
         public int NpcQuantity { get; set; } = 1;
 
+        public bool AnalyticsConsent { get; set; } = true;
+
         public void Save(string path)
         {
             string directory = Path.GetDirectoryName(path);

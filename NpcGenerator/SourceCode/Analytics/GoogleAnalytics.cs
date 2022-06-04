@@ -40,11 +40,16 @@ namespace NpcGenerator
         }
 #pragma warning disable CS0649 //Field is never assigned. 
 
-        public GoogleAnalytics(IAppSettings appSettings, ITrackingProfile trackingProfile, IMessager messager, bool dryRunValidation)
+        public GoogleAnalytics(IAppSettings appSettings, 
+            ITrackingProfile trackingProfile, 
+            IMessager messager, 
+            IUserSettings userSettings, 
+            bool dryRunValidation)
         {
             m_appSettings = appSettings;
             m_trackingProfile = trackingProfile;
             m_messager = messager;
+            m_userSettings = userSettings;
             m_dryRunValidation = dryRunValidation;
 
             m_messager.Subscribe<Message.Login>(OnLogin);
@@ -155,7 +160,11 @@ namespace NpcGenerator
 
         private void OnLogin(object sender, Message.Login login)
         {
-            TrackEvent(WriteLoginEvent);
+            //Consent can change throughout the session
+            if(m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(WriteLoginEvent);
+            }
         }
 
         private void WriteLoginEvent(JsonWriter writer)
@@ -178,7 +187,10 @@ namespace NpcGenerator
 
         private void OnPageView(object sender, Message.PageView pageView)
         {
-            TrackEvent(Callback);
+            if (m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(Callback);
+            }
 
             void Callback(JsonWriter writer)
             {
@@ -206,7 +218,10 @@ namespace NpcGenerator
 
         private void OnSelectConfiguration(object sender, Message.SelectConfiguration selectConfiguration)
         {
-            TrackEvent(WriteSelectConfigurationEvent);
+            if (m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(WriteSelectConfigurationEvent);
+            }   
         }
 
         private void WriteSelectConfigurationEvent(JsonWriter writer)
@@ -221,7 +236,10 @@ namespace NpcGenerator
 
         private void OnGenerateNpcs(object sender, Message.GenerateNpcs generateNpcs)
         {
-            TrackEvent(Callback);
+            if (m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(Callback);
+            }
 
             void Callback(JsonWriter writer)
             {
@@ -249,7 +267,10 @@ namespace NpcGenerator
 
         private void OnSaveNpcs(object sender, Message.SaveNpcs saveNpcs)
         {
-            TrackEvent(WriteSaveNpcsEvent);
+            if (m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(WriteSaveNpcsEvent);
+            }     
         }
 
         private void WriteSaveNpcsEvent(JsonWriter writer)
@@ -268,6 +289,7 @@ namespace NpcGenerator
         private readonly IAppSettings m_appSettings;
         private readonly ITrackingProfile m_trackingProfile;
         private readonly IMessager m_messager;
+        private readonly IUserSettings m_userSettings;
         private readonly bool m_dryRunValidation;
     }
 }

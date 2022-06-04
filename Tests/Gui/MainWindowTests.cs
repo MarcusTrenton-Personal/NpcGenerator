@@ -63,6 +63,8 @@ namespace Tests
 
         private class MockUserSettings : IUserSettings
         {
+            public bool AnalyticsConsent { get; set; } = true;
+
             public string ConfigurationPath { get; set; } = null;
 
             public int NpcQuantity { get; set; } = 1;

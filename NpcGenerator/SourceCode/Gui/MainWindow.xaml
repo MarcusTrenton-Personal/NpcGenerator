@@ -52,10 +52,12 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
         </StackPanel>
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock x:Name="VersionText" Margin="1" VerticalAlignment="Center"/>
+                <CheckBox x:Name="analyticsConsent" VerticalAlignment="Center" Margin="3" Checked="AnalyticsConsentGiven" Unchecked="AnalyticsConsentWithdrawn"/>
+                <TextBlock VerticalAlignment="Center">Data Collection<LineBreak/>Consent</TextBlock>
                 <Button x:Name="licenseButton" Margin="10" Click="ShowLicensePopup">
                     <TextBlock x:Name="licenseButtonText" Margin="1" Text="License"/>
                 </Button>
+                <TextBlock x:Name="VersionText" Margin="1" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
     </Grid>

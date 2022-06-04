@@ -56,6 +56,7 @@ namespace NpcGenerator
                  appSettings: m_serviceCenter.AppSettings,
                  trackingProfile: m_serviceCenter.Profile,
                  messager: m_serviceCenter.Messager,
+                 userSettings: m_serviceCenter.UserSettings,
                  dryRunValidation: analyticsDryRun);
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());

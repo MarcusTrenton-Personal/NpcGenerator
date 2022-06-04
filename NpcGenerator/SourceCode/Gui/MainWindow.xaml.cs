@@ -46,6 +46,8 @@ namespace NpcGenerator
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
 
+            analyticsConsent.IsChecked = m_serviceCenter.UserSettings.AnalyticsConsent;
+
             serviceCenter?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
         }
 
@@ -198,6 +200,23 @@ namespace NpcGenerator
             m_serviceCenter.FileIO.SaveToPickedFile(npcCsv, "csv");
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.SaveNpcs());
+        }
+
+        private void SetAnalyticsConsent(bool consent)
+        {
+            analyticsConsent.IsChecked = consent;
+            m_serviceCenter.UserSettings.AnalyticsConsent = consent;
+            m_serviceCenter.UserSettings.Save(m_userSettingsPath);
+        }
+
+        private void AnalyticsConsentGiven(object sender, RoutedEventArgs e)
+        {
+            SetAnalyticsConsent(true);
+        }
+
+        private void AnalyticsConsentWithdrawn(object sender, RoutedEventArgs e)
+        {
+            SetAnalyticsConsent(false);
         }
 
         private void ShowLicensePopup(object sender, RoutedEventArgs e)
