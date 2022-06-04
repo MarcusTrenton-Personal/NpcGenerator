@@ -21,6 +21,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
+using System.Diagnostics;
 
 namespace NpcGenerator
 {
@@ -52,6 +53,8 @@ namespace NpcGenerator
             m_userSettings = userSettings;
             m_dryRunValidation = dryRunValidation;
 
+            //Each Google Analytics event must have a name 40 characters or less: 
+            //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
             m_messager.Subscribe<Message.Login>(OnLogin);
             m_messager.Subscribe<Message.PageView>(OnPageView);
             m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
@@ -138,6 +141,9 @@ namespace NpcGenerator
 
         private static void WriteUserProperty(JsonWriter writer, string name, string value)
         {
+            Debug.Assert(name.Length <= 24, "User property name " + name + " is longer than the 24 character maximum");
+            Debug.Assert(value.Length <= 36, "User property value " + value + " is longer than the 36 character maximum");
+
             writer.WritePropertyName(name);
             
             writer.WriteStartObject();
