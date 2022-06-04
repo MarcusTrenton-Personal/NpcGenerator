@@ -15,6 +15,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 
 namespace NpcGenerator
@@ -56,7 +57,7 @@ namespace NpcGenerator
                     break;
                 }
             }
-            //If invalid index, let it crash.
+            Debug.Assert(selectedIndex >= 0, "Failed to choose a trait.");
             return traits[selectedIndex].Name;
         }
 
