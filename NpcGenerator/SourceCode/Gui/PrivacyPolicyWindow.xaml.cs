@@ -16,15 +16,26 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Services.Message;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace NpcGenerator
 {
-    public partial class LicenseWindow : Window
+    /// <summary>
+    /// Interaction logic for PrivacyPolicyWindow.xaml
+    /// </summary>
+    public partial class PrivacyPolicyWindow : Window
     {
-        public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider)
+        public PrivacyPolicyWindow(IMessager messager, IFilePathProvider filePathProvider)
         {
             if (filePathProvider == null)
             {
@@ -33,9 +44,9 @@ namespace NpcGenerator
 
             InitializeComponent();
 
-            flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.LicensePath);
+            flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.PrivacyPolicyPath);
 
-            messager?.Send(sender: this, message: new Message.PageView("License"));
+            messager?.Send(sender: this, message: new Message.PageView("Privacy Policy"));
         }
     }
 }

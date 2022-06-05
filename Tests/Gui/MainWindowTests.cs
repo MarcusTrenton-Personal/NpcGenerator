@@ -76,6 +76,7 @@ namespace Tests
         {
             public string AppDataFolderPath { get; set; } = null;
             public string LicensePath { get; set; } = null;
+            public string PrivacyPolicyPath { get; set; } = null;
             public string UserSettingsFilePath { get; set; } = null;
             public string AppSettingsFilePath { get; set; } = null;
             public string TrackingProfileFilePath { get; set; } = null;

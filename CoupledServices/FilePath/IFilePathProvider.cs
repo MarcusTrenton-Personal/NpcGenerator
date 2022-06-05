@@ -19,6 +19,7 @@ namespace CoupledServices
     {
         public string AppDataFolderPath { get; }
         public string LicensePath { get; }
+        public string PrivacyPolicyPath { get; }
         public string UserSettingsFilePath { get; }
         public string AppSettingsFilePath { get; }
         public string TrackingProfileFilePath { get; }

@@ -219,6 +219,17 @@ namespace NpcGenerator
             SetAnalyticsConsent(false);
         }
 
+        private void ShowPrivacyPopup(object sender, RoutedEventArgs e)
+        {
+            //Lazily create the data as it's unlikely that this button will be clicked. 
+            //It's almost unheard of that anyone would click it twice.
+            PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(m_serviceCenter.Messager, m_serviceCenter.FilePathProvider)
+            {
+                Owner = this
+            };
+            privacyWindow.Show();
+        }
+
         private void ShowLicensePopup(object sender, RoutedEventArgs e)
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 

@@ -31,6 +31,8 @@ namespace CoupledServices
         }
         public string LicensePath { get; } = "GNU License.rtf";
 
+        public string PrivacyPolicyPath { get; } = "Privacy Policy.rtf";
+
         public string UserSettingsFilePath 
         {
             get

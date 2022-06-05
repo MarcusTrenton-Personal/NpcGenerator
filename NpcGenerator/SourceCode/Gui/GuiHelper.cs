@@ -13,29 +13,29 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using CoupledServices;
-using Services.Message;
-using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
 
 namespace NpcGenerator
 {
-    public partial class LicenseWindow : Window
+    public static class GuiHelper
     {
-        public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider)
+        public static FlowDocument ReadRtfText(string path)
         {
-            if (filePathProvider == null)
+            try
             {
-                throw new ArgumentNullException(nameof(filePathProvider));
+                using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                FlowDocument flowDocument = new FlowDocument();
+                TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+                textRange.Load(fileStream, DataFormats.Rtf);
+                return flowDocument;
             }
-
-            InitializeComponent();
-
-            flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.LicensePath);
-
-            messager?.Send(sender: this, message: new Message.PageView("License"));
+            catch (IOException exception)
+            {
+                MessageBox.Show(exception.Message + " Was that file deleted?");
+                return null;
+            }
         }
     }
 }

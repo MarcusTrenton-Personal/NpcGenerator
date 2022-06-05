@@ -1,4 +1,4 @@
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ using System.Windows.Controls;
 namespace Tests
 {
     [TestClass]
-    public class LicenseWindowTests : FileCreatingTests
+    public class PrivacyPolicyWindowTests : FileCreatingTests
     {
         private class MockMessager : IMessager
         {
@@ -58,28 +58,28 @@ namespace Tests
                 try
                 {
                     //********* Setup Variables ********************
-                    const string licenseFileName = "TestLicense.rtf";
-                    string licensePath = Path.Combine(TestDirectory, licenseFileName);
+                    const string privacyPolicyFileName = "TestPolicy.rtf";
+                    string privacyPolicyPath = Path.Combine(TestDirectory, privacyPolicyFileName);
                     //From https://en.wikipedia.org/wiki/Rich_Text_Format
                     string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
                         This is some {\b bold} text.\par
                         }";
                     //string text = "";
-                    File.WriteAllText(licensePath, text);
+                    File.WriteAllText(privacyPolicyPath, text);
 
                     MockFilePathProvider filePathProvider = new MockFilePathProvider()
                     {
-                        LicensePath = licensePath
+                        PrivacyPolicyPath = privacyPolicyPath
                     };
 
-                    LicenseWindow licenseWindow = new LicenseWindow(new MockMessager(), filePathProvider);
+                    PrivacyPolicyWindow privacyPolicyWindow = new PrivacyPolicyWindow(new MockMessager(), filePathProvider);
 
                     //********* Test Initial Window ********************
-                    FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");
+                    FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)privacyPolicyWindow.FindName("flowViewer");
                     scrollDocumentExists = scrollViewer.Document != null;
 
                     //********* Clean Up ********************
-                    File.Delete(licensePath);
+                    File.Delete(privacyPolicyPath);
                 }
                 //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
                 //Therefore, every exception must be caught and explicitly marked as failure.
@@ -94,7 +94,7 @@ namespace Tests
             t.Start();
             t.Join();
 
-            Assert.IsTrue(scrollDocumentExists, "License scroll viewer is empty");
+            Assert.IsTrue(scrollDocumentExists, "Privacy Policy scroll viewer is empty");
             Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
     }

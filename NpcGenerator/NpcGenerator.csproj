@@ -41,10 +41,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <License Include="..\GNU License.rtf">
+    <LegalDocs Include="..\*.rtf">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </License>
+    </LegalDocs>
     <None Include="SourceAssets\1200px-2-Dice-Icon.svg.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -98,10 +98,7 @@
   </Target>
 
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
-    <ItemGroup>
-      <License Include="..\GNU License.rtf" />
-    </ItemGroup>
-    <Copy SourceFiles="@(License)" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(OutDir)" />
     <ItemGroup>
       <AppSettings Include="SourceAssets\AppSettings.json" />
     </ItemGroup>
@@ -128,7 +125,7 @@
     <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     
     <Message Text="Copying app data" Importance="high" />
-    <Copy SourceFiles="@(License)" DestinationFolder="$(PublishDir)" />
+    <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(PublishDir)" />
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(PublishDir)\Settings" />
     
     <Message Text="Signing exe" Importance="high" />
