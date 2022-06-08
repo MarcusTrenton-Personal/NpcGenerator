@@ -17,9 +17,9 @@ All the following must be in system path for the included scripts to function:
 * git.exe (For a tagging script)
 Find those executables using the `where` command:
 
-`where /R C:\ vstest.console` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe
+`where /R C:\ vstest.console` will yield a result like C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe
 
-`where /R C:\ msbuild` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
+`where /R C:\ msbuild` will yield a result like C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe
 
 `where /R C:\ git` will yield a result like C:\Users\Marcus\AppData\Local\Atlassian\SourceTree\git_local\bin\git.exe, if you use SourceTree for source control.
 
@@ -36,7 +36,7 @@ You must set environmental variables before starting Visual Studio or the comman
 Add a variable "Dropbox" for Dropbox's folder. This variable is used in the Dropbox publishing profile. 
 
 Add a variable "TextTemplating" for the file path of Microsoft.TextTemplating.targets, which is needed for auto-incrementing the AssemblyFileVersion.
-`where /R C:\ Microsoft.TextTemplating.targets` will yield a result like C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VisualStudio\v16.0\TextTemplating\Microsoft.TextTemplating.targets
+`where /R C:\ Microsoft.TextTemplating.targets` will yield a result like C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Microsoft\VisualStudio\v17.0\TextTemplating\Microsoft.TextTemplating.targets
 
 ### Release Managers Only
 
