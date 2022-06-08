@@ -14,17 +14,17 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using CoupledServices;
+using Services;
 using Services.Message;
 using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace NpcGenerator
 {
     public partial class LicenseWindow : Window
     {
-        public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider)
+        public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider, ILocalization localization)
         {
             if (filePathProvider == null)
             {
@@ -33,7 +33,17 @@ namespace NpcGenerator
 
             InitializeComponent();
 
-            flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.LicensePath);
+            Title = localization.GetText("license_window_title");
+
+            try
+            {
+                flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.LicensePath);
+            }
+            catch (IOException exception)
+            {
+                string message = localization.GetText("exception_maybe_file_deleted", exception.Message);
+                MessageBox.Show(message);
+            }
 
             messager?.Send(sender: this, message: new Message.PageView("License"));
         }

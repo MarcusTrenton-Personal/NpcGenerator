@@ -20,22 +20,22 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NpcGenerator"
         mc:Ignorable="d"
-        Title="NPC Generator" Height="1000" Width="1600">
+        Height="1000" Width="1600">
     <Grid Background="LightBlue">
         <StackPanel Orientation="Vertical">
             <!-- Input to Generation -->
             <StackPanel Orientation="Horizontal" Margin="100,10,0,0">
-                <TextBlock x:Name="configurationLabel" Margin="10" Text="Configuration File" VerticalAlignment="Center"/>
+                <TextBlock x:Name="configurationLabel" Margin="10" VerticalAlignment="Center"/>
                 <Button x:Name="configurationButton" Margin="10" Click="ChooseConfiguration" VerticalAlignment="Center">
-                    <TextBlock x:Name="configurationButtonText" Margin="1" Text="Choose"/>
+                    <TextBlock x:Name="configurationButtonText" Margin="1" />
                 </Button>
                 <Label x:Name="configurationPathText" Content="..." Background="White" VerticalAlignment="Center" BorderThickness="1" BorderBrush="Black" Margin="10"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
-                <TextBlock x:Name="npcQuantityLabel" Margin="10" Text="Quantity" VerticalAlignment="Center"/>
+                <TextBlock x:Name="npcQuantityLabel" Margin="10" VerticalAlignment="Center"/>
                 <TextBox x:Name="npcQuantityText" Margin="10" Padding="3" PreviewTextInput="NpcQuantityInput" TextChanged="NpcQuantityInputChanged" DataObject.Pasting="NpcQuantityPasting" VerticalAlignment="Center"/>
                 <Button x:Name="generateButton" Margin="10" Click="GenerateNpcs" VerticalAlignment="Center" IsEnabled="False">
-                    <TextBlock x:Name="generateButtonText" Margin="1" Text="Generate"/>
+                    <TextBlock x:Name="generateButtonText" Margin="1" />
                 </Button>
             </StackPanel>
             <!-- Viewing and exporting output -->
@@ -48,7 +48,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                     <Hyperlink NavigateUri="https://www.fantasynamegenerators.com/" RequestNavigate="OpenBrowserToUri">Name Generator</Hyperlink>
                 </TextBlock>
                 <Button x:Name="saveNpcsButton" Margin="10" Click="SaveNpcs" VerticalAlignment="Center" IsEnabled="False">
-                    <TextBlock x:Name="saveNpcsButtonText" Margin="1" Text="Save"/>
+                    <TextBlock x:Name="saveNpcsButtonText" Margin="1" />
                 </Button>
             </StackPanel>
         </StackPanel>
@@ -56,12 +56,12 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="privacyPolicyButton" Margin="10" Click="ShowPrivacyPopup">
-                    <TextBlock x:Name="privacyPolicyText" Margin="1" Text="Privacy Policy"/>
+                    <TextBlock x:Name="privacyPolicyText" Margin="1" />
                 </Button>
                 <CheckBox x:Name="analyticsConsent" VerticalAlignment="Center" Margin="3" Checked="AnalyticsConsentGiven" Unchecked="AnalyticsConsentWithdrawn"/>
-                <TextBlock VerticalAlignment="Center">Data Collection<LineBreak/>Consent</TextBlock>
+                <TextBlock x:Name="analyticsConsentText" VerticalAlignment="Center"/>
                 <Button x:Name="licenseButton" Margin="10" Click="ShowLicensePopup">
-                    <TextBlock x:Name="licenseButtonText" Margin="1" Text="License"/>
+                    <TextBlock x:Name="licenseButtonText" Margin="1" />
                 </Button>
                 <TextBlock x:Name="VersionText" Margin="3" VerticalAlignment="Center"/>
             </StackPanel>

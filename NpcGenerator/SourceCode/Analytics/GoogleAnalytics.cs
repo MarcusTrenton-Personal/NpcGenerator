@@ -132,6 +132,7 @@ namespace NpcGenerator
                 if (haveErrorInfo)
                 {
                     ValidationContent validation = validationResponse.validationMessages[0];
+                    //Don't localize dev messages.
                     MessageBox.Show("Analytics failed validation.\n" + validation.fieldPath + "\n" +
                         validation.description + "\n" + validation.validationCode + "\n\nOriginal Message:\n" +
                         body);

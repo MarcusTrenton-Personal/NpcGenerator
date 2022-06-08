@@ -14,19 +14,11 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using CoupledServices;
+using Services;
 using Services.Message;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NpcGenerator
 {
@@ -35,7 +27,7 @@ namespace NpcGenerator
     /// </summary>
     public partial class PrivacyPolicyWindow : Window
     {
-        public PrivacyPolicyWindow(IMessager messager, IFilePathProvider filePathProvider)
+        public PrivacyPolicyWindow(IMessager messager, IFilePathProvider filePathProvider, ILocalization localization)
         {
             if (filePathProvider == null)
             {
@@ -44,7 +36,17 @@ namespace NpcGenerator
 
             InitializeComponent();
 
-            flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.PrivacyPolicyPath);
+            Title = localization.GetText("privacy_policy_window_title");
+
+            try
+            {
+                flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.PrivacyPolicyPath);
+            }
+            catch (IOException exception)
+            {
+                string message = localization.GetText("exception_maybe_file_deleted", exception.Message);
+                MessageBox.Show(message);
+            }
 
             messager?.Send(sender: this, message: new Message.PageView("Privacy Policy"));
         }

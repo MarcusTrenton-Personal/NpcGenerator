@@ -29,17 +29,6 @@ namespace CoupledServices
                 return Path.Combine(commonAppData, appDataFolder);
             }
         }
-        public string LicensePath { get; } = "GNU License.rtf";
-
-        public string PrivacyPolicyPath { get; } = "Privacy Policy.rtf";
-
-        public string UserSettingsFilePath 
-        {
-            get
-            {
-                return Path.Combine(AppDataFolderPath, userSettingsFile);
-            }
-        }
 
         public string AppSettingsFilePath
         {
@@ -49,6 +38,18 @@ namespace CoupledServices
             }
         }
 
+        public string LicensePath { get; } = "GNU License.rtf";
+
+        public string LocalizationPath
+        {
+            get
+            {
+                return Path.Combine(appSettingsFolder, localizationFile);
+            }
+        }
+
+        public string PrivacyPolicyPath { get; } = "Privacy Policy.rtf";
+
         public string TrackingProfileFilePath
         {
             get
@@ -57,10 +58,19 @@ namespace CoupledServices
             }
         }
 
+        public string UserSettingsFilePath 
+        {
+            get
+            {
+                return Path.Combine(AppDataFolderPath, userSettingsFile);
+            }
+        }
+
         private const string appDataFolder = "NpcGenerator";
-        private const string userSettingsFile = "UserSettings.json";
-        private const string appSettingsFolder = "Settings";
         private const string appSettingsFile = "AppSettings.json";
+        private const string appSettingsFolder = "Settings";
+        private const string localizationFile = "Localization.csv";
         private const string trackingProfileFile = "TrackingProfile.json";
+        private const string userSettingsFile = "UserSettings.json";
     }
 }

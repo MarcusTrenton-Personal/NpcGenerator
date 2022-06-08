@@ -1,0 +1,15 @@
+ID	Context	Placeholder	en-CA
+main_window_title		AAAAAA	NPC Generator
+choose_configuration_file_label	Left of choose_configuration_file_button	BBBBBB	Configuration File
+choose_configuration_file_button	Right of choose_configuration_file_label	CCCCCC	Choose
+npc_quantity_label	Left of quantity number	DDDDDD	Quantity
+generate_button	Button to generate NPCs	EEEEEE	Generate
+save_button	Save generated NPCs	FFFFFFF	Save
+privacy_policy_button	Shows privacy policy window	GGGGGG	Privacy Policy
+data_collection_consent_checkbox		HHHHHHH	Data Collection Consent
+license_button	Show license window	IIIIII	License
+privacy_policy_window_title		JJJJJJ	Privacy Policy
+license_window_title		KKKKKK	GNU License
+exception_maybe_file_deleted	Parameter is an error message with the name of a file that couldn’t be found.	{0} LLLLLLL	{0} Was that file deleted?
+invalid_configuration_file_path	Attempted to generate NPCs without a configuration file	MMMMMM	Configuration path is not valid
+invalid_npc_quantity	Attempted to generate NPCs with an invalid NPC number	NNNNNN	NPC Quantity must be at least 1

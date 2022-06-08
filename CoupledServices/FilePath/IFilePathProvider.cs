@@ -18,10 +18,11 @@ namespace CoupledServices
     public interface IFilePathProvider
     {
         public string AppDataFolderPath { get; }
-        public string LicensePath { get; }
-        public string PrivacyPolicyPath { get; }
-        public string UserSettingsFilePath { get; }
         public string AppSettingsFilePath { get; }
+        public string LicensePath { get; }
+        public string LocalizationPath { get; }
+        public string PrivacyPolicyPath { get; }
         public string TrackingProfileFilePath { get; }
+        public string UserSettingsFilePath { get; }
     }
 }

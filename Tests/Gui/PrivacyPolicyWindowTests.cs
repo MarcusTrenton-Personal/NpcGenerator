@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using Services.Message;
 using System;
 using System.IO;
@@ -39,11 +40,22 @@ namespace Tests
         private class MockFilePathProvider : IFilePathProvider
         {
             public string AppDataFolderPath { get; set; } = null;
-            public string LicensePath { get; set; } = null;
-            public string PrivacyPolicyPath { get; set; } = null;
-            public string UserSettingsFilePath { get; set; } = null;
             public string AppSettingsFilePath { get; set; } = null;
+            public string LicensePath { get; set; } = null;
+            public string LocalizationPath { get; } = null;
+            public string PrivacyPolicyPath { get; set; } = null;
             public string TrackingProfileFilePath { get; set; } = null;
+            public string UserSettingsFilePath { get; set; } = null;
+        }
+
+        private class MockLocalization : ILocalization
+        {
+            public string[] SupportedLanguageCodes { get; set; } = null;
+            public string CurrentLanguageCode { get; set; } = null;
+            public string GetText(string textId, params object[] formatParameters)
+            {
+                return textId;
+            }
         }
 
         //An aborted test is actually a failure. Run with debug to determine what failed.
@@ -72,7 +84,10 @@ namespace Tests
                         PrivacyPolicyPath = privacyPolicyPath
                     };
 
-                    PrivacyPolicyWindow privacyPolicyWindow = new PrivacyPolicyWindow(new MockMessager(), filePathProvider);
+                    PrivacyPolicyWindow privacyPolicyWindow = new PrivacyPolicyWindow(
+                        messager: new MockMessager(), 
+                        filePathProvider: filePathProvider,
+                        localization: new MockLocalization());
 
                     //********* Test Initial Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)privacyPolicyWindow.FindName("flowViewer");

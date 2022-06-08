@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using Services.Message;
 using System;
 using System.Data;
@@ -50,6 +51,7 @@ namespace Tests
         {
             public IGoogleAnalyticsSettings GoogleAnalytics { get; set; } = new MockGoogleAnalyticsSettings();
             public int EncryptionKey { get; set; } = 0;
+            public string DefaultLanguageCode { get; set; } = null;
         }
 
         private class MockMessager : IMessager
@@ -75,11 +77,22 @@ namespace Tests
         private class MockFilePathProvider : IFilePathProvider
         {
             public string AppDataFolderPath { get; set; } = null;
-            public string LicensePath { get; set; } = null;
-            public string PrivacyPolicyPath { get; set; } = null;
-            public string UserSettingsFilePath { get; set; } = null;
             public string AppSettingsFilePath { get; set; } = null;
+            public string LicensePath { get; set; } = null;
+            public string LocalizationPath { get; } = null;
+            public string PrivacyPolicyPath { get; set; } = null;
             public string TrackingProfileFilePath { get; set; } = null;
+            public string UserSettingsFilePath { get; set; } = null;
+        }
+
+        private class MockLocalization : ILocalization
+        {
+            public string[] SupportedLanguageCodes { get; set; } = null;
+            public string CurrentLanguageCode { get; set; } = null;
+            public string GetText(string textId, params object[] formatParameters)
+            {
+                return textId;
+            }
         }
 
         private class MockLocalFileIO : ILocalFileIO
@@ -132,7 +145,8 @@ namespace Tests
                         messager: new MockMessager(),
                         userSettings: testUserSettings,
                         filePathProvider: new MockFilePathProvider(),
-                        fileIO: fileIO
+                        fileIO: fileIO,
+                        localization: new MockLocalization()
                     );
                     MainWindow mainWindow = new MainWindow(serviceCenter);
 

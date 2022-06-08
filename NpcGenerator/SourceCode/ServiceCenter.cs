@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using CoupledServices;
+using Services;
 using Services.Message;
 
 namespace NpcGenerator
@@ -23,12 +24,14 @@ namespace NpcGenerator
     public class ServiceCenter
     {
         public ServiceCenter(
-            ITrackingProfile profile, 
-            IAppSettings appSettings, 
-            IMessager messager, 
-            IUserSettings userSettings, 
+            IAppSettings appSettings,
             IFilePathProvider filePathProvider,
-            ILocalFileIO fileIO)
+            ILocalFileIO fileIO,
+            ILocalization localization,
+            IMessager messager, 
+            ITrackingProfile profile,
+            IUserSettings userSettings
+            )
         {
             Profile = profile;
             AppSettings = appSettings;
@@ -36,13 +39,16 @@ namespace NpcGenerator
             UserSettings = userSettings;
             FilePathProvider = filePathProvider;
             FileIO = fileIO;
+            Localization = localization;
+
         }
 
-        public ITrackingProfile Profile { get; private set; }
         public IAppSettings AppSettings { get; private set; }
-        public IMessager Messager { get; private set; }
-        public IUserSettings UserSettings { get; private set; }
-        public IFilePathProvider FilePathProvider { get; private set; }
         public ILocalFileIO FileIO { get; private set; }
+        public IFilePathProvider FilePathProvider { get; private set; }
+        public ILocalization Localization { get; private set; }
+        public IMessager Messager { get; private set; }
+        public ITrackingProfile Profile { get; private set; }
+        public IUserSettings UserSettings { get; private set; }
     }
 }

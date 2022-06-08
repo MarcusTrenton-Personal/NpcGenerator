@@ -31,14 +31,10 @@ namespace NpcGenerator
         {
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIO = new LocalFileIO(filePathProvider);
-
-            string appSettingsPath = filePathProvider.AppSettingsFilePath;
-            AppSettings appSettings = AppSettings.Load(appSettingsPath);
-
-            TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
-
+            AppSettings appSettings = AppSettings.Load(filePathProvider.AppSettingsFilePath);
+            Services.Localization localization = new Services.Localization(filePathProvider.LocalizationPath, appSettings.DefaultLanguageCode);
             Messager messager = new Messager();
-
+            TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
 
             m_serviceCenter = new ServiceCenter(
@@ -47,7 +43,8 @@ namespace NpcGenerator
                 messager: messager,
                 userSettings: userSettings,
                 filePathProvider: filePathProvider,
-                fileIO: fileIO);
+                fileIO: fileIO,
+                localization: localization);
 
             string[] commandLineArgs = Environment.GetCommandLineArgs();
             bool analyticsDryRun = Array.IndexOf(commandLineArgs, "-analyticsDryRun") >= 0;

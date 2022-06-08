@@ -20,7 +20,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NpcGenerator"
         mc:Ignorable="d"
-        Title="GNU License" Height="1000" Width="800">
+        Height="1000" Width="800">
     <Grid>
         <FlowDocumentScrollViewer x:Name="flowViewer"/>
     </Grid>

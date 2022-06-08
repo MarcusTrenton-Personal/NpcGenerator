@@ -26,11 +26,12 @@ namespace Tests
         private class MockFilePathProvider : IFilePathProvider
         {
             public string AppDataFolderPath { get; } = "App";
-            public string LicensePath { get; } = "License.txt";
-            public string PrivacyPolicyPath { get; } = "PrivacyPolicy.txt";
-            public string UserSettingsFilePath { get; } = "UserSettings.txt";
             public string AppSettingsFilePath { get; } = "AppSettings.txt";
+            public string LicensePath { get; } = "License.txt";
+            public string LocalizationPath { get; } = "Loc.csv";
+            public string PrivacyPolicyPath { get; } = "PrivacyPolicy.txt";
             public string TrackingProfileFilePath { get; } = "Tracking.txt";
+            public string UserSettingsFilePath { get; } = "UserSettings.txt";
         }
 
         [TestInitialize]

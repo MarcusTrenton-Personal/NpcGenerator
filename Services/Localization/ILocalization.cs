@@ -1,4 +1,4 @@
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,22 +13,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-namespace NpcGenerator
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Services
 {
-    public interface IGoogleAnalyticsSettings
+    public interface ILocalization
     {
-        public string MeasurementIdDev { get; }
-        public string MeasurementIdProd { get; }
-        public string AdditionalIdDev { get; }
-        public string AdditionalIdProd { get; }
-    }
-
-    public interface IAppSettings
-    {
-        public IGoogleAnalyticsSettings GoogleAnalytics { get; }
-
-        public int EncryptionKey { get; }
-
-        public string DefaultLanguageCode { get; }
+        public string[] SupportedLanguageCodes { get; }
+        public string CurrentLanguageCode { get; set; }
+        public string GetText(string textId, params object[] formatParameters);
     }
 }

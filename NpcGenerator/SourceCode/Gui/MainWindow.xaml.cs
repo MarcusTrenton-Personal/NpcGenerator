@@ -40,6 +40,8 @@ namespace NpcGenerator
 
             InitializeComponent();
 
+            SetLocalizedText();
+
             SetVersionText(); 
 
             configurationPathText.Content = m_serviceCenter.UserSettings.ConfigurationPath;
@@ -56,6 +58,20 @@ namespace NpcGenerator
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionText.Text = fvi.FileVersion;
+        }
+
+        private void SetLocalizedText()
+        {
+            ILocalization localization = m_serviceCenter.Localization;
+            Title = localization.GetText("main_window_title");
+            configurationLabel.Text = localization.GetText("choose_configuration_file_label");
+            configurationButtonText.Text = localization.GetText("choose_configuration_file_button");
+            npcQuantityLabel.Text = localization.GetText("npc_quantity_label");
+            generateButtonText.Text = localization.GetText("generate_button");
+            saveNpcsButtonText.Text = localization.GetText("save_button");
+            privacyPolicyText.Text = localization.GetText("privacy_policy_button");
+            analyticsConsentText.Text = localization.GetText("data_collection_consent_checkbox");
+            licenseButtonText.Text = localization.GetText("license_button");
         }
 
         private void UpdateGenerateButtonEnabled()
@@ -137,14 +153,16 @@ namespace NpcGenerator
             bool configurationFileExists = File.Exists(configurationPath);
             if (!configurationFileExists)
             {
-                MessageBox.Show("Configuration path is not valid");
+                string message = m_serviceCenter.Localization.GetText("invalid_configuration_file_path");
+                MessageBox.Show(message);
                 return false;
             }
 
             bool isNpcQuantityValid = NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out npcQuantity);
             if (!isNpcQuantityValid)
             {
-                MessageBox.Show("NPC Quantity must be at least 1");
+                string message = m_serviceCenter.Localization.GetText("invalid_npc_quantity");
+                MessageBox.Show(message);
                 return false;
             }
 
@@ -223,7 +241,10 @@ namespace NpcGenerator
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
-            PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(m_serviceCenter.Messager, m_serviceCenter.FilePathProvider)
+            PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(
+                messager: m_serviceCenter.Messager, 
+                filePathProvider: m_serviceCenter.FilePathProvider,
+                localization: m_serviceCenter.Localization)
             {
                 Owner = this
             };
@@ -234,7 +255,10 @@ namespace NpcGenerator
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
-            LicenseWindow licenseWindow = new LicenseWindow(m_serviceCenter.Messager, m_serviceCenter.FilePathProvider)
+            LicenseWindow licenseWindow = new LicenseWindow(
+                messager: m_serviceCenter.Messager, 
+                filePathProvider: m_serviceCenter.FilePathProvider,
+                localization: m_serviceCenter.Localization)
             {
                 Owner = this
             };

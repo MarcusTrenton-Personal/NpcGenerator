@@ -23,19 +23,11 @@ namespace NpcGenerator
     {
         public static FlowDocument ReadRtfText(string path)
         {
-            try
-            {
-                using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-                FlowDocument flowDocument = new FlowDocument();
-                TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-                textRange.Load(fileStream, DataFormats.Rtf);
-                return flowDocument;
-            }
-            catch (IOException exception)
-            {
-                MessageBox.Show(exception.Message + " Was that file deleted?");
-                return null;
-            }
+            using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FlowDocument flowDocument = new FlowDocument();
+            TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+            textRange.Load(fileStream, DataFormats.Rtf);
+            return flowDocument;
         }
     }
 }

@@ -49,6 +49,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <Localization Include="SourceAssets\Localization.csv">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </Localization>
   </ItemGroup>
 
   <ItemGroup>
@@ -94,11 +98,12 @@
     <ItemGroup>
       <GeneratedAssemblyInfo Include="SourceCode\AssemblyInfo.cs" />
     </ItemGroup>
-    <Move SourceFiles="@(GeneratedAssemblyInfo)" DestinationFolder="GeneratedCode" />
+    <Move SourceFiles="@(GeneratedAssemblyInfo)" DestinationFolder="GeneratedCode" ContinueOnError="true"/>
   </Target>
 
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="@(Localization)" DestinationFolder="$(OutDir)\Settings"/>
     <ItemGroup>
       <AppSettings Include="SourceAssets\AppSettings.json" />
     </ItemGroup>
@@ -126,6 +131,7 @@
     
     <Message Text="Copying app data" Importance="high" />
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(PublishDir)" />
+    <Copy SourceFiles="@(Localization)" DestinationFolder="$(PublishDir)\Settings"/>
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(PublishDir)\Settings" />
     
     <Message Text="Signing exe" Importance="high" />
