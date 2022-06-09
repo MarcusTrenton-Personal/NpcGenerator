@@ -39,15 +39,29 @@ namespace Services
 
         public string[] SupportedLanguageCodes { get; private set; }
 
-        public string CurrentLanguageCode { get; set; }
+        public string CurrentLanguageCode 
+        { 
+            get
+            {
+                return m_currentLanguageCode;
+            } 
+            
+            set
+            {
+                m_currentLanguageCode = value;
+                m_currentLanguageCodeHash = m_currentLanguageCode.GetHashCode();
+            }
+        }
 
         public string GetText(string textId, params object[] formatParameters)
         {
-            string unformattedText = m_localizedText[new LocalizationKey(textId: textId, languageCode: CurrentLanguageCode)];
+            int textIdHash = textId.GetHashCode();
+            int hashKey = Hash(textIdHash: textIdHash, languageCodeHash: m_currentLanguageCodeHash);
+            string unformattedText = m_localizedText[hashKey];
             return String.Format(unformattedText, formatParameters);
         }
 
-        private static void ParseCsv(string filePath, out Dictionary<LocalizationKey, string> localization, out string[] languageCodes)
+        private static void ParseCsv(string filePath, out Dictionary<int, string> localization, out string[] languageCodes)
         {
             IEnumerable<string> lines = File.ReadAllLines(filePath);
             IEnumerator<string> enumerator = lines.GetEnumerator();
@@ -91,64 +105,37 @@ namespace Services
             }
 
             //Convert into the expected format
-            localization = new Dictionary<LocalizationKey, string>();
+            localization = new Dictionary<int, string>();
             for(int languageIndex = 0; languageIndex < languageCodes.Length; ++languageIndex)
             {
-                for(int textIndex = 0; textIndex < textIdentifiers.Count; ++textIndex)
+                int languageCodeHash = languageCodes[languageIndex].GetHashCode();
+                for (int textIndex = 0; textIndex < textIdentifiers.Count; ++textIndex)
                 {
-                    string textId = textIdentifiers[textIndex];
-                    localization[new LocalizationKey(textId: textId, languageCode: languageCodes[languageIndex])] = translations[textIndex][languageIndex];
+                    int textIdHash = textIdentifiers[textIndex].GetHashCode();
+                    int hashKey = Hash(languageCodeHash: languageCodeHash, textIdHash: textIdHash);
+                    bool hashCollision = !localization.TryAdd(hashKey, translations[textIndex][languageIndex]);
+                    if(hashCollision)
+                    {
+                        throw new ArgumentException("Localization hash collision. Text not localized. A better hashing algorithm is needed.");
+                    }
                 }
             }
         }
 
-        private struct LocalizationKey : IEquatable<LocalizationKey>
+        private static int Hash(int languageCodeHash, int textIdHash)
         {
-            public LocalizationKey(string textId, string languageCode)
-            {
-                TextId = textId;
-                LanguageCode = languageCode;
-            }
-
-            public override bool Equals(object other)
-            {
-                return other is LocalizationKey otherKey && Equals(otherKey);
-            }
-
-            public bool Equals(LocalizationKey other)
-            {
-                // Optimization for a common success case.
-                if (Object.ReferenceEquals(this, other))
-                {
-                    return true;
-                }
-
-                // If run-time types are not exactly the same, return false.
-                if (this.GetType() != other.GetType())
-                {
-                    return false;
-                }
-
-                // Return true if the fields match.
-                // Note that the base class is not invoked because it is
-                // System.Object, which defines Equals as reference equality.
-                return (TextId == other.TextId) && (LanguageCode == other.LanguageCode);
-            }
-
-            public override int GetHashCode() => (TextId, LanguageCode).GetHashCode();
-
-            public static bool operator ==(LocalizationKey lhs, LocalizationKey rhs)
-            {
-                // Equals handles case of null on right side.
-                return lhs.Equals(rhs);
-            }
-
-            public static bool operator !=(LocalizationKey lhs, LocalizationKey rhs) => !(lhs == rhs);
-
-            public string TextId { get; private set; }
-            public string LanguageCode { get; private set; }
+            //The original languageCode and textId should never be mistaken for each other,
+            //so having a symmetric hashing function should be fine.
+            //This assumption will be verified at runtime, of course.
+            return languageCodeHash ^ textIdHash;
         }
 
-        private readonly Dictionary<LocalizationKey, string> m_localizedText = new Dictionary<LocalizationKey, string>();
+        //public override int GetHashCode() => (TextId, LanguageCode).GetHashCode();
+
+        private string m_currentLanguageCode;
+        private int m_currentLanguageCodeHash;
+
+        //The key is a combined hash of textId and languageCode
+        private readonly Dictionary<int, string> m_localizedText = new Dictionary<int, string>();
     }
 }
