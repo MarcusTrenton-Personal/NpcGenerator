@@ -48,9 +48,24 @@ namespace Services
             
             set
             {
-                m_currentLanguageCode = value;
-                m_currentLanguageCodeHash = m_currentLanguageCode.GetHashCode();
+                string valueLowerCase = value.ToLower();
+                bool isSupported = IsLanguageCodeSupported(valueLowerCase);
+                if(isSupported)
+                {
+                    m_currentLanguageCode = valueLowerCase;
+                    m_currentLanguageCodeHash = m_currentLanguageCode.GetHashCode();
+                }
+                else 
+                {
+                    throw new ArgumentException(value + " is not supported.");
+                }
             }
+        }
+
+        public bool IsLanguageCodeSupported(string languageCode)
+        {
+            bool isFound = Array.IndexOf(SupportedLanguageCodes, languageCode.ToLower()) >= 0;
+            return isFound;
         }
 
         public string GetText(string textId, params object[] formatParameters)

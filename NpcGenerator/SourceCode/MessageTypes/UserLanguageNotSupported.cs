@@ -13,17 +13,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Services
+namespace NpcGenerator.Message
 {
-    public interface ILocalization
+    public class UserLanguageNotSupported
     {
-        public string[] SupportedLanguageCodes { get; }
-        public string CurrentLanguageCode { get; set; }
-        public bool IsLanguageCodeSupported(string languageCode);
-        public string GetText(string textId, params object[] formatParameters);
+        public UserLanguageNotSupported(string languageCode)
+        {
+            LanguageCode = languageCode;
+        }
+
+        public string LanguageCode { get; private set; }
     }
 }

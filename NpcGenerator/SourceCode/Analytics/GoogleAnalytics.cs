@@ -60,6 +60,7 @@ namespace NpcGenerator
             m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
             m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
+            m_messager.Subscribe<Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
         }
 
         ~GoogleAnalytics()
@@ -69,6 +70,7 @@ namespace NpcGenerator
             m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
             m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
+            m_messager.Unsubscribe<Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
@@ -286,6 +288,37 @@ namespace NpcGenerator
 
             writer.WritePropertyName("name");
             writer.WriteValue("save_npcs");
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnUserLanguageNotSupported(object sender, Message.UserLanguageNotSupported notSupported)
+        {
+            if (m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(Callback);
+            }
+
+            void Callback(JsonWriter writer)
+            {
+                WriteUserLanguageNotSupportedEvent(writer, notSupported.LanguageCode);
+            }
+        }
+
+        private void WriteUserLanguageNotSupportedEvent(JsonWriter writer, string languageCode)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("unsupported_language");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("language_code");
+            writer.WriteValue(languageCode);
+
+            writer.WriteEnd(); //End of params object
 
             writer.WriteEnd(); //End of event object
         }

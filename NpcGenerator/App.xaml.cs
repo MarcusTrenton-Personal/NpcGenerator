@@ -16,6 +16,8 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Services.Message;
 using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 
 [assembly: CLSCompliant(true)]
@@ -58,8 +60,24 @@ namespace NpcGenerator
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
 
+            UseUsersLanguageOrReport(localization, m_serviceCenter.Messager);
+
             Current.MainWindow = new MainWindow(m_serviceCenter);
             Current.MainWindow.Show();
+        }
+
+        private static void UseUsersLanguageOrReport(Services.Localization localization, IMessager messager)
+        {
+            string userLanguageCode = Thread.CurrentThread.CurrentCulture.Name;
+            bool userLanguageIsSupported = localization.IsLanguageCodeSupported(userLanguageCode);
+            if(userLanguageIsSupported)
+            {
+                localization.CurrentLanguageCode = userLanguageCode;
+            }
+            else
+            {
+                messager.Send(Current, new Message.UserLanguageNotSupported(userLanguageCode));
+            }
         }
 
         private static TrackingProfile ReadTrackingProfile(FilePathProvider filePathProvider)

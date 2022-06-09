@@ -52,6 +52,12 @@ namespace Tests
         {
             public string[] SupportedLanguageCodes { get; set; } = null;
             public string CurrentLanguageCode { get; set; } = null;
+
+            public bool IsLanguageCodeSupported(string languageCode)
+            {
+                return false;
+            }
+
             public string GetText(string textId, params object[] formatParameters)
             {
                 return textId;
