@@ -1,6 +1,14 @@
 {
   "profiles": {
-    "NpcGenerator": {
+    "Placeholder Language": {
+      "commandName": "Project",
+      "commandLineArgs": "-language Placeholder"
+    },
+    "Analytics Dry Run": {
+      "commandName": "Project",
+      "commandLineArgs": "-analyticsDryRun"
+    },
+    "No Parameters": {
       "commandName": "Project"
     }
   }

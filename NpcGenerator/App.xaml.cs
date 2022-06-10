@@ -29,7 +29,40 @@ namespace NpcGenerator
     /// </summary>
     public partial class App : Application
     {
-        App()
+        private struct AppParameters
+        {
+            public bool analyticsDryRun;
+            public string forcedLanguageCode;
+        }
+
+        public App()
+        {
+            m_serviceCenter = CreateServices();
+            AppParameters parameters = ReadAppParameters();
+
+            m_googleAnalytics = new GoogleAnalytics(
+                 appSettings: m_serviceCenter.AppSettings,
+                 trackingProfile: m_serviceCenter.Profile,
+                 messager: m_serviceCenter.Messager,
+                 userSettings: m_serviceCenter.UserSettings,
+                 dryRunValidation: parameters.analyticsDryRun);
+
+            m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
+
+            if (string.IsNullOrEmpty(parameters.forcedLanguageCode))
+            {
+                UseUsersLanguageOrReport(m_serviceCenter.Localization, m_serviceCenter.Messager);
+            }
+            else
+            {
+                m_serviceCenter.Localization.CurrentLanguageCode = parameters.forcedLanguageCode;
+            }
+
+            Current.MainWindow = new MainWindow(m_serviceCenter);
+            Current.MainWindow.Show();
+        }
+
+        private static ServiceCenter CreateServices()
         {
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIO = new LocalFileIO(filePathProvider);
@@ -39,34 +72,57 @@ namespace NpcGenerator
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
 
-            m_serviceCenter = new ServiceCenter(
-                profile: trackingProfile, 
-                appSettings: appSettings, 
+            return new ServiceCenter(
+                profile: trackingProfile,
+                appSettings: appSettings,
                 messager: messager,
                 userSettings: userSettings,
                 filePathProvider: filePathProvider,
                 fileIO: fileIO,
                 localization: localization);
-
-            string[] commandLineArgs = Environment.GetCommandLineArgs();
-            bool analyticsDryRun = Array.IndexOf(commandLineArgs, "-analyticsDryRun") >= 0;
-
-            m_googleAnalytics = new GoogleAnalytics(
-                 appSettings: m_serviceCenter.AppSettings,
-                 trackingProfile: m_serviceCenter.Profile,
-                 messager: m_serviceCenter.Messager,
-                 userSettings: m_serviceCenter.UserSettings,
-                 dryRunValidation: analyticsDryRun);
-
-            m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
-
-            UseUsersLanguageOrReport(localization, m_serviceCenter.Messager);
-
-            Current.MainWindow = new MainWindow(m_serviceCenter);
-            Current.MainWindow.Show();
         }
 
-        private static void UseUsersLanguageOrReport(Services.Localization localization, IMessager messager)
+        private static AppParameters ReadAppParameters()
+        {
+            AppParameters parameters = new AppParameters
+            {
+                analyticsDryRun = false,
+                forcedLanguageCode = null
+            };
+
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            //Skip the first commandline argument, as it's always the path of the exe/dll.
+            for(int i = 1; i < commandLineArgs.Length; i++)
+            {
+                switch(commandLineArgs[i])
+                {
+                    case "-analyticsDryRun":
+                    {
+                        parameters.analyticsDryRun = true;
+                    }
+                    break;
+
+                    case "-language":
+                    {
+                        if(i + 1 >= commandLineArgs.Length)
+                        {
+                            throw new ArgumentOutOfRangeException("-language command line argument must be followed by a language code");
+                        }
+                        parameters.forcedLanguageCode = commandLineArgs[i + 1];
+                        ++i;
+                    }
+                    break;
+
+                    default:
+                    {
+                        throw new ArgumentException("Unknown command line argument: " + commandLineArgs[i]);
+                    }
+                }
+            }
+            return parameters;
+        }
+
+        private static void UseUsersLanguageOrReport(Services.ILocalization localization, IMessager messager)
         {
             string userLanguageCode = Thread.CurrentThread.CurrentCulture.Name;
             bool userLanguageIsSupported = localization.IsLanguageCodeSupported(userLanguageCode);
@@ -92,7 +148,7 @@ namespace NpcGenerator
             return trackingProfile;
         }
 
-        private UserSettings ReadUserSettings(FilePathProvider filePathProvider)
+        private static UserSettings ReadUserSettings(FilePathProvider filePathProvider)
         {
             string userSettingsPath = filePathProvider.UserSettingsFilePath;
             UserSettings userSettings = UserSettings.Load(userSettingsPath);
