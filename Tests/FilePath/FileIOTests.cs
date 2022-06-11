@@ -23,21 +23,11 @@ namespace Tests
     [TestClass]
     public class FileIOTests
     {
-        private class MockFilePathProvider : IFilePathProvider
-        {
-            public string AppDataFolderPath { get; } = "App";
-            public string AppSettingsFilePath { get; } = "AppSettings.txt";
-            public string LicensePath { get; } = "License.txt";
-            public string LocalizationPath { get; } = "Loc.csv";
-            public string PrivacyPolicyPath { get; } = "PrivacyPolicy.txt";
-            public string TrackingProfileFilePath { get; } = "Tracking.txt";
-            public string UserSettingsFilePath { get; } = "UserSettings.txt";
-        }
-
         [TestInitialize]
         public void CreateMockFileProvider()
         {
-            MockFilePathProvider mockFilePathProvider = new MockFilePathProvider();
+            StubFilePathProvider mockFilePathProvider = new StubFilePathProvider();
+            mockFilePathProvider.AppDataFolderPath = "App";
             m_fileIO = new LocalFileIO(mockFilePathProvider);
         }
 

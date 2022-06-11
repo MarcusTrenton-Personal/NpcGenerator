@@ -28,42 +28,6 @@ namespace Tests
     [TestClass]
     public class LicenseWindowTests : FileCreatingTests
     {
-        private class MockMessager : IMessager
-        {
-            public void Send<T>(object sender, T message) { }
-
-            public void Subscribe<T>(IChannel<T>.Callback callback) { }
-
-            public void Unsubscribe<T>(IChannel<T>.Callback callback) { }
-        }
-
-        private class MockFilePathProvider : IFilePathProvider
-        {
-            public string AppDataFolderPath { get; set; } = null;
-            public string AppSettingsFilePath { get; set; } = null;
-            public string LicensePath { get; set; } = null;
-            public string LocalizationPath { get; } = null;
-            public string PrivacyPolicyPath { get; set; } = null;
-            public string TrackingProfileFilePath { get; set; } = null;
-            public string UserSettingsFilePath { get; set; } = null;
-        }
-
-        private class MockLocalization : ILocalization
-        {
-            public string[] SupportedLanguageCodes { get; set; } = null;
-            public string CurrentLanguageCode { get; set; } = null;
-
-            public bool IsLanguageCodeSupported(string languageCode)
-            {
-                return false;
-            }
-
-            public string GetText(string textId, params object[] formatParameters)
-            {
-                return textId;
-            }
-        }
-
         //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
@@ -85,15 +49,15 @@ namespace Tests
                     //string text = "";
                     File.WriteAllText(licensePath, text);
 
-                    MockFilePathProvider filePathProvider = new MockFilePathProvider()
+                    StubFilePathProvider filePathProvider = new StubFilePathProvider()
                     {
                         LicensePath = licensePath
                     };
 
                     LicenseWindow licenseWindow = new LicenseWindow(
-                        messager: new MockMessager(), 
+                        messager: new StubMessager(), 
                         filePathProvider: filePathProvider,
-                        localization: new MockLocalization());
+                        localization: new StubLocalization());
 
                     //********* Test Initial Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");

@@ -31,91 +31,6 @@ namespace Tests
     [TestClass]
     public class MainWindowTests : FileCreatingTests
     {
-        private class MockTrackingProfile : ITrackingProfile
-        {
-            public Guid ClientId { get; set; } = Guid.Empty;
-            public string Language { get; set; } = null;
-            public string AppVersion { get; set; } = null;
-            public string OSVersion { get; set; } = null;
-        }
-
-        private class MockGoogleAnalyticsSettings : IGoogleAnalyticsSettings
-        {
-            public string MeasurementIdDev { get; set; } = null;
-            public string MeasurementIdProd { get; set; } = null;
-            public string AdditionalIdDev { get; set; } = null;
-            public string AdditionalIdProd { get; set; } = null;
-        }
-
-        private class MockAppSettings : IAppSettings
-        {
-            public IGoogleAnalyticsSettings GoogleAnalytics { get; set; } = new MockGoogleAnalyticsSettings();
-            public int EncryptionKey { get; set; } = 0;
-            public string DefaultLanguageCode { get; set; } = null;
-        }
-
-        private class MockMessager : IMessager
-        {
-            public void Send<T>(object sender, T message) { }
-
-            public void Subscribe<T>(IChannel<T>.Callback callback) { }
-
-            public void Unsubscribe<T>(IChannel<T>.Callback callback) { }
-        }
-
-        private class MockUserSettings : IUserSettings
-        {
-            public bool AnalyticsConsent { get; set; } = true;
-
-            public string ConfigurationPath { get; set; } = null;
-
-            public int NpcQuantity { get; set; } = 1;
-
-            public void Save(string path) { }
-        }
-
-        private class MockFilePathProvider : IFilePathProvider
-        {
-            public string AppDataFolderPath { get; set; } = null;
-            public string AppSettingsFilePath { get; set; } = null;
-            public string LicensePath { get; set; } = null;
-            public string LocalizationPath { get; } = null;
-            public string PrivacyPolicyPath { get; set; } = null;
-            public string TrackingProfileFilePath { get; set; } = null;
-            public string UserSettingsFilePath { get; set; } = null;
-        }
-
-        private class MockLocalization : ILocalization
-        {
-            public string[] SupportedLanguageCodes { get; set; } = null;
-            public string CurrentLanguageCode { get; set; } = null;
-            
-            public bool IsLanguageCodeSupported(string languageCode)
-            {
-                return false;
-            }
-
-            public string GetText(string textId, params object[] formatParameters)
-            {
-                return textId;
-            }
-        }
-
-        private class MockLocalFileIO : ILocalFileIO
-        {
-            public string CacheFile(string originalPath)
-            {
-                return originalPath;
-            }
-
-            public void SaveToPickedFile(string content, string fileType) 
-            {
-                SaveCalled = true;
-            }
-
-            public bool SaveCalled { get; set; } = false;
-        }
-
         //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
@@ -125,7 +40,7 @@ namespace Tests
             bool npcQuantityLabelMachesUserSettings = false;
             bool generatedNpcQuantityMatchesUserSettings = false;
 
-            MockLocalFileIO fileIO = new MockLocalFileIO();
+            StubLocalFileIO fileIO = new StubLocalFileIO();
 
             Thread t = new Thread(new ThreadStart(delegate ()
             {
@@ -139,20 +54,20 @@ namespace Tests
                         "Red,1";
                     File.WriteAllText(configPath, text);
 
-                    MockUserSettings testUserSettings = new MockUserSettings
+                    StubUserSettings testUserSettings = new StubUserSettings
                     {
                         ConfigurationPath = configPath,
                         NpcQuantity = 5
                     };
 
                     ServiceCenter serviceCenter = new ServiceCenter(
-                        profile: new MockTrackingProfile(),
-                        appSettings: new MockAppSettings(),
-                        messager: new MockMessager(),
+                        profile: new StubTrackingProfile(),
+                        appSettings: new StubAppSettings(),
+                        messager: new StubMessager(),
                         userSettings: testUserSettings,
-                        filePathProvider: new MockFilePathProvider(),
+                        filePathProvider: new StubFilePathProvider(),
                         fileIO: fileIO,
-                        localization: new MockLocalization()
+                        localization: new StubLocalization()
                     );
                     MainWindow mainWindow = new MainWindow(serviceCenter);
 
