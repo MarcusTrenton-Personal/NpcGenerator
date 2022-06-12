@@ -19,8 +19,17 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:NpcGenerator"
+    x:Name="ThisWindow"
     mc:Ignorable="d"
     Height="1000" Width="800">
+    <Window.Resources>
+        <local:LocalizationConverter x:Key="localization"/>
+    </Window.Resources>
+    <Window.Title>
+        <MultiBinding Converter="{StaticResource localization}" ConverterParameter="privacy_policy_window_title">
+            <Binding Path="Localization" ElementName="ThisWindow"/>
+        </MultiBinding>
+    </Window.Title>
     <Grid>
         <FlowDocumentScrollViewer x:Name="flowViewer"/>
     </Grid>

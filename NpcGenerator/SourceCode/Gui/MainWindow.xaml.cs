@@ -29,7 +29,7 @@ using System.Windows.Navigation;
 
 namespace NpcGenerator
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, ILocalizationProvider
     {   
         //Normally, only the needed services would be passed, 
         //but since this window can spawn other windows that is too restricting.
@@ -40,9 +40,7 @@ namespace NpcGenerator
 
             InitializeComponent();
 
-            SetLocalizedText();
-
-            SetVersionText(); 
+            SetVersionText();
 
             configurationPathText.Content = m_serviceCenter.UserSettings.ConfigurationPath;
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
@@ -60,20 +58,6 @@ namespace NpcGenerator
             VersionText.Text = fvi.FileVersion;
         }
 
-        private void SetLocalizedText()
-        {
-            ILocalization localization = m_serviceCenter.Localization;
-            Title = localization.GetText("main_window_title");
-            configurationLabel.Text = localization.GetText("choose_configuration_file_label");
-            configurationButtonText.Text = localization.GetText("choose_configuration_file_button");
-            npcQuantityLabel.Text = localization.GetText("npc_quantity_label");
-            generateButtonText.Text = localization.GetText("generate_button");
-            saveNpcsButtonText.Text = localization.GetText("save_button");
-            privacyPolicyText.Text = localization.GetText("privacy_policy_button");
-            analyticsConsentText.Text = localization.GetText("data_collection_consent_checkbox");
-            licenseButtonText.Text = localization.GetText("license_button");
-        }
-
         private void UpdateGenerateButtonEnabled()
         {
             if(generateButton != null && configurationPathText != null && npcQuantityText != null)
@@ -82,6 +66,14 @@ namespace NpcGenerator
                 bool isNpcQuantityPositiveInteger = NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out _);
 
                 generateButton.IsEnabled = isFilePicked && isNpcQuantityPositiveInteger;
+            }
+        }
+
+        public ILocalization Localization
+        {
+            get
+            { 
+                return m_serviceCenter.Localization; 
             }
         }
 

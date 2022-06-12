@@ -22,7 +22,7 @@ using System.Windows;
 
 namespace NpcGenerator
 {
-    public partial class LicenseWindow : Window
+    public partial class LicenseWindow : Window, ILocalizationProvider
     {
         public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider, ILocalization localization)
         {
@@ -30,10 +30,14 @@ namespace NpcGenerator
             {
                 throw new ArgumentNullException(nameof(filePathProvider));
             }
+            if (localization == null)
+            {
+                throw new ArgumentNullException(nameof(localization));
+            }
+
+            m_localization = localization;
 
             InitializeComponent();
-
-            Title = localization.GetText("license_window_title");
 
             try
             {
@@ -47,5 +51,15 @@ namespace NpcGenerator
 
             messager?.Send(sender: this, message: new Message.PageView("License"));
         }
+
+        public ILocalization Localization
+        {
+            get
+            {
+                return m_localization;
+            }
+        }
+
+        private readonly ILocalization m_localization;
     }
 }
