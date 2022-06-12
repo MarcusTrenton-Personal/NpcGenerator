@@ -21,6 +21,10 @@ namespace Services
 {
     public class Localization : ILocalization
     {
+        //The localization file must have tab-separated format:
+        //ID        Context LanguageCode1   LanguageCode2   ...
+        //text_id   context text            text
+        //...
         public Localization(string filePath, string defaultLanguageCode)
         {
             ParseCsv(filePath, out m_localizedText, out string[] supportedLanguages);
