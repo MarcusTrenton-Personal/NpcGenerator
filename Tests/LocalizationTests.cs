@@ -436,5 +436,162 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        [TestMethod]
+        public void Format1Param()
+        {
+            string languageCode = "Martian";
+            string textId = "ufo_sightings";
+            string text = "Spotted {0} ufos";
+
+            string path = Path.Combine(TestDirectory, "language.csv");
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            File.WriteAllText(path, sourceText);
+
+            Services.Localization localization = new Services.Localization(path, languageCode);
+
+            int ufosSpotted = 3;
+            string correctlyFormattedText = string.Format(text, ufosSpotted);
+            string candidateText = localization.GetText(textId, ufosSpotted);
+            Assert.AreEqual(correctlyFormattedText, candidateText, "String formatted incorrectly");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Format2Params()
+        {
+            string languageCode = "Martian";
+            string languageCodeLowerCase = languageCode.ToLower();
+
+            string textId = "stars_travelled_and_goal";
+            string text = "Visited {0} of {1} in range";
+
+            string path = Path.Combine(TestDirectory, "language.csv");
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            File.WriteAllText(path, sourceText);
+
+            Services.Localization localization = new Services.Localization(path, languageCode);
+
+            int visitedStars = 3;
+            int reachableStars = 10;
+            string correctlyFormattedText = string.Format(text, visitedStars, reachableStars);
+            string candidateText = localization.GetText(textId, visitedStars, reachableStars);
+            Assert.AreEqual(correctlyFormattedText, candidateText, "String formatted incorrectly");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Format0InsteadOf1Params()
+        {
+            string languageCode = "Martian";
+            string textId = "ufo_sightings";
+            string text = "Spotted {0} ufos";
+
+            string path = Path.Combine(TestDirectory, "language.csv");
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            File.WriteAllText(path, sourceText);
+
+            Services.Localization localization = new Services.Localization(path, languageCode);
+
+            bool causedException = false;
+            try
+            {
+                string candidateText = localization.GetText(textId);
+            }
+            catch(Exception)
+            {
+                causedException = true;
+            }
+            
+            Assert.IsTrue(causedException, "Formatting with too few parameters did not cause an exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Format1InsteadOf2Params()
+        {
+            string languageCode = "Martian";
+            string languageCodeLowerCase = languageCode.ToLower();
+
+            string textId = "stars_travelled_and_goal";
+            string text = "Visited {0} of {1} in range";
+
+            string path = Path.Combine(TestDirectory, "language.csv");
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            File.WriteAllText(path, sourceText);
+
+            Services.Localization localization = new Services.Localization(path, languageCode);
+
+            bool causedException = false;
+            try
+            {
+                int visitedStars = 3;
+                string candidateText = localization.GetText(textId, visitedStars);
+            }
+            catch (Exception)
+            {
+                causedException = true;
+            }
+
+            Assert.IsTrue(causedException, "Formatting with too few parameters did not cause an exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Format1InsteadOf0Params()
+        {
+            string languageCode = "Martian";
+            string languageCodeLowerCase = languageCode.ToLower();
+
+            string textId = "window_title";
+            string text = "Test Window";
+
+            string path = Path.Combine(TestDirectory, "language.csv");
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            File.WriteAllText(path, sourceText);
+
+            Services.Localization localization = new Services.Localization(path, languageCode);
+
+            Assert.AreEqual(text, localization.GetText(textId, 3), "Fetched the wrong text");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Format2InsteadOf1Params()
+        {
+            string languageCode = "Martian";
+            string textId = "ufo_sightings";
+            string text = "Spotted {0} ufos";
+
+            string path = Path.Combine(TestDirectory, "language.csv");
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            File.WriteAllText(path, sourceText);
+
+            Services.Localization localization = new Services.Localization(path, languageCode);
+
+            int ufosSpotted = 3;
+            string correctlyFormattedText = string.Format(text, ufosSpotted);
+            string candidateText = localization.GetText(textId, ufosSpotted, 19);
+            Assert.AreEqual(correctlyFormattedText, candidateText, "String formatted incorrectly");
+
+            File.Delete(path);
+        }
     }
 }
