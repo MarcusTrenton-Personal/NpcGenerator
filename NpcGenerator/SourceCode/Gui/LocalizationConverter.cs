@@ -14,13 +14,13 @@ namespace NpcGenerator
         {
             if(values.Length < 1)
             {
-                return "";
+                throw new ArgumentException("'values' contain at least a localization object");
             }
 
             ILocalization localization = values[0] as ILocalization;
             if (localization == null)
             {
-                return "";
+                throw new ArgumentException("'values' index 0 must contain a non-null localization object");
             }
 
             string textId = parameter.ToString();
