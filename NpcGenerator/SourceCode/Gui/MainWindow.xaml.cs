@@ -15,13 +15,15 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.Win32;
 using Services;
-using Services.Message;
 using System;
+using System.Collections;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,7 +31,7 @@ using System.Windows.Navigation;
 
 namespace NpcGenerator
 {
-    public partial class MainWindow : Window, ILocalizationProvider
+    public partial class MainWindow : Window, ILocalizationProvider, INotifyPropertyChanged
     {   
         //Normally, only the needed services would be passed, 
         //but since this window can spawn other windows that is too restricting.
@@ -46,6 +48,9 @@ namespace NpcGenerator
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
 
+            languageComboBox.ItemsSource = GetLanguages(m_serviceCenter.Localization, m_serviceCenter.AppSettings);
+            languageComboBox.SelectedItem = m_serviceCenter.Localization.CurrentLanguageCode;
+
             analyticsConsent.IsChecked = m_serviceCenter.UserSettings.AnalyticsConsent;
 
             serviceCenter?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
@@ -56,6 +61,11 @@ namespace NpcGenerator
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionText.Text = fvi.FileVersion;
+        }
+
+        private IEnumerable GetLanguages(ILocalization localization, IAppSettings appSettings)
+        {
+            return localization.SupportedLanguageCodes;
         }
 
         private void UpdateGenerateButtonEnabled()
@@ -219,6 +229,16 @@ namespace NpcGenerator
             m_serviceCenter.UserSettings.Save(m_userSettingsPath);
         }
 
+        private void LanguageSelectionChanged(object sender, SelectionChangedEventArgs args)
+        {
+            string pickedLanguage = args.AddedItems[0].ToString();
+            m_serviceCenter.Localization.CurrentLanguageCode = pickedLanguage;
+
+            NotifyPropertyChanged("Localization");
+
+            args.Handled = true;
+        }
+
         private void AnalyticsConsentGiven(object sender, RoutedEventArgs e)
         {
             SetAnalyticsConsent(true);
@@ -255,6 +275,17 @@ namespace NpcGenerator
                 Owner = this
             };
             licenseWindow.Show();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged([CallerMemberName] string name = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
         }
 
         private readonly ServiceCenter m_serviceCenter;

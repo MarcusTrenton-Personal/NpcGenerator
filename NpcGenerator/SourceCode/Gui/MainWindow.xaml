@@ -96,6 +96,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
         <!-- Meta -->
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ComboBox x:Name="languageComboBox" VerticalAlignment="Center" SelectionChanged="LanguageSelectionChanged"/>
                 <Button x:Name="privacyPolicyButton" Margin="10" Click="ShowPrivacyPopup">
                     <TextBlock x:Name="privacyPolicyText" Margin="1" >
                         <TextBlock.Text>
