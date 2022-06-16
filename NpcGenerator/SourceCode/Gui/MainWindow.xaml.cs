@@ -64,18 +64,25 @@ namespace NpcGenerator
             VersionText.Text = fvi.FileVersion;
         }
 
-        private IEnumerable GetSelectableLanguages(ILocalization localization, IAppSettings appSettings)
+        private static IEnumerable GetSelectableLanguages(ILocalization localization, IAppSettings appSettings)
         {
             List<string> allowedLanguageCodes = new List<string>();
-            foreach(string languageCode in localization.SupportedLanguageCodes)
+            if(localization.SupportedLanguageCodes != null)
             {
-                bool isHidden = Array.Exists(appSettings.HiddenLanguageCodes, 
-                    hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode);
-                if(!isHidden)
+                foreach (string languageCode in localization.SupportedLanguageCodes)
                 {
-                    allowedLanguageCodes.Add(languageCode);
+                    if(appSettings.HiddenLanguageCodes != null)
+                    {
+                        bool isHidden = Array.Exists(appSettings.HiddenLanguageCodes,
+                        hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode);
+                        if (!isHidden)
+                        {
+                            allowedLanguageCodes.Add(languageCode);
+                        }
+                    }
                 }
             }
+            
             return allowedLanguageCodes.ToArray();
         }
 
@@ -294,11 +301,7 @@ namespace NpcGenerator
 
         protected void NotifyPropertyChanged([CallerMemberName] string name = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private readonly ServiceCenter m_serviceCenter;

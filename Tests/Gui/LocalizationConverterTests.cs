@@ -32,9 +32,8 @@ namespace Tests
 
         const string twoParametersTextId = "twoParameters";
         const string twoParametersText = "{0} of the {1}";
-
-        ILocalization m_localization = new MockLocalization();
-        LocalizationConverter m_converter = new LocalizationConverter();
+        readonly ILocalization m_localization = new MockLocalization();
+        readonly LocalizationConverter m_converter = new LocalizationConverter();
 
         private class MockLocalization : ILocalization
         {
@@ -48,20 +47,13 @@ namespace Tests
 
             public string GetText(string textId, params object[] formatParameters)
             {
-                switch(textId)
+                return textId switch
                 {
-                    case noParameterTextId:
-                        return noParameterText;
-
-                    case oneParameterTextId:
-                        return string.Format(oneParameterText, formatParameters);
-
-                    case twoParametersTextId:
-                        return string.Format(twoParametersText, formatParameters);
-
-                    default:
-                        throw new ArgumentException();
-                }
+                    noParameterTextId => noParameterText,
+                    oneParameterTextId => string.Format(oneParameterText, formatParameters),
+                    twoParametersTextId => string.Format(twoParametersText, formatParameters),
+                    _ => throw new ArgumentException(),
+                };
             }
         }
 

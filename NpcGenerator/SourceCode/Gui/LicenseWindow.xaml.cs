@@ -30,12 +30,8 @@ namespace NpcGenerator
             {
                 throw new ArgumentNullException(nameof(filePathProvider));
             }
-            if (localization == null)
-            {
-                throw new ArgumentNullException(nameof(localization));
-            }
 
-            m_localization = localization;
+            m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
 
             InitializeComponent();
 

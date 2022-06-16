@@ -35,7 +35,7 @@ namespace Tests
         [TestMethod]
         public void EndToEnd()
         {
-            bool uncaughtException = false;
+            Exception uncaughtException = null;
             bool configPathMatches = false;
             bool npcQuantityLabelMachesUserSettings = false;
             bool generatedNpcQuantityMatchesUserSettings = false;
@@ -60,6 +60,11 @@ namespace Tests
                         NpcQuantity = 5
                     };
 
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
                     ServiceCenter serviceCenter = new ServiceCenter(
                         profile: new StubTrackingProfile(),
                         appSettings: new StubAppSettings(),
@@ -67,7 +72,7 @@ namespace Tests
                         userSettings: testUserSettings,
                         filePathProvider: new StubFilePathProvider(),
                         fileIO: fileIO,
-                        localization: new StubLocalization()
+                        localization: testLocalization
                     );
                     MainWindow mainWindow = new MainWindow(serviceCenter);
 
@@ -97,9 +102,9 @@ namespace Tests
                 }
                 //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
                 //Therefore, every exception must be caught and explicitly marked as failure.
-                catch (Exception)
+                catch (Exception e)
                 {
-                    uncaughtException = true;
+                    uncaughtException = e;
                 }
             }));
 
@@ -108,11 +113,11 @@ namespace Tests
             t.Start();
             t.Join();
 
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(configPathMatches, "Configuration file was changed by Main Window");
             Assert.IsTrue(npcQuantityLabelMachesUserSettings, "NPC Quantity was changed by Main Window");
             Assert.IsTrue(generatedNpcQuantityMatchesUserSettings, "Incorrect number of NPCs generated");
             Assert.IsTrue(fileIO.SaveCalled, "saveNpcsButton did not invoke ILocalFileIO.SaveToPickedFile");
-            Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
     }
 }

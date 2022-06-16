@@ -33,7 +33,7 @@ namespace Tests
         public void EndToEnd()
         {
             bool scrollDocumentExists = false;
-            bool uncaughtException = false;
+            Exception uncaughtException = null;
 
             Thread t = new Thread(new ThreadStart(delegate ()
             {
@@ -68,9 +68,9 @@ namespace Tests
                 }
                 //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
                 //Therefore, every exception must be caught and explicitly marked as failure.
-                catch (Exception)
+                catch (Exception e)
                 {
-                    uncaughtException = true;
+                    uncaughtException = e;
                 }
             }));
 
@@ -79,8 +79,8 @@ namespace Tests
             t.Start();
             t.Join();
 
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(scrollDocumentExists, "License scroll viewer is empty");
-            Assert.IsFalse(uncaughtException, "Test failed from uncaught exception");
         }
     }
 }

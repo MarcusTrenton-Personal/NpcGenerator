@@ -17,8 +17,7 @@ namespace NpcGenerator
                 throw new ArgumentException("'values' contain at least a localization object");
             }
 
-            ILocalization localization = values[0] as ILocalization;
-            if (localization == null)
+            if (!(values[0] is ILocalization localization))
             {
                 throw new ArgumentException("'values' index 0 must contain a non-null localization object");
             }

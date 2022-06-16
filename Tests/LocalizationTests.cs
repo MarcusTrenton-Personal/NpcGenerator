@@ -464,8 +464,6 @@ namespace Tests
         public void Format2Params()
         {
             string languageCode = "Martian";
-            string languageCodeLowerCase = languageCode.ToLower();
-
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
@@ -520,8 +518,6 @@ namespace Tests
         public void Format1InsteadOf2Params()
         {
             string languageCode = "Martian";
-            string languageCodeLowerCase = languageCode.ToLower();
-
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
@@ -553,8 +549,6 @@ namespace Tests
         public void Format1InsteadOf0Params()
         {
             string languageCode = "Martian";
-            string languageCodeLowerCase = languageCode.ToLower();
-
             string textId = "window_title";
             string text = "Test Window";
 

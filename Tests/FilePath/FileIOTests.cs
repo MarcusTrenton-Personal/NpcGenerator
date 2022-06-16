@@ -26,8 +26,10 @@ namespace Tests
         [TestInitialize]
         public void CreateMockFileProvider()
         {
-            StubFilePathProvider mockFilePathProvider = new StubFilePathProvider();
-            mockFilePathProvider.AppDataFolderPath = "App";
+            StubFilePathProvider mockFilePathProvider = new StubFilePathProvider
+            {
+                AppDataFolderPath = "App"
+            };
             m_fileIO = new LocalFileIO(mockFilePathProvider);
         }
 
