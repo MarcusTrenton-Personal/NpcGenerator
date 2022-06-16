@@ -244,6 +244,8 @@ namespace NpcGenerator
         {
             string pickedLanguage = args.AddedItems[0].ToString();
             m_serviceCenter.Localization.CurrentLanguageCode = pickedLanguage;
+            m_serviceCenter.UserSettings.LanguageCode = pickedLanguage;
+            m_serviceCenter.UserSettings.Save(m_userSettingsPath);
 
             NotifyPropertyChanged("Localization");
 

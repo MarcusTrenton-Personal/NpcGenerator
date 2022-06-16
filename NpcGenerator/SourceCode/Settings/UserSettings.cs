@@ -27,6 +27,8 @@ namespace NpcGenerator
 
         public bool AnalyticsConsent { get; set; } = true;
 
+        public string LanguageCode { get; set; } = null;
+
         public void Save(string path)
         {
             string directory = Path.GetDirectoryName(path);

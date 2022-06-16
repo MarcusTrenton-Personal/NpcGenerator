@@ -49,14 +49,7 @@ namespace NpcGenerator
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
 
-            if (string.IsNullOrEmpty(parameters.forcedLanguageCode))
-            {
-                UseUsersLanguageOrReport(m_serviceCenter.Localization, m_serviceCenter.Messager);
-            }
-            else
-            {
-                m_serviceCenter.Localization.CurrentLanguageCode = parameters.forcedLanguageCode;
-            }
+            PickLanguage(m_serviceCenter, parameters);
 
             Current.MainWindow = new MainWindow(m_serviceCenter);
             Current.MainWindow.Show();
@@ -120,6 +113,22 @@ namespace NpcGenerator
                 }
             }
             return parameters;
+        }
+
+        private static void PickLanguage(ServiceCenter serviceCenter, AppParameters parameters)
+        {
+            if (!string.IsNullOrEmpty(parameters.forcedLanguageCode))
+            {
+                serviceCenter.Localization.CurrentLanguageCode = parameters.forcedLanguageCode;
+            }
+            else if (!string.IsNullOrEmpty(serviceCenter.UserSettings.LanguageCode))
+            {
+                serviceCenter.Localization.CurrentLanguageCode = serviceCenter.UserSettings.LanguageCode;
+            }
+            else
+            {
+                UseUsersLanguageOrReport(serviceCenter.Localization, serviceCenter.Messager);
+            }
         }
 
         private static void UseUsersLanguageOrReport(Services.ILocalization localization, IMessager messager)

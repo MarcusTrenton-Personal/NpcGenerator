@@ -18,11 +18,11 @@ namespace NpcGenerator
     public interface IUserSettings
     {
         public string ConfigurationPath { get; set; }
-
         public int NpcQuantity { get; set; }
-
         public bool AnalyticsConsent { get; set; }
-
+        public string LanguageCode { get; set; }
+        
         public void Save(string path);
+
     }
 }

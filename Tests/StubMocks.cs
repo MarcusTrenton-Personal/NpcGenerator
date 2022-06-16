@@ -48,19 +48,16 @@ namespace Tests
     internal class StubMessager : IMessager
     {
         public void Send<T>(object sender, T message) { }
-
         public void Subscribe<T>(IChannel<T>.Callback callback) { }
-
         public void Unsubscribe<T>(IChannel<T>.Callback callback) { }
     }
 
     internal class StubUserSettings : IUserSettings
     {
         public bool AnalyticsConsent { get; set; } = true;
-
         public string ConfigurationPath { get; set; } = null;
-
         public int NpcQuantity { get; set; } = 1;
+        public string LanguageCode { get; set; } = null;
 
         public void Save(string path) { }
     }

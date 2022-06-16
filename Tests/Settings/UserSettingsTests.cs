@@ -30,12 +30,14 @@ namespace Tests
             const string fileName = "TestSettings.json";
             const string configurationPath = "Config.csv";
             const int npcQuantity = 1;
+            const string languageCode = "Atlantean";
 
             //Create the original UserSettings
             UserSettings original = new UserSettings
             {
                 ConfigurationPath = configurationPath,
-                NpcQuantity = npcQuantity
+                NpcQuantity = npcQuantity,
+                LanguageCode = languageCode
             };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
@@ -50,6 +52,7 @@ namespace Tests
 
             Assert.AreEqual(configurationPath, readSettings.ConfigurationPath, "Read incorrect ConfigurationPath");
             Assert.AreEqual(npcQuantity, readSettings.NpcQuantity, "Read incorrect NpcQuantity");
+            Assert.AreEqual(languageCode, readSettings.LanguageCode, "Read incorrect languageCode");
         }
     }
 }
