@@ -34,6 +34,8 @@ namespace NpcGenerator
 
         public string DefaultLanguageCode { get; set; }
 
+        public string[] HiddenLanguageCodes { get; set; }
+
         public static AppSettings Load(string path)
         {
             string text = File.ReadAllText(path);

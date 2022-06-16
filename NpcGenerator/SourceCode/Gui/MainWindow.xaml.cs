@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using Services;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -48,7 +49,7 @@ namespace NpcGenerator
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
 
-            languageComboBox.ItemsSource = GetLanguages(m_serviceCenter.Localization, m_serviceCenter.AppSettings);
+            languageComboBox.ItemsSource = GetSelectableLanguages(m_serviceCenter.Localization, m_serviceCenter.AppSettings);
             languageComboBox.SelectedItem = m_serviceCenter.Localization.CurrentLanguageCode;
 
             analyticsConsent.IsChecked = m_serviceCenter.UserSettings.AnalyticsConsent;
@@ -63,9 +64,19 @@ namespace NpcGenerator
             VersionText.Text = fvi.FileVersion;
         }
 
-        private IEnumerable GetLanguages(ILocalization localization, IAppSettings appSettings)
+        private IEnumerable GetSelectableLanguages(ILocalization localization, IAppSettings appSettings)
         {
-            return localization.SupportedLanguageCodes;
+            List<string> allowedLanguageCodes = new List<string>();
+            foreach(string languageCode in localization.SupportedLanguageCodes)
+            {
+                bool isHidden = Array.Exists(appSettings.HiddenLanguageCodes, 
+                    hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode);
+                if(!isHidden)
+                {
+                    allowedLanguageCodes.Add(languageCode);
+                }
+            }
+            return allowedLanguageCodes.ToArray();
         }
 
         private void UpdateGenerateButtonEnabled()

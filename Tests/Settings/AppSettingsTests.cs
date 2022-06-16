@@ -33,6 +33,7 @@ namespace Tests
             const string additionalIdProd = "Add Prod";
             const string measurementIdDev = "Measure Dev";
             const string measurementIdProd = "Measure Prod";
+            const string hiddenLanguageCode = "Atlantean";
 
             //Create the original AppSettings
             GoogleAnalyticsSettings googleAnalytics = new GoogleAnalyticsSettings
@@ -46,7 +47,8 @@ namespace Tests
             AppSettings original = new AppSettings
             {
                 EncryptionKey = encryptionKey,
-                GoogleAnalytics = googleAnalytics
+                GoogleAnalytics = googleAnalytics,
+                HiddenLanguageCodes = new string[] { hiddenLanguageCode }
             };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
@@ -60,6 +62,8 @@ namespace Tests
             AppSettings readSettings = AppSettings.Load(fileName);
 
             Assert.AreEqual(encryptionKey, readSettings.EncryptionKey, "Read incorrect EncryptionKey");
+            Assert.AreEqual(1, readSettings.HiddenLanguageCodes.Length, "Read incorrect number of HiddenLanguageCodes");
+            Assert.AreEqual(hiddenLanguageCode, readSettings.HiddenLanguageCodes[0], "Read incorrect HiddenLanguageCode");
             Assert.AreEqual(additionalIdDev, readSettings.GoogleAnalytics.AdditionalIdDev, "Read incorrect AdditionalIdDev");
             Assert.AreEqual(additionalIdProd, readSettings.GoogleAnalytics.AdditionalIdProd, "Read incorrect AdditionalIdProd");
             Assert.AreEqual(measurementIdDev, readSettings.GoogleAnalytics.MeasurementIdDev, "Read incorrect MeasurementIdDev");

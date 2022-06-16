@@ -30,5 +30,7 @@ namespace NpcGenerator
         public int EncryptionKey { get; }
 
         public string DefaultLanguageCode { get; }
+
+        public string[] HiddenLanguageCodes { get; }
     }
 }
