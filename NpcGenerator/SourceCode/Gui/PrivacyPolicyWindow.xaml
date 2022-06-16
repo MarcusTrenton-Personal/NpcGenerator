@@ -23,7 +23,11 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
     mc:Ignorable="d"
     Height="1000" Width="800">
     <Window.Resources>
-        <local:LocalizationConverter x:Key="localization"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Converters.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Window.Title>
         <MultiBinding Converter="{StaticResource localization}" ConverterParameter="privacy_policy_window_title">
