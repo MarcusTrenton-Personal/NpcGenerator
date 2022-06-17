@@ -57,7 +57,8 @@ namespace Tests
                     PrivacyPolicyWindow privacyPolicyWindow = new PrivacyPolicyWindow(
                         messager: new StubMessager(), 
                         filePathProvider: filePathProvider,
-                        localization: new StubLocalization());
+                        localization: new StubLocalization(),
+                        localizationModel: new StubLocalizationModel());
 
                     //********* Test Initial Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)privacyPolicyWindow.FindName("flowViewer");

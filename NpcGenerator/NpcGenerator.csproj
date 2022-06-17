@@ -98,12 +98,12 @@
     <ItemGroup>
       <GeneratedAssemblyInfo Include="SourceCode\AssemblyInfo.cs" />
     </ItemGroup>
-    <Move SourceFiles="@(GeneratedAssemblyInfo)" DestinationFolder="GeneratedCode" ContinueOnError="true"/>
+    <Move SourceFiles="@(GeneratedAssemblyInfo)" DestinationFolder="GeneratedCode" ContinueOnError="true" />
   </Target>
 
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(OutDir)" />
-    <Copy SourceFiles="@(Localization)" DestinationFolder="$(OutDir)\Settings"/>
+    <Copy SourceFiles="@(Localization)" DestinationFolder="$(OutDir)\Settings" />
     <ItemGroup>
       <AppSettings Include="SourceAssets\AppSettings.json" />
     </ItemGroup>
@@ -131,7 +131,7 @@
     
     <Message Text="Copying app data" Importance="high" />
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(PublishDir)" />
-    <Copy SourceFiles="@(Localization)" DestinationFolder="$(PublishDir)\Settings"/>
+    <Copy SourceFiles="@(Localization)" DestinationFolder="$(PublishDir)\Settings" />
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(PublishDir)\Settings" />
     
     <Message Text="Signing exe" Importance="high" />

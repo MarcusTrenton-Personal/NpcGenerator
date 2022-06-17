@@ -22,9 +22,13 @@ using System.Windows;
 
 namespace NpcGenerator
 {
-    public partial class LicenseWindow : Window, ILocalizationProvider
+    public partial class LicenseWindow : Window
     {
-        public LicenseWindow(IMessager messager, IFilePathProvider filePathProvider, ILocalization localization)
+        public LicenseWindow(
+            IMessager messager, 
+            IFilePathProvider filePathProvider, 
+            ILocalization localization,
+            ILocalizationModel localizationModel)
         {
             if (filePathProvider == null)
             {
@@ -32,6 +36,7 @@ namespace NpcGenerator
             }
 
             m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
+            m_localizationModel = localizationModel ?? throw new ArgumentNullException(nameof(localizationModel));
 
             InitializeComponent();
 
@@ -57,5 +62,6 @@ namespace NpcGenerator
         }
 
         private readonly ILocalization m_localization;
+        private readonly ILocalizationModel m_localizationModel;
     }
 }

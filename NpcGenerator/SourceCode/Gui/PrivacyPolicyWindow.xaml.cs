@@ -25,9 +25,13 @@ namespace NpcGenerator
     /// <summary>
     /// Interaction logic for PrivacyPolicyWindow.xaml
     /// </summary>
-    public partial class PrivacyPolicyWindow : Window, ILocalizationProvider
+    public partial class PrivacyPolicyWindow : Window
     {
-        public PrivacyPolicyWindow(IMessager messager, IFilePathProvider filePathProvider, ILocalization localization)
+        public PrivacyPolicyWindow(
+            IMessager messager, 
+            IFilePathProvider filePathProvider, 
+            ILocalization localization, 
+            ILocalizationModel localizationModel)
         {
             if (filePathProvider == null)
             {
@@ -35,6 +39,7 @@ namespace NpcGenerator
             }
 
             m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
+            m_localizationModel = localizationModel ?? throw new ArgumentNullException(nameof(localizationModel));
 
             InitializeComponent();
 
@@ -60,5 +65,6 @@ namespace NpcGenerator
         }
 
         private readonly ILocalization m_localization;
+        private readonly ILocalizationModel m_localizationModel;
     }
 }

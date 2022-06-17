@@ -50,8 +50,13 @@ namespace NpcGenerator
             m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
 
             PickLanguage(m_serviceCenter, parameters);
+        }
 
-            Current.MainWindow = new MainWindow(m_serviceCenter);
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            Current.MainWindow = new MainWindow(m_serviceCenter);       
             Current.MainWindow.Show();
         }
 
@@ -65,6 +70,14 @@ namespace NpcGenerator
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
 
+            LocalizationModel localizationModel = new LocalizationModel(
+                localization: localization,
+                userSettings: userSettings,
+                hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
+                userSettingsPath: filePathProvider.UserSettingsFilePath);
+
+            Models models = new Models(localizationModel);
+
             return new ServiceCenter(
                 profile: trackingProfile,
                 appSettings: appSettings,
@@ -72,7 +85,8 @@ namespace NpcGenerator
                 userSettings: userSettings,
                 filePathProvider: filePathProvider,
                 fileIO: fileIO,
-                localization: localization);
+                localization: localization,
+                models: models);
         }
 
         private static AppParameters ReadAppParameters()

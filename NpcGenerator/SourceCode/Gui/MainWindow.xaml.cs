@@ -32,7 +32,7 @@ using System.Windows.Navigation;
 
 namespace NpcGenerator
 {
-    public partial class MainWindow : Window, ILocalizationProvider, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {   
         //Normally, only the needed services would be passed, 
         //but since this window can spawn other windows that is too restricting.
@@ -49,12 +49,17 @@ namespace NpcGenerator
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
 
-            languageComboBox.ItemsSource = GetSelectableLanguages(m_serviceCenter.Localization, m_serviceCenter.AppSettings);
-            languageComboBox.SelectedItem = m_serviceCenter.Localization.CurrentLanguageCode;
-
             analyticsConsent.IsChecked = m_serviceCenter.UserSettings.AnalyticsConsent;
 
             serviceCenter?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
+        }
+
+        public ILocalizationModel LocalizationModel
+        {
+            get
+            {
+                return m_serviceCenter.Models.Localization;
+            }
         }
 
         private void SetVersionText()
@@ -64,44 +69,14 @@ namespace NpcGenerator
             VersionText.Text = fvi.FileVersion;
         }
 
-        private static IEnumerable GetSelectableLanguages(ILocalization localization, IAppSettings appSettings)
-        {
-            List<string> allowedLanguageCodes = new List<string>();
-            if(localization.SupportedLanguageCodes != null)
-            {
-                foreach (string languageCode in localization.SupportedLanguageCodes)
-                {
-                    if(appSettings.HiddenLanguageCodes != null)
-                    {
-                        bool isHidden = Array.Exists(appSettings.HiddenLanguageCodes,
-                        hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode);
-                        if (!isHidden)
-                        {
-                            allowedLanguageCodes.Add(languageCode);
-                        }
-                    }
-                }
-            }
-            
-            return allowedLanguageCodes.ToArray();
-        }
-
         private void UpdateGenerateButtonEnabled()
         {
-            if(generateButton != null && configurationPathText != null && npcQuantityText != null)
+            if (generateButton != null && configurationPathText != null && npcQuantityText != null)
             {
                 bool isFilePicked = File.Exists(configurationPathText.Content.ToString());
                 bool isNpcQuantityPositiveInteger = NumberHelper.TryParsePositiveNumber(npcQuantityText.Text, out _);
 
                 generateButton.IsEnabled = isFilePicked && isNpcQuantityPositiveInteger;
-            }
-        }
-
-        public ILocalization Localization
-        {
-            get
-            { 
-                return m_serviceCenter.Localization; 
             }
         }
 
@@ -112,7 +87,7 @@ namespace NpcGenerator
                 Filter = "Text CSV (*.csv)|*.csv|All files (*.*)|*.*"
             };
             bool? filePicked = openFileDialog.ShowDialog();
-            if(filePicked == true)
+            if (filePicked == true)
             {
 
                 configurationPathText.Content = openFileDialog.FileName;
@@ -135,7 +110,7 @@ namespace NpcGenerator
             bool isInt = int.TryParse(npcQuantityText.Text, out _);
             UpdateGenerateButtonEnabled();
 
-            if(m_serviceCenter.UserSettings != null && isInt)
+            if (m_serviceCenter.UserSettings != null && isInt)
             {
                 m_serviceCenter.UserSettings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
                 m_serviceCenter.UserSettings.Save(m_userSettingsPath);
@@ -193,7 +168,7 @@ namespace NpcGenerator
         {
             string configurationPath = "";
             bool isValid = ValidateInput(out int npcQuantity, ref configurationPath);
-            if(!isValid)
+            if (!isValid)
             {
                 return;
             }
@@ -205,11 +180,11 @@ namespace NpcGenerator
                 m_npcGroup = new NpcGroup(traitSchema, npcQuantity);
 
                 DataTable table = new DataTable("Npc Table");
-                for(int i = 0; i < m_npcGroup.TraitGroupCount; ++i)
+                for (int i = 0; i < m_npcGroup.TraitGroupCount; ++i)
                 {
                     table.Columns.Add(m_npcGroup.GetTraitGroupNameAtIndex(i));
-                } 
-                for(int i = 0; i < m_npcGroup.NpcCount; ++i)
+                }
+                for (int i = 0; i < m_npcGroup.NpcCount; ++i)
                 {
                     table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).GetTraits());
                 }
@@ -218,11 +193,11 @@ namespace NpcGenerator
 
                 m_serviceCenter.Messager.Send(sender: this, message: new Message.GenerateNpcs(npcQuantity));
             }
-            catch(IOException exception)
+            catch (IOException exception)
             {
                 MessageBox.Show(exception.Message);
             }
-            catch(FormatException exception)
+            catch (FormatException exception)
             {
                 MessageBox.Show(exception.Message);
             }
@@ -247,18 +222,6 @@ namespace NpcGenerator
             m_serviceCenter.UserSettings.Save(m_userSettingsPath);
         }
 
-        private void LanguageSelectionChanged(object sender, SelectionChangedEventArgs args)
-        {
-            string pickedLanguage = args.AddedItems[0].ToString();
-            m_serviceCenter.Localization.CurrentLanguageCode = pickedLanguage;
-            m_serviceCenter.UserSettings.LanguageCode = pickedLanguage;
-            m_serviceCenter.UserSettings.Save(m_userSettingsPath);
-
-            NotifyPropertyChanged("Localization");
-
-            args.Handled = true;
-        }
-
         private void AnalyticsConsentGiven(object sender, RoutedEventArgs e)
         {
             SetAnalyticsConsent(true);
@@ -274,9 +237,10 @@ namespace NpcGenerator
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
             PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(
-                messager: m_serviceCenter.Messager, 
+                messager: m_serviceCenter.Messager,
                 filePathProvider: m_serviceCenter.FilePathProvider,
-                localization: m_serviceCenter.Localization)
+                localization: m_serviceCenter.Localization,
+                localizationModel: m_serviceCenter.Models.Localization)
             {
                 Owner = this
             };
@@ -288,20 +252,14 @@ namespace NpcGenerator
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
             LicenseWindow licenseWindow = new LicenseWindow(
-                messager: m_serviceCenter.Messager, 
+                messager: m_serviceCenter.Messager,
                 filePathProvider: m_serviceCenter.FilePathProvider,
-                localization: m_serviceCenter.Localization)
+                localization: m_serviceCenter.Localization,
+                localizationModel: m_serviceCenter.Models.Localization)
             {
                 Owner = this
             };
             licenseWindow.Show();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private readonly ServiceCenter m_serviceCenter;

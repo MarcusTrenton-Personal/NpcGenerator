@@ -30,7 +30,8 @@ namespace NpcGenerator
             ILocalization localization,
             IMessager messager, 
             ITrackingProfile profile,
-            IUserSettings userSettings
+            IUserSettings userSettings,
+            Models models
             )
         {
             Profile = profile;
@@ -40,15 +41,16 @@ namespace NpcGenerator
             FilePathProvider = filePathProvider;
             FileIO = fileIO;
             Localization = localization;
-
+            Models = models;
         }
 
-        public IAppSettings AppSettings { get; private set; }
-        public ILocalFileIO FileIO { get; private set; }
-        public IFilePathProvider FilePathProvider { get; private set; }
-        public ILocalization Localization { get; private set; }
-        public IMessager Messager { get; private set; }
-        public ITrackingProfile Profile { get; private set; }
-        public IUserSettings UserSettings { get; private set; }
+        public IAppSettings AppSettings { get; }
+        public ILocalFileIO FileIO { get; }
+        public IFilePathProvider FilePathProvider { get; }
+        public ILocalization Localization { get; }
+        public IMessager Messager { get; }
+        public ITrackingProfile Profile { get; }
+        public IUserSettings UserSettings { get; }
+        public Models Models { get; }
     }
 }

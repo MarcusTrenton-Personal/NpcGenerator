@@ -57,7 +57,8 @@ namespace Tests
                     LicenseWindow licenseWindow = new LicenseWindow(
                         messager: new StubMessager(), 
                         filePathProvider: filePathProvider,
-                        localization: new StubLocalization());
+                        localization: new StubLocalization(),
+                        localizationModel: new StubLocalizationModel());
 
                     //********* Test Initial Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");

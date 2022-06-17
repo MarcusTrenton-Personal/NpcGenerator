@@ -18,10 +18,10 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NpcGenerator"
         x:Name="ThisWindow"
         mc:Ignorable="d"
-        Height="1000" Width="800">
+        Height="1000" Width="800"
+        DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

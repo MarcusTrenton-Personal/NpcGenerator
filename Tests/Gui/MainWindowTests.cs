@@ -65,6 +65,13 @@ namespace Tests
                         SupportedLanguageCodes = new[] { "en-ca" }
                     };
 
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
+                    Models models = new Models(localization: testLocalizationModel);
+
                     ServiceCenter serviceCenter = new ServiceCenter(
                         profile: new StubTrackingProfile(),
                         appSettings: new StubAppSettings(),
@@ -72,7 +79,8 @@ namespace Tests
                         userSettings: testUserSettings,
                         filePathProvider: new StubFilePathProvider(),
                         fileIO: fileIO,
-                        localization: testLocalization
+                        localization: testLocalization,
+                        models: models
                     );
                     MainWindow mainWindow = new MainWindow(serviceCenter);
 

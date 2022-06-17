@@ -18,6 +18,7 @@ using NpcGenerator;
 using Services;
 using Services.Message;
 using System;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -102,5 +103,12 @@ namespace Tests
         }
 
         public bool SaveCalled { get; set; } = false;
+    }
+
+    internal class StubLocalizationModel : ILocalizationModel
+    {
+        public ILocalization Localization { get; set; } = null;
+        public IEnumerable<string> SelectableLanguages { get; } = null;
+        public string CurrentLanguage { get; set; } = null;
     }
 }
