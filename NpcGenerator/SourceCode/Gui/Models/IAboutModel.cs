@@ -13,17 +13,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace NpcGenerator
 {
-    public class Models
+    public interface IAboutModel
     {
-        public Models(ILocalizationModel localization, IAboutModel about)
-        {
-            Localization = localization;
-            About = about;
-        }
-
-        public ILocalizationModel Localization { get; }
-        public IAboutModel About { get; }
+        public string Version { get; }
     }
 }

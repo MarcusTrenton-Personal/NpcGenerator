@@ -111,4 +111,9 @@ namespace Tests
         public IEnumerable<string> SelectableLanguages { get; } = null;
         public string CurrentLanguage { get; set; } = null;
     }
+
+    internal class StubAboutModel : IAboutModel
+    {
+        public string Version { get; set; } = null;
+    }
 }

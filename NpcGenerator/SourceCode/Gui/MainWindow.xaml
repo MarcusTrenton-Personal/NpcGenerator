@@ -129,7 +129,11 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </TextBlock.Text>
                     </TextBlock>
                 </Button>
-                <TextBlock x:Name="VersionText" Margin="3" VerticalAlignment="Center"/>
+                <TextBlock x:Name="VersionText" Margin="3" VerticalAlignment="Center" DataContext="{Binding Path=AboutModel, ElementName=ThisWindow}">
+                    <TextBlock.Text>
+                        <Binding Path="Version"/>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>

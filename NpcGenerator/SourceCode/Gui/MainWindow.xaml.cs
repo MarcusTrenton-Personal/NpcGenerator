@@ -43,8 +43,6 @@ namespace NpcGenerator
 
             InitializeComponent();
 
-            SetVersionText();
-
             configurationPathText.Content = m_serviceCenter.UserSettings.ConfigurationPath;
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
@@ -62,11 +60,12 @@ namespace NpcGenerator
             }
         }
 
-        private void SetVersionText()
+        public IAboutModel AboutModel
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            VersionText.Text = fvi.FileVersion;
+            get
+            {
+                return m_serviceCenter.Models.About;
+            }
         }
 
         private void UpdateGenerateButtonEnabled()

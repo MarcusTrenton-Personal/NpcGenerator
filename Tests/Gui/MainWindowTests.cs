@@ -70,7 +70,7 @@ namespace Tests
                         Localization = testLocalization
                     };
 
-                    Models models = new Models(localization: testLocalizationModel);
+                    Models models = new Models(localization: testLocalizationModel, new StubAboutModel());
 
                     ServiceCenter serviceCenter = new ServiceCenter(
                         profile: new StubTrackingProfile(),

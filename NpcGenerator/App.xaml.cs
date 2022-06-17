@@ -76,7 +76,7 @@ namespace NpcGenerator
                 hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
                 userSettingsPath: filePathProvider.UserSettingsFilePath);
 
-            Models models = new Models(localizationModel);
+            Models models = new Models(localizationModel, new AboutModel());
 
             return new ServiceCenter(
                 profile: trackingProfile,
