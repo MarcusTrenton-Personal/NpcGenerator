@@ -76,9 +76,10 @@ namespace NpcGenerator
                 hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
                 userSettingsPath: filePathProvider.UserSettingsFilePath);
 
-            Models models = new Models(localizationModel, new AboutModel());
+            //Temporarily set navigation to null, as it requires a constructed ServiceCenter as a parameter.
+            Models models = new Models(localizationModel, new AboutModel(), navigation: null);
 
-            return new ServiceCenter(
+            ServiceCenter serviceCenter = new ServiceCenter(
                 profile: trackingProfile,
                 appSettings: appSettings,
                 messager: messager,
@@ -87,6 +88,11 @@ namespace NpcGenerator
                 fileIO: fileIO,
                 localization: localization,
                 models: models);
+
+            //Set all the services that require access to the whole ServiceCenter.
+            models.Navigation = new NavigationModel(serviceCenter);
+
+            return serviceCenter;
         }
 
         private static AppParameters ReadAppParameters()

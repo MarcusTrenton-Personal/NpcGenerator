@@ -15,17 +15,10 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public class Models : IModels
+    public interface IModels
     {
-        public Models(ILocalizationModel localization, IAboutModel about, INavigationModel navigation)
-        {
-            Localization = localization;
-            About = about;
-            Navigation = navigation;
-        }
-
-        public ILocalizationModel Localization { get; set; }
-        public IAboutModel About { get; set; }
-        public INavigationModel Navigation { get; set; }
+        public ILocalizationModel Localization { get; }
+        public IAboutModel About { get; }
+        public INavigationModel Navigation { get; }
     }
 }

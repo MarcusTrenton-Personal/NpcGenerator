@@ -68,6 +68,14 @@ namespace NpcGenerator
             }
         }
 
+        public INavigationModel NavigationModel
+        {
+            get
+            {
+                return m_serviceCenter.Models.Navigation;
+            }
+        }
+
         private void UpdateGenerateButtonEnabled()
         {
             if (generateButton != null && configurationPathText != null && npcQuantityText != null)
@@ -229,36 +237,6 @@ namespace NpcGenerator
         private void AnalyticsConsentWithdrawn(object sender, RoutedEventArgs e)
         {
             SetAnalyticsConsent(false);
-        }
-
-        private void ShowPrivacyPopup(object sender, RoutedEventArgs e)
-        {
-            //Lazily create the data as it's unlikely that this button will be clicked. 
-            //It's almost unheard of that anyone would click it twice.
-            PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(
-                messager: m_serviceCenter.Messager,
-                filePathProvider: m_serviceCenter.FilePathProvider,
-                localization: m_serviceCenter.Localization,
-                localizationModel: m_serviceCenter.Models.Localization)
-            {
-                Owner = this
-            };
-            privacyWindow.Show();
-        }
-
-        private void ShowLicensePopup(object sender, RoutedEventArgs e)
-        {
-            //Lazily create the data as it's unlikely that this button will be clicked. 
-            //It's almost unheard of that anyone would click it twice.
-            LicenseWindow licenseWindow = new LicenseWindow(
-                messager: m_serviceCenter.Messager,
-                filePathProvider: m_serviceCenter.FilePathProvider,
-                localization: m_serviceCenter.Localization,
-                localizationModel: m_serviceCenter.Models.Localization)
-            {
-                Owner = this
-            };
-            licenseWindow.Show();
         }
 
         private readonly ServiceCenter m_serviceCenter;

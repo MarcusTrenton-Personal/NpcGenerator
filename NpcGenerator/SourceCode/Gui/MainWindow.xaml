@@ -103,8 +103,10 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                 <ComboBox x:Name="languageComboBox" VerticalAlignment="Center" 
                           ItemsSource="{Binding Path=SelectableLanguages}"
                           SelectedItem="{Binding Path=CurrentLanguage}"/>
-                <Button x:Name="privacyPolicyButton" Margin="10" Click="ShowPrivacyPopup">
-                    <TextBlock x:Name="privacyPolicyText" Margin="1" >
+                <Button x:Name="privacyPolicyButton" Margin="10" 
+                        DataContext="{Binding Path=NavigationModel, ElementName=ThisWindow}"
+                        Command="{Binding Path=GoToPrivacyPolicy}" CommandParameter="{Binding ElementName=ThisWindow}">
+                    <TextBlock x:Name="privacyPolicyText" Margin="1" DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource localization}" ConverterParameter="privacy_policy_button">
                                 <Binding Path="Localization"/>
@@ -120,8 +122,10 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-                <Button x:Name="licenseButton" Margin="10" Click="ShowLicensePopup">
-                    <TextBlock x:Name="licenseButtonText" Margin="1" >
+                <Button x:Name="licenseButton" Margin="10"
+                        DataContext="{Binding Path=NavigationModel, ElementName=ThisWindow}"
+                        Command="{Binding Path=GoToPrivacyPolicy}" CommandParameter="{Binding ElementName=ThisWindow}">
+                    <TextBlock x:Name="licenseButtonText" Margin="1" DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource localization}" ConverterParameter="license_button">
                                 <Binding Path="Localization"/>

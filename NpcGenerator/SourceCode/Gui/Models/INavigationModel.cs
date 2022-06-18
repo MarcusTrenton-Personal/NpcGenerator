@@ -13,19 +13,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using System.Windows.Input;
+
 namespace NpcGenerator
 {
-    public class Models : IModels
+    public interface INavigationModel
     {
-        public Models(ILocalizationModel localization, IAboutModel about, INavigationModel navigation)
-        {
-            Localization = localization;
-            About = about;
-            Navigation = navigation;
-        }
-
-        public ILocalizationModel Localization { get; set; }
-        public IAboutModel About { get; set; }
-        public INavigationModel Navigation { get; set; }
+        public ICommand GoToPrivacyPolicy { get; }
+        public ICommand GoToLicense { get; }
     }
 }

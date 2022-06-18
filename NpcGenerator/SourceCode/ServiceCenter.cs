@@ -51,6 +51,6 @@ namespace NpcGenerator
         public IMessager Messager { get; }
         public ITrackingProfile Profile { get; }
         public IUserSettings UserSettings { get; }
-        public Models Models { get; }
+        public IModels Models { get; }
     }
 }

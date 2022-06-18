@@ -19,6 +19,7 @@ using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Tests
 {
@@ -115,5 +116,11 @@ namespace Tests
     internal class StubAboutModel : IAboutModel
     {
         public string Version { get; set; } = null;
+    }
+
+    internal class StubNavigationModel : INavigationModel
+    {
+        public ICommand GoToPrivacyPolicy { get; } = null;
+        public ICommand GoToLicense { get; } = null;
     }
 }
