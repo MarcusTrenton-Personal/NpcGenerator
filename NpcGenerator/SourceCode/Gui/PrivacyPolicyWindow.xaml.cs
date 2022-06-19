@@ -30,7 +30,6 @@ namespace NpcGenerator
         public PrivacyPolicyWindow(
             IMessager messager, 
             IFilePathProvider filePathProvider, 
-            ILocalization localization, 
             ILocalizationModel localizationModel)
         {
             if (filePathProvider == null)
@@ -38,7 +37,6 @@ namespace NpcGenerator
                 throw new ArgumentNullException(nameof(filePathProvider));
             }
 
-            m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
             m_localizationModel = localizationModel ?? throw new ArgumentNullException(nameof(localizationModel));
 
             InitializeComponent();
@@ -49,22 +47,21 @@ namespace NpcGenerator
             }
             catch (IOException exception)
             {
-                string message = localization.GetText("exception_maybe_file_deleted", exception.Message);
+                string message = m_localizationModel.Localization.GetText("exception_maybe_file_deleted", exception.Message);
                 MessageBox.Show(message);
             }
 
             messager?.Send(sender: this, message: new Message.PageView("Privacy Policy"));
         }
 
-        public ILocalization Localization
+        public ILocalizationModel LocalizationModel
         {
             get
             {
-                return m_localization;
+                return m_localizationModel;
             }
         }
 
-        private readonly ILocalization m_localization;
         private readonly ILocalizationModel m_localizationModel;
     }
 }

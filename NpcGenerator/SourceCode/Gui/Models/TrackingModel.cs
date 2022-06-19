@@ -21,10 +21,9 @@ namespace NpcGenerator
 {
     public class TrackingModel : ITrackingModel
     {
-        public TrackingModel(IUserSettings userSettings, string userSettingsPath)
+        public TrackingModel(IUserSettings userSettings)
         {
             m_userSettings = userSettings;
-            m_userSettingsPath = userSettingsPath;
         }
 
         public bool TrackingConsent 
@@ -37,11 +36,9 @@ namespace NpcGenerator
             set
             {
                 m_userSettings.AnalyticsConsent = value;
-                m_userSettings.Save(m_userSettingsPath);
             }
         }
 
         private readonly IUserSettings m_userSettings;
-        private readonly string m_userSettingsPath;
     }
 }

@@ -54,11 +54,20 @@ namespace Tests
                         PrivacyPolicyPath = privacyPolicyPath
                     };
 
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
                     PrivacyPolicyWindow privacyPolicyWindow = new PrivacyPolicyWindow(
                         messager: new StubMessager(), 
                         filePathProvider: filePathProvider,
-                        localization: new StubLocalization(),
-                        localizationModel: new StubLocalizationModel());
+                        localizationModel: testLocalizationModel);
 
                     //********* Test Initial Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)privacyPolicyWindow.FindName("flowViewer");

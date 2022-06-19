@@ -49,7 +49,6 @@ namespace NpcGenerator
             PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(
                 messager: m_serviceCenter.Messager,
                 filePathProvider: m_serviceCenter.FilePathProvider,
-                localization: m_serviceCenter.Localization,
                 localizationModel: m_serviceCenter.Models.Localization)
             {
                 Owner = parameter as Window
@@ -79,7 +78,6 @@ namespace NpcGenerator
             LicenseWindow licenseWindow = new LicenseWindow(
                 messager: m_serviceCenter.Messager,
                 filePathProvider: m_serviceCenter.FilePathProvider,
-                localization: m_serviceCenter.Localization,
                 localizationModel: m_serviceCenter.Models.Localization)
             {
                 Owner = parameter as Window

@@ -22,23 +22,60 @@ namespace NpcGenerator
     //User settings are everything that the user explicitly chooses that are persistent session-to-session.
     public class UserSettings : IUserSettings
     {
-        public string ConfigurationPath { get; set; } = "...";
-
-        public int NpcQuantity { get; set; } = 1;
-
-        public bool AnalyticsConsent { get; set; } = true;
-
-        public string LanguageCode { get; set; } = null;
-
-        public void Save(string path)
+        public string ConfigurationPath 
         {
-            string directory = Path.GetDirectoryName(path);
-            Directory.CreateDirectory(directory);
+            get => m_configurationPath; 
+            set
+            {
+                m_configurationPath = value;
+                Save();
+            }
+        }
 
-            string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            using FileStream fs = File.Create(path);
-            byte[] info = new UTF8Encoding(true).GetBytes(json);
-            fs.Write(info, 0, info.Length);
+        public int NpcQuantity 
+        { 
+            get => m_npcQuantity; 
+            set
+            {
+                m_npcQuantity = value;
+                Save();
+            } 
+        }
+
+        public bool AnalyticsConsent
+        {
+            get => m_analyticsConsent; 
+            set
+            {
+                m_analyticsConsent = value;
+                Save();
+            }
+        }
+
+        public string LanguageCode 
+        { 
+            get => m_languageCode; 
+            set
+            {
+                m_languageCode = value;
+                Save();
+            }
+        }
+
+        public string SavePath { get; set; } = null;
+
+        private void Save()
+        {
+            if (!string.IsNullOrEmpty(SavePath))
+            {
+                string directory = Path.GetDirectoryName(SavePath);
+                Directory.CreateDirectory(directory);
+
+                string json = JsonConvert.SerializeObject(this, Formatting.Indented);
+                using FileStream fs = File.Create(SavePath);
+                byte[] info = new UTF8Encoding(true).GetBytes(json);
+                fs.Write(info, 0, info.Length);
+            }
         }
 
         public static UserSettings Load(string path)
@@ -52,5 +89,10 @@ namespace NpcGenerator
             }
             return null;
         }
+
+        private string m_configurationPath = "...";
+        private int m_npcQuantity = 1;
+        private bool m_analyticsConsent = true;
+        private string m_languageCode = null;
     }
 }

@@ -73,10 +73,9 @@ namespace NpcGenerator
             LocalizationModel localizationModel = new LocalizationModel(
                 localization: localization,
                 userSettings: userSettings,
-                hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
-                userSettingsPath: filePathProvider.UserSettingsFilePath);
+                hiddenLanguageCodes: appSettings.HiddenLanguageCodes);
 
-            TrackingModel trackingModel = new TrackingModel(userSettings, filePathProvider.UserSettingsFilePath);
+            TrackingModel trackingModel = new TrackingModel(userSettings);
 
             //Temporarily set navigation to null, as it requires a constructed ServiceCenter as a parameter.
             Models models = new Models(localizationModel, new AboutModel(), navigation: null, trackingModel);
@@ -187,6 +186,7 @@ namespace NpcGenerator
             {
                 userSettings = new UserSettings();
             }
+            userSettings.SavePath = userSettingsPath;
             return userSettings;
         }
 

@@ -13,11 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
-using Services;
-using Services.Message;
 using System;
 using System.IO;
 using System.Threading;
@@ -54,11 +51,20 @@ namespace Tests
                         LicensePath = licensePath
                     };
 
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
                     LicenseWindow licenseWindow = new LicenseWindow(
                         messager: new StubMessager(), 
                         filePathProvider: filePathProvider,
-                        localization: new StubLocalization(),
-                        localizationModel: new StubLocalizationModel());
+                        localizationModel: testLocalizationModel);
 
                     //********* Test Initial Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");

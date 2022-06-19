@@ -33,7 +33,6 @@ namespace NpcGenerator
         public MainWindow(ServiceCenter serviceCenter)
         {
             m_serviceCenter = serviceCenter;
-            m_userSettingsPath = m_serviceCenter.FilePathProvider.UserSettingsFilePath; //Must come before InitializeComponent()
 
             InitializeComponent();
 
@@ -101,7 +100,6 @@ namespace NpcGenerator
                 UpdateGenerateButtonEnabled();
 
                 m_serviceCenter.UserSettings.ConfigurationPath = openFileDialog.FileName;
-                m_serviceCenter.UserSettings.Save(m_userSettingsPath);
 
                 m_serviceCenter.Messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
@@ -120,7 +118,6 @@ namespace NpcGenerator
             if (m_serviceCenter.UserSettings != null && isInt)
             {
                 m_serviceCenter.UserSettings.NpcQuantity = int.Parse(npcQuantityText.Text, CultureInfo.InvariantCulture);
-                m_serviceCenter.UserSettings.Save(m_userSettingsPath);
             }
         }
 
@@ -223,7 +220,6 @@ namespace NpcGenerator
         }
 
         private readonly ServiceCenter m_serviceCenter;
-        private readonly string m_userSettingsPath;
         private NpcGroup m_npcGroup;
     }
 }

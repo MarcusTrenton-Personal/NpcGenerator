@@ -21,12 +21,11 @@ namespace NpcGenerator
 {
     public class LocalizationModel : BaseModel, ILocalizationModel
     {
-        public LocalizationModel(ILocalization localization, IUserSettings userSettings, string[] hiddenLanguageCodes, string userSettingsPath)
+        public LocalizationModel(ILocalization localization, IUserSettings userSettings, string[] hiddenLanguageCodes)
         {
             m_localization = localization;
             m_userSettings = userSettings;
             m_hiddenLanguageCodes = hiddenLanguageCodes;
-            m_userSettingsPath = userSettingsPath;
         }
 
         public ILocalization Localization
@@ -72,7 +71,6 @@ namespace NpcGenerator
             set
             {
                 m_userSettings.LanguageCode = value;
-                m_userSettings.Save(m_userSettingsPath);
 
                 m_localization.CurrentLanguageCode = value;
                 NotifyPropertyChanged("Localization");
@@ -82,6 +80,5 @@ namespace NpcGenerator
         private readonly ILocalization m_localization;
         private readonly string[] m_hiddenLanguageCodes;
         private readonly IUserSettings m_userSettings;
-        private readonly string m_userSettingsPath;
     }
 }

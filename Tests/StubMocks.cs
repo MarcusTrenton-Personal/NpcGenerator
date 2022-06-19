@@ -60,8 +60,6 @@ namespace Tests
         public string ConfigurationPath { get; set; } = null;
         public int NpcQuantity { get; set; } = 1;
         public string LanguageCode { get; set; } = null;
-
-        public void Save(string path) { }
     }
 
     internal class StubFilePathProvider : IFilePathProvider
