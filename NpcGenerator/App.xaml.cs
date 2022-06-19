@@ -76,8 +76,10 @@ namespace NpcGenerator
                 hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
                 userSettingsPath: filePathProvider.UserSettingsFilePath);
 
+            TrackingModel trackingModel = new TrackingModel(userSettings, filePathProvider.UserSettingsFilePath);
+
             //Temporarily set navigation to null, as it requires a constructed ServiceCenter as a parameter.
-            Models models = new Models(localizationModel, new AboutModel(), navigation: null);
+            Models models = new Models(localizationModel, new AboutModel(), navigation: null, trackingModel);
 
             ServiceCenter serviceCenter = new ServiceCenter(
                 profile: trackingProfile,

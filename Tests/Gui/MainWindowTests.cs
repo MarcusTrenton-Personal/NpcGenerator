@@ -73,7 +73,8 @@ namespace Tests
                     Models models = new Models(
                         localization: testLocalizationModel, 
                         about: new StubAboutModel(),
-                        navigation: new StubNavigationModel());
+                        navigation: new StubNavigationModel(),
+                        tracking: new StubTrackingModel());
 
                     ServiceCenter serviceCenter = new ServiceCenter(
                         profile: new StubTrackingProfile(),

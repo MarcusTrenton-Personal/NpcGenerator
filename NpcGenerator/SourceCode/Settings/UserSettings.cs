@@ -19,6 +19,7 @@ using System.Text;
 
 namespace NpcGenerator
 {
+    //User settings are everything that the user explicitly chooses that are persistent session-to-session.
     public class UserSettings : IUserSettings
     {
         public string ConfigurationPath { get; set; } = "...";

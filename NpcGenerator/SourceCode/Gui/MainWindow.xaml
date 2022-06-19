@@ -114,7 +114,9 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </TextBlock.Text>
                     </TextBlock>
                 </Button>
-                <CheckBox x:Name="analyticsConsent" VerticalAlignment="Center" Margin="3" Checked="AnalyticsConsentGiven" Unchecked="AnalyticsConsentWithdrawn"/>
+                <CheckBox x:Name="analyticsConsent" VerticalAlignment="Center" Margin="3" 
+                          DataContext="{Binding Path=TrackingModel, ElementName=ThisWindow}"
+                          IsChecked="{Binding Path=TrackingConsent, Mode=TwoWay}"/>
                 <TextBlock x:Name="analyticsConsentText" VerticalAlignment="Center">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource localization}" ConverterParameter="data_collection_consent_checkbox">

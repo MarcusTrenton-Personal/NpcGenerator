@@ -1,4 +1,4 @@
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,15 +15,8 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    //User settings are everything that the user explicitly chooses that are persistent session-to-session.
-    public interface IUserSettings
+    public interface ITrackingModel
     {
-        public string ConfigurationPath { get; set; }
-        public int NpcQuantity { get; set; }
-        public bool AnalyticsConsent { get; set; }
-        public string LanguageCode { get; set; }
-        
-        public void Save(string path);
-
+        public bool TrackingConsent { get; set; }
     }
 }

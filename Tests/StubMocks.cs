@@ -123,4 +123,9 @@ namespace Tests
         public ICommand GoToPrivacyPolicy { get; } = null;
         public ICommand GoToLicense { get; } = null;
     }
+
+    internal class StubTrackingModel : ITrackingModel
+    {
+        public bool TrackingConsent { get; set; } = false;
+    }
 }

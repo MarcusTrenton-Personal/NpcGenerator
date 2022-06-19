@@ -20,5 +20,6 @@ namespace NpcGenerator
         public ILocalizationModel Localization { get; }
         public IAboutModel About { get; }
         public INavigationModel Navigation { get; }
+        public ITrackingModel Tracking { get; }
     }
 }

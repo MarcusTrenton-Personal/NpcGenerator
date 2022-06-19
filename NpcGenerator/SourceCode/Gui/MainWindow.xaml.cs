@@ -16,15 +16,9 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Microsoft.Win32;
 using Services;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,8 +40,6 @@ namespace NpcGenerator
             configurationPathText.Content = m_serviceCenter.UserSettings.ConfigurationPath;
             npcQuantityText.Text = m_serviceCenter.UserSettings.NpcQuantity.ToString(CultureInfo.InvariantCulture);
             UpdateGenerateButtonEnabled();
-
-            analyticsConsent.IsChecked = m_serviceCenter.UserSettings.AnalyticsConsent;
 
             serviceCenter?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
         }
@@ -73,6 +65,14 @@ namespace NpcGenerator
             get
             {
                 return m_serviceCenter.Models.Navigation;
+            }
+        }
+
+        public ITrackingModel TrackingModel
+        {
+            get
+            {
+                return m_serviceCenter.Models.Tracking;
             }
         }
 
@@ -220,23 +220,6 @@ namespace NpcGenerator
             m_serviceCenter.FileIO.SaveToPickedFile(npcCsv, "csv");
 
             m_serviceCenter.Messager.Send(sender: this, message: new Message.SaveNpcs());
-        }
-
-        private void SetAnalyticsConsent(bool consent)
-        {
-            analyticsConsent.IsChecked = consent;
-            m_serviceCenter.UserSettings.AnalyticsConsent = consent;
-            m_serviceCenter.UserSettings.Save(m_userSettingsPath);
-        }
-
-        private void AnalyticsConsentGiven(object sender, RoutedEventArgs e)
-        {
-            SetAnalyticsConsent(true);
-        }
-
-        private void AnalyticsConsentWithdrawn(object sender, RoutedEventArgs e)
-        {
-            SetAnalyticsConsent(false);
         }
 
         private readonly ServiceCenter m_serviceCenter;
