@@ -24,7 +24,7 @@ namespace Tests
         [TestMethod]
         public void TryParsePositveNumberWithPositiveNumber()
         {
-            bool successful = NumberHelper.TryParsePositiveNumber("1234", out int result);
+            bool successful = NumberHelper.TryParsePositiveInteger("1234", out int result);
             Assert.IsTrue(successful, "Could not parse 1234");
             Assert.AreEqual(1234, result, "Parsed incorrect number");
         }
@@ -32,35 +32,35 @@ namespace Tests
         [TestMethod]
         public void TryParsePositveNumberWithZero()
         {
-            bool successful = NumberHelper.TryParsePositiveNumber("0", out _);
+            bool successful = NumberHelper.TryParsePositiveInteger("0", out _);
             Assert.IsFalse(successful, "Parsed 0 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberWithNegativeNumber()
         {
-            bool successful = NumberHelper.TryParsePositiveNumber("-1234", out _);
+            bool successful = NumberHelper.TryParsePositiveInteger("-1234", out _);
             Assert.IsFalse(successful, "Parsed -1234 when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberWithNonNumeric()
         {
-            bool successful = NumberHelper.TryParsePositiveNumber("123abc", out _);
+            bool successful = NumberHelper.TryParsePositiveInteger("123abc", out _);
             Assert.IsFalse(successful, "Parsed 123abc when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberWithNumericWords()
         {
-            bool successful = NumberHelper.TryParsePositiveNumber("one", out _);
+            bool successful = NumberHelper.TryParsePositiveInteger("one", out _);
             Assert.IsFalse(successful, "Parsed 'one' when it shouldn't");
         }
 
         [TestMethod]
         public void TryParsePositveNumberDecimal()
         {
-            bool successful = NumberHelper.TryParsePositiveNumber("1.23", out _);
+            bool successful = NumberHelper.TryParsePositiveInteger("1.23", out _);
             Assert.IsFalse(successful, "Parsed 1.23 when it shouldn't");
         }
 

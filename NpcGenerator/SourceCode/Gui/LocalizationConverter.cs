@@ -34,7 +34,8 @@ namespace NpcGenerator
 
             if (!(values[0] is ILocalization localization))
             {
-                throw new ArgumentException("'values' index 0 must contain a non-null localization object");
+                //At design-time, just return the localization id as a string.
+                return parameter;
             }
 
             string textId = parameter.ToString();
@@ -52,7 +53,6 @@ namespace NpcGenerator
 
             return localization.GetText(textId, formatParameters);
         }
-
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {

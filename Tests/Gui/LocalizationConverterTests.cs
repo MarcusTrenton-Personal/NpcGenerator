@@ -184,24 +184,16 @@ namespace Tests
         }
 
         [TestMethod]
-        public void NullLocalization()
+        public void DesignTimeLocalization()
         {
-            bool causedException = false;
-            try
-            {
-                object[] values = { null };
-                string text = (string)m_converter.Convert(
-                    values: values,
-                    targetType: values.GetType(),
-                    parameter: noParameterTextId,
-                    culture: CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
+            object[] values = { null };
+            string text = (string)m_converter.Convert(
+                values: values,
+                targetType: values.GetType(),
+                parameter: noParameterTextId,
+                culture: CultureInfo.InvariantCulture);
 
-            Assert.IsTrue(causedException, "Null localization didn't cause an exception");
+            Assert.AreEqual(noParameterTextId, text, "Null localization didn't return the parameter id as the result text");
         }
 
         [TestMethod]

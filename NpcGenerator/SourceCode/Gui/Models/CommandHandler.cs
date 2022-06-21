@@ -38,7 +38,8 @@ namespace NpcGenerator
 
         public bool CanExecute(object parameter)
         {
-            return m_canExecute.Invoke(parameter);
+            bool canExecute = m_canExecute.Invoke(parameter);
+            return canExecute;
         }
 
         public void Execute(object parameter)

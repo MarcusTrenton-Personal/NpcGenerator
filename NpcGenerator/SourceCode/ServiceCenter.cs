@@ -26,7 +26,7 @@ namespace NpcGenerator
         public ServiceCenter(
             IAppSettings appSettings,
             IFilePathProvider filePathProvider,
-            ILocalFileIO fileIO,
+            ILocalFileIO fileIo,
             ILocalization localization,
             IMessager messager, 
             ITrackingProfile profile,
@@ -39,7 +39,7 @@ namespace NpcGenerator
             Messager = messager;
             UserSettings = userSettings;
             FilePathProvider = filePathProvider;
-            FileIO = fileIO;
+            FileIO = fileIo;
             Localization = localization;
             Models = models;
         }

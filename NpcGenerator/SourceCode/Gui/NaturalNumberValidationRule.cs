@@ -13,28 +13,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using Services;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Windows.Controls;
+
 namespace NpcGenerator
 {
-    public class Models : IModels
+    public class NaturalNumberValidationRule : ValidationRule
     {
-        public Models(
-            ILocalizationModel localization, 
-            IAboutModel about, 
-            INavigationModel navigation, 
-            ITrackingModel tracking,
-            INpcGeneratorModel npcGenerator)
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            Localization = localization;
-            About = about;
-            Navigation = navigation;
-            Tracking = tracking;
-            NpcGenerator = npcGenerator;
+            if (!(value is string text))
+            {
+                return new ValidationResult(false, "Value must be text");
+            }
+            if (!NumberHelper.TryParsePositiveInteger(text, out _))
+            {
+                return new ValidationResult(false, "Value is not a natural number");
+            }
+            return new ValidationResult(true, null);
         }
-
-        public ILocalizationModel Localization { get; set; }
-        public IAboutModel About { get; set; }
-        public INavigationModel Navigation { get; set; }
-        public ITrackingModel Tracking { get; set; }
-        public INpcGeneratorModel NpcGenerator { get; set; }
     }
 }

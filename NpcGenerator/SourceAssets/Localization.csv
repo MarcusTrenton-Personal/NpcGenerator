@@ -11,5 +11,3 @@ license_button	Show license window	IIIIII	License	License
 privacy_policy_window_title		JJJJJJ	Privacy Policy	Privacy Policy
 license_window_title		KKKKKK	GNU License	GNU License
 exception_maybe_file_deleted	Parameter is an error message with the name of a file that couldn’t be found.	{0} LLLLLLL	{0} Was that file deleted?	{0} Was that file deleted?
-invalid_configuration_file_path	Attempted to generate NPCs without a configuration file	MMMMMM	Configuration path is not valid	Configuration path is not valid
-invalid_npc_quantity	Attempted to generate NPCs with an invalid NPC number	NNNNNN	NPC Quantity must be at least 1	NPC Quantity must be at least 1

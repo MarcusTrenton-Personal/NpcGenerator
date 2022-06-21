@@ -19,6 +19,8 @@ using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Tests
@@ -125,5 +127,15 @@ namespace Tests
     internal class StubTrackingModel : ITrackingModel
     {
         public bool TrackingConsent { get; set; } = false;
+    }
+
+    internal class StubNpcGeneratorModel : INpcGeneratorModel
+    {
+        public ICommand ChooseConfiguration { get; } = null;
+        public string ConfigurationPath { get; set; } = null;
+        public int NpcQuantity { get; set; } = 0;
+        public ICommand GenerateNpcs { get; } = null;
+        public DataTable ResultNpcs { get; set; }
+        public ICommand SaveNpcs { get; } = null;
     }
 }

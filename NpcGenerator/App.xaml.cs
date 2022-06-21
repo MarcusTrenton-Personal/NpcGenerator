@@ -63,7 +63,7 @@ namespace NpcGenerator
         private static ServiceCenter CreateServices()
         {
             FilePathProvider filePathProvider = new FilePathProvider();
-            LocalFileIO fileIO = new LocalFileIO(filePathProvider);
+            LocalFileIO fileIo = new LocalFileIO(filePathProvider);
             AppSettings appSettings = AppSettings.Load(filePathProvider.AppSettingsFilePath);
             Services.Localization localization = new Services.Localization(filePathProvider.LocalizationPath, appSettings.DefaultLanguageCode);
             Messager messager = new Messager();
@@ -77,8 +77,10 @@ namespace NpcGenerator
 
             TrackingModel trackingModel = new TrackingModel(userSettings);
 
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(userSettings, messager, fileIo);
+
             //Temporarily set navigation to null, as it requires a constructed ServiceCenter as a parameter.
-            Models models = new Models(localizationModel, new AboutModel(), navigation: null, trackingModel);
+            Models models = new Models(localizationModel, new AboutModel(), navigation: null, trackingModel, npcGeneratorModel);
 
             ServiceCenter serviceCenter = new ServiceCenter(
                 profile: trackingProfile,
@@ -86,7 +88,7 @@ namespace NpcGenerator
                 messager: messager,
                 userSettings: userSettings,
                 filePathProvider: filePathProvider,
-                fileIO: fileIO,
+                fileIo: fileIo,
                 localization: localization,
                 models: models);
 

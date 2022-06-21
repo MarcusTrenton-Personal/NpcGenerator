@@ -60,6 +60,8 @@ namespace Tests
                         NpcQuantity = 5
                     };
 
+                    StubMessager testMessager = new StubMessager();
+
                     StubLocalization testLocalization = new StubLocalization
                     {
                         SupportedLanguageCodes = new[] { "en-ca" }
@@ -74,15 +76,17 @@ namespace Tests
                         localization: testLocalizationModel, 
                         about: new StubAboutModel(),
                         navigation: new StubNavigationModel(),
-                        tracking: new StubTrackingModel());
+                        tracking: new StubTrackingModel(),
+                        //Only the npcGenerator is real.
+                        npcGenerator: new NpcGeneratorModel(testUserSettings, testMessager, fileIO));
 
                     ServiceCenter serviceCenter = new ServiceCenter(
                         profile: new StubTrackingProfile(),
                         appSettings: new StubAppSettings(),
-                        messager: new StubMessager(),
+                        messager: testMessager,
                         userSettings: testUserSettings,
                         filePathProvider: new StubFilePathProvider(),
-                        fileIO: fileIO,
+                        fileIo: fileIO,
                         localization: testLocalization,
                         models: models
                     );
@@ -98,15 +102,16 @@ namespace Tests
 
                     //********* Test Generate ********************
                     Button generate = (Button)mainWindow.FindName("generateButton");
-                    generate.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                    //Click event's don't trigger Commands while the window isn't shown, so invoke directly.
+                    generate.Command.Execute(null);
 
                     DataGrid dataGrid = (DataGrid)mainWindow.FindName("generatedNpcTable");
-                    DataTable dataTable = (DataTable)dataGrid.DataContext;
-                    generatedNpcQuantityMatchesUserSettings = testUserSettings.NpcQuantity == dataTable.Rows.Count;
+                    DataView dataView = (DataView)dataGrid.ItemsSource;
+                    generatedNpcQuantityMatchesUserSettings = testUserSettings.NpcQuantity == dataView.Count;
 
                     //********* Test Save ********************
                     Button save = (Button)mainWindow.FindName("saveNpcsButton");
-                    save.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                    save.Command.Execute(null);
                     //Track the result of event through fileIO.SavedCalled.
 
                     //********* Clean Up ********************

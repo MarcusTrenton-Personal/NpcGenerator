@@ -17,7 +17,7 @@ namespace Services
 {
     public static class NumberHelper
     {
-        public static bool TryParsePositiveNumber(string text, out int result)
+        public static bool TryParsePositiveInteger(string text, out int result)
         {
             bool isInt = int.TryParse(text, out result);
             bool isNaturalNumber = isInt && result > 0;

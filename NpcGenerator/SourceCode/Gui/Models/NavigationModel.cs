@@ -19,7 +19,7 @@ using System.Windows.Input;
 namespace NpcGenerator
 {
     //Based on code from https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf
-    public class NavigationModel : INavigationModel
+    public class NavigationModel : BaseModel, INavigationModel
     {
         //Navigating to any place in the app requires potentially any service, so store them all.
         public NavigationModel(ServiceCenter serviceCenter)

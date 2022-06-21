@@ -13,32 +13,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows.Input;
+using System.Data;
+using System.Windows;
 
 namespace NpcGenerator
 {
-    public class TrackingModel : BaseModel, ITrackingModel
+    public interface INpcGeneratorModel
     {
-        public TrackingModel(IUserSettings userSettings)
-        {
-            m_userSettings = userSettings;
-        }
-
-        public bool TrackingConsent 
-        { 
-            get
-            {
-                return m_userSettings.AnalyticsConsent;
-            }
-
-            set
-            {
-                m_userSettings.AnalyticsConsent = value;
-            }
-        }
-
-        private readonly IUserSettings m_userSettings;
+        public ICommand ChooseConfiguration { get; }
+        public string ConfigurationPath { get; }
+        public int NpcQuantity { get; set; }
+        public ICommand GenerateNpcs { get; }
+        public DataTable ResultNpcs { get; }
+        public ICommand SaveNpcs { get; }
     }
 }
