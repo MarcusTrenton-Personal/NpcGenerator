@@ -22,6 +22,7 @@ namespace NpcGenerator
 {
     //Code taken from https://stackoverflow.com/questions/12422945/how-to-bind-wpf-button-to-a-command-in-viewmodelbase and
     //https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf
+    //Modified so CanExecute guards Execute, because that just makes more sense.
     public class CommandHandler : ICommand
     {
         public CommandHandler(Action<object> action, Func<object, bool> canExecute)
@@ -44,7 +45,11 @@ namespace NpcGenerator
 
         public void Execute(object parameter)
         {
-            m_action(parameter);
+            bool canExecute = CanExecute(parameter);
+            if(canExecute)
+            {
+                m_action(parameter);
+            }
         }
 
         private readonly Action<object> m_action;

@@ -26,14 +26,19 @@ namespace NpcGenerator
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
+            if (value is int number)
+            {
+                return number > 0 ? new ValidationResult(true, null) : new ValidationResult(false, "Value is not greater than 0");
+            }
             if (!(value is string text))
             {
-                return new ValidationResult(false, "Value must be text");
+                return new ValidationResult(false, "Value must be text or int");
             }
             if (!NumberHelper.TryParsePositiveInteger(text, out _))
             {
                 return new ValidationResult(false, "Value is not a natural number");
             }
+
             return new ValidationResult(true, null);
         }
     }
