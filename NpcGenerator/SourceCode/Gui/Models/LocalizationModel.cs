@@ -48,7 +48,7 @@ namespace NpcGenerator
                         if (m_hiddenLanguageCodes != null)
                         {
                             bool isHidden = Array.Exists(m_hiddenLanguageCodes,
-                                hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode);
+                                hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode.ToLower());
                             if (!isHidden)
                             {
                                 allowedLanguageCodes.Add(languageCode);
@@ -70,9 +70,9 @@ namespace NpcGenerator
 
             set
             {
-                m_userSettings.LanguageCode = value;
-
                 m_localization.CurrentLanguageCode = value;
+                m_userSettings.LanguageCode = value;
+                
                 NotifyPropertyChanged("Localization");
             }
         }
