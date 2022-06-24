@@ -40,7 +40,7 @@ namespace Tests
             bool npcQuantityLabelMachesUserSettings = false;
             bool generatedNpcQuantityMatchesUserSettings = false;
 
-            StubLocalFileIO fileIO = new StubLocalFileIO();
+            StubLocalFileIo fileIO = new StubLocalFileIo();
 
             Thread t = new Thread(new ThreadStart(delegate ()
             {

@@ -91,7 +91,7 @@ namespace Tests
         }
     }
 
-    internal class StubLocalFileIO : ILocalFileIO
+    internal class StubLocalFileIo : ILocalFileIO
     {
         public string CacheFile(string originalPath)
         {
