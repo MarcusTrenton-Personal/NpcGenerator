@@ -72,8 +72,9 @@ namespace NpcGenerator
 
             LocalizationModel localizationModel = new LocalizationModel(
                 localization: localization,
+                hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
                 userSettings: userSettings,
-                hiddenLanguageCodes: appSettings.HiddenLanguageCodes);
+                messager: messager);
 
             TrackingModel trackingModel = new TrackingModel(userSettings);
 

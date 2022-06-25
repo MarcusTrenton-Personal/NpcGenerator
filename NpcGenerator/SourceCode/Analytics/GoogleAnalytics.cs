@@ -61,6 +61,7 @@ namespace NpcGenerator
             m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
             m_messager.Subscribe<Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
+            m_messager.Subscribe<Message.LanguageSelected>(OnLanguageSelected);
         }
 
         ~GoogleAnalytics()
@@ -71,6 +72,7 @@ namespace NpcGenerator
             m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
             m_messager.Unsubscribe<Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
+            m_messager.Unsubscribe<Message.LanguageSelected>(OnLanguageSelected);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
@@ -311,6 +313,37 @@ namespace NpcGenerator
 
             writer.WritePropertyName("name");
             writer.WriteValue("unsupported_language");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("language_code");
+            writer.WriteValue(languageCode);
+
+            writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnLanguageSelected(object sender, Message.LanguageSelected languageSelected)
+        {
+            if (m_userSettings.AnalyticsConsent)
+            {
+                TrackEvent(Callback);
+            }
+
+            void Callback(JsonWriter writer)
+            {
+                WriteLanguageSelectedEvent(writer, languageSelected.Language);
+            }
+        }
+
+        private void WriteLanguageSelectedEvent(JsonWriter writer, string languageCode)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("language_selected");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();

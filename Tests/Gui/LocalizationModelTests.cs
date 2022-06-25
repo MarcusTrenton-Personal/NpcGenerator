@@ -15,7 +15,9 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using NpcGenerator.Message;
 using Services;
+using Services.Message;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,14 +49,28 @@ namespace Tests
             }
         }
 
+        private class MockMessager : IMessager
+        {
+            public void Send<T>(object sender, T message)
+            { 
+                m_sentMessages.Add(message);
+            }
+            public void Subscribe<T>(IChannel<T>.Callback callback) { }
+            public void Unsubscribe<T>(IChannel<T>.Callback callback) { }
+
+            public List<object> m_sentMessages = new List<object>();
+        }
+
         public LocalizationModelTests()
         {
             m_localization = new MockLocalization();
             m_userSettings = new StubUserSettings();
+            m_messager = new MockMessager();
             m_localizationModel = new LocalizationModel(
                 m_localization,
-                m_userSettings, 
-                hiddenLanguageCodes: new string[1] { AtlanteanLanguageCode });
+                hiddenLanguageCodes: new string[1] { AtlanteanLanguageCode },
+                m_userSettings,
+                m_messager);
         }
 
         [TestMethod]
@@ -90,6 +106,11 @@ namespace Tests
         {
             m_localizationModel.CurrentLanguage = AtlanteanLanguageCode;
             Assert.AreEqual(AtlanteanLanguageCode, m_localizationModel.CurrentLanguage, "Cannot set hidden language but should be able");
+
+            Assert.AreEqual(1, m_messager.m_sentMessages.Count, "Wrong number of messages sent by LocalizationModel");
+            LanguageSelected languageSelectedMessage = m_messager.m_sentMessages[0] as LanguageSelected;
+            Assert.IsNotNull(languageSelectedMessage, "LocalizatoinModel sent the wrong message type");
+            Assert.AreEqual(AtlanteanLanguageCode, languageSelectedMessage.Language, "Wrong language code sent");
         }
 
         [TestMethod]
@@ -114,5 +135,6 @@ namespace Tests
         private readonly ILocalization m_localization;
         private readonly LocalizationModel m_localizationModel;
         private readonly IUserSettings m_userSettings;
+        private readonly MockMessager m_messager;
     }
 }

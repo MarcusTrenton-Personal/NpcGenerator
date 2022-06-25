@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Services;
+using Services.Message;
 using System;
 using System.Collections.Generic;
 
@@ -21,11 +22,12 @@ namespace NpcGenerator
 {
     public class LocalizationModel : BaseModel, ILocalizationModel
     {
-        public LocalizationModel(ILocalization localization, IUserSettings userSettings, string[] hiddenLanguageCodes)
+        public LocalizationModel(ILocalization localization, string[] hiddenLanguageCodes, IUserSettings userSettings, IMessager messager)
         {
             m_localization = localization;
             m_userSettings = userSettings;
             m_hiddenLanguageCodes = hiddenLanguageCodes;
+            m_messager = messager;
         }
 
         public ILocalization Localization
@@ -72,7 +74,8 @@ namespace NpcGenerator
             {
                 m_localization.CurrentLanguageCode = value;
                 m_userSettings.LanguageCode = value;
-                
+
+                m_messager.Send(sender: this, new Message.LanguageSelected(value));
                 NotifyPropertyChanged("Localization");
             }
         }
@@ -80,5 +83,6 @@ namespace NpcGenerator
         private readonly ILocalization m_localization;
         private readonly string[] m_hiddenLanguageCodes;
         private readonly IUserSettings m_userSettings;
+        private readonly IMessager m_messager;
     }
 }
