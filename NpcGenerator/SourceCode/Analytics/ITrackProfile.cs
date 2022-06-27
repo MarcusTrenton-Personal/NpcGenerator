@@ -26,7 +26,7 @@ namespace NpcGenerator
         public Guid ClientId { get; }
 
         //Which languages should be supported?
-        public string Language { get; }
+        public string SystemLanguage { get; }
 
         //Are the deployed versions reaching users?
         public string AppVersion { get; }

@@ -47,7 +47,7 @@ namespace NpcGenerator
 
         private void Update()
         {
-            Language = CultureInfo.CurrentCulture.Name;
+            SystemLanguage = CultureInfo.CurrentCulture.Name;
 
             AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
@@ -61,7 +61,7 @@ namespace NpcGenerator
         public Guid ClientId { get; set; }
 
         //Which languages should be supported?
-        public string Language { get; set; }
+        public string SystemLanguage { get; set; }
 
         //Are the deployed versions reaching users?
         public string AppVersion { get; set; }

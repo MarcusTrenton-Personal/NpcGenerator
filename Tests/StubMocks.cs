@@ -28,7 +28,7 @@ namespace Tests
     internal class StubTrackingProfile : ITrackingProfile
     {
         public Guid ClientId { get; set; } = Guid.Empty;
-        public string Language { get; set; } = null;
+        public string SystemLanguage { get; set; } = null;
         public string AppVersion { get; set; } = null;
         public string OSVersion { get; set; } = null;
     }

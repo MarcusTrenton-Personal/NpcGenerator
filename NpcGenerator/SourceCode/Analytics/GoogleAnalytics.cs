@@ -162,7 +162,8 @@ namespace NpcGenerator
             writer.WritePropertyName("user_properties");
             writer.WriteStartObject();
 
-            WriteUserProperty(writer, "language", m_trackingProfile.Language);
+            WriteUserProperty(writer, "system_language", m_trackingProfile.SystemLanguage);
+            WriteUserProperty(writer, "app_language", m_userSettings.LanguageCode);
             WriteUserProperty(writer, "app_version", m_trackingProfile.AppVersion);
             WriteUserProperty(writer, "os_version", m_trackingProfile.OSVersion);
 
