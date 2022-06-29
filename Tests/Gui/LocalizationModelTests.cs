@@ -27,11 +27,10 @@ namespace Tests
     [TestClass]
     public class LocalizationModelTests
     {
-        public const string MartianLanguageCode = "Martian";
-        public const string AtlanteanLanguageCode = "Atlantean";
+        public const string MartianLanguageCode = "martian";
+        public const string AtlanteanLanguageCode = "atlantean";
         public const string MartianText = "Invasion";
         public const string AtlanteanText = "Ancient";
-        public readonly string[] OriginalSupportedLanguageCodes = new string[2] { MartianLanguageCode, AtlanteanLanguageCode };
 
         private class MockLocalization : ILocalization
         {
