@@ -14,11 +14,9 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
-namespace NpcGenerator
+namespace WpfServices
 {
     //Code taken from https://stackoverflow.com/questions/12422945/how-to-bind-wpf-button-to-a-command-in-viewmodelbase and
     //https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf

@@ -13,18 +13,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace NpcGenerator
+namespace Services.Message
 {
-    public class BaseModel : INotifyPropertyChanged
+    public class UserLanguageNotSupported
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged([CallerMemberName] string name = null)
+        public UserLanguageNotSupported(string languageCode)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            LanguageCode = languageCode;
         }
+
+        public string LanguageCode { get; private set; }
     }
 }

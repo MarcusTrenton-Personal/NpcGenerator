@@ -13,19 +13,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Windows;
+using System.Windows.Documents;
 
-namespace NpcGenerator.Message
+namespace WpfServices
 {
-    public class LanguageSelected
+    public static class GuiHelper
     {
-        public LanguageSelected(string languageCode)
+        public static FlowDocument ReadRtfText(string path)
         {
-            Language = languageCode;
+            using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FlowDocument flowDocument = new FlowDocument();
+            TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+            textRange.Load(fileStream, DataFormats.Rtf);
+            return flowDocument;
         }
-
-        public string Language { get; private set; }
     }
 }

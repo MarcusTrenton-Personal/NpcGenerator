@@ -21,6 +21,7 @@ using Services.Message;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WpfServices;
 
 namespace Tests
 {

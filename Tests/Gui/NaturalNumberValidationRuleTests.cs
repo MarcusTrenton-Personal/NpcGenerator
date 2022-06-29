@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System.Globalization;
 using System.Windows.Controls;
+using WpfServices;
 
 namespace Tests
 {

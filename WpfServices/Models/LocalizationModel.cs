@@ -18,7 +18,7 @@ using Services.Message;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace NpcGenerator
+namespace WpfServices
 {
     public class LocalizationModel : BaseModel, ILocalizationModel
     {
@@ -78,7 +78,7 @@ namespace NpcGenerator
                 m_localization.CurrentLanguageCode = value;
                 m_currentLanguage.LanguageCode = value;
 
-                m_messager.Send(sender: this, new Message.LanguageSelected(value));
+                m_messager.Send(sender: this, new Services.Message.LanguageSelected(value));
                 NotifyPropertyChanged("Localization");
             }
         }

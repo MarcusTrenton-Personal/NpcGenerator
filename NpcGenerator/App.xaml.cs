@@ -16,9 +16,9 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Services.Message;
 using System;
-using System.Globalization;
 using System.Threading;
 using System.Windows;
+using WpfServices;
 
 [assembly: CLSCompliant(true)]
 namespace NpcGenerator
@@ -47,7 +47,7 @@ namespace NpcGenerator
                  userSettings: m_serviceCentre.UserSettings,
                  dryRunValidation: parameters.analyticsDryRun);
 
-            m_serviceCentre.Messager.Send(sender: this, message: new Message.Login());
+            m_serviceCentre.Messager.Send(sender: this, message: new Services.Message.Login());
 
             PickLanguage(m_serviceCentre, parameters);
         }
@@ -165,7 +165,7 @@ namespace NpcGenerator
             }
             else
             {
-                messager.Send(Current, new Message.UserLanguageNotSupported(userLanguageCode));
+                messager.Send(Current, new Services.Message.UserLanguageNotSupported(userLanguageCode));
             }
         }
 

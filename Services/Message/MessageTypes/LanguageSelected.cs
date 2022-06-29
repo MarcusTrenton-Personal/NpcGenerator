@@ -1,4 +1,4 @@
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,15 +13,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-namespace NpcGenerator.Message
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Services.Message
 {
-    public class PageView
+    public class LanguageSelected
     {
-        public PageView(string title)
+        public LanguageSelected(string languageCode)
         {
-            Title = title;
+            Language = languageCode;
         }
 
-        public string Title { get; private set; }
+        public string Language { get; private set; }
     }
 }

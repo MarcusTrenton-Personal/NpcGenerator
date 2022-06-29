@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Services\Services.csproj" />
+    <ProjectReference Include="..\WpfServices\WpfServices.csproj" />
     <ProjectReference Include="..\CoupledServices\CoupledServices.csproj" />
   </ItemGroup>
 

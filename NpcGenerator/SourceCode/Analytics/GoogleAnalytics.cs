@@ -55,24 +55,24 @@ namespace NpcGenerator
 
             //Each Google Analytics event must have a name 40 characters or less: 
             //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
-            m_messager.Subscribe<Message.Login>(OnLogin);
-            m_messager.Subscribe<Message.PageView>(OnPageView);
+            m_messager.Subscribe<Services.Message.Login>(OnLogin);
+            m_messager.Subscribe<Services.Message.PageView>(OnPageView);
             m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
             m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
-            m_messager.Subscribe<Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-            m_messager.Subscribe<Message.LanguageSelected>(OnLanguageSelected);
+            m_messager.Subscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
+            m_messager.Subscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
         }
 
         ~GoogleAnalytics()
         {
-            m_messager.Unsubscribe<Message.Login>(OnLogin);
-            m_messager.Unsubscribe<Message.PageView>(OnPageView);
+            m_messager.Unsubscribe<Services.Message.Login>(OnLogin);
+            m_messager.Unsubscribe<Services.Message.PageView>(OnPageView);
             m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
             m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
-            m_messager.Unsubscribe<Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-            m_messager.Unsubscribe<Message.LanguageSelected>(OnLanguageSelected);
+            m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
+            m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
         }
 
         private async void TrackEvent(WriteGoogleEvent googleEvent)
@@ -170,7 +170,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of user_properties object
         }
 
-        private void OnLogin(object sender, Message.Login login)
+        private void OnLogin(object sender, Services.Message.Login login)
         {
             //Consent can change throughout the session
             if(m_userSettings.AnalyticsConsent)
@@ -197,7 +197,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnPageView(object sender, Message.PageView pageView)
+        private void OnPageView(object sender, Services.Message.PageView pageView)
         {
             if (m_userSettings.AnalyticsConsent)
             {
@@ -295,7 +295,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnUserLanguageNotSupported(object sender, Message.UserLanguageNotSupported notSupported)
+        private void OnUserLanguageNotSupported(object sender, Services.Message.UserLanguageNotSupported notSupported)
         {
             if (m_userSettings.AnalyticsConsent)
             {
@@ -326,7 +326,7 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of event object
         }
 
-        private void OnLanguageSelected(object sender, Message.LanguageSelected languageSelected)
+        private void OnLanguageSelected(object sender, Services.Message.LanguageSelected languageSelected)
         {
             if (m_userSettings.AnalyticsConsent)
             {

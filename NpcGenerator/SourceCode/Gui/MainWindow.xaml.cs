@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Services;
 using System.Windows;
 using System.Windows.Navigation;
+using WpfServices;
 
 namespace NpcGenerator
 {
@@ -27,7 +28,7 @@ namespace NpcGenerator
 
             InitializeComponent();
 
-            serviceCentre?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
+            serviceCentre?.Messager.Send(sender: this, message: new Services.Message.PageView("Main Window"));
         }
 
         public ILocalizationModel LocalizationModel

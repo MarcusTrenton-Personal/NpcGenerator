@@ -18,7 +18,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace NpcGenerator
+namespace WpfServices
 {
     public class LocalizationConverter : IMultiValueConverter
     {

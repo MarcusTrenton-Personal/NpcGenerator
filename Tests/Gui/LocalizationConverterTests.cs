@@ -18,6 +18,7 @@ using NpcGenerator;
 using Services;
 using System;
 using System.Globalization;
+using WpfServices;
 
 namespace Tests
 {

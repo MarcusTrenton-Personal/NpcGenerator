@@ -14,14 +14,29 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Services;
-using System.Collections.Generic;
 
-namespace NpcGenerator
+namespace WpfServices
 {
-    public interface ILocalizationModel
+    public class TrackingModel : BaseModel, ITrackingModel
     {
-        public ILocalization Localization { get; }
-        public IEnumerable<string> SelectableLanguages { get; }
-        public string CurrentLanguage { get; set; }
+        public TrackingModel(IAnalyticsConsent consent)
+        {
+            m_consent = consent;
+        }
+
+        public bool TrackingConsent 
+        { 
+            get
+            {
+                return m_consent.AnalyticsConsent;
+            }
+
+            set
+            {
+                m_consent.AnalyticsConsent = value;
+            }
+        }
+
+        private readonly IAnalyticsConsent m_consent;
     }
 }

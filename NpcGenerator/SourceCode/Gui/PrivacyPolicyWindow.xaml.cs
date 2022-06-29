@@ -19,6 +19,7 @@ using Services.Message;
 using System;
 using System.IO;
 using System.Windows;
+using WpfServices;
 
 namespace NpcGenerator
 {
@@ -51,7 +52,7 @@ namespace NpcGenerator
                 MessageBox.Show(message);
             }
 
-            messager?.Send(sender: this, message: new Message.PageView("Privacy Policy"));
+            messager?.Send(sender: this, message: new Services.Message.PageView("Privacy Policy"));
         }
 
         public ILocalizationModel LocalizationModel

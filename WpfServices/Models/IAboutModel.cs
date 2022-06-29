@@ -13,15 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-namespace NpcGenerator.Message
+namespace WpfServices
 {
-    public class UserLanguageNotSupported
+    public interface IAboutModel
     {
-        public UserLanguageNotSupported(string languageCode)
-        {
-            LanguageCode = languageCode;
-        }
-
-        public string LanguageCode { get; private set; }
+        public string Version { get; }
     }
 }

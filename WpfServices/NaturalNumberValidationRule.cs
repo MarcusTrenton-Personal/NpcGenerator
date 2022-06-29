@@ -17,7 +17,7 @@ using Services;
 using System.Globalization;
 using System.Windows.Controls;
 
-namespace NpcGenerator
+namespace WpfServices
 {
     public class NaturalNumberValidationRule : ValidationRule
     {

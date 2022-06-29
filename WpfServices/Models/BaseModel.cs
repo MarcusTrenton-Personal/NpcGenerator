@@ -13,30 +13,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Services;
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-namespace NpcGenerator
+[assembly: CLSCompliant(true)]
+namespace WpfServices
 {
-    public class TrackingModel : BaseModel, ITrackingModel
+    public class BaseModel : INotifyPropertyChanged
     {
-        public TrackingModel(IAnalyticsConsent consent)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged([CallerMemberName] string name = null)
         {
-            m_consent = consent;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        public bool TrackingConsent 
-        { 
-            get
-            {
-                return m_consent.AnalyticsConsent;
-            }
-
-            set
-            {
-                m_consent.AnalyticsConsent = value;
-            }
-        }
-
-        private readonly IAnalyticsConsent m_consent;
     }
 }

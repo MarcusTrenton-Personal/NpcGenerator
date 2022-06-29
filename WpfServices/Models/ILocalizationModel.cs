@@ -13,14 +13,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
+using Services;
 using System.Collections.Generic;
-using System.Text;
 
-namespace NpcGenerator
+namespace WpfServices
 {
-    public interface IAboutModel
+    public interface ILocalizationModel
     {
-        public string Version { get; }
+        public ILocalization Localization { get; }
+        public IEnumerable<string> SelectableLanguages { get; }
+        public string CurrentLanguage { get; set; }
     }
 }
