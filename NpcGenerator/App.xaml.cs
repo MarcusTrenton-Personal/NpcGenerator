@@ -37,30 +37,30 @@ namespace NpcGenerator
 
         public App()
         {
-            m_serviceCenter = CreateServices();
+            m_serviceCentre = CreateServices();
             AppParameters parameters = ReadAppParameters();
 
             m_googleAnalytics = new GoogleAnalytics(
-                 appSettings: m_serviceCenter.AppSettings,
-                 trackingProfile: m_serviceCenter.Profile,
-                 messager: m_serviceCenter.Messager,
-                 userSettings: m_serviceCenter.UserSettings,
+                 appSettings: m_serviceCentre.AppSettings,
+                 trackingProfile: m_serviceCentre.Profile,
+                 messager: m_serviceCentre.Messager,
+                 userSettings: m_serviceCentre.UserSettings,
                  dryRunValidation: parameters.analyticsDryRun);
 
-            m_serviceCenter.Messager.Send(sender: this, message: new Message.Login());
+            m_serviceCentre.Messager.Send(sender: this, message: new Message.Login());
 
-            PickLanguage(m_serviceCenter, parameters);
+            PickLanguage(m_serviceCentre, parameters);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            Current.MainWindow = new MainWindow(m_serviceCenter);       
+            Current.MainWindow = new MainWindow(m_serviceCentre);       
             Current.MainWindow.Show();
         }
 
-        private static ServiceCenter CreateServices()
+        private static ServiceCentre CreateServices()
         {
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
@@ -80,10 +80,10 @@ namespace NpcGenerator
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(userSettings, messager, fileIo);
 
-            //Temporarily set navigation to null, as it requires a constructed ServiceCenter as a parameter.
+            //Temporarily set navigation to null, as it requires a constructed ServiceCentre as a parameter.
             Models models = new Models(localizationModel, new AboutModel(), navigation: null, trackingModel, npcGeneratorModel);
 
-            ServiceCenter serviceCenter = new ServiceCenter(
+            ServiceCentre serviceCentre = new ServiceCentre(
                 profile: trackingProfile,
                 appSettings: appSettings,
                 messager: messager,
@@ -93,10 +93,10 @@ namespace NpcGenerator
                 localization: localization,
                 models: models);
 
-            //Set all the services that require access to the whole ServiceCenter.
-            models.Navigation = new NavigationModel(serviceCenter);
+            //Set all the services that require access to the whole ServiceCentre.
+            models.Navigation = new NavigationModel(serviceCentre);
 
-            return serviceCenter;
+            return serviceCentre;
         }
 
         private static AppParameters ReadAppParameters()
@@ -139,19 +139,19 @@ namespace NpcGenerator
             return parameters;
         }
 
-        private static void PickLanguage(ServiceCenter serviceCenter, AppParameters parameters)
+        private static void PickLanguage(ServiceCentre serviceCentre, AppParameters parameters)
         {
             if (!string.IsNullOrEmpty(parameters.forcedLanguageCode))
             {
-                serviceCenter.Localization.CurrentLanguageCode = parameters.forcedLanguageCode;
+                serviceCentre.Localization.CurrentLanguageCode = parameters.forcedLanguageCode;
             }
-            else if (!string.IsNullOrEmpty(serviceCenter.UserSettings.LanguageCode))
+            else if (!string.IsNullOrEmpty(serviceCentre.UserSettings.LanguageCode))
             {
-                serviceCenter.Localization.CurrentLanguageCode = serviceCenter.UserSettings.LanguageCode;
+                serviceCentre.Localization.CurrentLanguageCode = serviceCentre.UserSettings.LanguageCode;
             }
             else
             {
-                UseUsersLanguageOrReport(serviceCenter.Localization, serviceCenter.Messager);
+                UseUsersLanguageOrReport(serviceCentre.Localization, serviceCentre.Messager);
             }
         }
 
@@ -194,7 +194,7 @@ namespace NpcGenerator
         }
 
         
-        private readonly ServiceCenter m_serviceCenter;
+        private readonly ServiceCentre m_serviceCentre;
 #pragma warning disable IDE0052 // Remove unread private members. 
         //This warning is stupid. The subscriber object only need to be created to be useful. It does not need to be read.
         private readonly GoogleAnalytics m_googleAnalytics;

@@ -21,9 +21,9 @@ namespace NpcGenerator
 {
     //This class is an implementation of the toolbox pattern.
     //Instead of a singleton, all the wanna-be global state is passed in a single, giant container: the toolbox.
-    public class ServiceCenter
+    public class ServiceCentre
     {
-        public ServiceCenter(
+        public ServiceCentre(
             IAppSettings appSettings,
             IFilePathProvider filePathProvider,
             ILocalFileIO fileIo,

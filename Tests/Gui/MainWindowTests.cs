@@ -80,7 +80,7 @@ namespace Tests
                         //Only the npcGenerator is real.
                         npcGenerator: new NpcGeneratorModel(testUserSettings, testMessager, fileIO));
 
-                    ServiceCenter serviceCenter = new ServiceCenter(
+                    ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),
                         appSettings: new StubAppSettings(),
                         messager: testMessager,
@@ -90,7 +90,7 @@ namespace Tests
                         localization: testLocalization,
                         models: models
                     );
-                    MainWindow mainWindow = new MainWindow(serviceCenter);
+                    MainWindow mainWindow = new MainWindow(serviceCentre);
 
                     //********* Test Initial Window ********************
                     Label configLabel = (Label)mainWindow.FindName("configurationPathText");

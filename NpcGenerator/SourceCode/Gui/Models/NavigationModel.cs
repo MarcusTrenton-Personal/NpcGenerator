@@ -22,9 +22,9 @@ namespace NpcGenerator
     public class NavigationModel : BaseModel, INavigationModel
     {
         //Navigating to any place in the app requires potentially any service, so store them all.
-        public NavigationModel(ServiceCenter serviceCenter)
+        public NavigationModel(ServiceCentre serviceCentre)
         {
-            m_serviceCenter = serviceCenter;
+            m_serviceCentre = serviceCentre;
         }
 
         public ICommand GoToPrivacyPolicy 
@@ -47,9 +47,9 @@ namespace NpcGenerator
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
             PrivacyPolicyWindow privacyWindow = new PrivacyPolicyWindow(
-                messager: m_serviceCenter.Messager,
-                filePathProvider: m_serviceCenter.FilePathProvider,
-                localizationModel: m_serviceCenter.Models.Localization)
+                messager: m_serviceCentre.Messager,
+                filePathProvider: m_serviceCentre.FilePathProvider,
+                localizationModel: m_serviceCentre.Models.Localization)
             {
                 Owner = parameter as Window
             };
@@ -76,16 +76,16 @@ namespace NpcGenerator
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
             LicenseWindow licenseWindow = new LicenseWindow(
-                messager: m_serviceCenter.Messager,
-                filePathProvider: m_serviceCenter.FilePathProvider,
-                localizationModel: m_serviceCenter.Models.Localization)
+                messager: m_serviceCentre.Messager,
+                filePathProvider: m_serviceCentre.FilePathProvider,
+                localizationModel: m_serviceCentre.Models.Localization)
             {
                 Owner = parameter as Window
             };
             licenseWindow.Show();
         }
 
-        private readonly ServiceCenter m_serviceCenter;
+        private readonly ServiceCentre m_serviceCentre;
         private ICommand m_goToPrivacyPolicyCommand;
         private ICommand m_goToLicenseCommand;
     }

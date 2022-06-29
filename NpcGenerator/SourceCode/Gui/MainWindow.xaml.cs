@@ -21,20 +21,20 @@ namespace NpcGenerator
 {
     public partial class MainWindow : Window
     {   
-        public MainWindow(ServiceCenter serviceCenter) //DO I NEED THESE SERVICES?
+        public MainWindow(ServiceCentre serviceCentre)
         {
-            m_serviceCenter = serviceCenter;
+            m_serviceCentre = serviceCentre;
 
             InitializeComponent();
 
-            serviceCenter?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
+            serviceCentre?.Messager.Send(sender: this, message: new Message.PageView("Main Window"));
         }
 
         public ILocalizationModel LocalizationModel
         {
             get
             {
-                return m_serviceCenter.Models.Localization;
+                return m_serviceCentre.Models.Localization;
             }
         }
 
@@ -42,7 +42,7 @@ namespace NpcGenerator
         {
             get
             {
-                return m_serviceCenter.Models.About;
+                return m_serviceCentre.Models.About;
             }
         }
 
@@ -50,7 +50,7 @@ namespace NpcGenerator
         {
             get
             {
-                return m_serviceCenter.Models.Navigation;
+                return m_serviceCentre.Models.Navigation;
             }
         }
 
@@ -58,7 +58,7 @@ namespace NpcGenerator
         {
             get
             {
-                return m_serviceCenter.Models.Tracking;
+                return m_serviceCentre.Models.Tracking;
             }
         }
 
@@ -66,7 +66,7 @@ namespace NpcGenerator
         {
             get
             {
-                return m_serviceCenter.Models.NpcGenerator;
+                return m_serviceCentre.Models.NpcGenerator;
             }
         }
 
@@ -75,6 +75,6 @@ namespace NpcGenerator
             e.Handled = UriHelper.OpenUri(e.Uri);
         }
 
-        private readonly ServiceCenter m_serviceCenter;
+        private readonly ServiceCentre m_serviceCentre;
     }
 }
