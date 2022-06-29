@@ -149,8 +149,6 @@ namespace Services
             return languageCodeHash ^ textIdHash;
         }
 
-        //public override int GetHashCode() => (TextId, LanguageCode).GetHashCode();
-
         private string m_currentLanguageCode;
         private int m_currentLanguageCodeHash;
 

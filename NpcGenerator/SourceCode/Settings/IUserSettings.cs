@@ -13,14 +13,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using Services;
+
 namespace NpcGenerator
 {
     //User settings are everything that the user explicitly chooses that are persistent session-to-session.
-    public interface IUserSettings
+    public interface IUserSettings : ILanguageCode, IAnalyticsConsent
     {
         public string ConfigurationPath { get; set; }
         public int NpcQuantity { get; set; }
-        public bool AnalyticsConsent { get; set; }
-        public string LanguageCode { get; set; }
+        public new bool AnalyticsConsent { get; set; }
+        public new string LanguageCode { get; set; }
     }
 }

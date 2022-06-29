@@ -13,30 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Services;
-
-namespace NpcGenerator
+namespace Services
 {
-    public class TrackingModel : BaseModel, ITrackingModel
+    public interface IAnalyticsConsent
     {
-        public TrackingModel(IAnalyticsConsent consent)
-        {
-            m_consent = consent;
-        }
-
-        public bool TrackingConsent 
-        { 
-            get
-            {
-                return m_consent.AnalyticsConsent;
-            }
-
-            set
-            {
-                m_consent.AnalyticsConsent = value;
-            }
-        }
-
-        private readonly IAnalyticsConsent m_consent;
+        bool AnalyticsConsent { get; set; }
     }
 }

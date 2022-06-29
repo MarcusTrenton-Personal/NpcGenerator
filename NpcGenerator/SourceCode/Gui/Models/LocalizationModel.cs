@@ -15,7 +15,6 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Services;
 using Services.Message;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -23,10 +22,14 @@ namespace NpcGenerator
 {
     public class LocalizationModel : BaseModel, ILocalizationModel
     {
-        public LocalizationModel(ILocalization localization, ReadOnlyCollection<string> hiddenLanguageCodes, IUserSettings userSettings, IMessager messager)
+        public LocalizationModel(
+            ILocalization localization, 
+            ReadOnlyCollection<string> hiddenLanguageCodes, 
+            ILanguageCode currentLanguage, 
+            IMessager messager)
         {
             m_localization = localization;
-            m_userSettings = userSettings;
+            m_currentLanguage = currentLanguage;
             m_hiddenLanguageCodes = hiddenLanguageCodes;
             m_messager = messager;
         }
@@ -73,7 +76,7 @@ namespace NpcGenerator
             set
             {
                 m_localization.CurrentLanguageCode = value;
-                m_userSettings.LanguageCode = value;
+                m_currentLanguage.LanguageCode = value;
 
                 m_messager.Send(sender: this, new Message.LanguageSelected(value));
                 NotifyPropertyChanged("Localization");
@@ -82,7 +85,7 @@ namespace NpcGenerator
 
         private readonly ILocalization m_localization;
         private readonly ReadOnlyCollection<string> m_hiddenLanguageCodes;
-        private readonly IUserSettings m_userSettings;
+        private readonly ILanguageCode m_currentLanguage;
         private readonly IMessager m_messager;
     }
 }
