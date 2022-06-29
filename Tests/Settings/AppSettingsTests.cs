@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
+using System;
 using System.IO;
 using System.Text;
 
@@ -48,7 +49,7 @@ namespace Tests
             {
                 EncryptionKey = encryptionKey,
                 GoogleAnalytics = googleAnalytics,
-                HiddenLanguageCodes = new string[] { hiddenLanguageCode }
+                HiddenLanguageCodes = Array.AsReadOnly(new string[] { hiddenLanguageCode })
             };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
@@ -62,7 +63,7 @@ namespace Tests
             AppSettings readSettings = AppSettings.Load(fileName);
 
             Assert.AreEqual(encryptionKey, readSettings.EncryptionKey, "Read incorrect EncryptionKey");
-            Assert.AreEqual(1, readSettings.HiddenLanguageCodes.Length, "Read incorrect number of HiddenLanguageCodes");
+            Assert.AreEqual(1, readSettings.HiddenLanguageCodes.Count, "Read incorrect number of HiddenLanguageCodes");
             Assert.AreEqual(hiddenLanguageCode, readSettings.HiddenLanguageCodes[0], "Read incorrect HiddenLanguageCode");
             Assert.AreEqual(additionalIdDev, readSettings.GoogleAnalytics.AdditionalIdDev, "Read incorrect AdditionalIdDev");
             Assert.AreEqual(additionalIdProd, readSettings.GoogleAnalytics.AdditionalIdProd, "Read incorrect AdditionalIdProd");

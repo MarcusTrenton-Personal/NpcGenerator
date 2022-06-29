@@ -68,7 +68,7 @@ namespace Tests
             m_messager = new MockMessager();
             m_localizationModel = new LocalizationModel(
                 m_localization,
-                hiddenLanguageCodes: new string[1] { AtlanteanLanguageCode },
+                hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
                 m_userSettings,
                 m_messager);
         }

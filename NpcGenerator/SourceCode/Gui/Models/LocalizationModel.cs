@@ -17,12 +17,13 @@ using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace NpcGenerator
 {
     public class LocalizationModel : BaseModel, ILocalizationModel
     {
-        public LocalizationModel(ILocalization localization, string[] hiddenLanguageCodes, IUserSettings userSettings, IMessager messager)
+        public LocalizationModel(ILocalization localization, ReadOnlyCollection<string> hiddenLanguageCodes, IUserSettings userSettings, IMessager messager)
         {
             m_localization = localization;
             m_userSettings = userSettings;
@@ -49,8 +50,7 @@ namespace NpcGenerator
                     {
                         if (m_hiddenLanguageCodes != null)
                         {
-                            bool isHidden = Array.Exists(m_hiddenLanguageCodes,
-                                hiddenLanguageCode => hiddenLanguageCode.ToLower() == languageCode.ToLower());
+                            bool isHidden = m_hiddenLanguageCodes.Contains(languageCode.ToLower());
                             if (!isHidden)
                             {
                                 allowedLanguageCodes.Add(languageCode);
@@ -81,7 +81,7 @@ namespace NpcGenerator
         }
 
         private readonly ILocalization m_localization;
-        private readonly string[] m_hiddenLanguageCodes;
+        private readonly ReadOnlyCollection<string> m_hiddenLanguageCodes;
         private readonly IUserSettings m_userSettings;
         private readonly IMessager m_messager;
     }

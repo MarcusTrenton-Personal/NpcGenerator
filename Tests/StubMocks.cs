@@ -19,6 +19,7 @@ using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Input;
@@ -46,7 +47,7 @@ namespace Tests
         public IGoogleAnalyticsSettings GoogleAnalytics { get; set; } = new StubGoogleAnalyticsSettings();
         public int EncryptionKey { get; set; } = 0;
         public string DefaultLanguageCode { get; set; } = null;
-        public string[] HiddenLanguageCodes { get; set; } = null;
+        public ReadOnlyCollection<string> HiddenLanguageCodes { get; set; } = null;
     }
 
     internal class StubMessager : IMessager

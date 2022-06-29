@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace NpcGenerator
@@ -34,7 +35,7 @@ namespace NpcGenerator
 
         public string DefaultLanguageCode { get; set; }
 
-        public string[] HiddenLanguageCodes { get; set; }
+        public ReadOnlyCollection<string> HiddenLanguageCodes { get; set; }
 
         public static AppSettings Load(string path)
         {
