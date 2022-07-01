@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -11,7 +11,7 @@
 
     <Copyright>Marcus Trenton 2022</Copyright>
 
-    <Description>The unit and end-to-end tests for the NpcGenerator and CoupledServices projects</Description>
+    <Description>The unit tests for WpfServices project</Description>
 
     <RepositoryUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</RepositoryUrl>
 
@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NpcGenerator\NpcGenerator.csproj" />
     <ProjectReference Include="..\TestUtils\TestUtils.csproj" />
+    <ProjectReference Include="..\WpfServices\WpfServices.csproj" />
   </ItemGroup>
 
 </Project>

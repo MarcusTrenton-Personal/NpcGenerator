@@ -14,7 +14,6 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NpcGenerator;
 using Services;
 using Services.Message;
 using System;
@@ -47,6 +46,11 @@ namespace Tests
             }
         }
 
+        private class MockILanguageCode : ILanguageCode
+        {
+            public string LanguageCode { get; set; }
+        }
+
         private class MockMessager : IMessager
         {
             public void Send<T>(object sender, T message)
@@ -62,12 +66,12 @@ namespace Tests
         public LocalizationModelTests()
         {
             m_localization = new MockLocalization();
-            m_userSettings = new StubUserSettings();
+            m_languageCode = new MockILanguageCode();
             m_messager = new MockMessager();
             m_localizationModel = new LocalizationModel(
                 m_localization,
                 hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
-                m_userSettings,
+                m_languageCode,
                 m_messager);
         }
 
@@ -127,12 +131,12 @@ namespace Tests
         {
             m_localizationModel.CurrentLanguage = AtlanteanLanguageCode;
             Assert.AreEqual(AtlanteanLanguageCode, m_localizationModel.CurrentLanguage, "Cannot set hidden language but should be able");
-            Assert.AreEqual(AtlanteanLanguageCode, m_userSettings.LanguageCode, "Language code not saved to UserSettings");
+            Assert.AreEqual(AtlanteanLanguageCode, m_languageCode.LanguageCode, "Language code not saved to underlying object");
         }
 
         private readonly ILocalization m_localization;
         private readonly LocalizationModel m_localizationModel;
-        private readonly IUserSettings m_userSettings;
+        private readonly ILanguageCode m_languageCode;
         private readonly MockMessager m_messager;
     }
 }

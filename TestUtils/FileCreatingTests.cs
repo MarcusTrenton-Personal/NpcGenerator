@@ -13,8 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using CoupledServices;
-using NpcGenerator;
 using System;
 using System.IO;
 
@@ -24,8 +22,8 @@ namespace Tests
     {
         public FileCreatingTests()
         {
-            FilePathProvider filePathProvider = new FilePathProvider();
-            TestDirectory = Path.Combine(filePathProvider.AppDataFolderPath, "UnitTestInput");
+            string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            TestDirectory = Path.Combine(commonAppData, "TempUnitTests", "UnitTestInput");
             Directory.CreateDirectory(TestDirectory);
         }
 

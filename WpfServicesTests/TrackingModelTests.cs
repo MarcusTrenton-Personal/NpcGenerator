@@ -22,10 +22,15 @@ namespace Tests
     [TestClass]
     public class TrackingModelTests
     {
+        private class MockAnalyticsConsent : IAnalyticsConsent
+        {
+            public bool AnalyticsConsent { get; set; }
+        }
+
         [TestMethod]
         public void UserSettingsReflectChanges()
         {
-            StubUserSettings userSettings = new StubUserSettings
+            IAnalyticsConsent userSettings = new MockAnalyticsConsent
             {
                 AnalyticsConsent = false
             };

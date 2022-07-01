@@ -2,7 +2,7 @@
 REM As a SourceTree custom action, for greatest convenience, enable the "Show Full Output" and "Run command silently" options
 
 echo Publishing a Local build for final smoke testing
-msbuild "NpcGenerator\NpcGenerator.csproj" -target:publish -property:PublishProfile=\NpcGenerator\Properties\PublishProfiles\Local.pubxml
+msbuild "NpcGenerator\NpcGenerator.csproj" -target:publish -property:PublishProfile=\NpcGenerator\Properties\PublishProfiles\Local.pubxml -verbosity:quiet
 if NOT %errorlevel% == 0 exit /B %errorlevel%
 
 echo Testing whether local build can launch successfully
@@ -10,7 +10,7 @@ call CanAppLaunch NpcGenerator\bin\Release\netcoreapp3.1\publish\NpcGenerator.ex
 if NOT %errorlevel% == 0 exit /B %errorlevel%
 
 echo Publishing a public build
-msbuild "NpcGenerator\NpcGenerator.csproj" -target:publish -property:PublishProfile=\NpcGenerator\Properties\PublishProfiles\Public.pubxml
+msbuild "NpcGenerator\NpcGenerator.csproj" -target:publish -property:PublishProfile=\NpcGenerator\Properties\PublishProfiles\Public.pubxml -verbosity:quiet
 if NOT %errorlevel% == 0 exit /B %errorlevel%
 
 echo Extracting version number from the public build

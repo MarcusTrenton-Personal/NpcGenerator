@@ -14,11 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NpcGenerator;
 using System;
-using System.Threading;
-using System.Windows;
-using System.Windows.Input;
 using WpfServices;
 
 namespace Tests
