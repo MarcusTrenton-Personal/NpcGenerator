@@ -5,6 +5,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>SourceAssets\1200px-2-Dice-Icon.svg.ico</ApplicationIcon>
     <Authors>Marcus Trenton</Authors>
@@ -24,6 +25,7 @@
     <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
     <StartupObject></StartupObject>
     <PackageProjectUrl>https://drive.google.com/file/d/1-5A_pPaXe5nKoEbQcJ2LQdzfRP2Pk9tH/view?usp=sharing</PackageProjectUrl>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -72,35 +74,19 @@
     <None Update="SourceCode\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
+      <OutputFileName>..\GeneratedCode\AssemblyInfo.cs</OutputFileName>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="GeneratedCode\" />
   </ItemGroup>
 
   <!-- ######## Clean Events ######## -->
   <Target Name="CleanGeneratedCode" AfterTargets="Clean">
     <ItemGroup>
       <GeneratedCode Include="GeneratedCode\*" />
-      <!-- In case some runs the manual T4 tool, which doesn't move the output to the correct folder. -->
-      <ManualInvokeGeneratedCode Include="SourceCode\AssemblyInfo.cs" />
     </ItemGroup>
     <Delete Files="@(GeneratedCode)" />
-    <Delete Files="@(ManualInvokeGeneratedCode)" />
   </Target>
 
   <!-- ######## Build Events ######## -->
-  
-  <!--Despite the docs https://docs.microsoft.com/en-us/visualstudio/modeling/code-generation-in-a-build-process?view=vs-2022, 
-  T4 text templating is NOT invoked automatically through PropertyGroups. Instead, it must be invoked explicitly.-->
-  <Target Name="AutogenerateCode" BeforeTargets="PreBuildEvent">
-    <Exec Command="msbuild NpcGenerator.csproj /t:TransformAll" ConsoleToMsBuild="true" />
-    <ItemGroup>
-      <GeneratedAssemblyInfo Include="SourceCode\AssemblyInfo.cs" />
-    </ItemGroup>
-    <Move SourceFiles="@(GeneratedAssemblyInfo)" DestinationFolder="GeneratedCode" ContinueOnError="true" />
-  </Target>
 
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(OutDir)" />
@@ -115,7 +101,7 @@
   
   <Target Name="TestBeforePublish" BeforeTargets="Publish">
     <Message Text="Running tests before allowing publishing" Importance="high" />
-    <Exec Command="..\Tests\BuildAndRunTests.bat" WorkingDirectory="..\Tests" ConsoleToMsBuild="true" />
+    <Exec Command="$(ProjectDir)..\BuildAndRunTests.bat" WorkingDirectory="$(ProjectDir).." ConsoleToMsBuild="true" />
   </Target>
 
   <!-- If the PublishDir in Public.pubxml changes then these Conditions must change too. Sadly there's no way to reference a publish profile by name. -->
@@ -147,11 +133,11 @@
     <ItemGroup>
       <AppExe Include="$(PublishDir)\NpcGenerator.exe" />
     </ItemGroup>
-    <Copy SourceFiles="@(AppExe)" DestinationFolder="../ExeCache" />
+    <Copy SourceFiles="@(AppExe)" DestinationFolder="$(ProjectDir)../ExeCache" />
 
     <Message Text="Compressing into a .zip for Google Drive Upload" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
-    <MakeDir Directories="../Zipped/" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
-    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="../Zipped/NpcGenerator.zip" Overwrite="true" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
+    <MakeDir Directories="$(ProjectDir)../Zipped/" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
+    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ProjectDir)../Zipped/NpcGenerator.zip" Overwrite="true" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
   </Target>
 
 </Project>

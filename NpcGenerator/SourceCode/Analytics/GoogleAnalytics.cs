@@ -210,7 +210,7 @@ namespace NpcGenerator
             }
         }
 
-        private void WritePageViewEvent(JsonWriter writer, string title)
+        private static void WritePageViewEvent(JsonWriter writer, string title)
         {
             writer.WriteStartObject(); //Start of event object
 
@@ -259,7 +259,7 @@ namespace NpcGenerator
             }
         }
 
-        private void WriteGenerateNpcsEvent(JsonWriter writer, int quantity)
+        private static void WriteGenerateNpcsEvent(JsonWriter writer, int quantity)
         {
             writer.WriteStartObject(); //Start of event object
 
@@ -308,7 +308,7 @@ namespace NpcGenerator
             }
         }
 
-        private void WriteUserLanguageNotSupportedEvent(JsonWriter writer, string languageCode)
+        private static void WriteUserLanguageNotSupportedEvent(JsonWriter writer, string languageCode)
         {
             writer.WriteStartObject(); //Start of event object
 
@@ -339,7 +339,7 @@ namespace NpcGenerator
             }
         }
 
-        private void WriteLanguageSelectedEvent(JsonWriter writer, string languageCode)
+        private static void WriteLanguageSelectedEvent(JsonWriter writer, string languageCode)
         {
             writer.WriteStartObject(); //Start of event object
 

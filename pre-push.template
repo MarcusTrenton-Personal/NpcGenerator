@@ -9,5 +9,4 @@
 remote="$1"
 url="$2"
 
-cd Tests #BuildAndRunTests.bat must be run from the directory is it located in.
 ${PWD}"\BuildAndRunTests.bat" #The bat file is not in the system path, so its full path must be specified.

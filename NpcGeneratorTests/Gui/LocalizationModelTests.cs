@@ -15,12 +15,10 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
-using NpcGenerator.Message;
 using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using WpfServices;
 
 namespace Tests

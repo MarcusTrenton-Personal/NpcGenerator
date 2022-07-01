@@ -14,7 +14,6 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NpcGenerator;
 using WpfServices;
 
 namespace Tests
@@ -25,10 +24,10 @@ namespace Tests
         [TestMethod]
         public void VersionText()
         {
-            string version = model.Version;
+            string version = m_model.Version;
 
             string[] parts = version.Split('.');
-            Assert.AreEqual(4, parts.Length, "Version should be 4 parts separated by .");
+            Assert.IsTrue(parts.Length == 3 || parts.Length == 4, "Version should be 3 or 4 parts separated by .");
             for(int i = 0; i < parts.Length; i++)
             {
                 Assert.IsTrue(int.TryParse(parts[i], out int number), "Part " + i + " must be an integer");
@@ -36,7 +35,7 @@ namespace Tests
             }
         }
 
-        private readonly AboutModel model = new AboutModel();
+        private readonly AboutModel m_model = new AboutModel();
     }
 
 

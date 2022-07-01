@@ -7,11 +7,12 @@
     <Description>Generic WPF services not tied to any single product.</Description>
     <Copyright>2022 Marcus Trenton</Copyright>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(ProjectDir)..\MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
     <RepositoryType>Git</RepositoryType>
     <PackageProjectUrl>https://drive.google.com/file/d/1-5A_pPaXe5nKoEbQcJ2LQdzfRP2Pk9tH/view?usp=sharing</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MarcusTrenton-Personal/NpcGenerator.git</RepositoryUrl>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

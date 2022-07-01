@@ -24,7 +24,7 @@ namespace WpfServices
         { 
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return fvi.FileVersion;
             }
