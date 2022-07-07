@@ -170,6 +170,32 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </TextBlock.Text>
                     </TextBlock>
                 </Button>
+                <Button x:Name="SourceButton" Margin="10">
+                    <Hyperlink DataContext="{Binding Path=AboutModel, ElementName=ThisWindow}"
+                               Command="{Binding Path=OpenBrowserToUri}"
+                               CommandParameter="{Binding Path=Website}">
+                        <TextBlock DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource localization}" ConverterParameter="source_code">
+                                    <Binding Path="Localization"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Hyperlink>
+                </Button>
+                <Button x:Name="DonateButton" Margin="10">
+                    <Hyperlink DataContext="{Binding Path=AboutModel, ElementName=ThisWindow}"
+                               Command="{Binding Path=OpenBrowserToUri}"
+                               CommandParameter="{Binding Path=Donation}">
+                        <TextBlock DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource localization}" ConverterParameter="donate">
+                                    <Binding Path="Localization"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Hyperlink>
+                </Button>
                 <TextBlock x:Name="VersionText" Margin="3" VerticalAlignment="Center" DataContext="{Binding Path=AboutModel, ElementName=ThisWindow}">
                     <TextBlock.Text>
                         <Binding Path="Version"/>

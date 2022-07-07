@@ -80,8 +80,12 @@ namespace NpcGenerator
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(userSettings, messager, fileIo);
 
+            AboutModel aboutModel = new AboutModel(
+                website: new Uri(appSettings.HomeWebsite), 
+                donation: new Uri(appSettings.DonationWebsite));
+
             //Temporarily set navigation to null, as it requires a constructed ServiceCentre as a parameter.
-            Models models = new Models(localizationModel, new AboutModel(), navigation: null, trackingModel, npcGeneratorModel);
+            Models models = new Models(localizationModel, aboutModel, navigation: null, trackingModel, npcGeneratorModel);
 
             ServiceCentre serviceCentre = new ServiceCentre(
                 profile: trackingProfile,

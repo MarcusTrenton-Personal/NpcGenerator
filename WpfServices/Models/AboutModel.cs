@@ -13,13 +13,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using Services;
+using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace WpfServices
 {
     public class AboutModel : BaseModel, IAboutModel
     {
+        public AboutModel(Uri website, Uri donation)
+        {
+            Website = website;
+            Donation = donation;
+        }
+
         public string Version 
         { 
             get
@@ -29,5 +38,33 @@ namespace WpfServices
                 return fvi.FileVersion;
             }
         }
+
+        public Uri Website { get; }
+
+        public Uri Donation { get; }
+
+        public ICommand OpenBrowserToUri 
+        { 
+            get
+            {
+                return m_openBrowserCommand ??= new CommandHandler(
+                    (object parameter) => ExecuteOpenBrowserToUri(parameter),
+                    (object parameter) => CanExecuteOpenBrowserToUri(parameter));
+            }
+        }
+
+        private static bool CanExecuteOpenBrowserToUri(object parameter)
+        {
+            Uri uri = parameter as Uri;
+            return uri != null;
+        }
+
+        private void ExecuteOpenBrowserToUri(object parameter)
+        {
+            Uri uri = parameter as Uri;
+            UriHelper.OpenUri(uri);
+        }
+
+        private ICommand m_openBrowserCommand;
     }
 }

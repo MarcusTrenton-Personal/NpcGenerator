@@ -13,10 +13,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using System;
+using System.Windows.Input;
+
 namespace WpfServices
 {
     public interface IAboutModel
     {
         public string Version { get; }
+        public Uri Website { get; }
+        public Uri Donation { get; }
+        public ICommand OpenBrowserToUri { get; }
     }
 }

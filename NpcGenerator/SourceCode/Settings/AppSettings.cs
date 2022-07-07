@@ -37,6 +37,10 @@ namespace NpcGenerator
 
         public ReadOnlyCollection<string> HiddenLanguageCodes { get; set; }
 
+        public string HomeWebsite { get; set; }
+
+        public string DonationWebsite { get; set; }
+
         public static AppSettings Load(string path)
         {
             string text = File.ReadAllText(path);

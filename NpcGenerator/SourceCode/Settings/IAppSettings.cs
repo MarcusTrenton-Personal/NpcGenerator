@@ -34,5 +34,9 @@ namespace NpcGenerator
         public string DefaultLanguageCode { get; }
 
         public ReadOnlyCollection<string> HiddenLanguageCodes { get; }
+
+        public string HomeWebsite { get; }
+
+        public string DonationWebsite { get; }
     }
 }

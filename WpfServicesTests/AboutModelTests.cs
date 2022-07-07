@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using WpfServices;
 
 namespace Tests
@@ -35,7 +36,21 @@ namespace Tests
             }
         }
 
-        private readonly AboutModel m_model = new AboutModel();
+        [TestMethod]
+        public void BadUriRejected()
+        {
+            bool canExecute = m_model.OpenBrowserToUri.CanExecute("This is not a Uri");
+            Assert.IsFalse(canExecute, "Bad uri is accepted for OpenBrowserToUri");
+        }
+
+        [TestMethod]
+        public void GoodUriAccepted()
+        {
+            bool canExecute = m_model.OpenBrowserToUri.CanExecute(new Uri("https://www.fake.com"));
+            Assert.IsTrue(canExecute, "Good uri is rejected from OpenBrowserToUri");
+        }
+
+        private readonly AboutModel m_model = new AboutModel(website: null, donation: null);
     }
 
 

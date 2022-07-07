@@ -49,6 +49,8 @@ namespace Tests
         public int EncryptionKey { get; set; } = 0;
         public string DefaultLanguageCode { get; set; } = null;
         public ReadOnlyCollection<string> HiddenLanguageCodes { get; set; } = null;
+        public string HomeWebsite { get; set; } = null;
+        public string DonationWebsite { get; set; } = null;
     }
 
     internal class StubMessager : IMessager
@@ -118,6 +120,9 @@ namespace Tests
     internal class StubAboutModel : IAboutModel
     {
         public string Version { get; set; } = null;
+        public Uri Website { get; set; } = null;
+        public Uri Donation { get; set; } = null;
+        public ICommand OpenBrowserToUri { get; set; } = null;
     }
 
     internal class StubNavigationModel : INavigationModel
