@@ -30,8 +30,14 @@ namespace WpfServices
         {
             m_localization = localization;
             m_currentLanguage = currentLanguage;
-            m_hiddenLanguageCodes = hiddenLanguageCodes;
             m_messager = messager;
+
+            List<string> lowerCaseHiddenLanguageCodes = new List<string>(hiddenLanguageCodes);
+            for(int i = 0; i < lowerCaseHiddenLanguageCodes.Count; i++)
+            {
+                lowerCaseHiddenLanguageCodes[i] = lowerCaseHiddenLanguageCodes[i].ToLower();
+            }
+            m_hiddenLanguageCodes = new ReadOnlyCollection<string>(lowerCaseHiddenLanguageCodes);
         }
 
         public ILocalization Localization
