@@ -73,21 +73,16 @@
     <None Update="SourceCode\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
-      <OutputFileName>..\GeneratedCode\AssemblyInfo.cs</OutputFileName>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GeneratedCode\" />
+    <Compile Update="SourceCode\AssemblyInfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssemblyInfo.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
-
-  <!-- ######## Clean Events ######## -->
-  <Target Name="CleanGeneratedCode" AfterTargets="Clean">
-    <ItemGroup>
-      <GeneratedCode Include="GeneratedCode\*" />
-    </ItemGroup>
-    <Delete Files="@(GeneratedCode)" />
-  </Target>
 
   <!-- ######## Build Events ######## -->
 

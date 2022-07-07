@@ -5,7 +5,7 @@ NpcGenerator.csproj.user
 Sample Configurations/.~lock.Marcus NPCs.csv#
 Sample Configurations/.~lock.Shawn NPCs.csv#
 *.user
-NpcGenerator/GeneratedCode/
 ExeCache/
 Zipped/
 NpcGenerator/SourceAssets/.~lock.Localization.csv#
+NpcGenerator/SourceCode/AssemblyInfo.cs
