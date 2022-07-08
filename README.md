@@ -72,3 +72,8 @@ Versioning has the format Major.Minor.Day.Minute.
 All of these are set in NpcGenerator/AssemblyInfo.tt. Set the Major and Minor versions in that file, not in the .csproj.
 
 To publish, run PublishAndTag.bat. That script will automatically publish to Dropbox and tag the last commit.
+
+## IDE Settings
+
+Build before Run should be turned off due to text templating used for AssemblyInfo.cs. Otherwise debugging will break because the AssemblyInfo changed just before running. You need to build explicitely and then run explicitely.
+In Visual Studio 2022 go to Tools -> Options -> Projects and Solutions -> Build And Run -> On Run, when projects are out of date: -> Never Build.
