@@ -102,7 +102,7 @@ namespace NpcGenerator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "Text CSV (*.csv)|*.csv|All files (*.*)|*.*"
+                Filter = "Text CSV (*.csv)|*.csv|Text JSON (*.json)|*json|All files (*.*)|*.*"
             };
             bool? filePicked = openFileDialog.ShowDialog();
             if (filePicked == true)

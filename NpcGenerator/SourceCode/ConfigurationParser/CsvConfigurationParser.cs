@@ -1,4 +1,4 @@
-﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,21 +19,21 @@ using System.IO;
 
 namespace NpcGenerator
 {
-    public static class ConfigurationFile
+    public static class CsvConfigurationParser
     {
         public static TraitSchema Parse(string path)
         {
             IEnumerable<string> lines = File.ReadAllLines(path);
             IEnumerator<string> enumerator = lines.GetEnumerator();
             bool hasTitleRow = enumerator.MoveNext();
-            if(!hasTitleRow)
+            if (!hasTitleRow)
             {
                 throw new IOException("The file is empty: " + path);
             }
 
             TraitSchema traitSchema = ParseTitles(enumerator.Current);
 
-            while(enumerator.MoveNext())
+            while (enumerator.MoveNext())
             {
                 ParseOptionsRow(traitSchema, enumerator.Current);
             }
@@ -51,11 +51,11 @@ namespace NpcGenerator
             }
 
             TraitSchema traitSchema = new TraitSchema();
-            for(int i = 0; i < titleCells.Length; i += 2)
+            for (int i = 0; i < titleCells.Length; i += 2)
             {
                 string title = titleCells[i];
                 bool isEmpty = string.IsNullOrEmpty(title);
-                if(isEmpty)
+                if (isEmpty)
                 {
                     throw new FormatException("Missing title for trait column");
                 }
@@ -67,18 +67,18 @@ namespace NpcGenerator
         private static void ParseOptionsRow(TraitSchema traitSchema, string optionsRow)
         {
             string[] cells = optionsRow.Split(',');
-            for(int i = 0; i*2 < cells.Length; ++i)
+            for (int i = 0; i * 2 < cells.Length; ++i)
             {
                 string traitName = cells[i * 2];
-                if(!string.IsNullOrEmpty(traitName))
+                if (!string.IsNullOrEmpty(traitName))
                 {
-                    if(i >= traitSchema.TraitCategoryCount)
+                    if (i >= traitSchema.TraitCategoryCount)
                     {
                         throw new FormatException("Trait " + traitName + " is missing a column title.");
                     }
 
                     string traitWeightString = cells[i * 2 + 1];
-                    if(!string.IsNullOrEmpty(traitWeightString))
+                    if (!string.IsNullOrEmpty(traitWeightString))
                     {
                         bool isInteger = int.TryParse(traitWeightString, out int weight);
                         if (!isInteger || weight < 0)

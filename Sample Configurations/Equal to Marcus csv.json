@@ -1,0 +1,144 @@
+{
+	"trait_categories" : 
+	[
+		{
+			"name" : "Sexuality",
+			"traits" :
+			[
+				{"name" : "Heterosexual", "weight" : 86},
+				{"name" : "Homosexual", "weight" : 4},
+				{"name" : "Pansexual", "weight" : 9},
+				{"name" : "Asexual", "weight" : 1}
+			]
+		},
+		{
+			"name" : "Gender",
+			"traits" :
+			[
+				{"name" : "Male", "weight" : 47},
+				{"name" : "Female", "weight" : 48},
+				{"name" : "Nonbinary", "weight" : 5}
+			]
+		},
+		{
+			"name" : "Race",
+			"traits" :
+			[
+				{"name" : "Region-specific", "weight" : 70},
+				{"name" : "Caucasian", "weight" : 6},
+				{"name" : "African", "weight" : 3},
+				{"name" : "Hispanic", "weight" : 4},
+				{"name" : "East Asian", "weight" : 6},
+				{"name" : "Aboriginal", "weight" : 1},
+				{"name" : "Indigenous", "weight" : 1},
+				{"name" : "Arabic", "weight" : 2},
+				{"name" : "Indian", "weight" : 3},
+				{"name" : "Turkic", "weight" : 1},
+				{"name" : "South-East Asian", "weight" : 2},
+				{"name" : "Pacific Islander", "weight" : 1}
+			]
+		},
+		{
+			"name" : "Motivation",
+			"traits" :
+			[
+				{"name" : "Power", "weight" : 1},
+				{"name" : "Wealth", "weight" : 1},
+				{"name" : "Fame", "weight" : 1},
+				{"name" : "Harmony", "weight" : 1},
+				{"name" : "Chaos", "weight" : 1},
+				{"name" : "Hedonism", "weight" : 1},
+				{"name" : "Order", "weight" : 1}
+			]
+		},
+		{
+			"name" : "Tactics",
+			"traits" :
+			[
+				{"name" : "Violence", "weight" : 1},
+				{"name" : "Competition", "weight" : 1},
+				{"name" : "Persuasion", "weight" : 1},
+				{"name" : "Authority", "weight" : 1},
+				{"name" : "Logic", "weight" : 1},
+				{"name" : "Money", "weight" : 1},
+				{"name" : "Seduction", "weight" : 1}
+			]
+		},
+		{
+			"name" : "Age",
+			"traits" :
+			[
+				{"name" : "Teenager", "weight" : 15},
+				{"name" : "Adult", "weight" : 40},
+				{"name" : "Middle Age", "weight" : 30},
+				{"name" : "Elderly", "weight" : 15}
+			]
+		},
+		{
+			"name" : "Height",
+			"traits" :
+			[
+				{"name" : "Dwarf", "weight" : 1},
+				{"name" : "Short", "weight" : 24},
+				{"name" : "Average", "weight" : 50},
+				{"name" : "Tall", "weight" : 24},
+				{"name" : "Gigantic", "weight" : 1}
+			]
+		},
+		{
+			"name" : "Mass",
+			"traits" :
+			[
+				{"name" : "Skeletal", "weight" : 3},
+				{"name" : "Underweight", "weight" : 15},
+				{"name" : "Regular", "weight" : 25},
+				{"name" : "Overweight", "weight" : 39},
+				{"name" : "Obese", "weight" : 18}
+			]
+		},
+		{
+			"name" : "Quirk",
+			"traits" :
+			[
+				{"name" : "Transgender", "weight" : 1},
+				{"name" : "Autistic", "weight" : 1},
+				{"name" : "Graceful", "weight" : 1},
+				{"name" : "Tourettes", "weight" : 1},
+				{"name" : "OCD", "weight" : 1},
+				{"name" : "Suicidal", "weight" : 1},
+				{"name" : "Addict", "weight" : 1},
+				{"name" : "Sports Fan", "weight" : 1},
+				{"name" : "Sharp senses", "weight" : 1},
+				{"name" : "Weight Lifter", "weight" : 1},
+				{"name" : "Limp", "weight" : 1},
+				{"name" : "Mute", "weight" : 1},
+				{"name" : "One arm", "weight" : 1},
+				{"name" : "Wheelchair", "weight" : 1},
+				{"name" : "One eye", "weight" : 1},
+				{"name" : "Smelly", "weight" : 1},
+				{"name" : "Stylish", "weight" : 1},
+				{"name" : "Slob", "weight" : 1},
+				{"name" : "Never forgets", "weight" : 1},
+				{"name" : "Insomniac","weight" : 1},
+				{"name" : "Curious", "weight" : 1},
+				{"name" : "Madness", "weight" : 1},
+				{"name" : "Overconfident", "weight" : 1},
+				{"name" : "Prosthetic", "weight" : 1},
+				{"name" : "ADHD", "weight" : 1},
+				{"name" : "Anxiety", "weight" : 1},
+				{"name" : "Depressed", "weight" : 1},
+				{"name" : "Joyous", "weight" : 1},
+				{"name" : "Shy", "weight" : 1},
+				{"name" : "Gregarious", "weight" : 1},
+				{"name" : "No filter", "weight" : 1},
+				{"name" : "Paranoid", "weight" : 1},
+				{"name" : "Beautiful", "weight" : 1},
+				{"name" : "Nymphomania", "weight" : 1},
+				{"name" : "Short temper", "weight" : 1},
+				{"name" : "Fidgeter", "weight" : 1},
+				{"name" : "Mismatched eye colour", "weight" : 1},
+				{"name" : "Dancer", "weight" : 1}
+			]
+		}
+	]
+}
