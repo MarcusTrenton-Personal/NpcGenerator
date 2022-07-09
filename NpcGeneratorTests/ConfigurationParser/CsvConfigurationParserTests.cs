@@ -21,7 +21,7 @@ using System.IO;
 namespace Tests
 {
     [TestClass]
-    public class ConfigurationFileTests : FileCreatingTests
+    public class CsvConfigurationParserTests : FileCreatingTests
     {
         [TestMethod]
         public void GeneratesTraitSchema()
@@ -32,7 +32,7 @@ namespace Tests
                 "Red,1";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = ConfigurationFile.Parse(path);
+            TraitSchema schema = CsvConfigurationParser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             File.Delete(path);
@@ -54,7 +54,7 @@ namespace Tests
                 CATEGORY1_TRAIT2 + ",1," + CATEGORY2_TRAIT2 + ",1";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = ConfigurationFile.Parse(path);
+            TraitSchema schema = CsvConfigurationParser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             Assert.AreEqual(schema.TraitCategoryCount, 2, "Schema has incorrect number of TraitCategories");
@@ -85,7 +85,7 @@ namespace Tests
             bool threwException = false;
             try 
             {
-                TraitSchema schema = ConfigurationFile.Parse(path);
+                TraitSchema schema = CsvConfigurationParser.Parse(path);
             }
             catch(Exception)
             {
@@ -109,7 +109,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                TraitSchema schema = ConfigurationFile.Parse(path);
+                TraitSchema schema = CsvConfigurationParser.Parse(path);
             }
             catch (Exception)
             {
