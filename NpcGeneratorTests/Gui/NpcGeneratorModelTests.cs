@@ -27,7 +27,8 @@ namespace Tests
         public void Initialize()
         {
             m_userSettings = new StubUserSettings();
-            m_npcGeneratorModel = new NpcGeneratorModel(m_userSettings, new StubMessager(), new StubLocalFileIo());
+            m_npcGeneratorModel = new NpcGeneratorModel(
+                m_userSettings, new StubMessager(), new StubLocalFileIo(), new MockCsvConfigurationParser());
         }
 
         [TestMethod]
@@ -37,10 +38,12 @@ namespace Tests
             const string FILE_PATH2 = "FakeFile.csv";
 
             m_userSettings.ConfigurationPath = FILE_PATH1;
-            Assert.AreEqual(FILE_PATH1, m_npcGeneratorModel.ConfigurationPath, "Configuration path is not the one in UserSettings");
+            Assert.AreEqual(FILE_PATH1, m_npcGeneratorModel.ConfigurationPath, 
+                "Configuration path is not the one in UserSettings");
 
             m_userSettings.ConfigurationPath = FILE_PATH2;
-            Assert.AreEqual(FILE_PATH2, m_npcGeneratorModel.ConfigurationPath, "Configuration path is not the one in UserSettings");
+            Assert.AreEqual(FILE_PATH2, m_npcGeneratorModel.ConfigurationPath, 
+                "Configuration path is not the one in UserSettings");
         }
 
         [TestMethod]

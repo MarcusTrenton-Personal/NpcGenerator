@@ -16,15 +16,16 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tests
 {
     [TestClass]
-    public class ConfigurationFileTests : FileCreatingTests
+    public class ConfigurationParserTests : FileCreatingTests
     {
         [TestMethod]
-        public void GeneratesTraitSchemaFromCsv()
+        public void GeneratesTraitSchemaFromSupportedFileType()
         {
             string path = Path.Combine(TestDirectory, "colour.csv");
             string text = "Colour,Weight\n" +
@@ -32,30 +33,19 @@ namespace Tests
                 "Red,1";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = ConfigurationFile.Parse(path);
+            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser()
+            {
+                SupportedFileExtension = ".csv"
+            };
+            ConfigurationParser parser = new ConfigurationParser(new List<IFormatConfigurationParser>() { stubParser });
+            TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             File.Delete(path);
         }
 
         [TestMethod]
-        public void GeneratesTraitSchemaFromJson()
-        {
-            string path = Path.Combine(TestDirectory, "colour.json");
-            string text = "{\"trait_categories\" : [{\"name\" : \"Colour\",\"traits\" :[" +
-                "{ \"name\" : \"Green\", \"weight\" : 1}," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}]}";
-            File.WriteAllText(path, text);
-
-            TraitSchema schema = ConfigurationFile.Parse(path);
-            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
-
-            File.Delete(path);
-        }
-
-        [TestMethod]
-        public void UnsupportedXml()
+        public void NoSchemaFromUnsupportedFileType()
         {
             string path = Path.Combine(TestDirectory, "colour.xml");
             string text = "<trait_categories>\n"+
@@ -86,11 +76,17 @@ namespace Tests
             bool threwException = false;
             try
             {
-                TraitSchema schema = ConfigurationFile.Parse(path);
+                StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser()
+                {
+                    SupportedFileExtension = ".csv"
+                };
+                ConfigurationParser parser = new ConfigurationParser(new List<IFormatConfigurationParser>() { stubParser });
+                TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 threwException = true;
+                Assert.IsTrue(e.Message.Contains("csv"), "Exception doesn't contain a list of supported file types");
             }
 
             Assert.IsTrue(threwException, "Unsupported xml did not throw an exception");

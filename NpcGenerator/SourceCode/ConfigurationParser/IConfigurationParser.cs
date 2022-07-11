@@ -13,28 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace NpcGenerator
 {
-    public static class ConfigurationFile
+    public interface IConfigurationParser
     {
-        public static TraitSchema Parse(string path)
-        {
-            string fileType = Path.GetExtension(path);
-            switch(fileType)
-            {
-                case ".csv":
-                    return CsvConfigurationParser.Parse(path);
-
-                case ".json":
-                    return JsonConfigurationParser.Parse(path);
-
-                default:
-                    throw new ArgumentException("File " + path + " + type must be csv or json");
-            }
-        }
+        public TraitSchema Parse(string path);
     }
 }

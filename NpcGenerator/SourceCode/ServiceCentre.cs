@@ -31,7 +31,8 @@ namespace NpcGenerator
             IMessager messager, 
             ITrackingProfile profile,
             IUserSettings userSettings,
-            Models models
+            Models models,
+            IConfigurationParser configurationParser
             )
         {
             Profile = profile;
@@ -42,6 +43,7 @@ namespace NpcGenerator
             FileIO = fileIo;
             Localization = localization;
             Models = models;
+            ConfigurationParser = configurationParser;
         }
 
         public IAppSettings AppSettings { get; }
@@ -52,5 +54,6 @@ namespace NpcGenerator
         public ITrackingProfile Profile { get; }
         public IUserSettings UserSettings { get; }
         public IModels Models { get; }
+        public IConfigurationParser ConfigurationParser { get; }
     }
 }

@@ -72,6 +72,7 @@ namespace Tests
     {
         public string AppDataFolderPath { get; set; } = null;
         public string AppSettingsFilePath { get; set; } = null;
+        public string ConfigurationJsonSchema { get; set; } = null;
         public string LicensePath { get; set; } = null;
         public string LocalizationPath { get; } = null;
         public string PrivacyPolicyPath { get; set; } = null;
@@ -144,5 +145,31 @@ namespace Tests
         public ICommand GenerateNpcs { get; } = null;
         public DataTable ResultNpcs { get; set; }
         public ICommand SaveNpcs { get; } = null;
+    }
+
+    internal class StubFormatConfigurationParser : IFormatConfigurationParser
+    {
+        public string SupportedFileExtension { get; set; }
+        public TraitSchema Parse(string path)
+        {
+            return new TraitSchema();
+        }
+    }
+
+    internal class StubConfigurationParser : IConfigurationParser
+    {
+        public TraitSchema Parse(string path)
+        {
+            return new TraitSchema();
+        }
+    }
+
+    internal class MockCsvConfigurationParser : IConfigurationParser
+    {
+        public TraitSchema Parse(string path)
+        {
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            return parser.Parse(path);
+        }
     }
 }

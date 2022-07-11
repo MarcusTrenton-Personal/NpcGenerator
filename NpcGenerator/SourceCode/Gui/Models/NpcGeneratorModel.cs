@@ -27,11 +27,13 @@ namespace NpcGenerator
 {
     public class NpcGeneratorModel : BaseModel, INpcGeneratorModel
     {
-        public NpcGeneratorModel(IUserSettings userSettings, IMessager messager, ILocalFileIO fileIo)
+        public NpcGeneratorModel(
+            IUserSettings userSettings, IMessager messager, ILocalFileIO fileIo, IConfigurationParser parser)
         {
             m_userSettings = userSettings;
             m_messager = messager;
             m_fileIo = fileIo;
+            m_parser = parser;
         }
 
         public ICommand ChooseConfiguration 
@@ -93,7 +95,7 @@ namespace NpcGenerator
             }
         }
 
-        private bool AlwaysTrue(object _)
+        private static bool AlwaysTrue(object _)
         {
             return true;
         }
@@ -127,7 +129,7 @@ namespace NpcGenerator
             try
             {
                 string cachedConfigurationPath = m_fileIo.CacheFile(m_userSettings.ConfigurationPath);
-                TraitSchema traitSchema = ConfigurationFile.Parse(cachedConfigurationPath);
+                TraitSchema traitSchema = m_parser.Parse(cachedConfigurationPath);
                 m_npcGroup = new NpcGroup(traitSchema, m_userSettings.NpcQuantity);
 
                 DataTable table = new DataTable("Npc Table");
@@ -174,6 +176,7 @@ namespace NpcGenerator
         private readonly IUserSettings m_userSettings;
         private readonly ILocalFileIO m_fileIo;
         private readonly IMessager m_messager;
+        private readonly IConfigurationParser m_parser;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;

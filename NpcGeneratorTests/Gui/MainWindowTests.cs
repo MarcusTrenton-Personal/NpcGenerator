@@ -28,6 +28,7 @@ using System.Windows.Controls.Primitives;
 
 namespace Tests
 {
+
     [TestClass]
     public class MainWindowTests : FileCreatingTests
     {
@@ -72,13 +73,16 @@ namespace Tests
                         Localization = testLocalization
                     };
 
+                    MockCsvConfigurationParser configurationParser = new MockCsvConfigurationParser();
+
                     Models models = new Models(
                         localization: testLocalizationModel, 
                         about: new StubAboutModel(),
                         navigation: new StubNavigationModel(),
                         tracking: new StubTrackingModel(),
                         //Only the npcGenerator is real.
-                        npcGenerator: new NpcGeneratorModel(testUserSettings, testMessager, fileIO));
+                        npcGenerator: new NpcGeneratorModel(
+                            testUserSettings, testMessager, fileIO, configurationParser));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),
@@ -88,7 +92,8 @@ namespace Tests
                         filePathProvider: new StubFilePathProvider(),
                         fileIo: fileIO,
                         localization: testLocalization,
-                        models: models
+                        models: models,
+                        configurationParser: configurationParser
                     );
                     MainWindow mainWindow = new MainWindow(serviceCentre);
 

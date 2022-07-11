@@ -1,0 +1,54 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/MarcusTrenton-Personal/NpcGenerator.git",
+	"title": "Npc Configuration",
+	"description": "All of the categorized, weighted traits an npc can possess",
+	"type": "object",
+	"properties": {
+		"trait_categories": {
+			"description": "List of all categories of traits. By default an NPC can only have 1 trait from each category.",
+			"type": "array",
+			"items": { "$ref": "#/$defs/trait_category"},
+			"minItems": 1,
+			"uniqueItems": true
+		}
+	},
+	"required": ["trait_categories"],
+	
+	"$defs": {
+		"trait_category":{
+			"description": "A list of related traits. Usually an npc to have one of the traits in the category.",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "The user-facing name for the trait category",
+					"type": "string"
+				},
+				"traits": {
+					"description": "List of all traits in one category. By default an NPC can only have 1 trait from a category.",
+					"type": "array",
+					"items": { "$ref": "#/$defs/trait"},
+					"minItems": 1,
+					"uniqueItems": true
+				}
+			},
+			"required": ["name", "traits"]
+		},
+		"trait": {
+			"description": "An Npc trait, with a name and weight.",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "The user-facing name for the trait",
+					"type": "string"
+				},
+				"weight": {
+					"description": "The likelihood that this trait will be picked. Two traits of equal weight are equally as likely to be picked. If one trait has double the weight of another, it is twice as likely to be picked. If the sum of all weights in a category add up to 100, the weight is a percentage change to be picked.",
+					"type": "integer",
+					"minimum": 0
+				}
+			},
+			"required":["name", "weight"]
+		}
+	}
+}

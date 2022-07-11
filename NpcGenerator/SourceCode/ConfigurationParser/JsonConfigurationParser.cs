@@ -13,74 +13,55 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace NpcGenerator
 {
-    public static class JsonConfigurationParser
+    public class JsonConfigurationParser : IFormatConfigurationParser
     {
-        public static TraitSchema Parse(string path)
+        public JsonConfigurationParser(string schemaPath)
         {
-            string filename = Path.GetFileName(path);
-            string text = File.ReadAllText(path);
-            ProtoTraitSchema protoTraitSchema = JsonConvert.DeserializeObject<ProtoTraitSchema>(text);
-            if (protoTraitSchema == null)
+            bool hasSchemaPath = !string.IsNullOrEmpty(schemaPath);
+            if (hasSchemaPath)
             {
-                throw new ArgumentException(filename + " has an unrecognizable json format");
+                string schemaText = File.ReadAllText(schemaPath);
+                m_schema = JSchema.Parse(schemaText);
             }
-            if (protoTraitSchema.trait_categories == null)
+        }
+
+        public string SupportedFileExtension { get; } = ".json";
+
+        public TraitSchema Parse(string path)
+        {
+            string text = File.ReadAllText(path);
+            JToken json = JToken.Parse(text);
+            
+            if(m_schema != null)
             {
-                throw new ArgumentException(filename + " has no trait_categories element");
+                //Validation schema means that no in-code validation is needed.
+                IList<string> errorMessages;
+                bool isValid = json.IsValid(m_schema, out errorMessages);
+                if (!isValid)
+                {
+                    throw new ArgumentException(errorMessages.ToString());
+                }
             }
 
+            ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
             TraitSchema traitSchema = new TraitSchema();
-            int categoryCount = 0;
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
-                if (protoCategory.traits == null)
-                {
-                    throw new ArgumentException(filename + " trait category " + protoCategory.Name + " has no traits");
-                }
-                if (string.IsNullOrEmpty(protoCategory.Name))
-                {
-                    throw new ArgumentException(filename + " has a trait category without a name");
-                }
-
                 TraitCategory category = new TraitCategory(protoCategory.Name);
-
-                int traitCount = 0;
                 foreach (ProtoTrait protoTrait in protoCategory.traits)
                 {
-                    if (string.IsNullOrEmpty(protoTrait.Name))
-                    {
-                        throw new ArgumentException(
-                            filename + " trait category " + protoCategory.Name + " has a trait without a name");
-                    }
-                    if (protoTrait.Weight < 0)
-                    {
-                        throw new ArgumentException(filename + " trait " + protoTrait.Name + " a negative Weight");
-                    }
-
                     Trait trait = new Trait(protoTrait.Name, protoTrait.Weight);
                     category.Add(trait);
-                    traitCount++;
                 }
-
-                if (traitCount == 0)
-                {
-                    throw new ArgumentException(filename + " trait category " + protoCategory.Name + " has no traits");
-                }
-
                 traitSchema.Add(category);
-                categoryCount++;
-            }
-
-            if (categoryCount == 0)
-            {
-                throw new ArgumentException(filename + " has no elements in the trait_categories array.");
             }
 
             return traitSchema;
@@ -107,5 +88,7 @@ namespace NpcGenerator
             public int Weight { get; set; }
         }
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
+
+        private readonly JSchema m_schema = null;
     }
 }

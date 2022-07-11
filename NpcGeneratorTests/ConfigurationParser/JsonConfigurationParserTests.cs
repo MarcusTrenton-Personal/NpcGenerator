@@ -38,17 +38,61 @@ namespace Tests
     [TestClass]
     public class JsonConfigurationParserTests : FileCreatingTests
     {
+        const string schemaPath = "../../../../../NpcGenerator/SourceAssets/ConfigurationSchema.json";
+
         [TestMethod]
         public void GeneratesTraitSchema()
         {
             string path = Path.Combine(TestDirectory, "colour.json");
-            string text = "{\"trait_categories\" : [{\"name\" : \"Colour\",\"traits\" :[" +
-                "{ \"name\" : \"Green\", \"weight\" : 1}," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}]}";
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = JsonConfigurationParser.Parse(path);
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            TraitSchema schema = parser.Parse(path);
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void SchemaIsOptional()
+        {
+            string path = Path.Combine(TestDirectory, "colour.json");
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(null);
+            TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             File.Delete(path);
@@ -57,18 +101,32 @@ namespace Tests
         [TestMethod]
         public void MalformedJson()
         {
-            string path = Path.Combine(TestDirectory, "mslformed.json");
+            string path = Path.Combine(TestDirectory, "malformed.json");
             //The initial { and final } are missing.
-            string text = "\"trait_categories\" : [{\"name\" : \"Colour\",\"traits\" :[" +
-                "{ \"name\" : \"Green\", \"weight\" : 1}," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}]";
+            string text = @"
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            ";
             File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {
@@ -91,19 +149,38 @@ namespace Tests
             const string CATEGORY2_TRAIT2 = "Rhino";
 
             string path = Path.Combine(TestDirectory, "colourAndAnimal.json");
-            string text = "{\"trait_categories\" : " +
-                "[{\"name\" : \"" + CATEGORY1_TITLE + "\",\"traits\" :[" +
-                "{ \"name\" : \""+ CATEGORY1_TRAIT1 + "\", \"weight\" : 1}," +
-                "{ \"name\" : \"" + CATEGORY1_TRAIT2 + "\", \"weight\" : 1}" +
-                "]}," +
-                "{\"name\" : \"" + CATEGORY2_TITLE + "\",\"traits\" :[" +
-                "{ \"name\" : \"" + CATEGORY2_TRAIT1 + "\", \"weight\" : 1}," +
-                "{ \"name\" : \"" + CATEGORY2_TRAIT2 + "\", \"weight\" : 1}" +
-                "]}" +
-                "]}";
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY1_TITLE}','traits' : [
+                            {{ 
+                                'name' : '{CATEGORY1_TRAIT1}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : '{CATEGORY1_TRAIT2}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY2_TITLE}','traits' : [
+                            {{ 
+                                'name' : '{CATEGORY2_TRAIT1}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : '{CATEGORY2_TRAIT2}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = JsonConfigurationParser.Parse(path);
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             Assert.AreEqual(schema.TraitCategoryCount, 2, "Schema has incorrect number of TraitCategories");
@@ -126,16 +203,26 @@ namespace Tests
         public void MissingTraitTitleThrowsException()
         {
             string path = Path.Combine(TestDirectory, "missingTitle.json");
-            string text = "{\"trait_categories\" : [" +
-                "{ \"name\" : \"Green\", \"weight\" : 1}," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}";
+            string text = @"{
+                'trait_categories' : [
+                    { 
+                        'name' : 'Green', 
+                        'weight' : 1
+                    },
+                    { 
+                        'name' : 'Red', 
+                        'weight' : 1
+                    }
+                ]
+            }";
             File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {
@@ -151,13 +238,22 @@ namespace Tests
         public void MissingTraitsThrowsException()
         {
             string path = Path.Combine(TestDirectory, "missingTraits.json");
-            string text = "{\"trait_categories\" : [{\"name\" : \"Colour\",\"traits\" :[]}]}";
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                        ]
+                    }
+                ]
+            }";
             File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {
@@ -172,16 +268,29 @@ namespace Tests
         public void MissingTraitName()
         {
             string path = Path.Combine(TestDirectory, "missingTraitName.json");
-            string text = "{\"trait_categories\" : [{\"name\" : \"Colour\",\"traits\" :[" +
-                "{ \"weight\" : 1}," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}]}";
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                            { 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
             File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {
@@ -197,16 +306,30 @@ namespace Tests
         public void NegativeWeightTrait()
         {
             string path = Path.Combine(TestDirectory, "negativeWeightTrait.json");
-            string text = "{\"trait_categories\" : [{\"name\" : \"Colour\",\"traits\" :[" +
-                "{ \"name\" : \"Green\", \"weight\" : -1 }," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}]}";
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : -1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
             File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {
@@ -218,22 +341,74 @@ namespace Tests
             File.Delete(path);
         }
 
-        //TODO: a missing weight test. This requires a formal json schema.
+        [TestMethod]
+        public void MissingWeightTrait()
+        {
+            string path = Path.Combine(TestDirectory, "missingWeightTrait.json");
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour','traits' : [
+                            { 
+                                'name' : 'Green'
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (Exception)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Missing trait weight did not throw exception");
+
+            File.Delete(path);
+        }
 
         [TestMethod]
         public void MissingTraitCategoryName()
         {
             string path = Path.Combine(TestDirectory, "missingTraitCategoryName.json");
-            string text = "{\"trait_categories\" : [{\"traits\" :[" +
-                "{ \"name\" : \"Green\", \"weight\" : 1 }," +
-                "{ \"name\" : \"Red\", \"weight\" : 1}" +
-                "]}]}";
+            string text = @"{
+                'trait_categories' : 
+                [ 
+                    {
+                        'traits' :
+                        [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
             File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {
@@ -252,10 +427,12 @@ namespace Tests
             string text = "{}";
             File.WriteAllText(path, text);
 
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
             bool threwException = false;
             try
             {
-                TraitSchema schema = JsonConfigurationParser.Parse(path);
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {

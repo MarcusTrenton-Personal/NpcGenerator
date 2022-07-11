@@ -32,7 +32,8 @@ namespace Tests
                 "Red,1";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = CsvConfigurationParser.Parse(path);
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             File.Delete(path);
@@ -54,7 +55,8 @@ namespace Tests
                 CATEGORY1_TRAIT2 + ",1," + CATEGORY2_TRAIT2 + ",1";
             File.WriteAllText(path, text);
 
-            TraitSchema schema = CsvConfigurationParser.Parse(path);
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             Assert.AreEqual(schema.TraitCategoryCount, 2, "Schema has incorrect number of TraitCategories");
@@ -85,7 +87,8 @@ namespace Tests
             bool threwException = false;
             try 
             {
-                TraitSchema schema = CsvConfigurationParser.Parse(path);
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
             }
             catch(Exception)
             {
@@ -109,7 +112,8 @@ namespace Tests
             bool threwException = false;
             try
             {
-                TraitSchema schema = CsvConfigurationParser.Parse(path);
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
             }
             catch (Exception)
             {

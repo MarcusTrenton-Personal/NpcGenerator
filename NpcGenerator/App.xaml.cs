@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Services.Message;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using WpfServices;
@@ -65,7 +66,8 @@ namespace NpcGenerator
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
             AppSettings appSettings = AppSettings.Load(filePathProvider.AppSettingsFilePath);
-            Services.Localization localization = new Services.Localization(filePathProvider.LocalizationPath, appSettings.DefaultLanguageCode);
+            Services.Localization localization = new Services.Localization(
+                filePathProvider.LocalizationPath, appSettings.DefaultLanguageCode);
             Messager messager = new Messager();
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
@@ -78,7 +80,14 @@ namespace NpcGenerator
 
             TrackingModel trackingModel = new TrackingModel(userSettings);
 
-            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(userSettings, messager, fileIo);
+            CsvConfigurationParser csvConfigurationParser = new CsvConfigurationParser();
+            JsonConfigurationParser jsonConfigurationParser = new JsonConfigurationParser(
+                filePathProvider.ConfigurationJsonSchema);
+            List<IFormatConfigurationParser> parsers = new List<IFormatConfigurationParser>()
+                { csvConfigurationParser, jsonConfigurationParser };
+            ConfigurationParser configurationParser = new ConfigurationParser(parsers);
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(userSettings, messager, fileIo, configurationParser);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
@@ -95,7 +104,8 @@ namespace NpcGenerator
                 filePathProvider: filePathProvider,
                 fileIo: fileIo,
                 localization: localization,
-                models: models);
+                models: models,
+                configurationParser: configurationParser);
 
             //Set all the services that require access to the whole ServiceCentre.
             models.Navigation = new NavigationModel(serviceCentre);

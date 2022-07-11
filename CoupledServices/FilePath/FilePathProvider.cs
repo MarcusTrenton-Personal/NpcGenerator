@@ -38,6 +38,14 @@ namespace CoupledServices
             }
         }
 
+        public string ConfigurationJsonSchema
+        {
+            get
+            {
+                return Path.Combine(appSettingsFolder, configurationFile);
+            }
+        }
+
         public string LicensePath { get; } = "GNU License.rtf";
 
         public string LocalizationPath
@@ -69,6 +77,7 @@ namespace CoupledServices
         private const string appDataFolder = "NpcGenerator";
         private const string appSettingsFile = "AppSettings.json";
         private const string appSettingsFolder = "Settings";
+        private const string configurationFile = "ConfigurationSchema.json";
         private const string localizationFile = "Localization.csv";
         private const string trackingProfileFile = "TrackingProfile.json";
         private const string userSettingsFile = "UserSettings.json";

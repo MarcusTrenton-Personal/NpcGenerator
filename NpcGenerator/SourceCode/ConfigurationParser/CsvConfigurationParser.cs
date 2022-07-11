@@ -19,9 +19,11 @@ using System.IO;
 
 namespace NpcGenerator
 {
-    public static class CsvConfigurationParser
+    public class CsvConfigurationParser : IFormatConfigurationParser
     {
-        public static TraitSchema Parse(string path)
+        public string SupportedFileExtension { get; } = ".csv";
+
+        public TraitSchema Parse(string path)
         {
             IEnumerable<string> lines = File.ReadAllLines(path);
             IEnumerator<string> enumerator = lines.GetEnumerator();
