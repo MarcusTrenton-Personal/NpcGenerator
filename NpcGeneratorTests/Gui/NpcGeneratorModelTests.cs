@@ -28,7 +28,11 @@ namespace Tests
         {
             m_userSettings = new StubUserSettings();
             m_npcGeneratorModel = new NpcGeneratorModel(
-                m_userSettings, new StubMessager(), new StubLocalFileIo(), new MockCsvConfigurationParser());
+                m_userSettings, 
+                new StubMessager(), 
+                new StubLocalFileIo(), 
+                new MockCsvConfigurationParser(), 
+                new StubLocalization());
         }
 
         [TestMethod]

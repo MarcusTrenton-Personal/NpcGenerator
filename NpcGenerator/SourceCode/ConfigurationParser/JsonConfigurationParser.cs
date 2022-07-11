@@ -47,7 +47,12 @@ namespace NpcGenerator
                 bool isValid = json.IsValid(m_schema, out errorMessages);
                 if (!isValid)
                 {
-                    throw new ArgumentException(errorMessages.ToString());
+                    string message = "";
+                    foreach(var error in errorMessages)
+                    {
+                        message += error + "\n";
+                    }
+                    throw new JsonFormatException(message, path);
                 }
             }
 
@@ -90,5 +95,14 @@ namespace NpcGenerator
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
 
         private readonly JSchema m_schema = null;
+    }
+
+    public class JsonFormatException : FormatException
+    {
+        public JsonFormatException(string message, string path) : base(message)
+        {
+            Path = path;
+        }
+        public string Path { get; private set; }
     }
 }

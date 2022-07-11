@@ -87,7 +87,8 @@ namespace NpcGenerator
                 { csvConfigurationParser, jsonConfigurationParser };
             ConfigurationParser configurationParser = new ConfigurationParser(parsers);
 
-            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(userSettings, messager, fileIo, configurationParser);
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings, messager, fileIo, configurationParser, localization);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 

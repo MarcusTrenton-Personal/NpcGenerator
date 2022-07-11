@@ -13,3 +13,4 @@ license_window_title		KKKKKK	GNU License	GNU License	License GNU
 exception_maybe_file_deleted	Parameter is an error message with the name of a file that couldn’t be found.	{0} LLLLLLL	{0} Was that file deleted?	{0} Was that file deleted?	{0} Est-ce que ce fichier a été effacé?
 source_code	View source code for this app	MMMMM	Source Code	Source Code	Code Source
 donate	Donate money to the maker of this app	NNNNNN	Donate	Donate	Faire un don
+configuration_file_invalid	Shown when npc configuration file has validation error. Parameter is a file name.	OOOOOO	Error parsing configuration file {0}.	Error parsing configuration file {0}.	Erreur lors de l'analyse du fichier de configuration {0}.

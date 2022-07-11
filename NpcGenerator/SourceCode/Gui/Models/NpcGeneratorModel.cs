@@ -28,12 +28,17 @@ namespace NpcGenerator
     public class NpcGeneratorModel : BaseModel, INpcGeneratorModel
     {
         public NpcGeneratorModel(
-            IUserSettings userSettings, IMessager messager, ILocalFileIO fileIo, IConfigurationParser parser)
+            IUserSettings userSettings, 
+            IMessager messager, 
+            ILocalFileIO fileIo, 
+            IConfigurationParser parser,
+            ILocalization localization)
         {
             m_userSettings = userSettings;
             m_messager = messager;
             m_fileIo = fileIo;
             m_parser = parser;
+            m_localization = localization;
         }
 
         public ICommand ChooseConfiguration 
@@ -150,6 +155,13 @@ namespace NpcGenerator
             {
                 MessageBox.Show(exception.Message);
             }
+            catch (JsonFormatException exception)
+            {
+                string message = m_localization.GetText("configuration_file_invalid", exception.Path);
+                message += "\n" + exception.Message;
+
+                MessageBox.Show(message);
+            }
             catch (FormatException exception)
             {
                 MessageBox.Show(exception.Message);
@@ -177,6 +189,7 @@ namespace NpcGenerator
         private readonly ILocalFileIO m_fileIo;
         private readonly IMessager m_messager;
         private readonly IConfigurationParser m_parser;
+        private readonly ILocalization m_localization;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;

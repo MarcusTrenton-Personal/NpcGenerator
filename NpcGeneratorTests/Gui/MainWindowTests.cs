@@ -82,7 +82,7 @@ namespace Tests
                         tracking: new StubTrackingModel(),
                         //Only the npcGenerator is real.
                         npcGenerator: new NpcGeneratorModel(
-                            testUserSettings, testMessager, fileIO, configurationParser));
+                            testUserSettings, testMessager, fileIO, configurationParser, new StubLocalization()));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),
