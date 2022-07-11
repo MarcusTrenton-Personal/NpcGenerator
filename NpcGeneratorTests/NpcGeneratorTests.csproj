@@ -34,4 +34,11 @@
     <ProjectReference Include="..\TestUtils\TestUtils.csproj" />
   </ItemGroup>
 
+  <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
+    <ItemGroup>
+      <JsonSchema Include="..\NpcGenerator\SourceAssets\ConfigurationSchema.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(JsonSchema)" DestinationFolder="$(OutDir)" />
+  </Target>
+
 </Project>

@@ -38,7 +38,7 @@ namespace Tests
     [TestClass]
     public class JsonConfigurationParserTests : FileCreatingTests
     {
-        const string schemaPath = "../../../../../NpcGenerator/SourceAssets/ConfigurationSchema.json";
+        const string schemaPath = "ConfigurationSchema.json";
 
         [TestMethod]
         public void GeneratesTraitSchema()
