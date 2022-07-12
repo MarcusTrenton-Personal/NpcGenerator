@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/MarcusTrenton-Personal/NpcGenerator.git",
+	"title": "Npc Group",
+	"description": "The traits of a group of NPCs",
+	"type": "object",
+	"properties": {
+		"npc_group": {
+			"description": "List of npcs and their traits",
+			"type": "array",
+			"items": { "$ref": "#/$defs/npc"},
+			"minItems": 1,
+			"uniqueItems": true
+		}
+	},
+	"required": ["npc_group"],
+	
+	"$defs": {
+		"npc": {
+			"description": "A list of traits of an NPC",
+			"type": "object"
+		}
+	}
+}

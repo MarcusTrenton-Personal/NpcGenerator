@@ -17,5 +17,11 @@ namespace NpcGenerator.Message
 {
     public class SaveNpcs
     {
+        public SaveNpcs(string format)
+        {
+            Format = format;
+        }
+
+        public string Format { get; private set; }
     }
 }

@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -43,11 +44,24 @@ namespace NpcGenerator
             return cachePath;
         }
 
-        public void SaveToPickedFile(string content, string fileType)
+        public bool SaveToPickedFile(IList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
+            pickedFileExtension = "";
+
+            string filterString = "";
+            for (int i = 0; i < contentProviders.Count; i++)
+            {
+                filterString += string.Format("{0} file (*.{0})|*.{0}", contentProviders[i].FileExtensionWithoutDot);
+                if (i+1 < contentProviders.Count)
+                {
+                    filterString += "|";
+                }
+            }
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = fileType + " files (*." + fileType + ")|*." + fileType,
+                
+                Filter = filterString,
                 RestoreDirectory = true
             };
 
@@ -55,16 +69,23 @@ namespace NpcGenerator
             {
                 try
                 {
+                    int index = saveFileDialog.FilterIndex - 1; //1-based index for some reason.
+                    pickedFileExtension = contentProviders[index].FileExtensionWithoutDot;
+                    string content = contentProviders[index].GetContent();
                     using Stream stream = saveFileDialog.OpenFile();
                     byte[] info = new UTF8Encoding(true).GetBytes(content);
                     stream.Write(info, 0, info.Length);
                     stream.Close();
+
+                    return true;
                 }
                 catch (IOException exception)
                 {
                     MessageBox.Show(exception.Message);
                 }
             }
+
+            return false;
         }
 
         private const string CacheFolder = "Cache";

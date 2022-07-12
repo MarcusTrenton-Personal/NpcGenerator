@@ -37,6 +37,7 @@
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
     <ItemGroup>
       <JsonSchema Include="..\NpcGenerator\SourceAssets\ConfigurationSchema.json" />
+      <JsonSchema Include="..\NpcGenerator\SourceAssets\NpcGroupSchema.json" />
     </ItemGroup>
     <Copy SourceFiles="@(JsonSchema)" DestinationFolder="$(OutDir)" />
   </Target>

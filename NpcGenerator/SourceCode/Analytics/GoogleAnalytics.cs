@@ -281,16 +281,29 @@ namespace NpcGenerator
         {
             if (m_userSettings.AnalyticsConsent)
             {
-                TrackEvent(WriteSaveNpcsEvent);
-            }     
+                TrackEvent(Callback);
+            }
+
+            void Callback(JsonWriter writer)
+            {
+                WriteSaveNpcsEvent(writer, saveNpcs.Format);
+            }
         }
 
-        private void WriteSaveNpcsEvent(JsonWriter writer)
+        private void WriteSaveNpcsEvent(JsonWriter writer, string format)
         {
             writer.WriteStartObject(); //Start of event object
 
             writer.WritePropertyName("name");
             writer.WriteValue("save_npcs");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("format");
+            writer.WriteValue(format);
+
+            writer.WriteEnd(); //End of params object
 
             writer.WriteEnd(); //End of event object
         }

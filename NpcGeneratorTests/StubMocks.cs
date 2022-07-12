@@ -103,9 +103,11 @@ namespace Tests
             return originalPath;
         }
 
-        public void SaveToPickedFile(string content, string fileType)
+        public bool SaveToPickedFile(IList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
+            pickedFileExtension = null;
             SaveCalled = true;
+            return true;
         }
 
         public bool SaveCalled { get; set; } = false;

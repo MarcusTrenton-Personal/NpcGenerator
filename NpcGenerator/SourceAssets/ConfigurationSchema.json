@@ -16,7 +16,7 @@
 	"required": ["trait_categories"],
 	
 	"$defs": {
-		"trait_category":{
+		"trait_category": {
 			"description": "A list of related traits. Usually an npc to have one of the traits in the category.",
 			"type": "object",
 			"properties": {

@@ -13,8 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace NpcGenerator
@@ -62,6 +64,30 @@ namespace NpcGenerator
             }
 
             return text.ToString();
+        }
+
+        public string ToJson()
+        {
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            using (JsonWriter writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("npc_group");
+                writer.WriteStartArray();
+
+                foreach(Npc npc in npcs)
+                {
+                    npc.ToJsonObject(writer, traitGroupNames);
+                }
+
+                writer.WriteEnd(); //End of array
+                writer.WriteEndObject(); //End of json
+
+            }
+            string json = sw.ToString();
+
+            return json;
         }
 
         private void TraitGroupNamesToCsv(StringBuilder text)

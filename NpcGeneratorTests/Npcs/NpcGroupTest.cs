@@ -14,7 +14,11 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using NpcGenerator;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Tests
 {
@@ -38,6 +42,40 @@ namespace Tests
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour,Animal\nBlue,Bear", csv, "NpcGroup did not generate expected CSV text");
+        }
+
+        [TestMethod]
+        public void NpcGroupGeneratesJson()
+        {
+            TraitCategory colourCategory = new TraitCategory("Colour");
+            colourCategory.Add(new Trait("Blue", 1));
+
+            TraitCategory animalCategory = new TraitCategory("Animal");
+            animalCategory.Add(new Trait("Bear", 1));
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+            traitSchema.Add(animalCategory);
+
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+            string jsonText = npcGroup.ToJson();
+            JToken json = JToken.Parse(jsonText);
+
+            string schemaPath = "NpcGroupSchema.json";
+            string schemaText = File.ReadAllText(schemaPath);
+            JSchema schema = JSchema.Parse(schemaText);
+            
+            IList<string> errorMessages;
+            string concatenatedMessages = "";
+            bool isValid = json.IsValid(schema, out errorMessages);
+            if (!isValid)
+            {
+                foreach (var error in errorMessages)
+                {
+                    concatenatedMessages += error + "\n";
+                }
+            }
+            Assert.IsTrue(isValid, "Json validation failed with message: " + concatenatedMessages);
         }
     }
 }

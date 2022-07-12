@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using Services;
 using Services.Message;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -179,10 +180,24 @@ namespace NpcGenerator
 
         private void ExecuteSaveNpcs(object _)
         {
-            string npcCsv = m_npcGroup.ToCsv();
-            m_fileIo.SaveToPickedFile(npcCsv, "csv");
-
-            m_messager.Send(sender: this, message: new Message.SaveNpcs());
+            List<FileContentProvider> contentProviders = new List<FileContentProvider>(2)
+            {
+                new FileContentProvider()
+                {
+                    FileExtensionWithoutDot = "csv",
+                    GetContent = m_npcGroup.ToCsv
+                },
+                new FileContentProvider()
+                {
+                    FileExtensionWithoutDot = "json",
+                    GetContent = m_npcGroup.ToJson
+                }
+            };
+            bool success = m_fileIo.SaveToPickedFile(contentProviders, out string pickedFormat);
+            if (success)
+            {
+                m_messager.Send(sender: this, message: new Message.SaveNpcs(pickedFormat));
+            }
         }
 
         private readonly IUserSettings m_userSettings;
