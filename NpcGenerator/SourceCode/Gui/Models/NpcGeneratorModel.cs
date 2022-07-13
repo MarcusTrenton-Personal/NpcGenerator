@@ -60,6 +60,15 @@ namespace NpcGenerator
             }
         }
 
+        public bool DoesConfigurationFileExist 
+        { 
+            get
+            {
+                bool doesExist = File.Exists(m_userSettings.ConfigurationPath);
+                return doesExist;
+            }
+        }
+
         public int NpcQuantity
         {
             get
@@ -117,6 +126,7 @@ namespace NpcGenerator
             {
                 m_userSettings.ConfigurationPath = openFileDialog.FileName;
                 NotifyPropertyChanged("ConfigurationPath");
+                NotifyPropertyChanged("DoesConfigurationFileExist");
 
                 m_messager.Send(sender: this, message: new Message.SelectConfiguration());
             }

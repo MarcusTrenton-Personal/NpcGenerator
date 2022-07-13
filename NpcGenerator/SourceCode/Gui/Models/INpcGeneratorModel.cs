@@ -23,6 +23,7 @@ namespace NpcGenerator
     {
         public ICommand ChooseConfiguration { get; }
         public string ConfigurationPath { get; }
+        public bool DoesConfigurationFileExist { get; }
         public int NpcQuantity { get; set; }
         public ICommand GenerateNpcs { get; }
         public DataTable ResultNpcs { get; }

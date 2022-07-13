@@ -143,6 +143,7 @@ namespace Tests
     {
         public ICommand ChooseConfiguration { get; } = null;
         public string ConfigurationPath { get; set; } = null;
+        public bool DoesConfigurationFileExist { get; set; } = false;
         public int NpcQuantity { get; set; } = 0;
         public ICommand GenerateNpcs { get; } = null;
         public DataTable ResultNpcs { get; set; }

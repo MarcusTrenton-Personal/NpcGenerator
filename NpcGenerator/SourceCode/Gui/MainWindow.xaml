@@ -57,10 +57,23 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </TextBlock.Text>
                     </TextBlock>
                 </Button>
-                <Label x:Name="configurationPathText" Background="White" VerticalAlignment="Center" 
-                       BorderThickness="1" BorderBrush="Black" Margin="10"
-                       DataContext="{Binding Path=NpcGeneratorModel, ElementName=ThisWindow}"
-                       Content="{Binding Path=ConfigurationPath}"/>
+                <Label x:Name="configurationPathLabel" Background="White" VerticalAlignment="Center" 
+                       BorderThickness="1" Margin="10"
+                       DataContext="{Binding Path=NpcGeneratorModel, ElementName=ThisWindow}">
+                    <Label.Style>
+                        <Style TargetType="{x:Type Label}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DoesConfigurationFileExist}" Value="True">
+                                    <Setter Property="BorderBrush" Value="Black"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DoesConfigurationFileExist}" Value="False">
+                                    <Setter Property="BorderBrush" Value="Red"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                    <TextBlock x:Name="configurationPathText" Text="{Binding Path=ConfigurationPath}"/>
+                </Label>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
                 <TextBlock x:Name="npcQuantityLabel" Margin="10" VerticalAlignment="Center">
