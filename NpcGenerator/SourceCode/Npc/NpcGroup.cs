@@ -32,7 +32,7 @@ namespace NpcGenerator
 
             for(int i = 0; i < traitSchema.TraitCategoryCount; ++i)
             {
-                traitGroupNames.Add(traitSchema.GetAtIndex(i).Name);
+                traitCategoryNames.Add(traitSchema.GetAtIndex(i).Name);
             }
 
             for(int i = 0; i < npcCount; ++i)
@@ -51,7 +51,7 @@ namespace NpcGenerator
         {
             StringBuilder text = new StringBuilder();
             
-            TraitGroupNamesToCsv(text);
+            TraitCategoryNamesToCsv(text);
             text.Append('\n');
 
             for(int i = 0; i < npcs.Count; ++i)
@@ -78,7 +78,7 @@ namespace NpcGenerator
 
                 foreach(Npc npc in npcs)
                 {
-                    npc.ToJsonObject(writer, traitGroupNames);
+                    npc.ToJsonObject(writer, traitCategoryNames);
                 }
 
                 writer.WriteEnd(); //End of array
@@ -90,12 +90,12 @@ namespace NpcGenerator
             return json;
         }
 
-        private void TraitGroupNamesToCsv(StringBuilder text)
+        private void TraitCategoryNamesToCsv(StringBuilder text)
         {
-            for (int i = 0; i < traitGroupNames.Count; ++i)
+            for (int i = 0; i < traitCategoryNames.Count; ++i)
             {
-                text.Append(traitGroupNames[i]);
-                if (i + 1 < traitGroupNames.Count)
+                text.Append(traitCategoryNames[i]);
+                if (i + 1 < traitCategoryNames.Count)
                 {
                     text.Append(',');
                 }
@@ -107,15 +107,15 @@ namespace NpcGenerator
             return npcs[index];
         }
 
-        public string GetTraitGroupNameAtIndex(int index)
+        public string GetTraitCategoryNameAtIndex(int index)
         {
-            return traitGroupNames[index];
+            return traitCategoryNames[index];
         }
 
-        public int TraitGroupCount { get { return traitGroupNames.Count; } }
+        public int TraitCategoryCount { get { return traitCategoryNames.Count; } }
         public int NpcCount { get { return npcs.Count; } }
 
-        private readonly List<string> traitGroupNames = new List<string>();
+        private readonly List<string> traitCategoryNames = new List<string>();
         private readonly List<Npc> npcs = new List<Npc>();
     }
 }

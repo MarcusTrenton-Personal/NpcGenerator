@@ -139,9 +139,9 @@ namespace NpcGenerator
                 m_npcGroup = new NpcGroup(traitSchema, m_userSettings.NpcQuantity);
 
                 DataTable table = new DataTable("Npc Table");
-                for (int i = 0; i < m_npcGroup.TraitGroupCount; ++i)
+                for (int i = 0; i < m_npcGroup.TraitCategoryCount; ++i)
                 {
-                    table.Columns.Add(m_npcGroup.GetTraitGroupNameAtIndex(i));
+                    table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
                 }
                 for (int i = 0; i < m_npcGroup.NpcCount; ++i)
                 {
