@@ -98,8 +98,8 @@ namespace Tests
                     MainWindow mainWindow = new MainWindow(serviceCentre);
 
                     //********* Test Initial Window ********************
-                    Label configLabel = (Label)mainWindow.FindName("configurationPathText");
-                    configPathMatches = configPath == configLabel.Content.ToString();
+                    TextBlock configText = (TextBlock)mainWindow.FindName("configurationPathText");
+                    configPathMatches = configPath == configText.Text.ToString();
 
                     TextBox quantityLabel = (TextBox)mainWindow.FindName("npcQuantityText");
                     int quantity = int.Parse(quantityLabel.Text);
