@@ -40,6 +40,23 @@ namespace NpcGenerator
             m_fileIo = fileIo;
             m_parser = parser;
             m_localization = localization;
+
+            m_configurationFileWatcher = new FileSystemWatcher
+            {
+                NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName,
+                EnableRaisingEvents = false
+            };
+            m_configurationFileWatcher.Deleted += OnConfigurationChanged;
+            m_configurationFileWatcher.Renamed += OnConfigurationRenamed;
+            m_configurationFileWatcher.Created += OnConfigurationChanged;
+            SetFileWatcherPath();
+        }
+
+        ~NpcGeneratorModel()
+        {
+            m_configurationFileWatcher.Deleted -= OnConfigurationChanged;
+            m_configurationFileWatcher.Renamed -= OnConfigurationRenamed;
+            m_configurationFileWatcher.Created -= OnConfigurationChanged;
         }
 
         public ICommand ChooseConfiguration 
@@ -127,6 +144,7 @@ namespace NpcGenerator
                 m_userSettings.ConfigurationPath = openFileDialog.FileName;
                 NotifyPropertyChanged("ConfigurationPath");
                 NotifyPropertyChanged("DoesConfigurationFileExist");
+                SetFileWatcherPath();
 
                 m_messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
@@ -210,6 +228,28 @@ namespace NpcGenerator
             }
         }
 
+        private void SetFileWatcherPath()
+        {
+            if (DoesConfigurationFileExist)
+            {
+                string fileName = Path.GetFileName(ConfigurationPath);
+                string path = Path.GetDirectoryName(ConfigurationPath);
+                m_configurationFileWatcher.Path = path;
+                m_configurationFileWatcher.Filter = fileName;
+                m_configurationFileWatcher.EnableRaisingEvents = true;
+            }
+        }
+
+        private void OnConfigurationChanged(object sender, FileSystemEventArgs e)
+        {
+            NotifyPropertyChanged("DoesConfigurationFileExist");
+        }   
+
+        private void OnConfigurationRenamed(object sender, RenamedEventArgs e)
+        {
+            NotifyPropertyChanged("DoesConfigurationFileExist");
+        }
+
         private readonly IUserSettings m_userSettings;
         private readonly ILocalFileIO m_fileIo;
         private readonly IMessager m_messager;
@@ -222,5 +262,6 @@ namespace NpcGenerator
 
         private NpcGroup m_npcGroup;
         private DataTable m_table;
+        private readonly FileSystemWatcher m_configurationFileWatcher;
     }
 }
