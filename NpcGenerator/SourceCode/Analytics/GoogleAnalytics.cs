@@ -147,7 +147,8 @@ namespace NpcGenerator
         private static void WriteUserProperty(JsonWriter writer, string name, string value)
         {
             Debug.Assert(name.Length <= 24, "User property name " + name + " is longer than the 24 character maximum");
-            Debug.Assert(value.Length <= 36, "User property value " + value + " is longer than the 36 character maximum");
+            Debug.Assert(value == null || value.Length <= 36, 
+                "User property value " + value + " is longer than the 36 character maximum");
 
             writer.WritePropertyName(name);
             
