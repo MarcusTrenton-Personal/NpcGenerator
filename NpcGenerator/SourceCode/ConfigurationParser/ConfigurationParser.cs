@@ -34,9 +34,8 @@ namespace NpcGenerator
         public TraitSchema Parse(string path)
         {
             string fileType = Path.GetExtension(path);
-            IFormatConfigurationParser parser;
-            bool isFound = m_parsers.TryGetValue(fileType, out parser);
-            if(isFound)
+            bool isFound = m_parsers.TryGetValue(fileType, out IFormatConfigurationParser parser);
+            if (isFound)
             {
                 return parser.Parse(path);
             }

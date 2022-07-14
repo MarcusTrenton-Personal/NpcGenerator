@@ -43,8 +43,7 @@ namespace NpcGenerator
             if(m_schema != null)
             {
                 //Validation schema means that no in-code validation is needed.
-                IList<string> errorMessages;
-                bool isValid = json.IsValid(m_schema, out errorMessages);
+                bool isValid = json.IsValid(m_schema, out IList<string> errorMessages);
                 if (!isValid)
                 {
                     string message = "";
