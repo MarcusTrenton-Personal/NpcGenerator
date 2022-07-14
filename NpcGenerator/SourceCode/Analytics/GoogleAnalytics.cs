@@ -13,15 +13,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using Newtonsoft.Json;
 using Services;
 using Services.Message;
-using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
-using System.Diagnostics;
 
 namespace NpcGenerator
 {
@@ -48,57 +46,13 @@ namespace NpcGenerator
             bool dryRunValidation)
         {
             m_appSettings = appSettings;
-            m_trackingProfile = trackingProfile;
-            m_messager = messager;
-            m_userSettings = userSettings;
             m_dryRunValidation = dryRunValidation;
 
-            //Each Google Analytics event must have a name 40 characters or less: 
-            //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
-            m_messager.Subscribe<Services.Message.Login>(OnLogin);
-            m_messager.Subscribe<Services.Message.PageView>(OnPageView);
-            m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
-            m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
-            m_messager.Subscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-            m_messager.Subscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
+            m_messageGenerator = new GoogleAnalyticsMessageGenerator(trackingProfile, messager, userSettings, TrackEvent);
         }
 
-        ~GoogleAnalytics()
+        private async void TrackEvent(string messageBody)
         {
-            m_messager.Unsubscribe<Services.Message.Login>(OnLogin);
-            m_messager.Unsubscribe<Services.Message.PageView>(OnPageView);
-            m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
-            m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
-            m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-            m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
-        }
-
-        private async void TrackEvent(WriteGoogleEvent googleEvent)
-        {
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw = new StringWriter(sb);
-            using (JsonWriter writer = new JsonTextWriter(sw))
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("client_id");
-                writer.WriteValue(m_trackingProfile.ClientId.ToString());
-
-                WriteUserProperties(writer);
-
-                //Writing the event should be through a callback.
-                writer.WritePropertyName("events");
-                writer.WriteStartArray();
-
-                googleEvent(writer);
-
-                writer.WriteEnd(); //End of array
-                writer.WriteEndObject(); //End of json
-
-            }
-            string body = sw.ToString();
-
 #if DEBUG
             string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdDev;
             string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdDev;
@@ -106,8 +60,9 @@ namespace NpcGenerator
             string measurementId = m_appSettings.GoogleAnalytics.MeasurementIdProd;
             string additionalId = m_appSettings.GoogleAnalytics.AdditionalIdProd;
 #endif
-            string url = m_dryRunValidation ?   "https://www.google-analytics.com/debug/mp/collect?api_secret={0}&measurement_id={1}" :
-                                                "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}";
+            string url = m_dryRunValidation ?   
+                "https://www.google-analytics.com/debug/mp/collect?api_secret={0}&measurement_id={1}" :
+                "https://www.google-analytics.com/mp/collect?api_secret={0}&measurement_id={1}";
 
             /*
              * Don't laugh. Doing security on a public source code, client-only app distributed to the public is not easy. 
@@ -117,7 +72,7 @@ namespace NpcGenerator
              * Text scrapers and casual inspection are insufficient to break the protection.
              * Either editing the source code or advanced sniffers are needed to break this.
              */
-            using StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
+            using StringContent content = new StringContent(messageBody, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await s_client.PostAsync(
                 new Uri(string.Format(url, Encryption.XorEncryptDecrypt(additionalId, m_appSettings.EncryptionKey), measurementId)),
                 content
@@ -139,248 +94,18 @@ namespace NpcGenerator
                     //Don't localize dev messages.
                     MessageBox.Show("Analytics failed validation.\n" + validation.fieldPath + "\n" +
                         validation.description + "\n" + validation.validationCode + "\n\nOriginal Message:\n" +
-                        body);
+                        messageBody);
                 }
             }
         }
 
-        private static void WriteUserProperty(JsonWriter writer, string name, string value)
-        {
-            if (value != null)
-            {
-                Debug.Assert(name.Length <= 24, "User property name " + name + " is longer than the 24 character maximum");
-                Debug.Assert(value.Length <= 36,
-                    "User property value " + value + " is longer than the 36 character maximum");
-
-                writer.WritePropertyName(name);
-
-                writer.WriteStartObject();
-                writer.WritePropertyName("value");
-                writer.WriteValue(value);
-                writer.WriteEnd();
-            }
-        }
-
-        private void WriteUserProperties(JsonWriter writer)
-        {
-            writer.WritePropertyName("user_properties");
-            writer.WriteStartObject();
-
-            WriteUserProperty(writer, "system_language", m_trackingProfile.SystemLanguage);
-            WriteUserProperty(writer, "app_language", m_userSettings.LanguageCode);
-            WriteUserProperty(writer, "app_version", m_trackingProfile.AppVersion);
-            WriteUserProperty(writer, "os_version", m_trackingProfile.OSVersion);
-
-            writer.WriteEnd(); //End of user_properties object
-        }
-
-        private void OnLogin(object sender, Services.Message.Login login)
-        {
-            //Consent can change throughout the session
-            if(m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(WriteLoginEvent);
-            }
-        }
-
-        private void WriteLoginEvent(JsonWriter writer)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("login");
-
-            writer.WritePropertyName("params");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("method");
-            writer.WriteValue("ClientApp");
-
-            writer.WriteEnd(); //End of params object
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private void OnPageView(object sender, Services.Message.PageView pageView)
-        {
-            if (m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(Callback);
-            }
-
-            void Callback(JsonWriter writer)
-            {
-                WritePageViewEvent(writer, pageView.Title);
-            }
-        }
-
-        private static void WritePageViewEvent(JsonWriter writer, string title)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("page_view");
-
-            writer.WritePropertyName("params");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("title");
-            writer.WriteValue(title);
-
-            writer.WriteEnd(); //End of params object
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private void OnSelectConfiguration(object sender, Message.SelectConfiguration selectConfiguration)
-        {
-            if (m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(WriteSelectConfigurationEvent);
-            }   
-        }
-
-        private void WriteSelectConfigurationEvent(JsonWriter writer)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("select_configuration");
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private void OnGenerateNpcs(object sender, Message.GenerateNpcs generateNpcs)
-        {
-            if (m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(Callback);
-            }
-
-            void Callback(JsonWriter writer)
-            {
-                WriteGenerateNpcsEvent(writer, generateNpcs.Quantity);
-            }
-        }
-
-        private static void WriteGenerateNpcsEvent(JsonWriter writer, int quantity)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("generate_npcs");
-
-            writer.WritePropertyName("params");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("quantity");
-            writer.WriteValue(quantity);
-
-            writer.WriteEnd(); //End of params object
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private void OnSaveNpcs(object sender, Message.SaveNpcs saveNpcs)
-        {
-            if (m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(Callback);
-            }
-
-            void Callback(JsonWriter writer)
-            {
-                WriteSaveNpcsEvent(writer, saveNpcs.Format);
-            }
-        }
-
-        private void WriteSaveNpcsEvent(JsonWriter writer, string format)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("save_npcs");
-
-            writer.WritePropertyName("params");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("format");
-            writer.WriteValue(format);
-
-            writer.WriteEnd(); //End of params object
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private void OnUserLanguageNotSupported(object sender, Services.Message.UserLanguageNotSupported notSupported)
-        {
-            if (m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(Callback);
-            }
-
-            void Callback(JsonWriter writer)
-            {
-                WriteUserLanguageNotSupportedEvent(writer, notSupported.LanguageCode);
-            }
-        }
-
-        private static void WriteUserLanguageNotSupportedEvent(JsonWriter writer, string languageCode)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("unsupported_language");
-
-            writer.WritePropertyName("params");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("language_code");
-            writer.WriteValue(languageCode);
-
-            writer.WriteEnd(); //End of params object
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private void OnLanguageSelected(object sender, Services.Message.LanguageSelected languageSelected)
-        {
-            if (m_userSettings.AnalyticsConsent)
-            {
-                TrackEvent(Callback);
-            }
-
-            void Callback(JsonWriter writer)
-            {
-                WriteLanguageSelectedEvent(writer, languageSelected.Language);
-            }
-        }
-
-        private static void WriteLanguageSelectedEvent(JsonWriter writer, string languageCode)
-        {
-            writer.WriteStartObject(); //Start of event object
-
-            writer.WritePropertyName("name");
-            writer.WriteValue("language_selected");
-
-            writer.WritePropertyName("params");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("language_code");
-            writer.WriteValue(languageCode);
-
-            writer.WriteEnd(); //End of params object
-
-            writer.WriteEnd(); //End of event object
-        }
-
-        private delegate void WriteGoogleEvent(JsonWriter writer);
-
         private static readonly HttpClient s_client = new HttpClient();
         private readonly IAppSettings m_appSettings;
-        private readonly ITrackingProfile m_trackingProfile;
-        private readonly IMessager m_messager;
-        private readonly IUserSettings m_userSettings;
         private readonly bool m_dryRunValidation;
+
+#pragma warning disable IDE0052 // Remove unread private members. 
+        //This warning is stupid. The subscriber object only need to be created to be useful. It does not need to be read.
+        private readonly GoogleAnalyticsMessageGenerator m_messageGenerator;
+#pragma warning restore IDE0052 // Remove unread private members
     }
 }
