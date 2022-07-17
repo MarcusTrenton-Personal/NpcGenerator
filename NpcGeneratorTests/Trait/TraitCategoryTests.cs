@@ -15,11 +15,12 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System;
 
 namespace Tests
 {
     [TestClass]
-    public class TraitTests
+    public class TraitCategoryTests
     {
         const string HEADS = "Heads";
         const string TAILS = "Tails";
@@ -27,7 +28,7 @@ namespace Tests
         [TestMethod]
         public void TraitSelectionReturnsAllValidValues()
         {
-            TraitCategory category = new TraitCategory("Coin");
+            TraitCategory category = new TraitCategory("Coin", 1);
             category.Add(new Trait(HEADS, 1));
             category.Add(new Trait(TAILS, 1));
 
@@ -37,8 +38,8 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                string choice = category.Choose();
-                switch (choice)
+                string[] choice = category.Choose();
+                switch (choice[0])
                 {
                     case HEADS:
                         headCount++;
@@ -61,7 +62,7 @@ namespace Tests
         [TestMethod]
         public void TraitSelectionIsRandom()
         {
-            TraitCategory category = new TraitCategory("Coin");
+            TraitCategory category = new TraitCategory("Coin", 1);
             category.Add(new Trait(HEADS, 2));
             category.Add(new Trait(TAILS, 1));
 
@@ -71,8 +72,8 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                string choice = category.Choose();
-                switch (choice)
+                string[] choice = category.Choose();
+                switch (choice[0])
                 {
                     case HEADS:
                         headCount++;
@@ -90,6 +91,78 @@ namespace Tests
 
             Assert.IsTrue(headCount >= tailCount, "Double weighted " + HEADS + " occured less often than " + TAILS +
                 "after " + ROLL_COUNT + "flips, defying astronomical odds.");
+        }
+
+        [TestMethod]
+        public void TraitSelectionTwice()
+        {
+            const int SELECTION_COUNT = 2;
+
+            TraitCategory category = new TraitCategory("Coin", SELECTION_COUNT);
+            category.Add(new Trait(HEADS, 1));
+            category.Add(new Trait(TAILS, 1));
+
+            string[] selections = category.Choose();
+            Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
+            Assert.AreNotEqual(selections[0], selections[1], "Did not select two different traits");
+        }
+
+        [TestMethod]
+        public void NoWeightSingleSelection()
+        {
+            TraitCategory category = new TraitCategory("Coin", 1);
+            category.Add(new Trait(HEADS, 0)); 
+
+            bool threwException = false;
+            try 
+            {
+                string[] selections = category.Choose();
+            }
+            catch (Exception)
+            {
+                threwException = true;
+            }
+            
+            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+        }
+
+        [TestMethod]
+        public void NoWeightMultipleSelection()
+        {
+            TraitCategory category = new TraitCategory("Coin", 2);
+            category.Add(new Trait(HEADS, 0));
+            category.Add(new Trait(TAILS, 1));
+
+            bool threwException = false;
+            try
+            {
+                string[] selections = category.Choose();
+            }
+            catch (Exception)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+        }
+
+        [TestMethod]
+        public void MoreSelectionsThanOptions()
+        {
+            TraitCategory category = new TraitCategory("Coin", 2);
+            category.Add(new Trait(HEADS, 0));
+
+            bool threwException = false;
+            try
+            {
+                string[] selections = category.Choose();
+            }
+            catch (Exception)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
         }
     }
 }

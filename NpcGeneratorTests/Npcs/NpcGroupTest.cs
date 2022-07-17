@@ -28,10 +28,10 @@ namespace Tests
         [TestMethod]
         public void NpcGroupGeneratesCsv()
         {
-            TraitCategory colourCategory = new TraitCategory("Colour");
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
             colourCategory.Add(new Trait("Blue", 1));
 
-            TraitCategory animalCategory = new TraitCategory("Animal");
+            TraitCategory animalCategory = new TraitCategory("Animal", 1);
             animalCategory.Add(new Trait("Bear", 1));
 
             TraitSchema schema = new TraitSchema();
@@ -47,10 +47,10 @@ namespace Tests
         [TestMethod]
         public void NpcGroupGeneratesJson()
         {
-            TraitCategory colourCategory = new TraitCategory("Colour");
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
             colourCategory.Add(new Trait("Blue", 1));
 
-            TraitCategory animalCategory = new TraitCategory("Animal");
+            TraitCategory animalCategory = new TraitCategory("Animal", 1);
             animalCategory.Add(new Trait("Bear", 1));
 
             TraitSchema traitSchema = new TraitSchema();

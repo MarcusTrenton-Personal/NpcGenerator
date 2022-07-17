@@ -47,7 +47,9 @@ namespace Tests
             string text = @"{
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                             { 
                                 'name' : 'Green', 
                                 'weight' : 1
@@ -76,7 +78,9 @@ namespace Tests
             string text = @"{
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                             { 
                                 'name' : 'Green', 
                                 'weight' : 1
@@ -106,7 +110,9 @@ namespace Tests
             string text = @"
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                             { 
                                 'name' : 'Green', 
                                 'weight' : 1
@@ -142,9 +148,11 @@ namespace Tests
         public void TraitSchemaHasTraitsInCorrectTraitCategories()
         {
             const string CATEGORY1_TITLE = "Colour";
+            const int CATEGORY1_SELECTION_COUNT = 1;
             const string CATEGORY1_TRAIT1 = "Green";
             const string CATEGORY1_TRAIT2 = "Red";
             const string CATEGORY2_TITLE = "Animal";
+            const int CATEGORY2_SELECTION_COUNT = 2;
             const string CATEGORY2_TRAIT1 = "Gorilla";
             const string CATEGORY2_TRAIT2 = "Rhino";
 
@@ -152,7 +160,9 @@ namespace Tests
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : '{CATEGORY1_TITLE}','traits' : [
+                        'name' : '{CATEGORY1_TITLE}',
+                        'selections': {CATEGORY1_SELECTION_COUNT},
+                        'traits' : [
                             {{ 
                                 'name' : '{CATEGORY1_TRAIT1}', 
                                 'weight' : 1
@@ -164,7 +174,9 @@ namespace Tests
                         ]
                     }},
                     {{
-                        'name' : '{CATEGORY2_TITLE}','traits' : [
+                        'name' : '{CATEGORY2_TITLE}',
+                        'selections': {CATEGORY2_SELECTION_COUNT},
+                        'traits' : [
                             {{ 
                                 'name' : '{CATEGORY2_TRAIT1}', 
                                 'weight' : 1
@@ -187,14 +199,23 @@ namespace Tests
             TraitCategory firstCategory = schema.GetAtIndex(0);
             Assert.IsNotNull(firstCategory, "Schema has a null first TraitCategory");
             Assert.AreEqual(firstCategory.Name, CATEGORY1_TITLE, "First category doesn't have name " + CATEGORY1_TITLE);
-            string colour = firstCategory.Choose();
-            Assert.IsTrue(colour == CATEGORY1_TRAIT1 || colour == CATEGORY1_TRAIT2, CATEGORY1_TITLE + " chose an invalid trait " + colour);
+            Assert.AreEqual(CATEGORY1_SELECTION_COUNT, firstCategory.SelectionCount, "First category has wrong SelectionCount");
+            string[] colours = firstCategory.Choose();
+            Assert.AreEqual(colours.Length, 1, "Wrong number of selections from " + CATEGORY1_TITLE);
+            Assert.IsTrue(colours[0] == CATEGORY1_TRAIT1 || colours[0] == CATEGORY1_TRAIT2, CATEGORY1_TITLE + 
+                " chose an invalid trait " + colours[0]);
 
             TraitCategory secondCategory = schema.GetAtIndex(1);
             Assert.IsNotNull(secondCategory, "Schema has a null second TraitCategory");
             Assert.AreEqual(secondCategory.Name, CATEGORY2_TITLE, "Second category doesn't have name " + CATEGORY2_TITLE);
-            string animal = secondCategory.Choose();
-            Assert.IsTrue(animal == CATEGORY2_TRAIT1 || animal == CATEGORY2_TRAIT2, CATEGORY2_TITLE + " chose an invalid trait " + animal);
+            Assert.AreEqual(CATEGORY2_SELECTION_COUNT, secondCategory.SelectionCount, "Second category has wrong SelectionCount");
+            string[] animals = secondCategory.Choose();
+            Assert.AreEqual(animals.Length, 2, "Wrong number of selections from " + CATEGORY2_TITLE);
+            Assert.IsTrue((animals[0] == CATEGORY2_TRAIT1 || animals[0] == CATEGORY2_TRAIT2), 
+                "Incorrect first animal selected: " + animals[0]);
+            Assert.IsTrue((animals[1] == CATEGORY2_TRAIT1 || animals[1] == CATEGORY2_TRAIT2), 
+                "Incorrect second animal selected: " + animals[1]);
+            Assert.AreNotEqual(animals[0], animals[1], "Did not select both animals");
 
             File.Delete(path);
         }
@@ -241,7 +262,9 @@ namespace Tests
             string text = @"{
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                         ]
                     }
                 ]
@@ -271,7 +294,9 @@ namespace Tests
             string text = @"{
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                             { 
                                 'weight' : 1
                             },
@@ -309,7 +334,9 @@ namespace Tests
             string text = @"{
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                             { 
                                 'name' : 'Green', 
                                 'weight' : -1
@@ -348,7 +375,9 @@ namespace Tests
             string text = @"{
                 'trait_categories' : [
                     {
-                        'name' : 'Colour','traits' : [
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
                             { 
                                 'name' : 'Green'
                             },
@@ -387,6 +416,7 @@ namespace Tests
                 'trait_categories' : 
                 [ 
                     {
+                        'selections': 1,
                         'traits' :
                         [
                             { 
@@ -416,6 +446,46 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Missing trait category name did not throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MissingSelections()
+        {
+            string path = Path.Combine(TestDirectory, "colour.json");
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour',
+                        'traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (Exception)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Missing trait selection number did not throw exception");
 
             File.Delete(path);
         }

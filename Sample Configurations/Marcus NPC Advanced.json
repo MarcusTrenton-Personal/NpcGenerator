@@ -106,7 +106,7 @@
 		},
 		{
 			"name": "Quirk",
-			"selections": 1,
+			"selections": 2,
 			"traits" :
 			[
 				{"name" : "Transgender", "weight" : 1},

@@ -63,14 +63,18 @@ namespace Tests
             TraitCategory firstCategory = schema.GetAtIndex(0);
             Assert.IsNotNull(firstCategory, "Schema has a null first TraitCategory");
             Assert.AreEqual(firstCategory.Name, CATEGORY1_TITLE, "First category doesn't have name " + CATEGORY1_TITLE);
-            string colour = firstCategory.Choose();
-            Assert.IsTrue(colour == CATEGORY1_TRAIT1 || colour == CATEGORY1_TRAIT2, CATEGORY1_TITLE + " chose an invalid trait " + colour);
+            string[] colours = firstCategory.Choose();
+            Assert.AreEqual(1, colours.Length, "Wrong number of traits selected from " + CATEGORY1_TITLE);
+            Assert.IsTrue(colours[0] == CATEGORY1_TRAIT1 || colours[0] == CATEGORY1_TRAIT2, 
+                CATEGORY1_TITLE + " chose an invalid trait " + colours[0]);
 
             TraitCategory secondCategory = schema.GetAtIndex(1);
             Assert.IsNotNull(secondCategory, "Schema has a null second TraitCategory");
             Assert.AreEqual(secondCategory.Name, CATEGORY2_TITLE, "Second category doesn't have name " + CATEGORY2_TITLE);
-            string animal = secondCategory.Choose();
-            Assert.IsTrue(animal == CATEGORY2_TRAIT1 || animal == CATEGORY2_TRAIT2, CATEGORY2_TITLE + " chose an invalid trait " + animal);
+            string[] animals = secondCategory.Choose();
+            Assert.AreEqual(1, animals.Length, "Wrong number of traits selected from " + CATEGORY2_TITLE);
+            Assert.IsTrue(animals[0] == CATEGORY2_TRAIT1 || animals[0] == CATEGORY2_TRAIT2, 
+                CATEGORY2_TITLE + " chose an invalid trait " + animals[0]);
 
             File.Delete(path);
         }

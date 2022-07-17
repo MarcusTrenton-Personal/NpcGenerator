@@ -32,7 +32,7 @@ namespace NpcGenerator
 
             for(int i = 0; i < traitSchema.TraitCategoryCount; ++i)
             {
-                traitCategoryNames.Add(traitSchema.GetAtIndex(i).Name);
+                m_traitCategoryNames.Add(traitSchema.GetAtIndex(i).Name);
             }
 
             for(int i = 0; i < npcCount; ++i)
@@ -40,10 +40,12 @@ namespace NpcGenerator
                 Npc npc = new Npc();
                 for(int j = 0; j < traitSchema.TraitCategoryCount; ++j)
                 {
-                    string trait = traitSchema.GetAtIndex(j).Choose();
-                    npc.AddTrait(trait);
+                    TraitCategory traitCategory = traitSchema.GetAtIndex(j);
+                    string category = traitCategory.Name;
+                    string[] traits = traitCategory.Choose();
+                    npc.AddTrait(category: category, traits: traits);
                 }
-                npcs.Add(npc);
+                m_npcs.Add(npc);
             }
         }
 
@@ -54,10 +56,10 @@ namespace NpcGenerator
             TraitCategoryNamesToCsv(text);
             text.Append('\n');
 
-            for(int i = 0; i < npcs.Count; ++i)
+            for(int i = 0; i < m_npcs.Count; ++i)
             {
-                npcs[i].ToCsvRow(text);
-                if (i + 1 < npcs.Count)
+                m_npcs[i].ToCsvRow(text, m_traitCategoryNames);
+                if (i + 1 < m_npcs.Count)
                 {
                     text.Append('\n');
                 }
@@ -76,12 +78,12 @@ namespace NpcGenerator
                 writer.WritePropertyName("npc_group");
                 writer.WriteStartArray();
 
-                foreach(Npc npc in npcs)
+                foreach(Npc npc in m_npcs)
                 {
-                    npc.ToJsonObject(writer, traitCategoryNames);
+                    npc.ToJsonObject(writer, m_traitCategoryNames);
                 }
 
-                writer.WriteEnd(); //End of array
+                writer.WriteEndArray();
                 writer.WriteEndObject(); //End of json
 
             }
@@ -92,10 +94,10 @@ namespace NpcGenerator
 
         private void TraitCategoryNamesToCsv(StringBuilder text)
         {
-            for (int i = 0; i < traitCategoryNames.Count; ++i)
+            for (int i = 0; i < m_traitCategoryNames.Count; ++i)
             {
-                text.Append(traitCategoryNames[i]);
-                if (i + 1 < traitCategoryNames.Count)
+                text.Append(m_traitCategoryNames[i]);
+                if (i + 1 < m_traitCategoryNames.Count)
                 {
                     text.Append(',');
                 }
@@ -104,18 +106,19 @@ namespace NpcGenerator
 
         public Npc GetNpcAtIndex(int index)
         {
-            return npcs[index];
+            return m_npcs[index];
         }
 
         public string GetTraitCategoryNameAtIndex(int index)
         {
-            return traitCategoryNames[index];
+            return m_traitCategoryNames[index];
         }
 
-        public int TraitCategoryCount { get { return traitCategoryNames.Count; } }
-        public int NpcCount { get { return npcs.Count; } }
+        public int TraitCategoryCount { get { return m_traitCategoryNames.Count; } }
+        public int NpcCount { get { return m_npcs.Count; } }
+        public IList<string> TraitCategories { get => m_traitCategoryNames; }
 
-        private readonly List<string> traitCategoryNames = new List<string>();
-        private readonly List<Npc> npcs = new List<Npc>();
+        private readonly List<string> m_traitCategoryNames = new List<string>();
+        private readonly List<Npc> m_npcs = new List<Npc>();
     }
 }

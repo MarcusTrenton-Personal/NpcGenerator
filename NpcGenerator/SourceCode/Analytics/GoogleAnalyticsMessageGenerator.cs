@@ -86,8 +86,8 @@ namespace NpcGenerator
         {
             if (value != null)
             {
-                Debug.Assert(name.Length <= 24, "User property name " + name + " is longer than the 24 character maximum");
-                Debug.Assert(value.Length <= 36,
+                Trace.Assert(name.Length <= 24, "User property name " + name + " is longer than the 24 character maximum");
+                Trace.Assert(value.Length <= 36,
                     "User property value " + value + " is longer than the 36 character maximum");
 
                 writer.WritePropertyName(name);

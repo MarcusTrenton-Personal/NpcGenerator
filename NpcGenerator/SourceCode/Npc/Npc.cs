@@ -22,53 +22,108 @@ namespace NpcGenerator
 {
     public class Npc
     {
-        public void AddTrait(string name)
+        public const char CSV_SEPARATOR = ',';
+        public const char MULTI_TRAIT_SEPARATOR = '&';
+
+        public void AddTrait(string category, string[] traits)
         {
-            traits.Add(name);
+            bool categoryExists = m_traitsByCategory.ContainsKey(category);
+            List<string> traitsList;
+            if (categoryExists)
+            {
+                traitsList = m_traitsByCategory[category];
+            }
+            else
+            {
+                m_traitsByCategory[category] = new List<string>();
+                traitsList = m_traitsByCategory[category];
+            }
+            traitsList.AddRange(traits);
         }
 
-        public string GetTraitAtIndex(int index)
+        public string[] GetTraitsOfCategory(string category)
         {
-            return traits[index];
+            bool success = m_traitsByCategory.TryGetValue(category, out List<string> traits);
+            if (success)
+            {
+                return traits.ToArray();
+            }
+            else
+            {
+                return Array.Empty<string>();
+            }
         }
 
-        public string[] GetTraits()
+        public string[] ToStringArrayByCategory(IList<string> categoryOrder)
         {
-            return traits.ToArray();
+            List<string> traitsPerCategory = new List<string>();
+            foreach (string category in categoryOrder)
+            {
+                bool found = m_traitsByCategory.TryGetValue(category, out List<string> traits);
+                if (found)
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    CombineTraits(traits, stringBuilder);
+                    traitsPerCategory.Add(stringBuilder.ToString());
+                }
+            }
+            return traitsPerCategory.ToArray();
         }
 
-        public void ToCsvRow(StringBuilder stringBuilder)
+        public void ToCsvRow(StringBuilder stringBuilder, IList<string> categoryOrder)
         {
             if (stringBuilder == null)
             {
                 throw new ArgumentNullException(nameof(stringBuilder));
             }
-
-            for (int i = 0; i < traits.Count; ++i)
+            for (int i = 0; i < categoryOrder.Count; ++i)
             {
-                stringBuilder.Append(traits[i]);
-                if (i + 1 < traits.Count)
+                bool found = m_traitsByCategory.TryGetValue(categoryOrder[i], out List<string> traits);
+                if (found)
                 {
-                    stringBuilder.Append(',');
+                    CombineTraits(traits, stringBuilder);
+                }
+                if (i + 1 < m_traitsByCategory.Count)
+                {
+                    stringBuilder.Append(CSV_SEPARATOR);
                 }
             }
         }
 
-        public void ToJsonObject(JsonWriter writer, IList<string> traitGroups)
+        public void ToJsonObject(JsonWriter writer, IList<string> categoryOrder)
         {
             writer.WriteStartObject();
             
-            for(int i = 0; i < traitGroups.Count; ++i)
+            for(int i = 0; i < categoryOrder.Count; ++i)
             {
-                writer.WritePropertyName(traitGroups[i]);
-                writer.WriteValue(traits[i]);
+                bool found = m_traitsByCategory.TryGetValue(categoryOrder[i], out List<string> traits);
+                if (found)
+                {
+                    writer.WritePropertyName(categoryOrder[i]);
+                    writer.WriteStartArray();
+                    for(int j = 0; j < traits.Count; ++j)
+                    {
+                        writer.WriteValue(traits[j]);
+                    }
+                    writer.WriteEndArray();
+                }
             }
 
             writer.WriteEndObject();
         }
 
-        public int TraitCount { get { return traits.Count; } }
+        private static void CombineTraits(List<string> traits, StringBuilder stringBuilder)
+        {
+            for (int i = 0; i < traits.Count; ++i)
+            {
+                stringBuilder.Append(traits[i]);
+                if (i + 1 < traits.Count)
+                {
+                    stringBuilder.Append(" " + MULTI_TRAIT_SEPARATOR + " ");
+                }
+            }
+        }
 
-        private readonly List<string> traits = new List<string>();
+        private readonly Dictionary<string,List<string>> m_traitsByCategory = new Dictionary<string, List<string>>();
     }
 }

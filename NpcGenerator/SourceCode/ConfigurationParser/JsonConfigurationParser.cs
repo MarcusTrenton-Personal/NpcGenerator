@@ -59,7 +59,7 @@ namespace NpcGenerator
             TraitSchema traitSchema = new TraitSchema();
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
-                TraitCategory category = new TraitCategory(protoCategory.Name);
+                TraitCategory category = new TraitCategory(protoCategory.Name, protoCategory.Selections);
                 foreach (ProtoTrait protoTrait in protoCategory.traits)
                 {
                     Trait trait = new Trait(protoTrait.Name, protoTrait.Weight);
@@ -83,6 +83,7 @@ namespace NpcGenerator
         private class ProtoTraitCategory
         {
             public string Name { get; set; }
+            public int Selections { get; set; }
             public List<ProtoTrait> traits;
         }
 

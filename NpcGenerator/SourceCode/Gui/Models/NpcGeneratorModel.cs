@@ -173,7 +173,7 @@ namespace NpcGenerator
                 }
                 for (int i = 0; i < m_npcGroup.NpcCount; ++i)
                 {
-                    table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).GetTraits());
+                    table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).ToStringArrayByCategory(m_npcGroup.TraitCategories));
                 }
                 m_table = table;
                 NotifyPropertyChanged("ResultNpcs");

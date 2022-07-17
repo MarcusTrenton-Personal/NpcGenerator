@@ -61,7 +61,7 @@ namespace NpcGenerator
                 {
                     throw new FormatException("Missing title for trait column");
                 }
-                traitSchema.Add(new TraitCategory(title));
+                traitSchema.Add(new TraitCategory(title, selectionCount: 1));
             }
             return traitSchema;
         }
