@@ -26,36 +26,58 @@ namespace Tests
     public class NpcGroupTests
     {
         [TestMethod]
-        public void NpcGroupGeneratesCsv()
+        public void NpcGroupGeneratesCsvSingleNpc()
         {
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            colourCategory.Add(new Trait("Blue", 1));
-
-            TraitCategory animalCategory = new TraitCategory("Animal", 1);
-            animalCategory.Add(new Trait("Bear", 1));
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
-            schema.Add(animalCategory);
 
             NpcGroup npcGroup = new NpcGroup(schema, 1);
             string csv = npcGroup.ToCsv();
 
-            Assert.AreEqual("Colour,Animal\nBlue,Bear", csv, "NpcGroup did not generate expected CSV text");
+            Assert.AreEqual("Colour\nBlue", csv, "NpcGroup did not generate expected CSV text");
         }
 
         [TestMethod]
-        public void NpcGroupGeneratesJson()
+        public void NpcGroupGeneratesCsvMultipleNpcs()
         {
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            colourCategory.Add(new Trait("Blue", 1));
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
 
-            TraitCategory animalCategory = new TraitCategory("Animal", 1);
-            animalCategory.Add(new Trait("Bear", 1));
+            TraitSchema schema = new TraitSchema();
+            schema.Add(colourCategory);
+
+            NpcGroup npcGroup = new NpcGroup(schema, 2);
+            string csv = npcGroup.ToCsv();
+
+            Assert.AreEqual("Colour\nBlue\nBlue", csv, "NpcGroup did not generate expected CSV text");
+        }
+
+        [TestMethod]
+        public void NpcGroupGeneratesCsvZeroNpcs()
+        {
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(colourCategory);
+
+            NpcGroup npcGroup = new NpcGroup(schema, 0);
+            string csv = npcGroup.ToCsv();
+
+            Assert.AreEqual("Colour\n", csv, "NpcGroup did not generate expected CSV text");
+        }
+
+        [TestMethod]
+        public void NpcGroupGeneratesJsonSingleNpc()
+        {
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
 
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
-            traitSchema.Add(animalCategory);
 
             NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
             string jsonText = npcGroup.ToJson();
@@ -64,10 +86,67 @@ namespace Tests
             string schemaPath = "NpcGroupSchema.json";
             string schemaText = File.ReadAllText(schemaPath);
             JSchema schema = JSchema.Parse(schemaText);
-            
-            IList<string> errorMessages;
+
             string concatenatedMessages = "";
-            bool isValid = json.IsValid(schema, out errorMessages);
+            bool isValid = json.IsValid(schema, out IList<string> errorMessages);
+            if (!isValid)
+            {
+                foreach (var error in errorMessages)
+                {
+                    concatenatedMessages += error + "\n";
+                }
+            }
+            Assert.IsTrue(isValid, "Json validation failed with message: " + concatenatedMessages);
+        }
+
+        [TestMethod]
+        public void NpcGroupGeneratesJsonMultipleNpcs()
+        {
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 2);
+            string jsonText = npcGroup.ToJson();
+            JToken json = JToken.Parse(jsonText);
+
+            string schemaPath = "NpcGroupSchema.json";
+            string schemaText = File.ReadAllText(schemaPath);
+            JSchema schema = JSchema.Parse(schemaText);
+
+            string concatenatedMessages = "";
+            bool isValid = json.IsValid(schema, out IList<string> errorMessages);
+            if (!isValid)
+            {
+                foreach (var error in errorMessages)
+                {
+                    concatenatedMessages += error + "\n";
+                }
+            }
+            Assert.IsTrue(isValid, "Json validation failed with message: " + concatenatedMessages);
+        }
+
+        [TestMethod]
+        public void NpcGroupGeneratesJsonZeroNpcs()
+        {
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 0);
+            string jsonText = npcGroup.ToJson();
+            JToken json = JToken.Parse(jsonText);
+
+            string schemaPath = "NpcGroupSchema.json";
+            string schemaText = File.ReadAllText(schemaPath);
+            JSchema schema = JSchema.Parse(schemaText);
+
+            string concatenatedMessages = "";
+            bool isValid = json.IsValid(schema, out IList<string> errorMessages);
             if (!isValid)
             {
                 foreach (var error in errorMessages)

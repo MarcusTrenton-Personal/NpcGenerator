@@ -28,9 +28,9 @@ namespace Tests
         [TestMethod]
         public void TraitSelectionReturnsAllValidValues()
         {
-            TraitCategory category = new TraitCategory("Coin", 1);
-            category.Add(new Trait(HEADS, 1));
-            category.Add(new Trait(TAILS, 1));
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
+            category.Add(new Trait(HEADS, 1, isHidden: false));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
 
             int headCount = 0;
             int tailCount = 0;
@@ -62,9 +62,9 @@ namespace Tests
         [TestMethod]
         public void TraitSelectionIsRandom()
         {
-            TraitCategory category = new TraitCategory("Coin", 1);
-            category.Add(new Trait(HEADS, 2));
-            category.Add(new Trait(TAILS, 1));
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
+            category.Add(new Trait(HEADS, 2, isHidden: false));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
 
             int headCount = 0;
             int tailCount = 0;
@@ -99,8 +99,8 @@ namespace Tests
             const int SELECTION_COUNT = 2;
 
             TraitCategory category = new TraitCategory("Coin", SELECTION_COUNT);
-            category.Add(new Trait(HEADS, 1));
-            category.Add(new Trait(TAILS, 1));
+            category.Add(new Trait(HEADS, 1, isHidden: false));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
 
             string[] selections = category.Choose();
             Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
@@ -110,8 +110,8 @@ namespace Tests
         [TestMethod]
         public void NoWeightSingleSelection()
         {
-            TraitCategory category = new TraitCategory("Coin", 1);
-            category.Add(new Trait(HEADS, 0)); 
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
+            category.Add(new Trait(HEADS, 0, isHidden: false)); 
 
             bool threwException = false;
             try 
@@ -129,9 +129,9 @@ namespace Tests
         [TestMethod]
         public void NoWeightMultipleSelection()
         {
-            TraitCategory category = new TraitCategory("Coin", 2);
-            category.Add(new Trait(HEADS, 0));
-            category.Add(new Trait(TAILS, 1));
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
+            category.Add(new Trait(HEADS, 0, isHidden: false));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
 
             bool threwException = false;
             try
@@ -149,8 +149,8 @@ namespace Tests
         [TestMethod]
         public void MoreSelectionsThanOptions()
         {
-            TraitCategory category = new TraitCategory("Coin", 2);
-            category.Add(new Trait(HEADS, 0));
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
+            category.Add(new Trait(HEADS, 0, isHidden: false));
 
             bool threwException = false;
             try
@@ -163,6 +163,30 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+        }
+
+        [TestMethod]
+        public void HiddenTraitOnSingleSelection()
+        {
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
+            category.Add(new Trait(HEADS, 1, isHidden: true));
+
+            string[] selections = category.Choose();
+
+            Assert.AreEqual(0, selections.Length, "Hidden selected trait is incorrectly present in output");
+        }
+
+        [TestMethod]
+        public void HiddenTraitOnMultiSelection()
+        {
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
+            category.Add(new Trait(HEADS, 1, isHidden: true));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
+
+            string[] selections = category.Choose();
+
+            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
+            Assert.AreEqual(TAILS, selections[0], "Hidden selected trait is incorrectly present in output");
         }
     }
 }

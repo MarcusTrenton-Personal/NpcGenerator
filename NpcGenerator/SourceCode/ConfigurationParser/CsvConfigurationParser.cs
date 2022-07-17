@@ -87,7 +87,7 @@ namespace NpcGenerator
                         {
                             throw new ArithmeticException("Weight for " + traitWeightString + " is not a whole number of at least 0");
                         }
-                        traitSchema.GetAtIndex(i).Add(new Trait(traitName, weight));
+                        traitSchema.GetAtIndex(i).Add(new Trait(traitName, weight, isHidden: false));
                     }
                     else
                     {

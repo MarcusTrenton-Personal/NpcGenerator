@@ -109,6 +109,7 @@
 			"selections": 2,
 			"traits" :
 			[
+				{"name" : "None", "weight" : 20, "hidden" : true},
 				{"name" : "Transgender", "weight" : 1},
 				{"name" : "Autistic", "weight" : 1},
 				{"name" : "Graceful", "weight" : 1},

@@ -13,6 +13,7 @@
 			"uniqueItems": true
 		}
 	},
+	"additionalProperties": false,
 	"required": ["trait_categories"],
 	
 	"$defs": {
@@ -37,6 +38,7 @@
 					"uniqueItems": true
 				}
 			},
+			"additionalProperties": false,
 			"required": ["name", "selections", "traits"]
 		},
 		"trait": {
@@ -51,9 +53,15 @@
 					"description": "The likelihood that this trait will be picked. Two traits of equal weight are equally as likely to be picked. If one trait has double the weight of another, it is twice as likely to be picked. If the sum of all weights in a category add up to 100, the weight is a percentage change to be picked.",
 					"type": "integer",
 					"minimum": 0
+				},
+				"hidden": {
+					"description": "Whether the trait is shown in Npcs. For example a hidden Npc quirk of 'None'. Optional and assumed false if not present.",
+					"type": "boolean",
+					"default": "false"
 				}
 			},
-			"required":["name", "weight"]
+			"required":["name", "weight"],
+			"additionalProperties": false
 		}
 	}
 }

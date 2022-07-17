@@ -62,7 +62,7 @@ namespace NpcGenerator
                 TraitCategory category = new TraitCategory(protoCategory.Name, protoCategory.Selections);
                 foreach (ProtoTrait protoTrait in protoCategory.traits)
                 {
-                    Trait trait = new Trait(protoTrait.Name, protoTrait.Weight);
+                    Trait trait = new Trait(protoTrait.Name, protoTrait.Weight, protoTrait.Hidden);
                     category.Add(trait);
                 }
                 traitSchema.Add(category);
@@ -91,6 +91,7 @@ namespace NpcGenerator
         {
             public string Name { get; set; }
             public int Weight { get; set; }
+            public bool Hidden { get; set; } = false;
         }
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
 

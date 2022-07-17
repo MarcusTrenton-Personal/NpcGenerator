@@ -61,8 +61,10 @@ namespace NpcGenerator
             List<Trait> remainingTraitChoices = SelectionCount == 1 ? m_traits : new List<Trait>(m_traits);
             int remainingWeight = m_totalWeight;
 
-            string[] selected = new string[SelectionCount];
-            for (int i = 0; i < selected.Length; i++)
+            //Number of selected traits is actually variable, with a maximum of SelectionCount. If a hidden trait is selected,
+            //it consumes a selection count but is not added to the selected list.
+            List<string> selected = new List<string>();
+            for (int i = 0; i < SelectionCount; i++)
             {
                 int randomSelection = RandomNumberGenerator.GetInt32(0, remainingWeight) + 1;
                 int selectedIndex = -1;
@@ -77,16 +79,20 @@ namespace NpcGenerator
                     }
                 }
                 Trace.Assert(selectedIndex >= 0, "Failed to choose a trait.");
-                selected[i] = remainingTraitChoices[selectedIndex].Name;
+                Trait trait = remainingTraitChoices[selectedIndex];
+                if (!trait.IsHidden)
+                {
+                    selected.Add(trait.Name);
+                }
 
-                if (i + 1 < selected.Length)
+                if (i + 1 < SelectionCount)
                 {
                     remainingWeight -= remainingTraitChoices[selectedIndex].Weight;
                     remainingTraitChoices.RemoveAt(selectedIndex);
                 }
             }
             
-            return selected;
+            return selected.ToArray();
         }
 
         public string Name

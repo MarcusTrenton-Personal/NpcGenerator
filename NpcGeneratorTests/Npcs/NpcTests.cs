@@ -54,6 +54,18 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ExportNoTraitCsv()
+        {
+            Npc npc = new Npc();
+
+            StringBuilder textBuilder = new StringBuilder();
+            npc.ToCsvRow(textBuilder, new List<string>() { "Purpose"});
+            string csvRow = textBuilder.ToString();
+
+            Assert.AreEqual("", csvRow, "Npc did not generate expected CSV row");
+        }
+
+        [TestMethod]
         public void ExportSingleTraitJson()
         {
             const string CATEGORY1_NAME = "Colour";
@@ -118,6 +130,25 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ExportNoTraitJson()
+        {
+            Npc npc = new Npc();
+
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            using (JsonWriter writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
+            {
+                npc.ToJsonObject(writer, new List<string>() { "Purpose" });
+
+            }
+            string json = sw.ToString();
+
+            Dictionary<string, List<string>> traits = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
+
+            Assert.AreEqual(0, traits.Count, "Npc exported traits that it was not given");
+        }
+
+        [TestMethod]
         public void ExportSingleTraitStringArray()
         {
             Npc npc = new Npc();
@@ -143,6 +174,16 @@ namespace Tests
             Assert.AreEqual(2, traitsByCategories.Length, "Wrong number of trait categories");
             Assert.AreEqual("Blue & Green", traitsByCategories[0], "Npc did not generate expected CSV row");
             Assert.AreEqual("Hills & River", traitsByCategories[1], "Npc did not generate expected CSV row");
+        }
+
+        [TestMethod]
+        public void ExportNoTraitStringArray()
+        {
+            Npc npc = new Npc();
+
+            string[] traitsByCategories = npc.ToStringArrayByCategory(new List<string>() { "Purpose" });
+
+            Assert.AreEqual(0, traitsByCategories.Length, "Wrong number of trait categories");
         }
     }
 }

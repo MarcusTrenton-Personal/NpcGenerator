@@ -8,9 +8,7 @@
 		"npc_group": {
 			"description": "List of npcs and their traits",
 			"type": "array",
-			"items": { "$ref": "#/$defs/npc"},
-			"minItems": 1,
-			"uniqueItems": true
+			"items": { "$ref": "#/$defs/npc"}
 		}
 	},
 	"required": ["npc_group"],
@@ -18,7 +16,14 @@
 	"$defs": {
 		"npc": {
 			"description": "A list of traits of an NPC",
-			"type": "object"
+			"type": "object",
+			"patternProperties": {
+				"^.*$": { 
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			},
+			"additionalProperties": false
 		}
 	}
 }

@@ -17,13 +17,15 @@ namespace NpcGenerator
 {
     public class Trait
     {
-        public Trait(string name, int weight)
+        public Trait(string name, int weight, bool isHidden)
         {
             Name = name;
             Weight = weight;
+            IsHidden = isHidden;
         }
 
         public string Name { get; }
         public int Weight { get; }
+        public bool IsHidden { get; }
     }
 }
