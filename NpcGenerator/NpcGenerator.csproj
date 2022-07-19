@@ -111,7 +111,7 @@
     <Delete Files="@(Symbols)" />
     <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     <ItemGroup>
-      <Sample Include="..\Sample Configurations\*.csv" />
+      <Sample Include="..\Sample Configurations\*.csv;..\Sample Configurations\*.json" />
     </ItemGroup>
     <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
     
