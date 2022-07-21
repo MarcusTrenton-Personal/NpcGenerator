@@ -57,6 +57,8 @@ namespace NpcGenerator
 
             ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
             TraitSchema traitSchema = new TraitSchema();
+            List<DeferredBonusSelection> deferredBonusSelections = new List<DeferredBonusSelection>();
+            List<TraitCategory> categories = new List<TraitCategory>();
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
                 TraitCategory category = new TraitCategory(protoCategory.Name, protoCategory.Selections);
@@ -64,8 +66,30 @@ namespace NpcGenerator
                 {
                     Trait trait = new Trait(protoTrait.Name, protoTrait.Weight, protoTrait.Hidden);
                     category.Add(trait);
+
+                    if (protoTrait.bonus_selection != null)
+                    {
+                        deferredBonusSelections.Add(new DeferredBonusSelection()
+                        {
+                            m_trait = trait,
+                            m_categoryName = protoTrait.bonus_selection.trait_category_name,
+                            m_selections = protoTrait.bonus_selection.Selections
+                        });
+                    }
                 }
                 traitSchema.Add(category);
+                categories.Add(category);
+            }
+            foreach (DeferredBonusSelection deferredBonusSelection in deferredBonusSelections)
+            {
+                TraitCategory category = categories.Find(category => category.Name == deferredBonusSelection.m_categoryName);
+                if (category == null)
+                {
+                    throw new MismatchedBonusSelectionException(notFoundCategoryName: deferredBonusSelection.m_categoryName,
+                        trait: deferredBonusSelection.m_trait.Name);
+                }
+                BonusSelection bonusSelection = new BonusSelection(category, deferredBonusSelection.m_selections);
+                deferredBonusSelection.m_trait.BonusSelection = bonusSelection;
             }
 
             return traitSchema;
@@ -92,8 +116,26 @@ namespace NpcGenerator
             public string Name { get; set; }
             public int Weight { get; set; }
             public bool Hidden { get; set; } = false;
+            //Deliberately breaking with the normal naming scheme.
+            //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
+            public ProtoBonusSelection bonus_selection { get; set; }
+        }
+
+        private class ProtoBonusSelection
+        {
+            //Deliberately breaking with the normal naming scheme.
+            //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
+            public string trait_category_name;
+            public int Selections { get; set; }
         }
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
+
+        private class DeferredBonusSelection
+        {
+            public Trait m_trait;
+            public string m_categoryName;
+            public int m_selections;
+        }
 
         private readonly JSchema m_schema = null;
     }
@@ -105,5 +147,17 @@ namespace NpcGenerator
             Path = path;
         }
         public string Path { get; private set; }
+    }
+
+    public class MismatchedBonusSelectionException : FormatException
+    {
+        public MismatchedBonusSelectionException(string notFoundCategoryName, string trait)
+        {
+            NotFoundCategoryName = notFoundCategoryName;
+            Trait = trait;
+        }
+
+        public string Trait { get; private set; }
+        public string NotFoundCategoryName { get; private set; }
     }
 }

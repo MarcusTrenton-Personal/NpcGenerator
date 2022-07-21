@@ -31,6 +31,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tests
@@ -199,8 +200,9 @@ namespace Tests
             TraitCategory firstCategory = schema.GetAtIndex(0);
             Assert.IsNotNull(firstCategory, "Schema has a null first TraitCategory");
             Assert.AreEqual(firstCategory.Name, CATEGORY1_TITLE, "First category doesn't have name " + CATEGORY1_TITLE);
-            Assert.AreEqual(CATEGORY1_SELECTION_COUNT, firstCategory.SelectionCount, "First category has wrong SelectionCount");
-            string[] colours = firstCategory.Choose();
+            Assert.AreEqual(CATEGORY1_SELECTION_COUNT, firstCategory.DefaultSelectionCount, "First category has wrong SelectionCount");
+            string[] colours = firstCategory.Choose(firstCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections1);
+            Assert.AreEqual(0, bonusSelections1.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(colours.Length, 1, "Wrong number of selections from " + CATEGORY1_TITLE);
             Assert.IsTrue(colours[0] == CATEGORY1_TRAIT1 || colours[0] == CATEGORY1_TRAIT2, CATEGORY1_TITLE + 
                 " chose an invalid trait " + colours[0]);
@@ -208,8 +210,9 @@ namespace Tests
             TraitCategory secondCategory = schema.GetAtIndex(1);
             Assert.IsNotNull(secondCategory, "Schema has a null second TraitCategory");
             Assert.AreEqual(secondCategory.Name, CATEGORY2_TITLE, "Second category doesn't have name " + CATEGORY2_TITLE);
-            Assert.AreEqual(CATEGORY2_SELECTION_COUNT, secondCategory.SelectionCount, "Second category has wrong SelectionCount");
-            string[] animals = secondCategory.Choose();
+            Assert.AreEqual(CATEGORY2_SELECTION_COUNT, secondCategory.DefaultSelectionCount, "Second category has wrong SelectionCount");
+            string[] animals = secondCategory.Choose(secondCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections2);
+            Assert.AreEqual(0, bonusSelections2.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(animals.Length, 2, "Wrong number of selections from " + CATEGORY2_TITLE);
             Assert.IsTrue((animals[0] == CATEGORY2_TRAIT1 || animals[0] == CATEGORY2_TRAIT2), 
                 "Incorrect first animal selected: " + animals[0]);

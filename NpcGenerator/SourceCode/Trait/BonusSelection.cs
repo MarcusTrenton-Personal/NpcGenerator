@@ -1,4 +1,4 @@
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,18 +15,15 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public class Trait
+    public class BonusSelection
     {
-        public Trait(string name, int weight, bool isHidden)
+        public BonusSelection(TraitCategory traitCategory, int selectionCount)
         {
-            Name = name;
-            Weight = weight;
-            IsHidden = isHidden;
+            TraitCategory = traitCategory;
+            SelectionCount = selectionCount;
         }
 
-        public string Name { get; }
-        public int Weight { get; }
-        public bool IsHidden { get; }
-        public BonusSelection BonusSelection { get; set; } = null;
+        public TraitCategory TraitCategory { get; }
+        public int SelectionCount { get; }
     }
 }

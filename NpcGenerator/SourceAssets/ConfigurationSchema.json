@@ -25,11 +25,7 @@
 					"description": "The user-facing name for the trait category",
 					"type": "string"
 				},
-				"selections": {
-					"description": "How many traits from this category will be selected. No trait can be selected twice.",
-					"type": "integer",
-					"minimum": 1
-				},
+				"selections": { "$ref": "#/$defs/selections"},
 				"traits": {
 					"description": "List of all traits in one category. By default an NPC can only have 1 trait from a category.",
 					"type": "array",
@@ -58,10 +54,28 @@
 					"description": "Whether the trait is shown in Npcs. For example a hidden Npc quirk of 'None'. Optional and assumed false if not present.",
 					"type": "boolean",
 					"default": "false"
+				},
+				"bonus_selection": {
+					"description": "If this trait is selected then additional traits will be selected in the specified category. Example 1: In the category of races, the biracial trait will select 2 more races from the same category. Example 2: In the Quirk category, the disablity trait will select 1 more trait in the disability category. Optional.",
+					"type": "object",
+					"properties": {
+						"trait_category_name": {
+							"description": "Must match the name properties of a trait_category",
+							"type": "string"
+						},
+						"selections": { "$ref": "#/$defs/selections"}
+					},
+					"required": ["trait_category_name", "selections"],
+					"additionalProperties": false
 				}
 			},
-			"required":["name", "weight"],
+			"required": ["name", "weight"],
 			"additionalProperties": false
+		},
+		"selections": {
+			"description": "How many traits from this category will be selected. No trait can be selected twice.",
+			"type": "integer",
+			"minimum": 0
 		}
 	}
 }

@@ -14,3 +14,4 @@ exception_maybe_file_deleted	Parameter is an error message with the name of a fi
 source_code	View source code for this app	MMMMM	Source Code	Source Code	Code Source
 donate	Donate money to the maker of this app	NNNNNN	Donate	Donate	Faire un don
 configuration_file_invalid	Shown when npc configuration file has validation error. Parameter is a file name.	OOOOOO	Error parsing configuration file {0}.	Error parsing configuration file {0}.	Erreur lors de l'analyse du fichier de configuration {0}.
+mismatched_bonus_selection	Shown when npc configuration file has a bonus selection in a category that doesn’t exist.	PPPPPP	Trait {0} has a bonus selection in category {1} that does not exist. 	Trait {0} has a bonus selection in category {1} that does not exist. 	

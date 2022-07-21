@@ -30,22 +30,50 @@ namespace NpcGenerator
                 throw new ArgumentNullException(nameof(traitSchema));
             }
 
+            List<TraitCategory> categories = new List<TraitCategory>();
             for(int i = 0; i < traitSchema.TraitCategoryCount; ++i)
             {
-                m_traitCategoryNames.Add(traitSchema.GetAtIndex(i).Name);
+                TraitCategory category = traitSchema.GetAtIndex(i);
+                m_traitCategoryNames.Add(category.Name);
+                categories.Add(category);
             }
 
             for(int i = 0; i < npcCount; ++i)
             {
                 Npc npc = new Npc();
-                for(int j = 0; j < traitSchema.TraitCategoryCount; ++j)
+
+                Dictionary<TraitCategory, int> selectionsPerCategory = new Dictionary<TraitCategory, int>();
+                foreach(TraitCategory category in categories)
+                {
+                    selectionsPerCategory[category] = category.DefaultSelectionCount;
+                }
+
+                while(selectionsPerCategory.Count > 0)
+                {
+                    //Get any category, choose traits, remove category, add bonus selection, repeat until no more categories left.
+                    Dictionary<TraitCategory, int>.Enumerator enumerator = selectionsPerCategory.GetEnumerator();
+                    enumerator.MoveNext();
+                    KeyValuePair<TraitCategory, int> current = enumerator.Current;
+                    TraitCategory category = current.Key;
+                    int count = current.Value;
+                    string[] traits = category.Choose(count, out List <BonusSelection> bonusSelections);
+                    npc.AddTrait(category: category.Name, traits: traits);
+
+                    selectionsPerCategory.Remove(category);
+
+                    foreach (BonusSelection bonusSelection in bonusSelections)
+                    {
+                        selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
+                    }
+                }
+
+                m_npcs.Add(npc);
+
+                for (int j = 0; j < traitSchema.TraitCategoryCount; ++j)
                 {
                     TraitCategory traitCategory = traitSchema.GetAtIndex(j);
-                    string category = traitCategory.Name;
-                    string[] traits = traitCategory.Choose();
-                    npc.AddTrait(category: category, traits: traits);
+                    traitCategory.ResetChoices();
                 }
-                m_npcs.Add(npc);
             }
         }
 

@@ -27,7 +27,7 @@
 			"selections": 1,
 			"traits" :
 			[
-				{"name" : "Region-specific", "weight" : 70},
+				{"name" : "Region-specific", "weight" : 50},
 				{"name" : "Caucasian", "weight" : 6},
 				{"name" : "African", "weight" : 3},
 				{"name" : "Hispanic", "weight" : 4},
@@ -38,7 +38,8 @@
 				{"name" : "Indian", "weight" : 3},
 				{"name" : "Turkic", "weight" : 1},
 				{"name" : "South-East Asian", "weight" : 2},
-				{"name" : "Pacific Islander", "weight" : 1}
+				{"name" : "Pacific Islander", "weight" : 1},
+				{"name" : "Biracial", "weight" : 20, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Race", "selections" : 2}}
 			]
 		},
 		{
@@ -113,18 +114,13 @@
 				{"name" : "Transgender", "weight" : 1},
 				{"name" : "Autistic", "weight" : 1},
 				{"name" : "Graceful", "weight" : 1},
-				{"name" : "Tourettes", "weight" : 1},
-				{"name" : "OCD", "weight" : 1},
+				{"name" : "Disabled", "weight" : 5, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Disability", "selections" : 1}},
+				{"name" : "Religious", "weight" : 3, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Religion", "selections" : 1}},
 				{"name" : "Suicidal", "weight" : 1},
 				{"name" : "Addict", "weight" : 1},
 				{"name" : "Sports Fan", "weight" : 1},
 				{"name" : "Sharp senses", "weight" : 1},
 				{"name" : "Weight Lifter", "weight" : 1},
-				{"name" : "Limp", "weight" : 1},
-				{"name" : "Mute", "weight" : 1},
-				{"name" : "One arm", "weight" : 1},
-				{"name" : "Wheelchair", "weight" : 1},
-				{"name" : "One eye", "weight" : 1},
 				{"name" : "Smelly", "weight" : 1},
 				{"name" : "Stylish", "weight" : 1},
 				{"name" : "Slob", "weight" : 1},
@@ -148,6 +144,38 @@
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},
 				{"name" : "Dancer", "weight" : 1}
+			]
+		},
+		{
+			"name": "Disability",
+			"selections": 0,
+			"traits" :
+			[
+				{"name" : "Tourettes", "weight" : 1},
+				{"name" : "OCD", "weight" : 1},
+				{"name" : "Stutter", "weight" : 1},
+				{"name" : "Limp", "weight" : 1},
+				{"name" : "Mute", "weight" : 1},
+				{"name" : "One arm", "weight" : 1},
+				{"name" : "Wheelchair", "weight" : 1},
+				{"name" : "One eye", "weight" : 1},
+				{"name" : "Blind", "weight" : 1},
+				{"name" : "Deaf", "weight" : 1}
+			]
+		},
+		{
+			"name": "Religion",
+			"selections": 0,
+			"traits" :
+			[
+				{"name" : "Region-specific", "weight" : 50},
+				{"name" : "Atheist", "weight" : 5},
+				{"name" : "Christian", "weight" : 15},
+				{"name" : "Jewish", "weight" : 4},
+				{"name" : "Muslim", "weight" : 10},
+				{"name" : "Hinduism", "weight" : 10},
+				{"name" : "Buddhism", "weight" : 5},
+				{"name" : "Satanist", "weight" : 1}
 			]
 		}
 	]

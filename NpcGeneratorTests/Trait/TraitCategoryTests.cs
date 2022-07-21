@@ -16,6 +16,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -38,7 +39,7 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                string[] choice = category.Choose();
+                string[] choice = category.Choose(category.DefaultSelectionCount, out _);
                 switch (choice[0])
                 {
                     case HEADS:
@@ -53,6 +54,7 @@ namespace Tests
                         Assert.Fail("Trait returned value " + choice + " that was not added");
                         break;
                 }
+                category.ResetChoices();
             }
 
             Assert.IsTrue(headCount > 0, HEADS + " never came up after " + ROLL_COUNT + " flips");
@@ -72,7 +74,7 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                string[] choice = category.Choose();
+                string[] choice = category.Choose(category.DefaultSelectionCount, out _);
                 switch (choice[0])
                 {
                     case HEADS:
@@ -87,6 +89,7 @@ namespace Tests
                         Assert.Fail("Trait returned value " + choice + " that was not added");
                         break;
                 }
+                category.ResetChoices();
             }
 
             Assert.IsTrue(headCount >= tailCount, "Double weighted " + HEADS + " occured less often than " + TAILS +
@@ -102,7 +105,7 @@ namespace Tests
             category.Add(new Trait(HEADS, 1, isHidden: false));
             category.Add(new Trait(TAILS, 1, isHidden: false));
 
-            string[] selections = category.Choose();
+            string[] selections = category.Choose(category.DefaultSelectionCount, out _);
             Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
             Assert.AreNotEqual(selections[0], selections[1], "Did not select two different traits");
         }
@@ -116,7 +119,7 @@ namespace Tests
             bool threwException = false;
             try 
             {
-                string[] selections = category.Choose();
+                string[] selections = category.Choose(category.DefaultSelectionCount, out _);
             }
             catch (Exception)
             {
@@ -136,7 +139,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                string[] selections = category.Choose();
+                string[] selections = category.Choose(category.DefaultSelectionCount, out _);
             }
             catch (Exception)
             {
@@ -155,7 +158,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                string[] selections = category.Choose();
+                string[] selections = category.Choose(category.DefaultSelectionCount, out _);
             }
             catch (Exception)
             {
@@ -171,7 +174,7 @@ namespace Tests
             TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
             category.Add(new Trait(HEADS, 1, isHidden: true));
 
-            string[] selections = category.Choose();
+            string[] selections = category.Choose(category.DefaultSelectionCount, out _);
 
             Assert.AreEqual(0, selections.Length, "Hidden selected trait is incorrectly present in output");
         }
@@ -183,10 +186,47 @@ namespace Tests
             category.Add(new Trait(HEADS, 1, isHidden: true));
             category.Add(new Trait(TAILS, 1, isHidden: false));
 
-            string[] selections = category.Choose();
+            string[] selections = category.Choose(category.DefaultSelectionCount, out _);
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(TAILS, selections[0], "Hidden selected trait is incorrectly present in output");
+        }
+
+        [TestMethod]
+        public void EmptyBonusSelection()
+        {
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
+            category.Add(new Trait(HEADS, 1, isHidden: false));
+
+            string[] selections = category.Choose(category.DefaultSelectionCount, out List<BonusSelection> bonusSelection);
+
+            Assert.AreEqual(0, bonusSelection.Count, "Returned a bonus selection where there should be none.");
+        }
+
+        [TestMethod]
+        public void ChooseMoreThanDefault()
+        {
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
+            category.Add(new Trait(HEADS, 1, isHidden: false));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
+
+            string[] selections = category.Choose(2, out _);
+
+            Assert.AreEqual(2, selections.Length, "Selected traits is not the correct number.");
+            Assert.IsTrue(selections[0] != selections[1], "Same trait was selected twice");
+        }
+
+        [TestMethod]
+        public void ChooseLessThanDefault()
+        {
+            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
+            category.Add(new Trait(HEADS, 1, isHidden: false));
+            category.Add(new Trait(TAILS, 1, isHidden: false));
+
+            string[] selections = category.Choose(1, out _);
+
+            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
+            Assert.IsTrue(selections[0] == HEADS || selections[0] == TAILS, "Unknown trait selected");
         }
     }
 }

@@ -191,6 +191,11 @@ namespace NpcGenerator
 
                 MessageBox.Show(message);
             }
+            catch (MismatchedBonusSelectionException exception)
+            {
+                string message = m_localization.GetText("mismatched_bonus_selection", exception.Trait, exception.NotFoundCategoryName);
+                MessageBox.Show(message);
+            }
             catch (FormatException exception)
             {
                 MessageBox.Show(exception.Message);
