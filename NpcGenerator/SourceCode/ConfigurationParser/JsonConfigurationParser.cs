@@ -59,6 +59,10 @@ namespace NpcGenerator
             TraitSchema traitSchema = new TraitSchema();
             List<DeferredBonusSelection> deferredBonusSelections = new List<DeferredBonusSelection>();
             List<TraitCategory> categories = new List<TraitCategory>();
+
+            DetectDuplicateCategoryNames(protoTraitSchema.trait_categories);
+            DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
+
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
                 TraitCategory category = new TraitCategory(protoCategory.Name, protoCategory.Selections);
@@ -80,19 +84,79 @@ namespace NpcGenerator
                 traitSchema.Add(category);
                 categories.Add(category);
             }
+            
             foreach (DeferredBonusSelection deferredBonusSelection in deferredBonusSelections)
             {
                 TraitCategory category = categories.Find(category => category.Name == deferredBonusSelection.m_categoryName);
                 if (category == null)
                 {
-                    throw new MismatchedBonusSelectionException(notFoundCategoryName: deferredBonusSelection.m_categoryName,
+                    throw new MismatchedBonusSelectionException(notFoundCategory: deferredBonusSelection.m_categoryName,
                         trait: deferredBonusSelection.m_trait.Name);
                 }
                 BonusSelection bonusSelection = new BonusSelection(category, deferredBonusSelection.m_selections);
                 deferredBonusSelection.m_trait.BonusSelection = bonusSelection;
             }
 
+            if (protoTraitSchema.replacements != null)
+            {
+                foreach (ProtoReplacement protoReplacement in protoTraitSchema.replacements)
+                {
+                    TraitCategory category = categories.Find(category => category.Name == protoReplacement.category_name);
+                    if (category == null)
+                    {
+                        throw new MismatchedReplacementCategoryException(category: protoReplacement.category_name,
+                            trait: protoReplacement.trait);
+                    }
+                    Trait trait = category.GetTrait(protoReplacement.trait);
+                    if (trait == null)
+                    {
+                        throw new MismatchedReplacementTraitException(category: protoReplacement.category_name,
+                            trait: protoReplacement.trait);
+                    }
+
+                    ReplacementSearch replacement = new ReplacementSearch(trait, category);
+                    traitSchema.Add(replacement);
+                }
+            }
+
             return traitSchema;
+        }
+
+        void DetectDuplicateCategoryNames(List<ProtoTraitCategory> trait_categories)
+        {
+            List<string> categoryNames = new List<string>();
+            foreach (ProtoTraitCategory protoCategory in trait_categories)
+            {
+                bool isDuplicateName = categoryNames.Contains(protoCategory.Name);
+                if (isDuplicateName)
+                {
+                    throw new DuplicateCategoryNameException(protoCategory.Name);
+                }
+                else
+                {
+                    categoryNames.Add(protoCategory.Name);
+                }
+            }
+        }
+
+        void DetectDuplicateTraitNamesInASingleCategory(List<ProtoTraitCategory> trait_categories)
+        {
+            foreach (ProtoTraitCategory protoCategory in trait_categories)
+            {
+                List<string> traitNames = new List<string>();
+                foreach (ProtoTrait protoTrait in protoCategory.traits)
+                {
+                    bool isDuplicateName = traitNames.Contains(protoTrait.Name);
+                    if (isDuplicateName)
+                    {
+                        throw new DuplicateTraitNamesInCategoryException(category: protoCategory.Name, trait: protoTrait.Name);
+                    }
+                    else
+                    {
+                        traitNames.Add(protoTrait.Name);
+                    }
+                }
+            }
         }
 
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value null
@@ -101,6 +165,7 @@ namespace NpcGenerator
         {
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
+            public List<ProtoReplacement> replacements;
             public List<ProtoTraitCategory> trait_categories;
         }
 
@@ -128,7 +193,6 @@ namespace NpcGenerator
             public string trait_category_name;
             public int Selections { get; set; }
         }
-#pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
 
         private class DeferredBonusSelection
         {
@@ -136,6 +200,13 @@ namespace NpcGenerator
             public string m_categoryName;
             public int m_selections;
         }
+
+        private class ProtoReplacement
+        {
+            public string trait;
+            public string category_name;
+        }
+#pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
 
         private readonly JSchema m_schema = null;
     }
@@ -147,17 +218,5 @@ namespace NpcGenerator
             Path = path;
         }
         public string Path { get; private set; }
-    }
-
-    public class MismatchedBonusSelectionException : FormatException
-    {
-        public MismatchedBonusSelectionException(string notFoundCategoryName, string trait)
-        {
-            NotFoundCategoryName = notFoundCategoryName;
-            Trait = trait;
-        }
-
-        public string Trait { get; private set; }
-        public string NotFoundCategoryName { get; private set; }
     }
 }

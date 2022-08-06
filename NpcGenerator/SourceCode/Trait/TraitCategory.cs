@@ -15,8 +15,6 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Security.Cryptography;
 
 namespace NpcGenerator
 {
@@ -33,6 +31,52 @@ namespace NpcGenerator
             DefaultSelectionCount = selectionCount;
         }
 
+        public TraitCategory DeepCopyWithReplacements(IReadOnlyList<Replacement> replacements)
+        {
+            TraitCategory copy = (TraitCategory)MemberwiseClone();
+            IReadOnlyList<Replacement> replacementsForThisCategory = ReplacementsForThisCategory(replacements);
+            copy.m_traits = new List<Trait>(m_traits.Count);
+            for (int i = 0; i < m_traits.Count; ++i)
+            {
+                Trait originalTrait = m_traits[i];
+                Trait replacementTrait = ReplacementTrait(originalTrait, replacementsForThisCategory);
+                copy.m_traits.Add(replacementTrait);
+            }
+            return copy;
+        }
+
+        private static Trait ReplacementTrait(Trait originalTrait, IReadOnlyList<Replacement> replacements)
+        {
+            string replacementTraitName = ReplacementNameForTrait(replacements, originalTrait);
+            Trait newTrait = originalTrait.DeepCopyWithRename(replacementTraitName);
+            return newTrait;
+        }
+
+        private static string ReplacementNameForTrait(IReadOnlyList<Replacement> replacements, Trait trait)
+        {
+            foreach (Replacement replacement in replacements)
+            {
+                if (replacement.OriginalTrait == trait)
+                {
+                    return replacement.ReplacementTraitName;
+                }
+            }
+            return trait.Name;
+        }
+
+        private IReadOnlyList<Replacement> ReplacementsForThisCategory(IReadOnlyList<Replacement> replacements)
+        {
+            List<Replacement> replacementsForThis = new List<Replacement>();
+            foreach(Replacement replacement in replacements)
+            {
+                if (replacement.Category.Name == Name)
+                {
+                    replacementsForThis.Add(replacement);
+                }
+            }
+            return replacementsForThis;
+        }
+
         public void Add(Trait trait)
         {
             if (trait == null)
@@ -43,23 +87,41 @@ namespace NpcGenerator
             m_traits.Add(trait);
         }
 
-        public string[] Choose(int count, out List<BonusSelection> bonusSelections)
+        public TraitChooser CreateTraitChooser()
         {
-            if (m_traits.Count == 0)
-            {
-                throw new InvalidOperationException("Cannot choose trait from empty Trait Category " + Name);
-            }
-
-            if (m_traitChooser == null)
-            {
-                m_traitChooser = new TraitChooser(m_traits);
-            }
-            return m_traitChooser.Choose(count, out bonusSelections);
+            return new TraitChooser(m_traits);
         }
 
-        public void ResetChoices()
+        public Trait GetTrait(string name)
         {
-            m_traitChooser = null;
+            return m_traits.Find(trait => trait.Name == name);
+        }
+
+        public string[] GetTraitNames()
+        {
+            Trait[] traits = m_traits.ToArray();
+            string[] names = new string[traits.Length];
+            for (int i = 0; i < traits.Length; ++i)
+            {
+                names[i] = traits[i].Name;
+            }
+            return names;
+        }
+
+        public void ReplaceTraitReferences(Dictionary<TraitCategory,TraitCategory> originalsToReplacements)
+        {
+            foreach (Trait trait in m_traits)
+            {
+                if (trait.BonusSelection != null)
+                {
+                    TraitCategory original = trait.BonusSelection.TraitCategory;
+                    bool found = originalsToReplacements.TryGetValue(original, out TraitCategory replacement);
+                    if (found)
+                    {
+                        trait.BonusSelection = trait.BonusSelection.ShallowCopyWithNewCategory(replacement);
+                    }
+                }
+            }
         }
 
         public string Name
@@ -74,68 +136,6 @@ namespace NpcGenerator
             private set;
         }
 
-        private readonly List<Trait> m_traits = new List<Trait>();
-        private TraitChooser m_traitChooser;
-
-        //Chooses traits until it runs of out traits or is destroyed.
-        private class TraitChooser
-        {
-            public TraitChooser(List<Trait> remainingTraits)
-            {
-                m_remainingTraits = new List<Trait>(remainingTraits);
-                foreach(Trait trait in remainingTraits)
-                {
-                    m_remainingWeight += trait.Weight;
-                }
-            }
-
-            public string[] Choose(int count, out List<BonusSelection> bonusSelections)
-            {
-                bonusSelections = new List<BonusSelection>();
-                if (count == 0)
-                {
-                    return Array.Empty<string>();
-                }
-
-                Trace.Assert(m_remainingTraits.Count >= count, "Not enough traits for all selections.");
-
-                //Number of selected traits is actually variable, with a maximum of SelectionCount. If a hidden trait is selected,
-                //it consumes a selection count but is not added to the selected list.
-                List<string> selected = new List<string>();
-                for (int i = 0; i < count; i++)
-                {
-                    int randomSelection = RandomNumberGenerator.GetInt32(0, m_remainingWeight) + 1;
-                    int selectedIndex = -1;
-                    int weightCount = 0;
-                    for (int j = 0; j < m_remainingTraits.Count; ++j)
-                    {
-                        weightCount += m_remainingTraits[j].Weight;
-                        if (randomSelection <= weightCount)
-                        {
-                            selectedIndex = j;
-                            break;
-                        }
-                    }
-                    Trace.Assert(selectedIndex >= 0, "Failed to choose a trait.");
-                    Trait trait = m_remainingTraits[selectedIndex];
-                    if (!trait.IsHidden)
-                    {
-                        selected.Add(trait.Name);
-                    }
-                    if (trait.BonusSelection != null)
-                    {
-                        bonusSelections.Add(trait.BonusSelection);
-                    }
-
-                    m_remainingWeight -= m_remainingTraits[selectedIndex].Weight;
-                    m_remainingTraits.RemoveAt(selectedIndex);
-                }
-
-                return selected.ToArray();
-            }
-
-            private readonly List<Trait> m_remainingTraits = new List<Trait>();
-            private int m_remainingWeight = 0;
-        }
+        private List<Trait> m_traits = new List<Trait>();
     }
 }

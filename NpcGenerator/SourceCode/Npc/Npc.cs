@@ -25,6 +25,45 @@ namespace NpcGenerator
         public const char CSV_SEPARATOR = ',';
         public const char MULTI_TRAIT_SEPARATOR = '&';
 
+        public Npc()
+        {
+        }
+
+        public Npc(IReadOnlyList<TraitCategory> categories)
+        {
+            Dictionary<TraitCategory, TraitChooser> chooserForCategory = new Dictionary<TraitCategory, TraitChooser>();
+            Dictionary<TraitCategory, int> selectionsPerCategory = new Dictionary<TraitCategory, int>();
+            foreach (TraitCategory category in categories)
+            {
+                selectionsPerCategory[category] = category.DefaultSelectionCount;
+                chooserForCategory[category] = category.CreateTraitChooser();
+            }
+
+            while (selectionsPerCategory.Count > 0)
+            {
+                GetElementOf(selectionsPerCategory, out TraitCategory category, out int count);
+                TraitChooser chooser = chooserForCategory[category];
+                string[] traits = chooser.Choose(count, out List<BonusSelection> bonusSelections);
+                AddTrait(category: category.Name, traits: traits);
+
+                selectionsPerCategory.Remove(category);
+
+                foreach (BonusSelection bonusSelection in bonusSelections)
+                {
+                    selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
+                }
+            }
+        }
+
+        private static void GetElementOf(Dictionary<TraitCategory, int> selectionsPerCategory, out TraitCategory category, out int count)
+        {
+            Dictionary<TraitCategory, int>.Enumerator enumerator = selectionsPerCategory.GetEnumerator();
+            enumerator.MoveNext();
+            KeyValuePair<TraitCategory, int> current = enumerator.Current;
+            category = current.Key;
+            count = current.Value;
+        }
+
         public void AddTrait(string category, string[] traits)
         {
             bool categoryExists = m_traitsByCategory.ContainsKey(category);

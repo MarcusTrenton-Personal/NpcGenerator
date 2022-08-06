@@ -15,6 +15,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 
@@ -23,30 +24,29 @@ namespace Tests
     [TestClass]
     public class NpcGeneratorModelTests : FileCreatingTests
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            m_userSettings = new StubUserSettings();
-            m_npcGeneratorModel = new NpcGeneratorModel(
-                m_userSettings, 
-                new StubMessager(), 
-                new StubLocalFileIo(), 
-                new MockCsvConfigurationParser(), 
-                new StubLocalization());
-        }
-
         [TestMethod]
         public void ConfigurationPathReflectsUserSettings()
         {
             const string FILE_PATH1 = "...";
             const string FILE_PATH2 = "FakeFile.csv";
 
-            m_userSettings.ConfigurationPath = FILE_PATH1;
-            Assert.AreEqual(FILE_PATH1, m_npcGeneratorModel.ConfigurationPath, 
-                "Configuration path is not the one in UserSettings");
+            StubUserSettings userSettings = new StubUserSettings
+            {
+                ConfigurationPath = FILE_PATH1
+            };
 
-            m_userSettings.ConfigurationPath = FILE_PATH2;
-            Assert.AreEqual(FILE_PATH2, m_npcGeneratorModel.ConfigurationPath, 
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization());
+            
+            Assert.AreEqual(FILE_PATH1, npcGeneratorModel.ConfigurationPath, 
+                "Configuration path is not the one in UserSettings");
+            userSettings.ConfigurationPath = FILE_PATH2;
+
+            Assert.AreEqual(FILE_PATH2, npcGeneratorModel.ConfigurationPath, 
                 "Configuration path is not the one in UserSettings");
         }
 
@@ -56,59 +56,185 @@ namespace Tests
             const int QUANTITY1 = 1;
             const int QUANTITY2 = 5;
 
-            m_userSettings.NpcQuantity = QUANTITY1;
-            Assert.AreEqual(QUANTITY1, m_npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
+            StubUserSettings userSettings = new StubUserSettings();
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization());
 
-            m_npcGeneratorModel.NpcQuantity = QUANTITY2;
-            Assert.AreEqual(QUANTITY2, m_userSettings.NpcQuantity, "NpcQuantity is not the one in UserSettings");
-            Assert.AreEqual(QUANTITY2, m_npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
+            userSettings.NpcQuantity = QUANTITY1;
+            Assert.AreEqual(QUANTITY1, npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
+
+            npcGeneratorModel.NpcQuantity = QUANTITY2;
+            Assert.AreEqual(QUANTITY2, userSettings.NpcQuantity, "NpcQuantity is not the one in UserSettings");
+            Assert.AreEqual(QUANTITY2, npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
         }
 
         [TestMethod]
         public void InvalidNpcQuantityBlocksNpcGeneration()
         {
-            m_npcGeneratorModel.NpcQuantity = 0;
-            bool canGenerateNpcs = m_npcGeneratorModel.GenerateNpcs.CanExecute(null);
+            StubUserSettings userSettings = new StubUserSettings();
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization())
+            {
+                NpcQuantity = 0
+            };
+            bool canGenerateNpcs = npcGeneratorModel.GenerateNpcs.CanExecute(null);
             Assert.IsFalse(canGenerateNpcs, "Not blocking the generation of 0 npcs");
         }
 
         [TestMethod]
         public void InvalidConfigurationPathBlocksNpcGeneration()
         {
-            m_userSettings.ConfigurationPath = "Bad file";
-            bool canGenerateNpcs = m_npcGeneratorModel.GenerateNpcs.CanExecute(null);
+            StubUserSettings userSettings = new StubUserSettings();
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization());
+
+            userSettings.ConfigurationPath = "Bad file";
+            bool canGenerateNpcs = npcGeneratorModel.GenerateNpcs.CanExecute(null);
             Assert.IsFalse(canGenerateNpcs, "Not blocking the generation of npcs with invalid ConfigurationPath");
         }
 
         [TestMethod]
         public void GenerateNpcs()
         {
+            StubUserSettings userSettings = new StubUserSettings();
             string path = Path.Combine(TestDirectory, "colour.csv");
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
             File.WriteAllText(path, text);
-            m_userSettings.ConfigurationPath = path;
+            userSettings.ConfigurationPath = path;
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization()); 
 
             const int QUANTITY = 5;
-            m_npcGeneratorModel.NpcQuantity = 5;
+            npcGeneratorModel.NpcQuantity = 5;
 
-            m_npcGeneratorModel.GenerateNpcs.Execute(null);
-            DataTable result = m_npcGeneratorModel.ResultNpcs;
+            npcGeneratorModel.GenerateNpcs.Execute(null);
+            DataTable result = npcGeneratorModel.ResultNpcs;
 
             Assert.AreEqual(QUANTITY, result.Rows.Count, "Generate the wrong number of npcs");
-            bool canSave = m_npcGeneratorModel.SaveNpcs.CanExecute(null);
+            bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsTrue(canSave, "Have npcs but cannot save");
+
+            File.Delete(path);
         }
 
         [TestMethod]
         public void CannotSaveWithoutNpcs()
         {
-            bool canSave = m_npcGeneratorModel.SaveNpcs.CanExecute(null);
+            StubUserSettings userSettings = new StubUserSettings();
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization());
+
+            bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsFalse(canSave, "Can save even though there are no npcs");
         }
 
-        private NpcGeneratorModel m_npcGeneratorModel;
-        private StubUserSettings m_userSettings;
+        [TestMethod]
+        public void ReplacementsForNullSchema()
+        {
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization());
+
+            IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
+
+            Assert.AreEqual(0, replacements.Count, "Replacements somehow found for a null schema");
+        }
+
+        [TestMethod]
+        public void ReplacementsForSchemaWithoutReplacements()
+        {
+            StubUserSettings userSettings = new StubUserSettings();
+            string path = Path.Combine(TestDirectory, "colour2.csv");
+            string text = "Colour,Weight\n" +
+                "Green,1\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+            userSettings.ConfigurationPath = path;
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new StubLocalization());
+
+            IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
+
+            Assert.AreEqual(0, replacements.Count, "Replacements somehow found for a replacement-less schema");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementsForSchemaWithReplacements()
+        {
+            StubUserSettings userSettings = new StubUserSettings();
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = @"{
+                'replacements' : [
+                    {
+                        'category_name' : 'Colour',
+                        'trait' : 'Green'
+                    }
+                ],
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+            userSettings.ConfigurationPath = path;
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockJsonConfigurationParser(),
+                new StubLocalization());
+
+            IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
+
+            Assert.AreEqual(1, replacements.Count, "Replacements somehow found for a replacement-less schema");
+
+            File.Delete(path);
+        }
     }
 }

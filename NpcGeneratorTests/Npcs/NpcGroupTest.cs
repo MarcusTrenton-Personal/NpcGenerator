@@ -35,7 +35,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 1);
+            NpcGroup npcGroup = new NpcGroup(schema, 1, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\nBlue", csv, "NpcGroup did not generate expected CSV text");
@@ -50,7 +50,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 2);
+            NpcGroup npcGroup = new NpcGroup(schema, 2, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\nBlue\nBlue", csv, "NpcGroup did not generate expected CSV text");
@@ -65,7 +65,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 0);
+            NpcGroup npcGroup = new NpcGroup(schema, 0, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\n", csv, "NpcGroup did not generate expected CSV text");
@@ -79,7 +79,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 1);
+            NpcGroup npcGroup = new NpcGroup(schema, 1, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\n", csv, "NpcGroup did not generate expected CSV text");
@@ -94,7 +94,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -123,7 +123,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 2);
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 2, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -152,7 +152,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 0);
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 0, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -180,7 +180,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -216,7 +216,7 @@ namespace Tests
             bool threwException = false;
             try 
             {
-                NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+                NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
             }
             catch(Exception)
             {
@@ -242,7 +242,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+                NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
             }
             catch (Exception)
             {
@@ -253,7 +253,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IntraCategoryBonusSelection()
+        public void SingleNpcIntraCategoryBonusSelection()
         {
             const string BLUE = "Blue";
             const string GREEN = "Green";
@@ -275,7 +275,7 @@ namespace Tests
             string[] traits = null;
             for (int i = 0; i < 3; ++i)
             {
-                NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+                NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
                 traits = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(colourCategory.Name);
                 int index = Array.FindIndex(traits, trait => trait == BLUE);
                 bool isTraitWithBonusSelected = index > 0;
@@ -288,6 +288,32 @@ namespace Tests
             Assert.AreEqual(2, traits.Length, "Bonus selection did not occur.");
             Assert.IsTrue(traits[0] == BLUE || traits[1] == BLUE, "Both traits were not selected");
             Assert.IsTrue(traits[0] == GREEN || traits[1] == GREEN, "Both traits were not selected");
+        }
+
+        [TestMethod]
+        public void MultipleNpcIntraCategoryBonusSelectionDoesNotCauseException()
+        {
+            const string BLUE = "Blue";
+            const string GREEN = "Green";
+
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            Trait blue = new Trait(BLUE, int.MaxValue - 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(colourCategory, 1)
+            };
+            colourCategory.Add(blue);
+            Trait green = new Trait(GREEN, 1, isHidden: false);
+            colourCategory.Add(green);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+
+            //Attempt 3 times to randomly select blue. Given the weighting, the odds are literally astronimical
+            //that blue won't be selected.
+            const int NPC_COUNT = 3;
+            NpcGroup npcGroup = new NpcGroup(traitSchema, NPC_COUNT, new List<Replacement>());
+
+            Assert.AreEqual(NPC_COUNT, npcGroup.NpcCount, "Wrong number of NPCs generated");
         }
 
         [TestMethod]
@@ -310,7 +336,7 @@ namespace Tests
             traitSchema.Add(colourCategory);
             traitSchema.Add(animalCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1);
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
             Npc npc = npcGroup.GetNpcAtIndex(0);
 
             string[] colours = npc.GetTraitsOfCategory(colourCategory.Name);
@@ -320,6 +346,71 @@ namespace Tests
             string[] animals = npc.GetTraitsOfCategory(animalCategory.Name);
             Assert.AreEqual(1, animals.Length, "Bonus selection did not occur.");
             Assert.AreEqual(BEAR, animals[0], "Wrong trait was selected");
+        }
+
+        [TestMethod]
+        public void SingleNpcWithReplacement()
+        {
+            const string CATEGORY_NAME = "Colour";
+            TraitCategory colourCategory = new TraitCategory(CATEGORY_NAME, 1);
+            Trait trait = new Trait("Blue", 1, isHidden: false);
+            colourCategory.Add(trait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+
+            const string REPLACEMENT_COLOUR = "Red";
+            Replacement replacement = new Replacement(trait, REPLACEMENT_COLOUR, colourCategory);
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>() { replacement });
+            string jsonText = npcGroup.ToJson();
+            JToken json = JToken.Parse(jsonText);
+
+            string schemaPath = "NpcGroupSchema.json";
+            string schemaText = File.ReadAllText(schemaPath);
+            JSchema schema = JSchema.Parse(schemaText);
+
+            string concatenatedMessages = "";
+            bool isValid = json.IsValid(schema, out IList<string> errorMessages);
+            if (!isValid)
+            {
+                foreach (var error in errorMessages)
+                {
+                    concatenatedMessages += error + "\n";
+                }
+            }
+            Assert.IsTrue(isValid, "Json validation failed with message: " + concatenatedMessages);
+
+            string colourTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY_NAME)[0];
+            Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait, "Replacement was not honoured");
+        }
+
+        [TestMethod]
+        public void MultipleNpcsWithReplacements()
+        {
+            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+
+            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+            string jsonText = npcGroup.ToJson();
+            JToken json = JToken.Parse(jsonText);
+
+            string schemaPath = "NpcGroupSchema.json";
+            string schemaText = File.ReadAllText(schemaPath);
+            JSchema schema = JSchema.Parse(schemaText);
+
+            string concatenatedMessages = "";
+            bool isValid = json.IsValid(schema, out IList<string> errorMessages);
+            if (!isValid)
+            {
+                foreach (var error in errorMessages)
+                {
+                    concatenatedMessages += error + "\n";
+                }
+            }
+            Assert.IsTrue(isValid, "Json validation failed with message: " + concatenatedMessages);
         }
     }
 }

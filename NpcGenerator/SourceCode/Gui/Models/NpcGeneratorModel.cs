@@ -29,9 +29,9 @@ namespace NpcGenerator
     public class NpcGeneratorModel : BaseModel, INpcGeneratorModel
     {
         public NpcGeneratorModel(
-            IUserSettings userSettings, 
-            IMessager messager, 
-            ILocalFileIO fileIo, 
+            IUserSettings userSettings,
+            IMessager messager,
+            ILocalFileIO fileIo,
             IConfigurationParser parser,
             ILocalization localization)
         {
@@ -43,13 +43,16 @@ namespace NpcGenerator
 
             m_configurationFileWatcher = new FileSystemWatcher
             {
-                NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName,
+                NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName | NotifyFilters.LastWrite,
                 EnableRaisingEvents = false
             };
             m_configurationFileWatcher.Deleted += OnConfigurationChanged;
             m_configurationFileWatcher.Renamed += OnConfigurationRenamed;
             m_configurationFileWatcher.Created += OnConfigurationChanged;
+            m_configurationFileWatcher.Changed += OnConfigurationChanged;
             SetFileWatcherPath();
+
+            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
         }
 
         ~NpcGeneratorModel()
@@ -57,6 +60,7 @@ namespace NpcGenerator
             m_configurationFileWatcher.Deleted -= OnConfigurationChanged;
             m_configurationFileWatcher.Renamed -= OnConfigurationRenamed;
             m_configurationFileWatcher.Created -= OnConfigurationChanged;
+            m_configurationFileWatcher.Changed -= OnConfigurationChanged;
         }
 
         public ICommand ChooseConfiguration 
@@ -96,6 +100,14 @@ namespace NpcGenerator
             set
             {
                 m_userSettings.NpcQuantity = value;
+            }
+        }
+
+        public IReadOnlyList<ReplacementSubModel> Replacements 
+        { 
+            get
+            {
+                return m_replacementSubModels;
             }
         }
 
@@ -146,6 +158,7 @@ namespace NpcGenerator
                 NotifyPropertyChanged("DoesConfigurationFileExist");
                 SetFileWatcherPath();
 
+                ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
                 m_messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
         }
@@ -160,50 +173,41 @@ namespace NpcGenerator
 
         private void ExecuteGenerateNpcs(object _)
         {
-            try
-            {
-                string cachedConfigurationPath = m_fileIo.CacheFile(m_userSettings.ConfigurationPath);
-                TraitSchema traitSchema = m_parser.Parse(cachedConfigurationPath);
-                m_npcGroup = new NpcGroup(traitSchema, m_userSettings.NpcQuantity);
+            List<Replacement> replacements = GetReplacements(m_replacementSubModels, m_traitSchema);
+            m_npcGroup = new NpcGroup(m_traitSchema, m_userSettings.NpcQuantity, replacements);
 
-                DataTable table = new DataTable("Npc Table");
-                for (int i = 0; i < m_npcGroup.TraitCategoryCount; ++i)
+            DataTable table = new DataTable("Npc Table");
+            for (int i = 0; i < m_npcGroup.TraitCategoryCount; ++i)
+            {
+                table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
+            }
+            for (int i = 0; i < m_npcGroup.NpcCount; ++i)
+            {
+                table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).ToStringArrayByCategory(m_npcGroup.TraitCategories));
+            }
+            m_table = table;
+            NotifyPropertyChanged("ResultNpcs");
+
+            m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
+        }
+
+        private List<Replacement> GetReplacements(List<ReplacementSubModel> replacementSubModels, TraitSchema schema)
+        {
+            List<Replacement> replacements = new List<Replacement>();
+            IReadOnlyList<ReplacementSearch> searches = schema.GetReplacementSearches();
+            foreach (ReplacementSubModel subModel in replacementSubModels)
+            {
+                foreach (ReplacementSearch search in searches)
                 {
-                    table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
+                    if (search.Trait.Name == subModel.OriginalTrait && search.Category.Name == subModel.Category)
+                    {
+                        Replacement replacement = new Replacement(search.Trait, subModel.CurrentReplacementTrait, search.Category);
+                        replacements.Add(replacement);
+                        break;
+                    }
                 }
-                for (int i = 0; i < m_npcGroup.NpcCount; ++i)
-                {
-                    table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).ToStringArrayByCategory(m_npcGroup.TraitCategories));
-                }
-                m_table = table;
-                NotifyPropertyChanged("ResultNpcs");
-
-                m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
             }
-            catch (IOException exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-            catch (JsonFormatException exception)
-            {
-                string message = m_localization.GetText("configuration_file_invalid", exception.Path);
-                message += "\n" + exception.Message;
-
-                MessageBox.Show(message);
-            }
-            catch (MismatchedBonusSelectionException exception)
-            {
-                string message = m_localization.GetText("mismatched_bonus_selection", exception.Trait, exception.NotFoundCategoryName);
-                MessageBox.Show(message);
-            }
-            catch (FormatException exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-            catch (ArithmeticException exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
+            return replacements;
         }
 
         private bool CanExecuteSaveNpcs(object _)
@@ -248,11 +252,92 @@ namespace NpcGenerator
         private void OnConfigurationChanged(object sender, FileSystemEventArgs e)
         {
             NotifyPropertyChanged("DoesConfigurationFileExist");
+            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
         }   
 
         private void OnConfigurationRenamed(object sender, RenamedEventArgs e)
         {
             NotifyPropertyChanged("DoesConfigurationFileExist");
+        }
+
+        private void ParseTraitSchema(out TraitSchema traitSchema, out List<ReplacementSubModel> replacementSubModels)
+        {
+            traitSchema = null;
+            replacementSubModels = new List<ReplacementSubModel>();
+            if (DoesConfigurationFileExist)
+            {
+                try
+                {
+                    string cachedConfigurationPath = m_fileIo.CacheFile(m_userSettings.ConfigurationPath);
+                    traitSchema = m_parser.Parse(cachedConfigurationPath);
+                }
+                catch (IOException exception)
+                {
+                    MessageBox.Show(exception.Message);
+                }
+                catch (JsonFormatException exception)
+                {
+                    string message = m_localization.GetText("configuration_file_invalid", exception.Path);
+                    message += "\n" + exception.Message;
+
+                    MessageBox.Show(message);
+                }
+                catch (MismatchedBonusSelectionException exception)
+                {
+                    string message = m_localization.GetText("mismatched_bonus_selection", exception.Trait, exception.NotFoundCategoryName);
+                    MessageBox.Show(message);
+                }
+                catch (MismatchedReplacementTraitException exception)
+                {
+                    string message = m_localization.GetText("mismatched_replacement_trait", exception.Trait, exception.Category);
+                    MessageBox.Show(message);
+                }
+                catch (MismatchedReplacementCategoryException exception)
+                {
+                    string message = m_localization.GetText("mismatched_replacement_category", exception.Category, exception.Trait);
+                    MessageBox.Show(message);
+                }
+                catch (DuplicateCategoryNameException exception)
+                {
+                    string message = m_localization.GetText("duplicate_category_name", exception.Category);
+                    MessageBox.Show(message);
+                }
+                catch (FormatException exception)
+                {
+                    MessageBox.Show(exception.Message);
+                }
+                catch (ArithmeticException exception)
+                {
+                    MessageBox.Show(exception.Message);
+                }
+            }
+
+            replacementSubModels = MakeReplacementSubModels(m_traitSchema);
+            NotifyPropertyChanged("Replacements");
+        }
+
+        private List<ReplacementSubModel> MakeReplacementSubModels(TraitSchema traitSchema)
+        {
+            List<ReplacementSubModel> replacements = new List<ReplacementSubModel>();
+            if (traitSchema == null)
+            {
+                return replacements;
+            }
+
+            IReadOnlyList<ReplacementSearch> replacementSearches = traitSchema.GetReplacementSearches();
+            foreach (ReplacementSearch replacementSearch in replacementSearches)
+            {
+                ReplacementSubModel replacementSubModel = new ReplacementSubModel()
+                {
+                    Category = replacementSearch.Category.Name,
+                    OriginalTrait = replacementSearch.Trait.Name,
+                    CurrentReplacementTrait = replacementSearch.Trait.Name,
+                    ReplacementTraits = replacementSearch.Category.GetTraitNames()
+                };
+                replacements.Add(replacementSubModel);
+            }
+
+            return replacements;
         }
 
         private readonly IUserSettings m_userSettings;
@@ -265,8 +350,10 @@ namespace NpcGenerator
         private ICommand m_generateNpcsCommand;
         private ICommand m_saveNpcsCommand;
 
+        private List<ReplacementSubModel> m_replacementSubModels;
         private NpcGroup m_npcGroup;
         private DataTable m_table;
+        private TraitSchema m_traitSchema = null;
         private readonly FileSystemWatcher m_configurationFileWatcher;
     }
 }

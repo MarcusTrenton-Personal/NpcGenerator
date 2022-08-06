@@ -1,4 +1,9 @@
 {
+	"replacements" :
+	[
+		{ "category_name" : "Race", "trait" : "Region-specific" },
+		{ "category_name" : "Religion", "trait" : "Region-specific" }
+	],
 	"trait_categories" : 
 	[
 		{
@@ -173,8 +178,8 @@
 				{"name" : "Christian", "weight" : 15},
 				{"name" : "Jewish", "weight" : 4},
 				{"name" : "Muslim", "weight" : 10},
-				{"name" : "Hinduism", "weight" : 10},
-				{"name" : "Buddhism", "weight" : 5},
+				{"name" : "Hindu", "weight" : 10},
+				{"name" : "Buddhist", "weight" : 5},
 				{"name" : "Satanist", "weight" : 1}
 			]
 		}

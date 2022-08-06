@@ -17,216 +17,202 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Tests
 {
     [TestClass]
     public class TraitCategoryTests
     {
-        const string HEADS = "Heads";
-        const string TAILS = "Tails";
+        [TestMethod]
+        public void ValueConstructor()
+        {
+            const string NAME = "Colour";
+            const int DEFAULT_SELECTIONS = 3;
+            TraitCategory category = new TraitCategory(NAME, DEFAULT_SELECTIONS);
+
+            Assert.AreEqual(NAME, category.Name, "Assigned the wrong name");
+            Assert.AreEqual(DEFAULT_SELECTIONS, category.DefaultSelectionCount, "Assigned the wrong default selections");
+        }
 
         [TestMethod]
-        public void TraitSelectionReturnsAllValidValues()
+        public void DeepCopyWithEmptyReplacements()
         {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
-            category.Add(new Trait(HEADS, 1, isHidden: false));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
+            const string NAME = "Colour";
+            const int DEFAULT_SELECTIONS = 3;
+            TraitCategory original = new TraitCategory(NAME, DEFAULT_SELECTIONS);
+            const string TRAIT1_NAME = "Blue";
+            const string TRAIT2_NAME = "Green";
+            Trait trait1 = new Trait(TRAIT1_NAME, 1, isHidden: true);
+            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false);
+            original.Add(trait1);
+            original.Add(trait2);
 
-            int headCount = 0;
-            int tailCount = 0;
-            const int ROLL_COUNT = 100;
+            TraitCategory copy = original.DeepCopyWithReplacements(new List<Replacement>());
 
-            for (int i = 0; i < ROLL_COUNT; ++i)
+            Assert.AreEqual(NAME, copy.Name, "Assigned the wrong name");
+            Assert.AreEqual(DEFAULT_SELECTIONS, copy.DefaultSelectionCount, "Assigned the wrong default selections");
+            Assert.AreEqual(TRAIT1_NAME, copy.GetTrait(TRAIT1_NAME).Name, TRAIT1_NAME + " was not copied correctly");
+            Assert.AreEqual(TRAIT2_NAME, copy.GetTrait(TRAIT2_NAME).Name, TRAIT2_NAME + " was not copied correctly");
+        }
+
+        [TestMethod]
+        public void DeepCopyWithReplacements()
+        {
+            const string NAME = "Colour";
+            const int DEFAULT_SELECTIONS = 3;
+            TraitCategory original = new TraitCategory(NAME, DEFAULT_SELECTIONS);
+            const string TRAIT1_NAME = "Blue";
+            const string TRAIT2_NAME = "Green";
+            Trait trait1 = new Trait(TRAIT1_NAME, 1, isHidden: true);
+            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false);
+            original.Add(trait1);
+            original.Add(trait2);
+
+            const string IRRELEVANT_TRAIT_ORIGINAL_NAME = "Lion";
+            TraitCategory irreleventCategory = new TraitCategory("Animal", 1);
+            Trait irreleventTrait = new Trait(IRRELEVANT_TRAIT_ORIGINAL_NAME, 1, isHidden: false);
+            irreleventCategory.Add(irreleventTrait);
+
+            const string TRAIT1_REPLACEMENT = "Red";
+            const string IRRELEVANT_TRAIT_REPLACEMENT = "Elephant";
+            List<Replacement> replacements = new List<Replacement>
             {
-                string[] choice = category.Choose(category.DefaultSelectionCount, out _);
-                switch (choice[0])
-                {
-                    case HEADS:
-                        headCount++;
-                        break;
+                new Replacement(trait1, TRAIT1_REPLACEMENT, original),
+                new Replacement(irreleventTrait, IRRELEVANT_TRAIT_REPLACEMENT, irreleventCategory)
+            };
 
-                    case TAILS:
-                        tailCount++;
-                        break;
+            TraitCategory copy = original.DeepCopyWithReplacements(replacements);
 
-                    default:
-                        Assert.Fail("Trait returned value " + choice + " that was not added");
-                        break;
-                }
-                category.ResetChoices();
-            }
+            Assert.AreEqual(NAME, copy.Name, "Assigned the wrong name");
+            Assert.AreEqual(DEFAULT_SELECTIONS, copy.DefaultSelectionCount, "Assigned the wrong default selections");
 
-            Assert.IsTrue(headCount > 0, HEADS + " never came up after " + ROLL_COUNT + " flips");
-            Assert.IsTrue(tailCount > 0, TAILS + " never came up after " + ROLL_COUNT + " flips");
+            Trait trait1WithOldName  = copy.GetTrait(TRAIT1_NAME);
+            Assert.IsNull(trait1WithOldName, "Trait with old name was not removed");
+
+            Trait trait1Replacement = copy.GetTrait(TRAIT1_REPLACEMENT);
+            Assert.IsFalse(ReferenceEquals(trait1, trait1Replacement), "Deep copy did not copy trait.");
+            Assert.IsNotNull(trait1Replacement, "Cannot find the replacement trait");
+            Assert.AreEqual(TRAIT1_REPLACEMENT, trait1Replacement.Name, "Replacement trait has the wrong name.");
+
+            Trait trait2Copy = copy.GetTrait(TRAIT2_NAME);
+            Assert.IsFalse(ReferenceEquals(trait2, trait2Copy), "Deep copy did not copy trait.");
+            Assert.IsNotNull(trait2Copy, "Cannot find the unchanged trait");
+            Assert.AreEqual(TRAIT2_NAME, trait2Copy.Name, TRAIT2_NAME + " was not found in the copy");
+
+            Assert.AreEqual(IRRELEVANT_TRAIT_ORIGINAL_NAME, irreleventCategory.GetTrait(IRRELEVANT_TRAIT_ORIGINAL_NAME).Name, 
+                "Irrelevent category was changed when it shouldn't.");
         }
 
         [TestMethod]
-        public void TraitSelectionIsRandom()
+        public void AddAndGetTrait()
         {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
-            category.Add(new Trait(HEADS, 2, isHidden: false));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour", 1);
+            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            category.Add(trait);
 
-            int headCount = 0;
-            int tailCount = 0;
-            const int ROLL_COUNT = 100;
+            Assert.AreEqual(trait, category.GetTrait(TRAIT_NAME), TRAIT_NAME + " was not found in the copy");
+        }
 
-            for (int i = 0; i < ROLL_COUNT; ++i)
+        [TestMethod]
+        public void GetTraitThatDoesNotExist()
+        {
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour", 1);
+            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            category.Add(trait);
+
+            Trait foundTrait = category.GetTrait("Purple");
+
+            Assert.IsNull(foundTrait, "Getting a trait that does not exist should return null but is not");
+        }
+
+        [TestMethod]
+        public void ReplaceReferences()
+        {
+            TraitCategory oldCategory = new TraitCategory("Animal", 1);
+
+            const string TRAIT1_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour", 1);
+            Trait trait1 = new Trait(TRAIT1_NAME, 1, isHidden: true);
+            BonusSelection bonusSelection1 = new BonusSelection(category, 1);
+            trait1.BonusSelection = bonusSelection1;
+            category.Add(trait1);
+
+            const string TRAIT2_NAME = "Green";
+            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false);
+            BonusSelection bonusSelection2 = new BonusSelection(oldCategory, 1);
+            trait2.BonusSelection = bonusSelection2;
+            category.Add(trait2);
+
+            TraitCategory newCategory = new TraitCategory("Terrain", 1);
+
+            Dictionary<TraitCategory, TraitCategory> replacements = new Dictionary<TraitCategory, TraitCategory>
             {
-                string[] choice = category.Choose(category.DefaultSelectionCount, out _);
-                switch (choice[0])
-                {
-                    case HEADS:
-                        headCount++;
-                        break;
+                [oldCategory] = newCategory
+            };
+            category.ReplaceTraitReferences(replacements);
 
-                    case TAILS:
-                        tailCount++;
-                        break;
-
-                    default:
-                        Assert.Fail("Trait returned value " + choice + " that was not added");
-                        break;
-                }
-                category.ResetChoices();
-            }
-
-            Assert.IsTrue(headCount >= tailCount, "Double weighted " + HEADS + " occured less often than " + TAILS +
-                "after " + ROLL_COUNT + "flips, defying astronomical odds.");
+            Assert.AreEqual(category, trait1.BonusSelection.TraitCategory, "Category was incorrectly replaced.");
+            Assert.AreEqual(newCategory, trait2.BonusSelection.TraitCategory, "Category was not replaced.");
         }
 
         [TestMethod]
-        public void TraitSelectionTwice()
+        public void CreateTraitChooser()
         {
-            const int SELECTION_COUNT = 2;
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour", 1);
+            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            category.Add(trait);
 
-            TraitCategory category = new TraitCategory("Coin", SELECTION_COUNT);
-            category.Add(new Trait(HEADS, 1, isHidden: false));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
+            TraitChooser chooser = category.CreateTraitChooser();
 
-            string[] selections = category.Choose(category.DefaultSelectionCount, out _);
-            Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
-            Assert.AreNotEqual(selections[0], selections[1], "Did not select two different traits");
+            Assert.IsNotNull(chooser, "Chooser is null, which should be impossible");
         }
 
         [TestMethod]
-        public void NoWeightSingleSelection()
+        public void GetTraitNamesWhenEmpty()
         {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
-            category.Add(new Trait(HEADS, 0, isHidden: false)); 
+            TraitCategory category = new TraitCategory("Colour", 1);
 
-            bool threwException = false;
-            try 
-            {
-                string[] selections = category.Choose(category.DefaultSelectionCount, out _);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-            
-            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+            string[] names = category.GetTraitNames();
+
+            Assert.IsNotNull(names);
         }
 
         [TestMethod]
-        public void NoWeightMultipleSelection()
+        public void GetSingleTraitName()
         {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
-            category.Add(new Trait(HEADS, 0, isHidden: false));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour", 1);
+            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            category.Add(trait);
 
-            bool threwException = false;
-            try
-            {
-                string[] selections = category.Choose(category.DefaultSelectionCount, out _);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
+            string[] names = category.GetTraitNames();
 
-            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+            Assert.AreEqual(1, names.Length, "Wrong number of traits names");
+            Assert.AreEqual(TRAIT_NAME, names[0], "Wrong trait name");
         }
 
         [TestMethod]
-        public void MoreSelectionsThanOptions()
+        public void GetMultipleTraitNames()
         {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
-            category.Add(new Trait(HEADS, 0, isHidden: false));
+            const string TRAIT_NAME0 = "Blue";
+            const string TRAIT_NAME1 = "Red";
+            TraitCategory category = new TraitCategory("Colour", 1);
+            Trait trait0 = new Trait(TRAIT_NAME0, 1, isHidden: true);
+            Trait trait1 = new Trait(TRAIT_NAME1, 1, isHidden: true);
+            category.Add(trait0);
+            category.Add(trait1);
 
-            bool threwException = false;
-            try
-            {
-                string[] selections = category.Choose(category.DefaultSelectionCount, out _);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
+            string[] names = category.GetTraitNames();
 
-            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
-        }
-
-        [TestMethod]
-        public void HiddenTraitOnSingleSelection()
-        {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
-            category.Add(new Trait(HEADS, 1, isHidden: true));
-
-            string[] selections = category.Choose(category.DefaultSelectionCount, out _);
-
-            Assert.AreEqual(0, selections.Length, "Hidden selected trait is incorrectly present in output");
-        }
-
-        [TestMethod]
-        public void HiddenTraitOnMultiSelection()
-        {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
-            category.Add(new Trait(HEADS, 1, isHidden: true));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
-
-            string[] selections = category.Choose(category.DefaultSelectionCount, out _);
-
-            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
-            Assert.AreEqual(TAILS, selections[0], "Hidden selected trait is incorrectly present in output");
-        }
-
-        [TestMethod]
-        public void EmptyBonusSelection()
-        {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
-            category.Add(new Trait(HEADS, 1, isHidden: false));
-
-            string[] selections = category.Choose(category.DefaultSelectionCount, out List<BonusSelection> bonusSelection);
-
-            Assert.AreEqual(0, bonusSelection.Count, "Returned a bonus selection where there should be none.");
-        }
-
-        [TestMethod]
-        public void ChooseMoreThanDefault()
-        {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 1);
-            category.Add(new Trait(HEADS, 1, isHidden: false));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
-
-            string[] selections = category.Choose(2, out _);
-
-            Assert.AreEqual(2, selections.Length, "Selected traits is not the correct number.");
-            Assert.IsTrue(selections[0] != selections[1], "Same trait was selected twice");
-        }
-
-        [TestMethod]
-        public void ChooseLessThanDefault()
-        {
-            TraitCategory category = new TraitCategory("Coin", selectionCount: 2);
-            category.Add(new Trait(HEADS, 1, isHidden: false));
-            category.Add(new Trait(TAILS, 1, isHidden: false));
-
-            string[] selections = category.Choose(1, out _);
-
-            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
-            Assert.IsTrue(selections[0] == HEADS || selections[0] == TAILS, "Unknown trait selected");
+            Assert.AreEqual(2, names.Length, "Wrong number of traits names");
+            int trait0Index = Array.FindIndex(names, name => name == TRAIT_NAME0);
+            Assert.IsTrue(trait0Index > -1, TRAIT_NAME0 + " is not found in trait name list");
+            int trait1Index = Array.FindIndex(names, name => name == TRAIT_NAME1);
+            Assert.IsTrue(trait1Index > -1, TRAIT_NAME1 + " is not found in trait name list");
         }
     }
 }

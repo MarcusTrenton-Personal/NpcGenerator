@@ -40,6 +40,8 @@ namespace NpcGenerator
                 ParseOptionsRow(traitSchema, enumerator.Current);
             }
 
+            DetectDuplicateTraitNamesInASingleCategory(traitSchema);
+
             return traitSchema;
         }
 
@@ -63,18 +65,57 @@ namespace NpcGenerator
                 }
                 traitSchema.Add(new TraitCategory(title, selectionCount: 1));
             }
+
+            DetectDuplicateCategoryNames(traitSchema);
+
             return traitSchema;
+        }
+
+        private static void DetectDuplicateCategoryNames(TraitSchema traitSchema)
+        {
+            List<string> names = new List<string>();
+            foreach (TraitCategory category in traitSchema.GetTraitCategories())
+            {
+                string categoryName = category.Name;
+                bool isDuplicateName = names.Contains(categoryName);
+                if (isDuplicateName)
+                {
+                    throw new DuplicateCategoryNameException(categoryName);
+                }
+                else
+                {
+                    names.Add(categoryName);
+                }
+            }
+        }
+
+        private static void DetectDuplicateTraitNamesInASingleCategory(TraitSchema traitSchema)
+        {
+            foreach (TraitCategory category in traitSchema.GetTraitCategories())
+            {
+                string[] traitNames = category.GetTraitNames();
+                for (int j = 0; j < traitNames.Length; j++)
+                {
+                    string[] matchingNames = Array.FindAll(traitNames, name => name == traitNames[j]);
+                    bool duplicateFound = matchingNames.Length > 1;
+                    if (duplicateFound)
+                    {
+                        throw new DuplicateTraitNamesInCategoryException(category: category.Name, trait: traitNames[j]);
+                    }
+                }
+            }
         }
 
         private static void ParseOptionsRow(TraitSchema traitSchema, string optionsRow)
         {
+            IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
             string[] cells = optionsRow.Split(',');
             for (int i = 0; i * 2 < cells.Length; ++i)
             {
                 string traitName = cells[i * 2];
                 if (!string.IsNullOrEmpty(traitName))
                 {
-                    if (i >= traitSchema.TraitCategoryCount)
+                    if (i >= categories.Count)
                     {
                         throw new FormatException("Trait " + traitName + " is missing a column title.");
                     }
@@ -87,7 +128,7 @@ namespace NpcGenerator
                         {
                             throw new ArithmeticException("Weight for " + traitWeightString + " is not a whole number of at least 0");
                         }
-                        traitSchema.GetAtIndex(i).Add(new Trait(traitName, weight, isHidden: false));
+                        categories[i].Add(new Trait(traitName, weight, isHidden: false));
                     }
                     else
                     {

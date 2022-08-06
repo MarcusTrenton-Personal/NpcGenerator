@@ -15,27 +15,15 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public class BonusSelection
+    public class ReplacementSearch
     {
-        public BonusSelection(TraitCategory traitCategory, int selectionCount)
+        public ReplacementSearch(Trait trait, TraitCategory category)
         {
-            TraitCategory = traitCategory;
-            SelectionCount = selectionCount;
+            Trait = trait;
+            Category = category;
         }
 
-        public BonusSelection ShallowCopy()
-        {
-            return (BonusSelection)MemberwiseClone();
-        }
-
-        public BonusSelection ShallowCopyWithNewCategory(TraitCategory newTraitCategory)
-        {
-            BonusSelection copy = (BonusSelection)MemberwiseClone();
-            copy.TraitCategory = newTraitCategory;
-            return copy;
-        }
-
-        public TraitCategory TraitCategory { get; private set; }
-        public int SelectionCount { get; private set; }
+        public Trait Trait { get; private set; }
+        public TraitCategory Category { get; private set; }
     }
 }

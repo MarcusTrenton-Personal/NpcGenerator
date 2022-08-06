@@ -75,7 +75,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                     <TextBlock x:Name="configurationPathText" Text="{Binding Path=ConfigurationPath}"/>
                 </Label>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
+            <StackPanel Orientation="Horizontal" Margin="100,10,0,0">
                 <TextBlock x:Name="npcQuantityLabel" Margin="10" VerticalAlignment="Center">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource localization}" ConverterParameter="npc_quantity_label">
@@ -94,9 +94,40 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="100,10,0,0">
+                <ItemsControl DataContext="{Binding Path=NpcGeneratorModel, ElementName=ThisWindow}" 
+                              ItemsSource="{Binding Path=Replacements}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="150" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Category}" Padding="3"/>
+                                <TextBlock Grid.Column="1" Text=":" Padding="3"/>
+                                <TextBlock Grid.Column="2" Text="{Binding OriginalTrait}" Padding="3"/>
+                                <TextBlock Grid.Column="3" Text="->" Padding="3"/>
+                                <ComboBox x:Name="languageComboBox" VerticalAlignment="Center"
+                                          ItemsSource="{Binding Path=ReplacementTraits}"
+                                          SelectedItem="{Binding Path=CurrentReplacementTrait}"
+                                          Text="{Binding CurrentReplacementTrait, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                          StaysOpenOnEdit="False"
+                                          IsEditable="True"
+                                          Grid.Column="4" Padding="3"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="100,10,0,0">
                 <Button x:Name="generateButton" Margin="10" VerticalAlignment="Center"
-                        DataContext="{Binding Path=NpcGeneratorModel, ElementName=ThisWindow}"
-                        Command="{Binding Path=GenerateNpcs}">
+                            DataContext="{Binding Path=NpcGeneratorModel, ElementName=ThisWindow}"
+                            Command="{Binding Path=GenerateNpcs}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="IsEnabled" Value="False"/>
@@ -111,7 +142,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/> .-->
                         </Style>
                     </Button.Style>
                     <TextBlock x:Name="generateButtonText" Margin="1" 
-                               DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
+                                   DataContext="{Binding Path=LocalizationModel, ElementName=ThisWindow}">
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource localization}" ConverterParameter="generate_button">
                                 <Binding Path="Localization"/>

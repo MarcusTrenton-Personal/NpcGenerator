@@ -23,58 +23,52 @@ namespace NpcGenerator
 {
     public class NpcGroup
     {
-        public NpcGroup(TraitSchema traitSchema, int npcCount)
+        public NpcGroup(TraitSchema traitSchema, int npcCount, IReadOnlyList<Replacement> replacements)
         {
-            if(traitSchema == null)
+            if (traitSchema == null)
             {
                 throw new ArgumentNullException(nameof(traitSchema));
             }
-
-            List<TraitCategory> categories = new List<TraitCategory>();
-            for(int i = 0; i < traitSchema.TraitCategoryCount; ++i)
+            if (replacements == null)
             {
-                TraitCategory category = traitSchema.GetAtIndex(i);
-                m_traitCategoryNames.Add(category.Name);
-                categories.Add(category);
+                throw new ArgumentNullException(nameof(replacements));
             }
 
-            for(int i = 0; i < npcCount; ++i)
+            List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
+            m_traitCategoryNames = categoriesWithReplacements.ConvertAll(category => category.Name);
+
+            for (int i = 0; i < npcCount; ++i)
             {
-                Npc npc = new Npc();
-
-                Dictionary<TraitCategory, int> selectionsPerCategory = new Dictionary<TraitCategory, int>();
-                foreach(TraitCategory category in categories)
-                {
-                    selectionsPerCategory[category] = category.DefaultSelectionCount;
-                }
-
-                while(selectionsPerCategory.Count > 0)
-                {
-                    //Get any category, choose traits, remove category, add bonus selection, repeat until no more categories left.
-                    Dictionary<TraitCategory, int>.Enumerator enumerator = selectionsPerCategory.GetEnumerator();
-                    enumerator.MoveNext();
-                    KeyValuePair<TraitCategory, int> current = enumerator.Current;
-                    TraitCategory category = current.Key;
-                    int count = current.Value;
-                    string[] traits = category.Choose(count, out List <BonusSelection> bonusSelections);
-                    npc.AddTrait(category: category.Name, traits: traits);
-
-                    selectionsPerCategory.Remove(category);
-
-                    foreach (BonusSelection bonusSelection in bonusSelections)
-                    {
-                        selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
-                    }
-                }
-
+                Npc npc = new Npc(categoriesWithReplacements);
                 m_npcs.Add(npc);
-
-                for (int j = 0; j < traitSchema.TraitCategoryCount; ++j)
-                {
-                    TraitCategory traitCategory = traitSchema.GetAtIndex(j);
-                    traitCategory.ResetChoices();
-                }
             }
+        }
+
+        private static List<TraitCategory> GetReplacementCategories(TraitSchema schema, IReadOnlyList<Replacement> replacements)
+        {
+            List<TraitCategory> replacementCategories = new List<TraitCategory>();
+            IReadOnlyList<TraitCategory> originalCategories = schema.GetTraitCategories();
+            for (int i = 0; i < originalCategories.Count; ++i)
+            {
+                TraitCategory originalCategory = originalCategories[i];
+                TraitCategory replacementCategory = originalCategory.DeepCopyWithReplacements(replacements);
+                replacementCategories.Add(replacementCategory);
+            }
+
+            //The copies made above have references to the old categories that must be updated.
+            Dictionary<TraitCategory, TraitCategory> originalCategoriesToReplacements = new Dictionary<TraitCategory, TraitCategory>();
+            for (int i = 0; i < originalCategories.Count; ++i)
+            {
+                TraitCategory originalCategory = originalCategories[i];
+                TraitCategory replacementCategory = replacementCategories[i];
+                originalCategoriesToReplacements[originalCategory] = replacementCategory;
+            }
+            foreach (TraitCategory category in replacementCategories)
+            {
+                category.ReplaceTraitReferences(originalCategoriesToReplacements);
+            }
+
+            return replacementCategories;
         }
 
         public string ToCsv()
@@ -146,7 +140,7 @@ namespace NpcGenerator
         public int NpcCount { get { return m_npcs.Count; } }
         public IList<string> TraitCategories { get => m_traitCategoryNames; }
 
-        private readonly List<string> m_traitCategoryNames = new List<string>();
+        private readonly List<string> m_traitCategoryNames;
         private readonly List<Npc> m_npcs = new List<Npc>();
     }
 }

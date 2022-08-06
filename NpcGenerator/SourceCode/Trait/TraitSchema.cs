@@ -19,24 +19,27 @@ namespace NpcGenerator
 {
     public class TraitSchema
     {
-        public int TraitCategoryCount 
-        { 
-            get 
-            {
-                return m_categories.Count;
-            } 
-        }
-
         public void Add(TraitCategory traitCategory)
         {
             m_categories.Add(traitCategory);
         }
 
-        public TraitCategory GetAtIndex(int index)
+        public void Add(ReplacementSearch replacement)
         {
-            return m_categories[index];
+            m_replacements.Add(replacement);
+        }
+
+        public IReadOnlyList<TraitCategory> GetTraitCategories()
+        {
+            return m_categories;
+        }
+
+        public IReadOnlyList<ReplacementSearch> GetReplacementSearches()
+        {
+            return m_replacements;
         }
 
         private readonly List<TraitCategory> m_categories = new List<TraitCategory>();
+        private readonly List<ReplacementSearch> m_replacements = new List<ReplacementSearch>();
     }
 }

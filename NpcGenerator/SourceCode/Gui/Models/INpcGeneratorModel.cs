@@ -15,7 +15,7 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
 using System.Windows.Input;
 using System.Data;
-using System.Windows;
+using System.Collections.Generic;
 
 namespace NpcGenerator
 {
@@ -25,8 +25,17 @@ namespace NpcGenerator
         public string ConfigurationPath { get; }
         public bool DoesConfigurationFileExist { get; }
         public int NpcQuantity { get; set; }
+        public IReadOnlyList<ReplacementSubModel> Replacements { get; }
         public ICommand GenerateNpcs { get; }
         public DataTable ResultNpcs { get; }
         public ICommand SaveNpcs { get; }
+    }
+
+    public class ReplacementSubModel
+    {
+        public string Category { get; set; }
+        public string OriginalTrait { get; set; }
+        public string[] ReplacementTraits { get; set; }
+        public string CurrentReplacementTrait { get; set; }
     }
 }

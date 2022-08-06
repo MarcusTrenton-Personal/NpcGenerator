@@ -196,22 +196,26 @@ namespace Tests
             TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
-            Assert.AreEqual(schema.TraitCategoryCount, 2, "Schema has incorrect number of TraitCategories");
-            TraitCategory firstCategory = schema.GetAtIndex(0);
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            Assert.IsNotNull(categories, "Schema categories is null, which should be impossible");
+            Assert.AreEqual(2, categories.Count, "Schema has incorrect number of TraitCategories");
+            TraitCategory firstCategory = categories[0];
             Assert.IsNotNull(firstCategory, "Schema has a null first TraitCategory");
             Assert.AreEqual(firstCategory.Name, CATEGORY1_TITLE, "First category doesn't have name " + CATEGORY1_TITLE);
             Assert.AreEqual(CATEGORY1_SELECTION_COUNT, firstCategory.DefaultSelectionCount, "First category has wrong SelectionCount");
-            string[] colours = firstCategory.Choose(firstCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections1);
+            TraitChooser firstChooser = firstCategory.CreateTraitChooser();
+            string[] colours = firstChooser.Choose(firstCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections1);
             Assert.AreEqual(0, bonusSelections1.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(colours.Length, 1, "Wrong number of selections from " + CATEGORY1_TITLE);
             Assert.IsTrue(colours[0] == CATEGORY1_TRAIT1 || colours[0] == CATEGORY1_TRAIT2, CATEGORY1_TITLE + 
                 " chose an invalid trait " + colours[0]);
 
-            TraitCategory secondCategory = schema.GetAtIndex(1);
+            TraitCategory secondCategory = categories[1];
             Assert.IsNotNull(secondCategory, "Schema has a null second TraitCategory");
             Assert.AreEqual(secondCategory.Name, CATEGORY2_TITLE, "Second category doesn't have name " + CATEGORY2_TITLE);
             Assert.AreEqual(CATEGORY2_SELECTION_COUNT, secondCategory.DefaultSelectionCount, "Second category has wrong SelectionCount");
-            string[] animals = secondCategory.Choose(secondCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections2);
+            TraitChooser secondChooser = secondCategory.CreateTraitChooser();
+            string[] animals = secondChooser.Choose(secondCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections2);
             Assert.AreEqual(0, bonusSelections2.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(animals.Length, 2, "Wrong number of selections from " + CATEGORY2_TITLE);
             Assert.IsTrue((animals[0] == CATEGORY2_TRAIT1 || animals[0] == CATEGORY2_TRAIT2), 
@@ -513,6 +517,94 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Empty json did not throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void DuplicateCategoryNames()
+        {
+            string path = Path.Combine(TestDirectory, "colour.json");
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }
+                        ]
+                    },
+                    {
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool throwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch(Exception)
+            {
+                throwException = true;
+            }
+            
+            Assert.IsTrue(throwException, "Duplicate categories were not rejected.");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void DuplicateTraitNamesInACategory()
+        {
+            string path = Path.Combine(TestDirectory, "colour.json");
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool throwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (Exception)
+            {
+                throwException = true;
+            }
+
+            Assert.IsTrue(throwException, "Duplicate trait names in the same category were not rejected.");
 
             File.Delete(path);
         }

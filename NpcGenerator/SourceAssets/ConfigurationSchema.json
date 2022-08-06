@@ -5,6 +5,12 @@
 	"description": "All of the categorized, weighted traits an npc can possess",
 	"type": "object",
 	"properties": {
+		"replacements": {
+			"description": "Traits that are replaced with a user-selected trait. See the description of 'replacement' for an example.",
+			"type": "array",
+			"items": { "$ref": "#/$defs/replacement"},
+			"uniqueItems": true
+		},
 		"trait_categories": {
 			"description": "List of all categories of traits. By default an NPC can only have 1 trait from each category.",
 			"type": "array",
@@ -76,6 +82,22 @@
 			"description": "How many traits from this category will be selected. No trait can be selected twice.",
 			"type": "integer",
 			"minimum": 0
+		},
+		"replacement": {
+			"description": "A trait that is replaced with a user-specified choice for the next batch of npcs. For example, a trait of 'region-specific' in the 'race' category is replaced with user selected race. The replacement for one batch of npcs could be Japanese and another could be Nigerian. This allows quick generation of region-specific npcs in a globe trotting session.",
+			"type": "object",
+			"properties": {
+				"category_name": {
+					"description": "The category of the trait to be replacement. This is needed to distinguish between identically-named traits in different categories.",
+					"type": "string"
+				},
+				"trait": {
+					"description": "The trait to be replaced. For example 'Region-specific' trait of category 'Race'.",
+					"type": "string"
+				}
+			},
+			"required": ["category_name", "trait"],
+			"additionalProperties": false
 		}
 	}
 }

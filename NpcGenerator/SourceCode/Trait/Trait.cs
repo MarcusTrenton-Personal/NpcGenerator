@@ -24,9 +24,17 @@ namespace NpcGenerator
             IsHidden = isHidden;
         }
 
-        public string Name { get; }
-        public int Weight { get; }
-        public bool IsHidden { get; }
+        public Trait DeepCopyWithRename(string newName)
+        {
+            Trait copy = (Trait) MemberwiseClone();
+            copy.Name = newName;
+            copy.BonusSelection = BonusSelection?.ShallowCopy();
+            return copy;
+        }
+
+        public string Name { get; private set; }
+        public int Weight { get; private set; }
+        public bool IsHidden { get; private set; }
         public BonusSelection BonusSelection { get; set; } = null;
     }
 }

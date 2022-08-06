@@ -144,8 +144,9 @@ namespace Tests
         public ICommand ChooseConfiguration { get; } = null;
         public string ConfigurationPath { get; set; } = null;
         public bool DoesConfigurationFileExist { get; set; } = false;
-        public int NpcQuantity { get; set; } = 0;
         public ICommand GenerateNpcs { get; } = null;
+        public int NpcQuantity { get; set; } = 0;
+        public IReadOnlyList<ReplacementSubModel> Replacements { get; set; } = null;
         public DataTable ResultNpcs { get; set; }
         public ICommand SaveNpcs { get; } = null;
     }
@@ -172,6 +173,15 @@ namespace Tests
         public TraitSchema Parse(string path)
         {
             CsvConfigurationParser parser = new CsvConfigurationParser();
+            return parser.Parse(path);
+        }
+    }
+
+    internal class MockJsonConfigurationParser : IConfigurationParser
+    {
+        public TraitSchema Parse(string path)
+        {
+            JsonConfigurationParser parser = new JsonConfigurationParser(null);
             return parser.Parse(path);
         }
     }
