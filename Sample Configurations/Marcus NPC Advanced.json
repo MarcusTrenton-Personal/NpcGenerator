@@ -134,7 +134,6 @@
 				{"name" : "Curious", "weight" : 1},
 				{"name" : "Madness", "weight" : 1},
 				{"name" : "Overconfident", "weight" : 1},
-				{"name" : "Prosthetic", "weight" : 1},
 				{"name" : "ADHD", "weight" : 1},
 				{"name" : "Anxiety", "weight" : 1},
 				{"name" : "Depressed", "weight" : 1},
@@ -165,6 +164,7 @@
 				{"name" : "Wheelchair", "weight" : 1},
 				{"name" : "One eye", "weight" : 1},
 				{"name" : "Blind", "weight" : 1},
+				{"name" : "Prosthetic", "weight" : 1},
 				{"name" : "Deaf", "weight" : 1}
 			]
 		},
