@@ -186,5 +186,26 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        [TestMethod]
+        public void DuplicateTraitNamesInDifferentCategories()
+        {
+            const string TRAIT_NAME = "Brown";
+            string path = Path.Combine(TestDirectory, "person.csv");
+            string text = "Hair,Weight,Skin,Weight\n" +
+                TRAIT_NAME + ",1," + TRAIT_NAME + ",1";
+            File.WriteAllText(path, text);
+
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+
+            TraitSchema schema = parser.Parse(path);
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+
+            Assert.AreEqual(2, categories.Count);
+            Assert.IsNotNull(categories[0].GetTrait(TRAIT_NAME), "Missing expected trait in category");
+            Assert.IsNotNull(categories[1].GetTrait(TRAIT_NAME), "Missing expected trait in category");
+
+            File.Delete(path);
+        }
     }
 }

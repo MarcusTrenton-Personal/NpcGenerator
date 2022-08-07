@@ -608,5 +608,47 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        public void DuplicateTraitNamesInDifferentCategories()
+        {
+            const string TRAIT_NAME = "Brown";
+            string path = Path.Combine(TestDirectory, "person.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Hair',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT_NAME}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Skin',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT_NAME}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            TraitSchema schema = parser.Parse(path);
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            
+            Assert.AreEqual(2, categories.Count);
+            Assert.IsNotNull(categories[0].GetTrait(TRAIT_NAME), "Missing expected trait in category");
+            Assert.IsNotNull(categories[1].GetTrait(TRAIT_NAME), "Missing expected trait in category");
+
+            File.Delete(path);
+        }
     }
 }
