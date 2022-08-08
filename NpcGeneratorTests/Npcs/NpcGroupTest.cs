@@ -35,7 +35,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\nBlue", csv, "NpcGroup did not generate expected CSV text");
@@ -50,7 +50,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 2, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 2, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\nBlue\nBlue", csv, "NpcGroup did not generate expected CSV text");
@@ -65,7 +65,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 0, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 0, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\n", csv, "NpcGroup did not generate expected CSV text");
@@ -79,7 +79,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
             string csv = npcGroup.ToCsv();
 
             Assert.AreEqual("Colour\n", csv, "NpcGroup did not generate expected CSV text");
@@ -94,7 +94,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -123,7 +123,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 2, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 2, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -152,7 +152,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 0, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 0, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -180,7 +180,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -216,7 +216,7 @@ namespace Tests
             bool threwException = false;
             try 
             {
-                NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             }
             catch(Exception)
             {
@@ -242,7 +242,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             }
             catch (Exception)
             {
@@ -275,7 +275,7 @@ namespace Tests
             string[] traits = null;
             for (int i = 0; i < 3; ++i)
             {
-                NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
                 traits = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(colourCategory.Name);
                 int index = Array.FindIndex(traits, trait => trait == BLUE);
                 bool isTraitWithBonusSelected = index > 0;
@@ -311,7 +311,7 @@ namespace Tests
             //Attempt 3 times to randomly select blue. Given the weighting, the odds are literally astronimical
             //that blue won't be selected.
             const int NPC_COUNT = 3;
-            NpcGroup npcGroup = new NpcGroup(traitSchema, NPC_COUNT, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, NPC_COUNT, new List<Replacement>());
 
             Assert.AreEqual(NPC_COUNT, npcGroup.NpcCount, "Wrong number of NPCs generated");
         }
@@ -336,7 +336,7 @@ namespace Tests
             traitSchema.Add(colourCategory);
             traitSchema.Add(animalCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             Npc npc = npcGroup.GetNpcAtIndex(0);
 
             string[] colours = npc.GetTraitsOfCategory(colourCategory.Name);
@@ -361,7 +361,7 @@ namespace Tests
 
             const string REPLACEMENT_COLOUR = "Red";
             Replacement replacement = new Replacement(trait, REPLACEMENT_COLOUR, colourCategory);
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>() { replacement });
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>() { replacement });
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 
@@ -393,7 +393,7 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            NpcGroup npcGroup = new NpcGroup(traitSchema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             string jsonText = npcGroup.ToJson();
             JToken json = JToken.Parse(jsonText);
 

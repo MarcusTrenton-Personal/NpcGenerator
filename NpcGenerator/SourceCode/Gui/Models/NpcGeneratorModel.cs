@@ -174,7 +174,7 @@ namespace NpcGenerator
         private void ExecuteGenerateNpcs(object _)
         {
             List<Replacement> replacements = GetReplacements(m_replacementSubModels, m_traitSchema);
-            m_npcGroup = new NpcGroup(m_traitSchema, m_userSettings.NpcQuantity, replacements);
+            m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements);
 
             DataTable table = new DataTable("Npc Table");
             for (int i = 0; i < m_npcGroup.TraitCategoryCount; ++i)
@@ -191,7 +191,7 @@ namespace NpcGenerator
             m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
         }
 
-        private List<Replacement> GetReplacements(List<ReplacementSubModel> replacementSubModels, TraitSchema schema)
+        private static List<Replacement> GetReplacements(List<ReplacementSubModel> replacementSubModels, TraitSchema schema)
         {
             List<Replacement> replacements = new List<Replacement>();
             IReadOnlyList<ReplacementSearch> searches = schema.GetReplacementSearches();
@@ -316,7 +316,7 @@ namespace NpcGenerator
             NotifyPropertyChanged("Replacements");
         }
 
-        private List<ReplacementSubModel> MakeReplacementSubModels(TraitSchema traitSchema)
+        private static List<ReplacementSubModel> MakeReplacementSubModels(TraitSchema traitSchema)
         {
             List<ReplacementSubModel> replacements = new List<ReplacementSubModel>();
             if (traitSchema == null)

@@ -23,25 +23,9 @@ namespace NpcGenerator
 {
     public class NpcGroup
     {
-        public NpcGroup(TraitSchema traitSchema, int npcCount, IReadOnlyList<Replacement> replacements)
+        public NpcGroup(List<string> categoryNames)
         {
-            if (traitSchema == null)
-            {
-                throw new ArgumentNullException(nameof(traitSchema));
-            }
-            if (replacements == null)
-            {
-                throw new ArgumentNullException(nameof(replacements));
-            }
-
-            List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
-            m_traitCategoryNames = categoriesWithReplacements.ConvertAll(category => category.Name);
-
-            for (int i = 0; i < npcCount; ++i)
-            {
-                Npc npc = new Npc(categoriesWithReplacements);
-                m_npcs.Add(npc);
-            }
+            m_traitCategoryNames = categoryNames;
         }
 
         private static List<TraitCategory> GetReplacementCategories(TraitSchema schema, IReadOnlyList<Replacement> replacements)
@@ -69,6 +53,11 @@ namespace NpcGenerator
             }
 
             return replacementCategories;
+        }
+
+        public void Add(Npc npc)
+        {
+            m_npcs.Add(npc);
         }
 
         public string ToCsv()
