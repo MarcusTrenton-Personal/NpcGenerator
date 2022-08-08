@@ -28,33 +28,6 @@ namespace NpcGenerator
             m_traitCategoryNames = categoryNames;
         }
 
-        private static List<TraitCategory> GetReplacementCategories(TraitSchema schema, IReadOnlyList<Replacement> replacements)
-        {
-            List<TraitCategory> replacementCategories = new List<TraitCategory>();
-            IReadOnlyList<TraitCategory> originalCategories = schema.GetTraitCategories();
-            for (int i = 0; i < originalCategories.Count; ++i)
-            {
-                TraitCategory originalCategory = originalCategories[i];
-                TraitCategory replacementCategory = originalCategory.DeepCopyWithReplacements(replacements);
-                replacementCategories.Add(replacementCategory);
-            }
-
-            //The copies made above have references to the old categories that must be updated.
-            Dictionary<TraitCategory, TraitCategory> originalCategoriesToReplacements = new Dictionary<TraitCategory, TraitCategory>();
-            for (int i = 0; i < originalCategories.Count; ++i)
-            {
-                TraitCategory originalCategory = originalCategories[i];
-                TraitCategory replacementCategory = replacementCategories[i];
-                originalCategoriesToReplacements[originalCategory] = replacementCategory;
-            }
-            foreach (TraitCategory category in replacementCategories)
-            {
-                category.ReplaceTraitReferences(originalCategoriesToReplacements);
-            }
-
-            return replacementCategories;
-        }
-
         public void Add(Npc npc)
         {
             m_npcs.Add(npc);
@@ -125,9 +98,8 @@ namespace NpcGenerator
             return m_traitCategoryNames[index];
         }
 
-        public int TraitCategoryCount { get { return m_traitCategoryNames.Count; } }
         public int NpcCount { get { return m_npcs.Count; } }
-        public IList<string> TraitCategories { get => m_traitCategoryNames; }
+        public IReadOnlyList<string> TraitCategories { get => m_traitCategoryNames; }
 
         private readonly List<string> m_traitCategoryNames;
         private readonly List<Npc> m_npcs = new List<Npc>();

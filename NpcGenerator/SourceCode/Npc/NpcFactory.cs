@@ -38,7 +38,7 @@ namespace NpcGenerator
 
             for (int i = 0; i < npcCount; ++i)
             {
-                Npc npc = new Npc(categoriesWithReplacements);
+                Npc npc = CreateNpc(categoriesWithReplacements);
                 group.Add(npc);
             }
 
@@ -70,6 +70,44 @@ namespace NpcGenerator
             }
 
             return replacementCategories;
+        }
+
+        private static Npc CreateNpc(IReadOnlyList<TraitCategory> categories)
+        {
+            Npc npc = new Npc();
+            Dictionary<TraitCategory, TraitChooser> chooserForCategory = new Dictionary<TraitCategory, TraitChooser>();
+            Dictionary<TraitCategory, int> selectionsPerCategory = new Dictionary<TraitCategory, int>();
+            foreach (TraitCategory category in categories)
+            {
+                selectionsPerCategory[category] = category.DefaultSelectionCount;
+                chooserForCategory[category] = category.CreateTraitChooser();
+            }
+
+            while (selectionsPerCategory.Count > 0)
+            {
+                GetElementOf(selectionsPerCategory, out TraitCategory category, out int count);
+                TraitChooser chooser = chooserForCategory[category];
+                string[] traits = chooser.Choose(count, out List<BonusSelection> bonusSelections);
+                npc.AddTrait(category: category.Name, traits: traits);
+
+                selectionsPerCategory.Remove(category);
+
+                foreach (BonusSelection bonusSelection in bonusSelections)
+                {
+                    selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
+                }
+            }
+
+            return npc;
+        }
+
+        private static void GetElementOf(Dictionary<TraitCategory, int> selectionsPerCategory, out TraitCategory category, out int count)
+        {
+            Dictionary<TraitCategory, int>.Enumerator enumerator = selectionsPerCategory.GetEnumerator();
+            enumerator.MoveNext();
+            KeyValuePair<TraitCategory, int> current = enumerator.Current;
+            category = current.Key;
+            count = current.Value;
         }
     }
 }

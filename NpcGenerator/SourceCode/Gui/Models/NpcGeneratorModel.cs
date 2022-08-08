@@ -177,7 +177,7 @@ namespace NpcGenerator
             m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements);
 
             DataTable table = new DataTable("Npc Table");
-            for (int i = 0; i < m_npcGroup.TraitCategoryCount; ++i)
+            for (int i = 0; i < m_npcGroup.TraitCategories.Count; ++i)
             {
                 table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
             }

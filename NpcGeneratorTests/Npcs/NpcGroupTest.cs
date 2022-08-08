@@ -27,6 +27,111 @@ namespace Tests
     public class NpcGroupTests
     {
         [TestMethod]
+        public void InitialGroupIsEmpty()
+        {
+            List<string> categoryNames = new List<string>() { "Colour" };
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Assert.AreEqual(0, group.NpcCount, "Wrong number of Npcs stored");
+        }
+
+        [TestMethod]
+        public void AddAndGetSingleNpc()
+        {
+            List<string> categoryNames = new List<string>() { "Colour" }; 
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Npc npc = new Npc();
+            group.Add(npc);
+
+            Assert.AreEqual(1, group.NpcCount, "Wrong number of Npcs stored");
+            Assert.AreEqual(npc, group.GetNpcAtIndex(0), "Different Npc returned than was stored");
+        }
+
+        [TestMethod]
+        public void DoubleAddNpc()
+        {
+            List<string> categoryNames = new List<string>() { "Colour" };
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Npc npc = new Npc();
+            group.Add(npc);
+            group.Add(npc);
+
+            Assert.AreEqual(2, group.NpcCount, "Wrong number of Npcs stored");
+            Assert.AreEqual(npc, group.GetNpcAtIndex(0), "Different Npc returned than was stored");
+            Assert.AreEqual(npc, group.GetNpcAtIndex(1), "Different Npc returned than was stored");
+        }
+
+        [TestMethod]
+        public void AddMultipleNpcs()
+        {
+            List<string> categoryNames = new List<string>() { "Colour" };
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Npc npc0 = new Npc();
+            group.Add(npc0);
+            Npc npc1 = new Npc();
+            group.Add(npc1);
+
+            Assert.AreEqual(2, group.NpcCount, "Wrong number of Npcs stored");
+            Assert.AreEqual(npc0, group.GetNpcAtIndex(0), "Different Npc returned than was stored");
+            Assert.AreEqual(npc1, group.GetNpcAtIndex(1), "Different Npc returned than was stored");
+        }
+
+        [TestMethod]
+        public void GetWithoutAdd()
+        {
+            List<string> categoryNames = new List<string>() { "Colour" };
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            bool threwException = false;
+            try
+            {
+                Npc npc = group.GetNpcAtIndex(0);
+            }
+            catch(Exception)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Did not throw an exception for fetch an out of bounds index");
+        }
+
+        [TestMethod]
+        public void EmptyTraitCategories()
+        {
+            List<string> categoryNames = new List<string>();
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Assert.AreEqual(0, group.TraitCategories.Count, "Wrong number of Category names stored");
+        }
+
+        [TestMethod]
+        public void SingleTraitCategory()
+        {
+            const string CATEGORY_NAME = "Colour";
+            List<string> categoryNames = new List<string>() { CATEGORY_NAME };
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Assert.AreEqual(1, group.TraitCategories.Count, "Wrong number of Category names stored");
+            Assert.AreEqual(CATEGORY_NAME, group.TraitCategories[0], "Wrong Category name");
+        }
+
+        [TestMethod]
+        public void MultipleTraitCategories()
+        {
+            const string CATEGORY_NAME0 = "Colour";
+            const string CATEGORY_NAME1 = "Animal";
+            List<string> categoryNames = new List<string>() { CATEGORY_NAME0, CATEGORY_NAME1 };
+            NpcGroup group = new NpcGroup(categoryNames);
+
+            Assert.AreEqual(2, group.TraitCategories.Count, "Wrong number of Trait names stored");
+            Assert.AreEqual(CATEGORY_NAME0, group.TraitCategories[0], "Wrong Category name");
+            Assert.AreEqual(CATEGORY_NAME1, group.TraitCategories[1], "Wrong Category name");
+        }
+
+        [TestMethod]
         public void NpcGroupGeneratesCsvSingleNpc()
         {
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
@@ -214,11 +319,11 @@ namespace Tests
             traitSchema.Add(colourCategory);
 
             bool threwException = false;
-            try 
+            try
             {
                 NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
             }
-            catch(Exception)
+            catch (Exception)
             {
                 threwException = true;
             }
@@ -259,7 +364,7 @@ namespace Tests
             const string GREEN = "Green";
 
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait blue = new Trait(BLUE, int.MaxValue-1, isHidden: false)
+            Trait blue = new Trait(BLUE, int.MaxValue - 1, isHidden: false)
             {
                 BonusSelection = new BonusSelection(colourCategory, 1)
             };
