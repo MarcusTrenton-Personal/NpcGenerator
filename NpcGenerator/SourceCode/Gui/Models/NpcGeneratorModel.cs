@@ -177,13 +177,14 @@ namespace NpcGenerator
             m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements);
 
             DataTable table = new DataTable("Npc Table");
-            for (int i = 0; i < m_npcGroup.TraitCategories.Count; ++i)
+            for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
             {
                 table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
             }
             for (int i = 0; i < m_npcGroup.NpcCount; ++i)
             {
-                table.Rows.Add(m_npcGroup.GetNpcAtIndex(i).ToStringArrayByCategory(m_npcGroup.TraitCategories));
+                string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.CategoryOrder);
+                table.Rows.Add(text);
             }
             m_table = table;
             NotifyPropertyChanged("ResultNpcs");
@@ -217,17 +218,19 @@ namespace NpcGenerator
 
         private void ExecuteSaveNpcs(object _)
         {
+            NpcToCsv csv = new NpcToCsv();
+            NpcToJson json = new NpcToJson();
             List<FileContentProvider> contentProviders = new List<FileContentProvider>(2)
             {
                 new FileContentProvider()
                 {
                     FileExtensionWithoutDot = "csv",
-                    GetContent = m_npcGroup.ToCsv
+                    GetContent = () => csv.Export(m_npcGroup)
                 },
                 new FileContentProvider()
                 {
                     FileExtensionWithoutDot = "json",
-                    GetContent = m_npcGroup.ToJson
+                    GetContent = () => json.Export(m_npcGroup)
                 }
             };
             bool success = m_fileIo.SaveToPickedFile(contentProviders, out string pickedFormat);

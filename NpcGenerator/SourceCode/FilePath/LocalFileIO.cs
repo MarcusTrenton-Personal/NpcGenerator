@@ -44,7 +44,7 @@ namespace NpcGenerator
             return cachePath;
         }
 
-        public bool SaveToPickedFile(IList<FileContentProvider> contentProviders, out string pickedFileExtension)
+        public bool SaveToPickedFile(IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
             pickedFileExtension = "";
 

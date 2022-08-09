@@ -88,7 +88,7 @@ namespace NpcGenerator
                 GetElementOf(selectionsPerCategory, out TraitCategory category, out int count);
                 TraitChooser chooser = chooserForCategory[category];
                 string[] traits = chooser.Choose(count, out List<BonusSelection> bonusSelections);
-                npc.AddTrait(category: category.Name, traits: traits);
+                npc.Add(category: category.Name, traits: traits);
 
                 selectionsPerCategory.Remove(category);
 

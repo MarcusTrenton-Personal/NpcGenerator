@@ -13,79 +13,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace NpcGenerator
 {
     public class NpcGroup
     {
-        public NpcGroup(List<string> categoryNames)
+        public NpcGroup(List<string> categoryOrder)
         {
-            m_traitCategoryNames = categoryNames;
+            m_categoryOrder = categoryOrder;
         }
 
         public void Add(Npc npc)
         {
             m_npcs.Add(npc);
-        }
-
-        public string ToCsv()
-        {
-            StringBuilder text = new StringBuilder();
-            
-            TraitCategoryNamesToCsv(text);
-            text.Append('\n');
-
-            for(int i = 0; i < m_npcs.Count; ++i)
-            {
-                m_npcs[i].ToCsvRow(text, m_traitCategoryNames);
-                if (i + 1 < m_npcs.Count)
-                {
-                    text.Append('\n');
-                }
-            }
-
-            return text.ToString();
-        }
-
-        public string ToJson()
-        {
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw = new StringWriter(sb);
-            using (JsonWriter writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("npc_group");
-                writer.WriteStartArray();
-
-                foreach(Npc npc in m_npcs)
-                {
-                    npc.ToJsonObject(writer, m_traitCategoryNames);
-                }
-
-                writer.WriteEndArray();
-                writer.WriteEndObject(); //End of json
-
-            }
-            string json = sw.ToString();
-
-            return json;
-        }
-
-        private void TraitCategoryNamesToCsv(StringBuilder text)
-        {
-            for (int i = 0; i < m_traitCategoryNames.Count; ++i)
-            {
-                text.Append(m_traitCategoryNames[i]);
-                if (i + 1 < m_traitCategoryNames.Count)
-                {
-                    text.Append(',');
-                }
-            }
         }
 
         public Npc GetNpcAtIndex(int index)
@@ -95,13 +36,13 @@ namespace NpcGenerator
 
         public string GetTraitCategoryNameAtIndex(int index)
         {
-            return m_traitCategoryNames[index];
+            return m_categoryOrder[index];
         }
 
         public int NpcCount { get { return m_npcs.Count; } }
-        public IReadOnlyList<string> TraitCategories { get => m_traitCategoryNames; }
+        public IReadOnlyList<string> CategoryOrder { get => m_categoryOrder; }
 
-        private readonly List<string> m_traitCategoryNames;
+        private readonly List<string> m_categoryOrder;
         private readonly List<Npc> m_npcs = new List<Npc>();
     }
 }

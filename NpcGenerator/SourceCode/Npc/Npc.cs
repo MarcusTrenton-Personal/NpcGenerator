@@ -25,7 +25,7 @@ namespace NpcGenerator
         public const char CSV_SEPARATOR = ',';
         public const char MULTI_TRAIT_SEPARATOR = '&';
 
-        public void AddTrait(string category, string[] traits)
+        public void Add(string category, string[] traits)
         {
             bool categoryExists = m_traitsByCategory.ContainsKey(category);
             List<string> traitsList;
@@ -51,76 +51,6 @@ namespace NpcGenerator
             else
             {
                 return Array.Empty<string>();
-            }
-        }
-
-        public string[] ToStringArrayByCategory(IReadOnlyList<string> categoryOrder)
-        {
-            List<string> traitsPerCategory = new List<string>();
-            foreach (string category in categoryOrder)
-            {
-                bool found = m_traitsByCategory.TryGetValue(category, out List<string> traits);
-                if (found)
-                {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    CombineTraits(traits, stringBuilder);
-                    traitsPerCategory.Add(stringBuilder.ToString());
-                }
-            }
-            return traitsPerCategory.ToArray();
-        }
-
-        public void ToCsvRow(StringBuilder stringBuilder, IList<string> categoryOrder)
-        {
-            if (stringBuilder == null)
-            {
-                throw new ArgumentNullException(nameof(stringBuilder));
-            }
-            for (int i = 0; i < categoryOrder.Count; ++i)
-            {
-                bool found = m_traitsByCategory.TryGetValue(categoryOrder[i], out List<string> traits);
-                if (found)
-                {
-                    CombineTraits(traits, stringBuilder);
-                }
-                if (i + 1 < m_traitsByCategory.Count)
-                {
-                    stringBuilder.Append(CSV_SEPARATOR);
-                }
-            }
-        }
-
-        public void ToJsonObject(JsonWriter writer, IList<string> categoryOrder)
-        {
-            writer.WriteStartObject();
-            
-            for(int i = 0; i < categoryOrder.Count; ++i)
-            {
-                bool found = m_traitsByCategory.TryGetValue(categoryOrder[i], out List<string> traits);
-                if (found)
-                {
-                    writer.WritePropertyName(categoryOrder[i]);
-                    writer.WriteStartArray();
-                    for(int j = 0; j < traits.Count; ++j)
-                    {
-                        writer.WriteValue(traits[j]);
-                    }
-                    writer.WriteEndArray();
-                }
-            }
-
-            writer.WriteEndObject();
-        }
-
-        private static void CombineTraits(List<string> traits, StringBuilder stringBuilder)
-        {
-            for (int i = 0; i < traits.Count; ++i)
-            {
-                stringBuilder.Append(traits[i]);
-                if (i + 1 < traits.Count)
-                {
-                    stringBuilder.Append(" " + MULTI_TRAIT_SEPARATOR + " ");
-                }
             }
         }
 
