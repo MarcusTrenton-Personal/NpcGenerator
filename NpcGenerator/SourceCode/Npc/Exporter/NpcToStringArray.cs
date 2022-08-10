@@ -22,6 +22,7 @@ namespace NpcGenerator
     {
         public static string[] Export(Npc npc, IReadOnlyList<string> categoryOrder)
         {
+            StringBuilder stringBuilder = new StringBuilder();
             List<string> traitsPerCategory = new List<string>();
             for (int i = 0; i < categoryOrder.Count; ++i)
             {
@@ -29,9 +30,13 @@ namespace NpcGenerator
                 bool found = traits.Length > 0;
                 if (found)
                 {
-                    StringBuilder stringBuilder = new StringBuilder();
                     ExportUtil.CombineTraits(traits, stringBuilder);
                     traitsPerCategory.Add(stringBuilder.ToString());
+                    stringBuilder.Clear();
+                }
+                else
+                {
+                    traitsPerCategory.Add(string.Empty);
                 }
             }
             return traitsPerCategory.ToArray();

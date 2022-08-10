@@ -93,7 +93,31 @@ namespace Tests
 
             string[] categories = NpcToStringArray.Export(npc, new List<string>() { "Purpose" });
 
-            Assert.AreEqual(0, categories.Length, "Wrong number of trait categories");
+            Assert.AreEqual(1, categories.Length, "Wrong number of trait categories");
+            Assert.AreEqual(string.Empty, categories[0], "Wrong traits in category");
+        }
+
+        [TestMethod]
+        public void NpcHasNoTraitsInCategoryOfMany()
+        {
+            const string COLOUR_CATEGORY = "Colour";
+            const string COLOUR_TRAIT = "Blue";
+
+            const string ANIMAL_CATEGORY = "Animal";
+
+            const string AGE_CATEGORY = "Age";
+            const string AGE_TRAIT = "Young";
+
+            Npc npc = new Npc();
+            npc.Add(COLOUR_CATEGORY, new string[] { COLOUR_TRAIT });
+            npc.Add(AGE_CATEGORY, new string[] { AGE_TRAIT });
+
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { COLOUR_CATEGORY, ANIMAL_CATEGORY, AGE_CATEGORY });
+
+            Assert.AreEqual(3, categories.Length, "Wrong number of categories");
+            Assert.AreEqual(COLOUR_TRAIT, categories[0], "Wrong traits in category");
+            Assert.AreEqual(string.Empty, categories[1], "Wrong traits in category");
+            Assert.AreEqual(AGE_TRAIT, categories[2], "Wrong traits in category");
         }
     }
 }
