@@ -13,28 +13,26 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.*/
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace NpcGenerator
 {
-    public class NpcToStringArray
+    public static class ExportUtil
     {
-        public static string[] Export(Npc npc, IReadOnlyList<string> categoryOrder)
+        public const string MULTI_TRAIT_SEPARATOR = " & ";
+
+        public static void CombineTraits(string[] traits, StringBuilder stringBuilder)
         {
-            List<string> traitsPerCategory = new List<string>();
-            for (int i = 0; i < categoryOrder.Count; ++i)
+            for (int i = 0; i < traits.Length; ++i)
             {
-                string[] traits = npc.GetTraitsOfCategory(categoryOrder[i]);
-                bool found = traits.Length > 0;
-                if (found)
+                stringBuilder.Append(traits[i]);
+                if (i + 1 < traits.Length)
                 {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    ExportUtil.CombineTraits(traits, stringBuilder);
-                    traitsPerCategory.Add(stringBuilder.ToString());
+                    stringBuilder.Append(MULTI_TRAIT_SEPARATOR);
                 }
             }
-            return traitsPerCategory.ToArray();
         }
     }
 }

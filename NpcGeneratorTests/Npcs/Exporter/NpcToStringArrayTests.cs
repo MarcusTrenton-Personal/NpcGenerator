@@ -47,7 +47,7 @@ namespace Tests
             string[] categories = NpcToStringArray.Export(npc, new string[] { "Colour" });
 
             Assert.AreEqual(1, categories.Length, "Wrong number of categories");
-            Assert.AreEqual(TRAIT0 + NpcToStringArray.MULTI_TRAIT_SEPARATOR + TRAIT1, categories[0], "Wrong traits in category");
+            Assert.AreEqual(TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + TRAIT1, categories[0], "Wrong traits in category");
         }
 
         [TestMethod]

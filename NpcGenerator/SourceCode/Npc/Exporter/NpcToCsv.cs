@@ -23,8 +23,7 @@ namespace NpcGenerator
     {
         public string FileExtensionWithoutDot { get; } = "csv";
 
-        private const char SEPARATOR = ',';
-        private const string MULTI_TRAIT_SEPARATOR = " & ";
+        private const char SEPARATOR = ','; 
 
         public string Export(NpcGroup group)
         {
@@ -65,23 +64,11 @@ namespace NpcGenerator
                 bool found = traits.Length > 0;
                 if (found)
                 {
-                    CombineTraits(traits, stringBuilder);
+                    ExportUtil.CombineTraits(traits, stringBuilder);
                 }
                 if (i + 1 < categoryOrder.Count)
                 {
                     stringBuilder.Append(SEPARATOR);
-                }
-            }
-        }
-
-        private static void CombineTraits(string[] traits, StringBuilder stringBuilder)
-        {
-            for (int i = 0; i < traits.Length; ++i)
-            {
-                stringBuilder.Append(traits[i]);
-                if (i + 1 < traits.Length)
-                {
-                    stringBuilder.Append(MULTI_TRAIT_SEPARATOR);
                 }
             }
         }
