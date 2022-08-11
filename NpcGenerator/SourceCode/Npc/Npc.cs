@@ -27,6 +27,26 @@ namespace NpcGenerator
 
         public void Add(string category, string[] traits)
         {
+            if (category == null)
+            {
+                throw new ArgumentNullException(nameof(category));
+            }
+            if (category.Length == 0)
+            {
+                throw new ArgumentException("string must not be null or empty", nameof(category));
+            }
+            if (traits == null)
+            {
+                throw new ArgumentNullException(nameof(traits));
+            }
+            foreach (var trait in traits)
+            {
+                if (string.IsNullOrEmpty(trait))
+                {
+                    throw new ArgumentException("string array elements must not be null or empty", nameof(traits));
+                }
+            }
+
             bool categoryExists = m_traitsByCategory.ContainsKey(category);
             List<string> traitsList;
             if (categoryExists)
