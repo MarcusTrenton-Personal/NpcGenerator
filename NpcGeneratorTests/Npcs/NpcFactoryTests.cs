@@ -11,7 +11,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.If not, see<https://www.gnu.org/licenses/>.*/
+along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 /*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
@@ -26,7 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.If not, see<https://www.gnu.org/licenses/>.*/
+along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
