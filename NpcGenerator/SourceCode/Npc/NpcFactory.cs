@@ -15,7 +15,6 @@ along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace NpcGenerator
 {
@@ -30,6 +29,10 @@ namespace NpcGenerator
             if (replacements == null)
             {
                 throw new ArgumentNullException(nameof(replacements));
+            }
+            if (npcCount < 0)
+            {
+                throw new ArgumentException("npcCount must be greater than or equal to 0.", nameof(npcCount));
             }
 
             List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
