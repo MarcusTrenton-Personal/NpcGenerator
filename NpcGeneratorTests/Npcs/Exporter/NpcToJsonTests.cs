@@ -197,5 +197,29 @@ namespace Tests
             Assert.AreEqual(CATEGORY1_TRAIT0, result.npc_group[0][CATEGORY1_NAME][0], "Npc did not serialize category correctly");
             Assert.AreEqual(CATEGORY2_TRAIT1, result.npc_group[0][CATEGORY1_NAME][1], "Npc did not serialize category correctly");
         }
+
+        [TestMethod]
+        public void OrderHasUnknownCategories()
+        {
+            const string CATEGORY = "Colour";
+            const string NOT_FOUND_CATEGORY = "Animal";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+            npcGroup.Add(npc);
+
+            NpcToJson npcToJson = new NpcToJson();
+            string jsonText = npcToJson.Export(npcGroup);
+            ValidateJsonAgainstSchema(jsonText);
+
+            DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
+
+            Assert.IsNotNull(result, "Serialized using an unknown format");
+            Assert.AreEqual(1, result.npc_group.Count, "Wrong number of npcs");
+            Assert.AreEqual(1, result.npc_group[0][CATEGORY].Count, "Npc did not serialize category correctly");
+            Assert.AreEqual(TRAIT, result.npc_group[0][CATEGORY][0], "Npc did not serialize category correctly");
+        }
     }
 }

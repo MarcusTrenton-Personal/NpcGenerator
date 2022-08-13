@@ -25,91 +25,169 @@ namespace Tests
         [TestMethod]
         public void SingleNpc()
         {
-            Npc npc = new Npc();
-            npc.Add("Colour", new string[] { "Blue" });
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
 
-            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Colour" });
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            Assert.AreEqual("Colour\nBlue", csv, "NpcGroup did not generate expected CSV text");
+            Assert.AreEqual(CATEGORY + "\n" + TRAIT, csv, "NpcGroup did not generate expected CSV text");
         }
 
         [TestMethod]
         public void MultipleNpcs()
         {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+
             Npc npc0 = new Npc();
-            npc0.Add("Colour", new string[] { "Blue" });
+            npc0.Add(CATEGORY, new string[] { TRAIT });
 
             Npc npc1 = new Npc();
-            npc1.Add("Colour", new string[] { "Blue" });
+            npc1.Add(CATEGORY, new string[] { TRAIT });
 
-            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Colour" });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
             npcGroup.Add(npc0);
             npcGroup.Add(npc1);
 
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            Assert.AreEqual("Colour\nBlue\nBlue", csv, "NpcGroup did not generate expected CSV text");
+            Assert.AreEqual(CATEGORY + "\n" + TRAIT + "\n" + TRAIT, csv, "NpcGroup did not generate expected CSV text");
         }
 
         [TestMethod]
         public void ZeroNpcs()
         {
-            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Colour" });
+            const string CATEGORY = "Colour";
+
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            Assert.AreEqual("Colour\n", csv, "NpcGroup did not generate expected CSV text");
+            Assert.AreEqual(CATEGORY + "\n", csv, "NpcGroup did not generate expected CSV text");
         }
 
         [TestMethod]
         public void MultipleCategories()
         {
-            Npc npc = new Npc();
-            npc.Add(category: "Colour", traits: new string[] { "Blue" });
-            npc.Add(category: "Animal", traits: new string[] { "Bear" });
+            const string CATEGORY0 = "Colour";
+            const string TRAIT0 = "Blue";
 
-            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Colour", "Animal" });
+            const string CATEGORY1 = "Animal";
+            const string TRAIT1 = "Bear";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, traits: new string[] { TRAIT0 });
+            npc.Add(CATEGORY1, traits: new string[] { TRAIT1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            Assert.AreEqual("Colour,Animal\nBlue,Bear", csv, "Npc did not generate expected CSV row");
+            string expectedCsv = CATEGORY0 + NpcToCsv.SEPARATOR + CATEGORY1 + "\n" +
+                TRAIT0 + NpcToCsv.SEPARATOR + TRAIT1;
+
+            Assert.AreEqual(expectedCsv, csv, "Npc did not generate expected CSV row");
         }
 
         [TestMethod]
         public void ExportMultiTraitCsv()
         {
-            Npc npc = new Npc();
-            npc.Add(category: "Colour", traits: new string[] { "Blue", "Green" });
-            npc.Add(category: "Terrain", traits: new string[] { "Hills", "River" });
+            const string CATEGORY0 = "Colour";
+            const string CATEGORY0_TRAIT0 = "Blue";
+            const string CATEGORY0_TRAIT1 = "Green";
 
-            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Colour", "Terrain" });
+            const string CATEGORY1 = "Terrain";
+            const string CATEGORY1_TRAIT0 = "Hills";
+            const string CATEGORY1_TRAIT1 = "River";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, traits: new string[] { CATEGORY0_TRAIT0, CATEGORY0_TRAIT1 });
+            npc.Add(CATEGORY1, traits: new string[] { CATEGORY1_TRAIT0, CATEGORY1_TRAIT1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            Assert.AreEqual("Colour,Terrain\nBlue & Green,Hills & River", csv, "Npc did not generate expected CSV row");
+            string expectedCsv = CATEGORY0 + NpcToCsv.SEPARATOR + CATEGORY1 + "\n" +
+                CATEGORY0_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR +
+                CATEGORY1_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
+
+            Assert.AreEqual(expectedCsv, csv, "Npc did not generate expected CSV row");
         }
 
         [TestMethod]
         public void ExportNoTraitCsv()
         {
+            const string CATEGORY = "Colour";
+
             Npc npc = new Npc();
 
-            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Colour" });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            Assert.AreEqual("Colour\n", csv, "Npc did not generate expected CSV row");
+            Assert.AreEqual(CATEGORY + "\n", csv, "Npc did not generate expected CSV row");
+        }
+
+        [TestMethod]
+        public void MultipleTraitsInMultipleCategories()
+        {
+            const string CATEGORY0_NAME = "Colour";
+            const string CATEGORY0_TRAIT0 = "Blue";
+            const string CATEGORY0_TRAIT1 = "Green";
+            const string CATEGORY1_NAME = "Terrain";
+            const string CATEGORY1_TRAIT0 = "Hills";
+            const string CATEGORY1_TRAIT1 = "River";
+
+            Npc npc = new Npc();
+            npc.Add(category: CATEGORY0_NAME, traits: new string[] { CATEGORY0_TRAIT0, CATEGORY0_TRAIT1 });
+            npc.Add(category: CATEGORY1_NAME, traits: new string[] { CATEGORY1_TRAIT0, CATEGORY1_TRAIT1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
+            npcGroup.Add(npc);
+
+            NpcToCsv npcToCsv = new NpcToCsv();
+            string csv = npcToCsv.Export(npcGroup);
+
+            string expectedCsv = CATEGORY0_NAME + NpcToCsv.SEPARATOR + CATEGORY1_NAME + "\n" +
+                CATEGORY0_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR + 
+                CATEGORY1_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
+
+            Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
+        }
+
+        [TestMethod]
+        public void OrderHasUnknownCategories()
+        {
+            const string CATEGORY = "Colour";
+            const string NOT_FOUND_CATEGORY = "Animal";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+            npcGroup.Add(npc);
+
+            NpcToCsv npcToCsv = new NpcToCsv();
+            string csv = npcToCsv.Export(npcGroup);
+
+            string expectedCsv = NOT_FOUND_CATEGORY + NpcToCsv.SEPARATOR + CATEGORY + "\n" + NpcToCsv.SEPARATOR + TRAIT;
+
+            Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
         }
     }
 }

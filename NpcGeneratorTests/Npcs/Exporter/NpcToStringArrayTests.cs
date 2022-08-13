@@ -119,5 +119,46 @@ namespace Tests
             Assert.AreEqual(string.Empty, categories[1], "Wrong traits in category");
             Assert.AreEqual(AGE_TRAIT, categories[2], "Wrong traits in category");
         }
+
+        [TestMethod]
+        public void MultipleTraitsInMultipleCategories()
+        {
+            const string CATEGORY0_NAME = "Colour";
+            const string CATEGORY0_TRAIT0 = "Blue";
+            const string CATEGORY0_TRAIT1 = "Green";
+            const string CATEGORY1_NAME = "Terrain";
+            const string CATEGORY1_TRAIT0 = "Hills";
+            const string CATEGORY1_TRAIT1 = "River";
+
+            Npc npc = new Npc();
+            npc.Add(category: CATEGORY0_NAME, traits: new string[] { CATEGORY0_TRAIT0, CATEGORY0_TRAIT1 });
+            npc.Add(category: CATEGORY1_NAME, traits: new string[] { CATEGORY1_TRAIT0, CATEGORY1_TRAIT1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY0_NAME, CATEGORY1_NAME });
+
+            Assert.AreEqual(2, categories.Length, "Wrong number of categories");
+            Assert.AreEqual(CATEGORY0_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1, categories[0], "Wrong traits in category");
+            Assert.AreEqual(CATEGORY1_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1, categories[1], "Wrong traits in category");
+        }
+
+        [TestMethod]
+        public void OrderHasUnknownCategories()
+        {
+            const string CATEGORY = "Colour";
+            const string NOT_FOUND_CATEGORY = "Animal";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { NOT_FOUND_CATEGORY, CATEGORY });
+
+            Assert.AreEqual(2, categories.Length, "Wrong number of categories");
+        }
     }
 }
