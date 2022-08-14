@@ -75,6 +75,8 @@ namespace Tests
 
                     MockCsvConfigurationParser configurationParser = new MockCsvConfigurationParser();
 
+                    MockRandom random = new MockRandom();
+
                     Models models = new Models(
                         localization: testLocalizationModel, 
                         about: new StubAboutModel(),
@@ -82,7 +84,7 @@ namespace Tests
                         tracking: new StubTrackingModel(),
                         //Only the npcGenerator is real.
                         npcGenerator: new NpcGeneratorModel(
-                            testUserSettings, testMessager, fileIO, configurationParser, new StubLocalization()));
+                            testUserSettings, testMessager, fileIO, configurationParser, new StubLocalization(), random));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),
@@ -92,8 +94,9 @@ namespace Tests
                         filePathProvider: new StubFilePathProvider(),
                         fileIo: fileIO,
                         localization: testLocalization,
-                        models: models,
-                        configurationParser: configurationParser
+                        configurationParser: configurationParser,
+                        random: random,
+                        models: models
                     );
                     MainWindow mainWindow = new MainWindow(serviceCentre);
 

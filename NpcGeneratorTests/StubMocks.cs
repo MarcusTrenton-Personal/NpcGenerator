@@ -185,4 +185,12 @@ namespace Tests
             return parser.Parse(path);
         }
     }
+
+    internal class MockRandom : IRandom
+    {
+        public int Int(int inclusiveMinimum, int exclusiveMaximum)
+        {
+            return inclusiveMinimum;
+        }
+    }
 }

@@ -203,7 +203,7 @@ namespace Tests
             Assert.IsNotNull(firstCategory, "Schema has a null first TraitCategory");
             Assert.AreEqual(firstCategory.Name, CATEGORY1_TITLE, "First category doesn't have name " + CATEGORY1_TITLE);
             Assert.AreEqual(CATEGORY1_SELECTION_COUNT, firstCategory.DefaultSelectionCount, "First category has wrong SelectionCount");
-            TraitChooser firstChooser = firstCategory.CreateTraitChooser();
+            TraitChooser firstChooser = firstCategory.CreateTraitChooser(m_random);
             string[] colours = firstChooser.Choose(firstCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections1);
             Assert.AreEqual(0, bonusSelections1.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(colours.Length, 1, "Wrong number of selections from " + CATEGORY1_TITLE);
@@ -214,7 +214,7 @@ namespace Tests
             Assert.IsNotNull(secondCategory, "Schema has a null second TraitCategory");
             Assert.AreEqual(secondCategory.Name, CATEGORY2_TITLE, "Second category doesn't have name " + CATEGORY2_TITLE);
             Assert.AreEqual(CATEGORY2_SELECTION_COUNT, secondCategory.DefaultSelectionCount, "Second category has wrong SelectionCount");
-            TraitChooser secondChooser = secondCategory.CreateTraitChooser();
+            TraitChooser secondChooser = secondCategory.CreateTraitChooser(m_random);
             string[] animals = secondChooser.Choose(secondCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections2);
             Assert.AreEqual(0, bonusSelections2.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(animals.Length, 2, "Wrong number of selections from " + CATEGORY2_TITLE);
@@ -650,5 +650,7 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        private readonly MockRandom m_random = new MockRandom();
     }
 }

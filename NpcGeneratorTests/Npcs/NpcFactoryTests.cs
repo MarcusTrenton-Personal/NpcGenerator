@@ -34,7 +34,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
             
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -56,7 +56,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 2, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 2, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(2, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -81,7 +81,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 0, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 0, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(0, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -100,7 +100,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -131,7 +131,7 @@ namespace Tests
             schema.Add(colourCategory);
             schema.Add(animalCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -165,7 +165,7 @@ namespace Tests
             schema.Add(colourCategory);
             schema.Add(animalCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -189,7 +189,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = NpcFactory.Create(null, 1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(null, 1, new List<Replacement>(), m_random);
             }
             catch (Exception)
             {
@@ -213,7 +213,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = NpcFactory.Create(schema, -1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(schema, -1, new List<Replacement>(), m_random);
             }
             catch (Exception)
             {
@@ -237,7 +237,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = NpcFactory.Create(schema, 1, null);
+                NpcGroup npcGroup = NpcFactory.Create(schema, 1, null, m_random);
             }
             catch (Exception)
             {
@@ -252,7 +252,7 @@ namespace Tests
         {
             TraitSchema schema = new TraitSchema();
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -272,7 +272,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
@@ -298,7 +298,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
             }
             catch (Exception)
             {
@@ -324,7 +324,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
+                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
             }
             catch (Exception)
             {
@@ -341,7 +341,7 @@ namespace Tests
             const string GREEN = "Green";
 
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait blue = new Trait(BLUE, int.MaxValue - 1, isHidden: false)
+            Trait blue = new Trait(BLUE, 1, isHidden: false)
             {
                 BonusSelection = new BonusSelection(colourCategory, 1)
             };
@@ -352,20 +352,9 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            //Attempt 3 times to randomly select blue. Given the weighting, the odds are literally astronimical
-            //that blue won't be selected.
-            string[] traits = null;
-            for (int i = 0; i < 3; ++i)
-            {
-                NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
-                traits = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(colourCategory.Name);
-                int index = Array.FindIndex(traits, trait => trait == BLUE);
-                bool isTraitWithBonusSelected = index > 0;
-                if (isTraitWithBonusSelected)
-                {
-                    break;
-                }
-            }
+            //Mock random always selects the first trait in a category, causing bonus selection.
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
+            string[] traits = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(colourCategory.Name);
 
             Assert.AreEqual(2, traits.Length, "Bonus selection did not occur.");
             Assert.IsTrue(traits[0] == BLUE || traits[1] == BLUE, "Both traits were not selected");
@@ -379,7 +368,7 @@ namespace Tests
             const string GREEN = "Green";
 
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait blue = new Trait(BLUE, int.MaxValue - 1, isHidden: false)
+            Trait blue = new Trait(BLUE, 1, isHidden: false)
             {
                 BonusSelection = new BonusSelection(colourCategory, 1)
             };
@@ -390,10 +379,9 @@ namespace Tests
             TraitSchema traitSchema = new TraitSchema();
             traitSchema.Add(colourCategory);
 
-            //Attempt 3 times to randomly select blue. Given the weighting, the odds are literally astronimical
-            //that blue won't be selected.
             const int NPC_COUNT = 3;
-            NpcGroup npcGroup = NpcFactory.Create(traitSchema, NPC_COUNT, new List<Replacement>());
+            //Mock random always selects the first trait in a category, causing bonus selection.
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, NPC_COUNT, new List<Replacement>(), m_random);
 
             Assert.AreEqual(NPC_COUNT, npcGroup.NpcCount, "Wrong number of NPCs generated");
         }
@@ -418,7 +406,7 @@ namespace Tests
             traitSchema.Add(colourCategory);
             traitSchema.Add(animalCategory);
 
-            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
             Npc npc = npcGroup.GetNpcAtIndex(0);
 
             string[] colours = npc.GetTraitsOfCategory(colourCategory.Name);
@@ -443,7 +431,7 @@ namespace Tests
 
             const string REPLACEMENT_COLOUR = "Red";
             Replacement replacement = new Replacement(trait, REPLACEMENT_COLOUR, colourCategory);
-            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>() { replacement });
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>() { replacement }, m_random);
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             string colourTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
@@ -463,7 +451,7 @@ namespace Tests
 
             const string REPLACEMENT_COLOUR = "Red";
             Replacement replacement = new Replacement(trait, REPLACEMENT_COLOUR, colourCategory);
-            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 2, new List<Replacement>() { replacement });
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 2, new List<Replacement>() { replacement }, m_random);
 
             Assert.AreEqual(2, npcGroup.NpcCount, "Wrong number of npcs created.");
             string colourTrait0 = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
@@ -471,5 +459,7 @@ namespace Tests
             string colourTrait1 = npcGroup.GetNpcAtIndex(1).GetTraitsOfCategory(CATEGORY)[0];
             Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait1, "Replacement was not honoured");
         }
+
+        MockRandom m_random = new MockRandom();
     }
 }

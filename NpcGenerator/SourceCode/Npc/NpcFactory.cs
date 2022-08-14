@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace NpcGenerator
 {
     public static class NpcFactory
     {
-        public static NpcGroup Create(TraitSchema traitSchema, int npcCount, IReadOnlyList<Replacement> replacements)
+        public static NpcGroup Create(TraitSchema traitSchema, int npcCount, IReadOnlyList<Replacement> replacements, IRandom random)
         {
             if (traitSchema == null)
             {
@@ -41,7 +42,7 @@ namespace NpcGenerator
 
             for (int i = 0; i < npcCount; ++i)
             {
-                Npc npc = CreateNpc(categoriesWithReplacements);
+                Npc npc = CreateNpc(categoriesWithReplacements, random);
                 group.Add(npc);
             }
 
@@ -75,7 +76,7 @@ namespace NpcGenerator
             return replacementCategories;
         }
 
-        private static Npc CreateNpc(IReadOnlyList<TraitCategory> categories)
+        private static Npc CreateNpc(IReadOnlyList<TraitCategory> categories, IRandom random)
         {
             Npc npc = new Npc();
             Dictionary<TraitCategory, TraitChooser> chooserForCategory = new Dictionary<TraitCategory, TraitChooser>();
@@ -83,7 +84,7 @@ namespace NpcGenerator
             foreach (TraitCategory category in categories)
             {
                 selectionsPerCategory[category] = category.DefaultSelectionCount;
-                chooserForCategory[category] = category.CreateTraitChooser();
+                chooserForCategory[category] = category.CreateTraitChooser(random);
             }
 
             while (selectionsPerCategory.Count > 0)

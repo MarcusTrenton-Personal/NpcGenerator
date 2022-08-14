@@ -40,7 +40,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
             
             Assert.AreEqual(FILE_PATH1, npcGeneratorModel.ConfigurationPath, 
                 "Configuration path is not the one in UserSettings");
@@ -62,7 +63,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
 
             userSettings.NpcQuantity = QUANTITY1;
             Assert.AreEqual(QUANTITY1, npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
@@ -81,7 +83,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization())
+                new StubLocalization(),
+                new MockRandom())
             {
                 NpcQuantity = 0
             };
@@ -98,7 +101,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
 
             userSettings.ConfigurationPath = "Bad file";
             bool canGenerateNpcs = npcGeneratorModel.GenerateNpcs.CanExecute(null);
@@ -121,7 +125,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization()); 
+                new StubLocalization(),
+                new MockRandom()); 
 
             const int QUANTITY = 5;
             npcGeneratorModel.NpcQuantity = 5;
@@ -145,7 +150,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
 
             bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsFalse(canSave, "Can save even though there are no npcs");
@@ -159,7 +165,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -182,7 +189,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -228,7 +236,8 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockJsonConfigurationParser(),
-                new StubLocalization());
+                new StubLocalization(),
+                new MockRandom());
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -236,5 +245,7 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        MockRandom m_random = new MockRandom();
     }
 }

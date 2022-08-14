@@ -77,7 +77,7 @@ namespace Tests
         {
             TraitSchema schema = new TraitSchema();
 
-            NpcGroup npcGroup = NpcFactory.Create(schema, 0, new List<Replacement>());
+            NpcGroup npcGroup = NpcFactory.Create(schema, 0, new List<Replacement>(), m_random);
             Npc npc = new Npc();
             npcGroup.Add(npc);
 
@@ -160,5 +160,7 @@ namespace Tests
 
             Assert.AreEqual(2, categories.Length, "Wrong number of categories");
         }
+
+        MockRandom m_random = new MockRandom();
     }
 }

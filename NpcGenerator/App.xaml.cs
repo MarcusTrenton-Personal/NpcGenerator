@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using CoupledServices;
+using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
@@ -87,8 +88,10 @@ namespace NpcGenerator
                 { csvConfigurationParser, jsonConfigurationParser };
             ConfigurationParser configurationParser = new ConfigurationParser(parsers);
 
+            CryptoRandom random = new CryptoRandom();
+
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
-                userSettings, messager, fileIo, configurationParser, localization);
+                userSettings, messager, fileIo, configurationParser, localization, random);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
@@ -105,8 +108,9 @@ namespace NpcGenerator
                 filePathProvider: filePathProvider,
                 fileIo: fileIo,
                 localization: localization,
-                models: models,
-                configurationParser: configurationParser);
+                configurationParser: configurationParser,
+                random: random,
+                models: models);
 
             //Set all the services that require access to the whole ServiceCentre.
             models.Navigation = new NavigationModel(serviceCentre);

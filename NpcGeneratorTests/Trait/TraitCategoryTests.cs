@@ -166,7 +166,7 @@ namespace Tests
             Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
             category.Add(trait);
 
-            TraitChooser chooser = category.CreateTraitChooser();
+            TraitChooser chooser = category.CreateTraitChooser(new MockRandom());
 
             Assert.IsNotNull(chooser, "Chooser is null, which should be impossible");
         }

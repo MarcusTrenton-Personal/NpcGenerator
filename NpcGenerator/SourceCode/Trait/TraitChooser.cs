@@ -13,18 +13,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Security.Cryptography;
 
 namespace NpcGenerator
 {
     public class TraitChooser
     {
-        public TraitChooser(List<Trait> traits)
+        public TraitChooser(List<Trait> traits, IRandom random)
         {
             m_remainingTraits = new List<Trait>(traits);
+            m_random = random;
             foreach (Trait trait in traits)
             {
                 m_remainingWeight += trait.Weight;
@@ -46,13 +47,13 @@ namespace NpcGenerator
             List<string> selected = new List<string>();
             for (int i = 0; i < count; i++)
             {
-                int randomSelection = RandomNumberGenerator.GetInt32(0, m_remainingWeight) + 1;
+                int randomSelection = m_random.Int(0, m_remainingWeight);
                 int selectedIndex = -1;
                 int weightCount = 0;
                 for (int j = 0; j < m_remainingTraits.Count; ++j)
                 {
                     weightCount += m_remainingTraits[j].Weight;
-                    if (randomSelection <= weightCount)
+                    if (randomSelection < weightCount)
                     {
                         selectedIndex = j;
                         break;
@@ -76,6 +77,7 @@ namespace NpcGenerator
             return selected.ToArray();
         }
 
+        private readonly IRandom m_random;
         private readonly List<Trait> m_remainingTraits = new List<Trait>();
         private int m_remainingWeight = 0;
     }

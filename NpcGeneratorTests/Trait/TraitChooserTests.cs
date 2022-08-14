@@ -15,6 +15,7 @@ along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -41,7 +42,7 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                TraitChooser chooser = new TraitChooser(traits);
+                TraitChooser chooser = new TraitChooser(traits, new CryptoRandom());
                 string[] choice = chooser.Choose(1, out _);
                 switch (choice[0])
                 {
@@ -78,7 +79,7 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                TraitChooser chooser = new TraitChooser(traits);
+                TraitChooser chooser = new TraitChooser(traits, new CryptoRandom());
                 string[] choice = chooser.Choose(1, out _);
                 switch (choice[0])
                 {
@@ -98,6 +99,8 @@ namespace Tests
 
             Assert.IsTrue(headCount >= tailCount, "Double weighted " + HEADS + " occured less often than " + TAILS +
                 "after " + ROLL_COUNT + "flips, defying astronomical odds.");
+            Assert.IsTrue(tailCount > 0, "Despite a 1/3 chance of being picked, " + TAILS + ", was never picked after " + ROLL_COUNT +
+                "flips, defying astronomical odds.");
         }
 
         [TestMethod]
@@ -111,7 +114,7 @@ namespace Tests
                 new Trait(TAILS, 1, isHidden: false)
             };
 
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
             string[] selections = chooser.Choose(SELECTION_COUNT, out _);
             Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
             Assert.AreNotEqual(selections[0], selections[1], "Did not select two different traits");
@@ -124,7 +127,7 @@ namespace Tests
             {
                 new Trait(HEADS, 0, isHidden: false)
             };
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             bool threwException = false;
             try
@@ -147,7 +150,7 @@ namespace Tests
                 new Trait(HEADS, 0, isHidden: false),
                 new Trait(TAILS, 1, isHidden: false)
             };
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             bool threwException = false;
             try
@@ -169,7 +172,7 @@ namespace Tests
             {
                 new Trait(HEADS, 1, isHidden: false)
             };
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             bool threwException = false;
             try
@@ -191,7 +194,7 @@ namespace Tests
             {
                 new Trait(HEADS, 1, isHidden: true)
             };
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             string[] selections = chooser.Choose(1, out _);
 
@@ -206,7 +209,7 @@ namespace Tests
                 new Trait(HEADS, 1, isHidden: true),
                 new Trait(TAILS, 1, isHidden: false)
             };
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             string[] selections = chooser.Choose(2, out _);
 
@@ -221,7 +224,7 @@ namespace Tests
             {
                 new Trait(HEADS, 1, isHidden: false)
             };
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelection);
 
@@ -238,7 +241,7 @@ namespace Tests
             trait.BonusSelection = new BonusSelection(category, 1);
             traits.Add(trait);
 
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelections);
 
@@ -258,7 +261,7 @@ namespace Tests
             trait.BonusSelection = new BonusSelection(category, 2);
             traits.Add(trait);
 
-            TraitChooser chooser = new TraitChooser(traits);
+            TraitChooser chooser = new TraitChooser(traits, m_random);
 
             string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelections);
 
@@ -267,5 +270,7 @@ namespace Tests
             Assert.AreEqual(category, bonusSelections[0].TraitCategory, "Incorrect bonus category selected");
             Assert.AreEqual(2, bonusSelections[0].SelectionCount, "Incorrect bonus selection count");
         }
+
+        MockRandom m_random = new MockRandom();
     }
 }

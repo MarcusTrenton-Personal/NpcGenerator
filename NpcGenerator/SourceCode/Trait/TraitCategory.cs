@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -87,9 +88,9 @@ namespace NpcGenerator
             m_traits.Add(trait);
         }
 
-        public TraitChooser CreateTraitChooser()
+        public TraitChooser CreateTraitChooser(IRandom random)
         {
-            return new TraitChooser(m_traits);
+            return new TraitChooser(m_traits, random);
         }
 
         public Trait GetTrait(string name)

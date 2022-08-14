@@ -33,14 +33,28 @@ namespace NpcGenerator
             IMessager messager,
             ILocalFileIO fileIo,
             IConfigurationParser parser,
-            ILocalization localization)
+            ILocalization localization,
+            IRandom random)
         {
             m_userSettings = userSettings;
             m_messager = messager;
             m_fileIo = fileIo;
             m_parser = parser;
             m_localization = localization;
+            m_random = random;
 
+            CreateFileWatcher();
+
+            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+        }
+
+        ~NpcGeneratorModel()
+        {
+            TearDownFileWatcher();
+        }
+
+        private void CreateFileWatcher()
+        {
             m_configurationFileWatcher = new FileSystemWatcher
             {
                 NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName | NotifyFilters.LastWrite,
@@ -50,12 +64,11 @@ namespace NpcGenerator
             m_configurationFileWatcher.Renamed += OnConfigurationRenamed;
             m_configurationFileWatcher.Created += OnConfigurationChanged;
             m_configurationFileWatcher.Changed += OnConfigurationChanged;
-            SetFileWatcherPath();
 
-            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+            SetFileWatcherPath();
         }
 
-        ~NpcGeneratorModel()
+        private void TearDownFileWatcher()
         {
             m_configurationFileWatcher.Deleted -= OnConfigurationChanged;
             m_configurationFileWatcher.Renamed -= OnConfigurationRenamed;
@@ -174,7 +187,7 @@ namespace NpcGenerator
         private void ExecuteGenerateNpcs(object _)
         {
             List<Replacement> replacements = GetReplacements(m_replacementSubModels, m_traitSchema);
-            m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements);
+            m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements, m_random);
 
             DataTable table = new DataTable("Npc Table");
             for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
@@ -348,6 +361,7 @@ namespace NpcGenerator
         private readonly IMessager m_messager;
         private readonly IConfigurationParser m_parser;
         private readonly ILocalization m_localization;
+        private readonly IRandom m_random;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;
@@ -357,6 +371,6 @@ namespace NpcGenerator
         private NpcGroup m_npcGroup;
         private DataTable m_table;
         private TraitSchema m_traitSchema = null;
-        private readonly FileSystemWatcher m_configurationFileWatcher;
+        private FileSystemWatcher m_configurationFileWatcher;
     }
 }
