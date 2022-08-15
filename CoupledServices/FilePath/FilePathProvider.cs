@@ -26,7 +26,7 @@ namespace CoupledServices
             get
             {
                 string commonAppData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                return Path.Combine(commonAppData, appDataFolder);
+                return Path.Combine(commonAppData, m_appDataFolder);
             }
         }
 
@@ -34,7 +34,7 @@ namespace CoupledServices
         {
             get
             {
-                return Path.Combine(appSettingsFolder, appSettingsFile);
+                return Path.Combine(m_appSettingsFolder, m_appSettingsFile);
             }
         }
 
@@ -42,7 +42,15 @@ namespace CoupledServices
         {
             get
             {
-                return Path.Combine(appSettingsFolder, configurationFile);
+                return Path.Combine(m_appSettingsFolder, m_configurationSchemaFile);
+            }
+        }
+
+        public string NpcExportJsonSchema
+        {
+            get
+            {
+                return Path.Combine(m_appSettingsFolder, m_npcExportFile);
             }
         }
 
@@ -52,7 +60,7 @@ namespace CoupledServices
         {
             get
             {
-                return Path.Combine(appSettingsFolder, localizationFile);
+                return Path.Combine(m_appSettingsFolder, m_localizationFile);
             }
         }
 
@@ -62,7 +70,7 @@ namespace CoupledServices
         {
             get
             {
-                return Path.Combine(AppDataFolderPath, trackingProfileFile);
+                return Path.Combine(AppDataFolderPath, m_trackingProfileFile);
             }
         }
 
@@ -70,16 +78,17 @@ namespace CoupledServices
         {
             get
             {
-                return Path.Combine(AppDataFolderPath, userSettingsFile);
+                return Path.Combine(AppDataFolderPath, m_userSettingsFile);
             }
         }
 
-        private const string appDataFolder = "NpcGenerator";
-        private const string appSettingsFile = "AppSettings.json";
-        private const string appSettingsFolder = "Settings";
-        private const string configurationFile = "ConfigurationSchema.json";
-        private const string localizationFile = "Localization.csv";
-        private const string trackingProfileFile = "TrackingProfile.json";
-        private const string userSettingsFile = "UserSettings.json";
+        private const string m_appDataFolder = "NpcGenerator";
+        private const string m_appSettingsFile = "AppSettings.json";
+        private const string m_appSettingsFolder = "Settings";
+        private const string m_configurationSchemaFile = "ConfigurationSchema.json";
+        private const string m_npcExportFile = "NpcGroupSchema.json";
+        private const string m_localizationFile = "Localization.csv";
+        private const string m_trackingProfileFile = "TrackingProfile.json";
+        private const string m_userSettingsFile = "UserSettings.json";
     }
 }

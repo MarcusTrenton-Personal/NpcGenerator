@@ -33,6 +33,7 @@ namespace NpcGenerator
             IMessager messager,
             ILocalFileIO fileIo,
             IConfigurationParser parser,
+            Dictionary<string, INpcExport> npcExporters,
             ILocalization localization,
             IRandom random)
         {
@@ -40,10 +41,9 @@ namespace NpcGenerator
             m_messager = messager;
             m_fileIo = fileIo;
             m_parser = parser;
+            m_npcExporters = npcExporters;
             m_localization = localization;
             m_random = random;
-
-            SetupNpcExporters();
 
             CreateFileWatcher();
 
@@ -78,14 +78,6 @@ namespace NpcGenerator
             m_configurationFileWatcher.Changed -= OnConfigurationChanged;
         }
 
-        private void SetupNpcExporters()
-        {
-            NpcToCsv csv = new NpcToCsv();
-            m_npcExporters[csv.FileExtensionWithoutDot] = csv;
-
-            NpcToJson json = new NpcToJson();
-            m_npcExporters[json.FileExtensionWithoutDot] = json;
-        }
         public ICommand ChooseConfiguration 
         { 
             get
@@ -251,10 +243,18 @@ namespace NpcGenerator
                 };
                 contentProviders.Add(fileContentProvider);
             }
-            bool success = m_fileIo.SaveToPickedFile(contentProviders, out string pickedFormat);
-            if (success)
+
+            try
             {
-                m_messager.Send(sender: this, message: new Message.SaveNpcs(pickedFormat));
+                bool success = m_fileIo.SaveToPickedFile(contentProviders, out string pickedFormat);
+                if (success)
+                {
+                    m_messager.Send(sender: this, message: new Message.SaveNpcs(pickedFormat));
+                }
+            }
+            catch(JsonExportFormatException exception)
+            {
+                MessageBox.Show(exception.Message);
             }
         }
 
@@ -284,7 +284,6 @@ namespace NpcGenerator
         private void ParseTraitSchema(out TraitSchema traitSchema, out List<ReplacementSubModel> replacementSubModels)
         {
             traitSchema = null;
-            replacementSubModels = new List<ReplacementSubModel>();
             if (DoesConfigurationFileExist)
             {
                 try

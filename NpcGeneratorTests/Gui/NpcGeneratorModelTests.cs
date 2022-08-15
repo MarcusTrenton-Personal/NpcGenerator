@@ -40,6 +40,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
             
@@ -63,6 +64,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
 
@@ -83,6 +85,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom())
             {
@@ -101,6 +104,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
 
@@ -125,6 +129,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom()); 
 
@@ -150,6 +155,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
 
@@ -165,6 +171,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
 
@@ -189,6 +196,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
 
@@ -236,6 +244,7 @@ namespace Tests
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockJsonConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom());
 

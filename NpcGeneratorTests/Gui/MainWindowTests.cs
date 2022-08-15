@@ -19,6 +19,7 @@ using NpcGenerator;
 using Services;
 using Services.Message;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Threading;
@@ -74,6 +75,7 @@ namespace Tests
                     };
 
                     MockCsvConfigurationParser configurationParser = new MockCsvConfigurationParser();
+                    Dictionary<string, INpcExport> npcExporters = new Dictionary<string, INpcExport>();
 
                     MockRandom random = new MockRandom();
 
@@ -84,7 +86,7 @@ namespace Tests
                         tracking: new StubTrackingModel(),
                         //Only the npcGenerator is real.
                         npcGenerator: new NpcGeneratorModel(
-                            testUserSettings, testMessager, fileIO, configurationParser, new StubLocalization(), random));
+                            testUserSettings, testMessager, fileIO, configurationParser, npcExporters, new StubLocalization(), random));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),
@@ -95,6 +97,7 @@ namespace Tests
                         fileIo: fileIO,
                         localization: testLocalization,
                         configurationParser: configurationParser,
+                        npcExporters: npcExporters,
                         random: random,
                         models: models
                     );

@@ -88,10 +88,16 @@ namespace NpcGenerator
                 { csvConfigurationParser, jsonConfigurationParser };
             ConfigurationParser configurationParser = new ConfigurationParser(parsers);
 
+            Dictionary<string, INpcExport> npcExporters = new Dictionary<string, INpcExport>();
+            NpcToCsv csv = new NpcToCsv();
+            npcExporters[csv.FileExtensionWithoutDot] = csv;
+            NpcToJson json = new NpcToJson(filePathProvider.NpcExportJsonSchema);
+            npcExporters[json.FileExtensionWithoutDot] = json;
+
             CryptoRandom random = new CryptoRandom();
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
-                userSettings, messager, fileIo, configurationParser, localization, random);
+                userSettings, messager, fileIo, configurationParser, npcExporters, localization, random);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
@@ -109,6 +115,7 @@ namespace NpcGenerator
                 fileIo: fileIo,
                 localization: localization,
                 configurationParser: configurationParser,
+                npcExporters: npcExporters,
                 random: random,
                 models: models);
 

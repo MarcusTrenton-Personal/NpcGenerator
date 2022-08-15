@@ -33,23 +33,6 @@ namespace Tests
     {
         const string SCHEMA_PATH = "NpcGroupSchema.json";
 
-        private void ValidateJsonAgainstSchema(string jsonText)
-        {
-            JToken json = JToken.Parse(jsonText);
-            string schemaText = File.ReadAllText(SCHEMA_PATH);
-            JSchema schema = JSchema.Parse(schemaText);
-            string concatenatedMessages = "";
-            bool isValid = json.IsValid(schema, out IList<string> errorMessages);
-            if (!isValid)
-            {
-                foreach (var error in errorMessages)
-                {
-                    concatenatedMessages += error + "\n";
-                }
-            }
-            Assert.IsTrue(isValid, "Json validation failed with message: " + concatenatedMessages);
-        }
-
         [TestMethod]
         public void SingleNpc()
         {
@@ -61,9 +44,8 @@ namespace Tests
             npc.Add(CATEGORY, new string[] { TRAIT });
             npcGroup.Add(npc);
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 
@@ -88,9 +70,8 @@ namespace Tests
             npc1.Add(CATEGORY, new string[] { TRAIT });
             npcGroup.Add(npc1);
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 
@@ -107,9 +88,8 @@ namespace Tests
         {
             NpcGroup npcGroup = new NpcGroup(new List<string> { "Colour" });
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 
@@ -125,9 +105,8 @@ namespace Tests
             Npc npc = new Npc();
             npcGroup.Add(npc);
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 
@@ -151,9 +130,8 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
             npcGroup.Add(npc);
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 
@@ -182,9 +160,8 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
             npcGroup.Add(npc);
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 
@@ -210,9 +187,30 @@ namespace Tests
             npc.Add(CATEGORY, new string[] { TRAIT });
             npcGroup.Add(npc);
 
-            NpcToJson npcToJson = new NpcToJson();
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
             string jsonText = npcToJson.Export(npcGroup);
-            ValidateJsonAgainstSchema(jsonText);
+
+            DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
+
+            Assert.IsNotNull(result, "Serialized using an unknown format");
+            Assert.AreEqual(1, result.npc_group.Count, "Wrong number of npcs");
+            Assert.AreEqual(1, result.npc_group[0][CATEGORY].Count, "Npc did not serialize category correctly");
+            Assert.AreEqual(TRAIT, result.npc_group[0][CATEGORY][0], "Npc did not serialize category correctly");
+        }
+
+        [TestMethod]
+        public void SchemaIsOptional()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+            npcGroup.Add(npc);
+
+            NpcToJson npcToJson = new NpcToJson(null);
+            string jsonText = npcToJson.Export(npcGroup);
 
             DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
 

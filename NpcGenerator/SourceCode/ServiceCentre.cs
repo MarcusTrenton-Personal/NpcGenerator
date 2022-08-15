@@ -16,6 +16,7 @@ along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Services;
 using Services.Message;
+using System.Collections.Generic;
 
 namespace NpcGenerator
 {
@@ -32,6 +33,7 @@ namespace NpcGenerator
             ITrackingProfile profile,
             IUserSettings userSettings,
             IConfigurationParser configurationParser,
+            Dictionary<string, INpcExport> npcExporters,
             IRandom random,
             Models models
             )
@@ -44,6 +46,7 @@ namespace NpcGenerator
             FileIO = fileIo;
             Localization = localization;
             ConfigurationParser = configurationParser;
+            NpcExporters = npcExporters;
             Random = random;
             Models = models;
         }
@@ -56,6 +59,7 @@ namespace NpcGenerator
         public ITrackingProfile Profile { get; }
         public IUserSettings UserSettings { get; }
         public IConfigurationParser ConfigurationParser { get; }
+        public Dictionary<string, INpcExport> NpcExporters { get; }
         public IRandom Random { get; }
         public IModels Models { get; }
     }

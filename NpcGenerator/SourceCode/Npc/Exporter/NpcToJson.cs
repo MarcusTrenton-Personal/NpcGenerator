@@ -14,6 +14,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -22,6 +25,16 @@ namespace NpcGenerator
 {
     public class NpcToJson : INpcExport
     {
+        public NpcToJson(string schemaPath)
+        {
+            bool hasSchemaPath = !string.IsNullOrEmpty(schemaPath);
+            if (hasSchemaPath)
+            {
+                string schemaText = File.ReadAllText(schemaPath);
+                m_schema = JSchema.Parse(schemaText);
+            }
+        }
+
         public string FileExtensionWithoutDot { get; } = "json";
 
         public string Export(NpcGroup group)
@@ -44,8 +57,29 @@ namespace NpcGenerator
 
             }
             string json = sw.ToString();
+            
+            ValidateJson(json);
 
             return json;
+        }
+
+        private void ValidateJson(string text)
+        {
+            if (m_schema != null)
+            {
+                JToken json = JToken.Parse(text);
+                //Validation schema means that less in-code validation is needed.
+                bool isValid = json.IsValid(m_schema, out IList<string> errorMessages);
+                if (!isValid)
+                {
+                    string message = "";
+                    foreach (var error in errorMessages)
+                    {
+                        message += error + "\n";
+                    }
+                    throw new JsonExportFormatException(message);
+                }
+            }
         }
 
         public void ToJsonObject(Npc npc, JsonWriter writer, IReadOnlyList<string> categoryOrder)
@@ -69,6 +103,15 @@ namespace NpcGenerator
             }
 
             writer.WriteEndObject();
+        }
+
+        private readonly JSchema m_schema = null;
+    }
+
+    public class JsonExportFormatException : FormatException
+    {
+        public JsonExportFormatException(string message) : base(message)
+        {
         }
     }
 }

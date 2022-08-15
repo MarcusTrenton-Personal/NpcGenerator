@@ -42,7 +42,7 @@ namespace NpcGenerator
             
             if(m_schema != null)
             {
-                //Validation schema means that no in-code validation is needed.
+                //Validation schema means that less in-code validation is needed.
                 bool isValid = json.IsValid(m_schema, out IList<string> errorMessages);
                 if (!isValid)
                 {
