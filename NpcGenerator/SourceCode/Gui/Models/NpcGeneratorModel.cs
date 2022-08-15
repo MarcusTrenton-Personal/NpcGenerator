@@ -43,6 +43,8 @@ namespace NpcGenerator
             m_localization = localization;
             m_random = random;
 
+            SetupNpcExporters();
+
             CreateFileWatcher();
 
             ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
@@ -76,6 +78,14 @@ namespace NpcGenerator
             m_configurationFileWatcher.Changed -= OnConfigurationChanged;
         }
 
+        private void SetupNpcExporters()
+        {
+            NpcToCsv csv = new NpcToCsv();
+            m_npcExporters[csv.FileExtensionWithoutDot] = csv;
+
+            NpcToJson json = new NpcToJson();
+            m_npcExporters[json.FileExtensionWithoutDot] = json;
+        }
         public ICommand ChooseConfiguration 
         { 
             get
@@ -231,21 +241,16 @@ namespace NpcGenerator
 
         private void ExecuteSaveNpcs(object _)
         {
-            NpcToCsv csv = new NpcToCsv();
-            NpcToJson json = new NpcToJson();
-            List<FileContentProvider> contentProviders = new List<FileContentProvider>(2)
+            List<FileContentProvider> contentProviders = new List<FileContentProvider>(m_npcExporters.Count);
+            foreach(KeyValuePair<string, INpcExport> exporter in m_npcExporters)
             {
-                new FileContentProvider()
+                FileContentProvider fileContentProvider = new FileContentProvider()
                 {
-                    FileExtensionWithoutDot = "csv",
-                    GetContent = () => csv.Export(m_npcGroup)
-                },
-                new FileContentProvider()
-                {
-                    FileExtensionWithoutDot = "json",
-                    GetContent = () => json.Export(m_npcGroup)
-                }
-            };
+                    FileExtensionWithoutDot = exporter.Key,
+                    GetContent = () => exporter.Value.Export(m_npcGroup)
+                };
+                contentProviders.Add(fileContentProvider);
+            }
             bool success = m_fileIo.SaveToPickedFile(contentProviders, out string pickedFormat);
             if (success)
             {
@@ -362,6 +367,7 @@ namespace NpcGenerator
         private readonly IConfigurationParser m_parser;
         private readonly ILocalization m_localization;
         private readonly IRandom m_random;
+        private readonly Dictionary<string, INpcExport> m_npcExporters = new Dictionary<string, INpcExport>();
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;
