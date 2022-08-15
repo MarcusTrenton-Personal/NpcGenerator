@@ -23,7 +23,8 @@ namespace NpcGenerator
     {
         public string FileExtensionWithoutDot { get; } = "csv";
 
-        public const char SEPARATOR = ','; 
+        public const char SEPARATOR = ',';
+        public const string MULTI_TRAIT_SEPARATOR = ExportUtil.MULTI_TRAIT_SEPARATOR;
 
         public string Export(NpcGroup group)
         {

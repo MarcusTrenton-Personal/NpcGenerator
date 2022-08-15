@@ -121,8 +121,8 @@ namespace Tests
             string csv = npcToCsv.Export(npcGroup);
 
             string expectedCsv = CATEGORY0 + NpcToCsv.SEPARATOR + CATEGORY1 + "\n" +
-                CATEGORY0_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR +
-                CATEGORY1_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
+                CATEGORY0_TRAIT0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR +
+                CATEGORY1_TRAIT0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
 
             Assert.AreEqual(expectedCsv, csv, "Npc did not generate expected CSV row");
         }
@@ -164,8 +164,8 @@ namespace Tests
             string csv = npcToCsv.Export(npcGroup);
 
             string expectedCsv = CATEGORY0_NAME + NpcToCsv.SEPARATOR + CATEGORY1_NAME + "\n" +
-                CATEGORY0_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR + 
-                CATEGORY1_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
+                CATEGORY0_TRAIT0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR + 
+                CATEGORY1_TRAIT0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
 
             Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
         }
