@@ -189,5 +189,12 @@ namespace Tests
 
             Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
         }
+
+        [TestMethod]
+        public void InterAndIntraTraitSeparatorsAreDifferent()
+        {
+            Assert.AreNotEqual(NpcToCsv.MULTI_TRAIT_SEPARATOR, NpcToCsv.SEPARATOR, 
+                "Trait lists in a category are not distinguishable from a trait in another category because separators are the same.");
+        }
     }
 }
