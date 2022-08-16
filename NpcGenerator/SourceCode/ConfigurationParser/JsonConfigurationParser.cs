@@ -39,29 +39,92 @@ namespace NpcGenerator
         {
             string text = File.ReadAllText(path);
             JToken json = JToken.Parse(text);
-            
-            if(m_schema != null)
+            ValidateJson(json, m_schema, path);
+
+            ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
+            DetectDuplicateCategoryNames(protoTraitSchema.trait_categories);
+            DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
+            TraitSchema traitSchema = ParseInternal(protoTraitSchema);
+            return traitSchema;
+        }
+
+        private static void ValidateJson(JToken json, JSchema m_schema, string path)
+        {
+            if (m_schema != null)
             {
                 //Validation schema means that less in-code validation is needed.
                 bool isValid = json.IsValid(m_schema, out IList<string> errorMessages);
                 if (!isValid)
                 {
                     string message = "";
-                    foreach(var error in errorMessages)
+                    foreach (var error in errorMessages)
                     {
                         message += error + "\n";
                     }
                     throw new JsonFormatException(message, path);
                 }
             }
+        }
 
-            ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
-            TraitSchema traitSchema = new TraitSchema();
-            List<DeferredBonusSelection> deferredBonusSelections = new List<DeferredBonusSelection>();
-            List<TraitCategory> categories = new List<TraitCategory>();
+        private void DetectDuplicateCategoryNames(List<ProtoTraitCategory> trait_categories)
+        {
+            List<string> categoryNames = new List<string>();
+            foreach (ProtoTraitCategory protoCategory in trait_categories)
+            {
+                bool isDuplicateName = categoryNames.Contains(protoCategory.Name);
+                if (isDuplicateName)
+                {
+                    throw new DuplicateCategoryNameException(protoCategory.Name);
+                }
+                else
+                {
+                    categoryNames.Add(protoCategory.Name);
+                }
+            }
+        }
 
-            DetectDuplicateCategoryNames(protoTraitSchema.trait_categories);
-            DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
+        private void DetectDuplicateTraitNamesInASingleCategory(List<ProtoTraitCategory> trait_categories)
+        {
+            foreach (ProtoTraitCategory protoCategory in trait_categories)
+            {
+                List<string> traitNames = new List<string>();
+                foreach (ProtoTrait protoTrait in protoCategory.traits)
+                {
+                    bool isDuplicateName = traitNames.Contains(protoTrait.Name);
+                    if (isDuplicateName)
+                    {
+                        throw new DuplicateTraitNamesInCategoryException(category: protoCategory.Name, trait: protoTrait.Name);
+                    }
+                    else
+                    {
+                        traitNames.Add(protoTrait.Name);
+                    }
+                }
+            }
+        }
+
+        private TraitSchema ParseInternal(ProtoTraitSchema protoTraitSchema)
+        {
+            ParseCategories(
+                protoTraitSchema,
+                out TraitSchema traitSchema,
+                out List<DeferredBonusSelection> deferredBonusSelections,
+                out List<TraitCategory> categories);
+            ParseDeferredBonusSelections(deferredBonusSelections, categories);
+            ParseReplacements(protoTraitSchema.replacements, traitSchema, categories);
+
+            return traitSchema;
+        }
+
+        private static void ParseCategories(
+            ProtoTraitSchema protoTraitSchema, 
+            out TraitSchema traitSchema, 
+            out List<DeferredBonusSelection> deferredBonusSelections, 
+            out List<TraitCategory> categories)
+        {
+            traitSchema = new TraitSchema();
+            deferredBonusSelections = new List<DeferredBonusSelection>();
+            categories = new List<TraitCategory>();
 
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
@@ -84,7 +147,10 @@ namespace NpcGenerator
                 traitSchema.Add(category);
                 categories.Add(category);
             }
-            
+        }
+
+        private static void ParseDeferredBonusSelections(List<DeferredBonusSelection> deferredBonusSelections, List<TraitCategory> categories)
+        {
             foreach (DeferredBonusSelection deferredBonusSelection in deferredBonusSelections)
             {
                 TraitCategory category = categories.Find(category => category.Name == deferredBonusSelection.m_categoryName);
@@ -96,10 +162,14 @@ namespace NpcGenerator
                 BonusSelection bonusSelection = new BonusSelection(category, deferredBonusSelection.m_selections);
                 deferredBonusSelection.m_trait.BonusSelection = bonusSelection;
             }
+        }
 
-            if (protoTraitSchema.replacements != null)
+        private static void ParseReplacements(
+            List<ProtoReplacement> protoReplacements, TraitSchema traitSchema, List<TraitCategory> categories)
+        {
+            if (protoReplacements != null)
             {
-                foreach (ProtoReplacement protoReplacement in protoTraitSchema.replacements)
+                foreach (ProtoReplacement protoReplacement in protoReplacements)
                 {
                     TraitCategory category = categories.Find(category => category.Name == protoReplacement.category_name);
                     if (category == null)
@@ -116,45 +186,6 @@ namespace NpcGenerator
 
                     ReplacementSearch replacement = new ReplacementSearch(trait, category);
                     traitSchema.Add(replacement);
-                }
-            }
-
-            return traitSchema;
-        }
-
-        void DetectDuplicateCategoryNames(List<ProtoTraitCategory> trait_categories)
-        {
-            List<string> categoryNames = new List<string>();
-            foreach (ProtoTraitCategory protoCategory in trait_categories)
-            {
-                bool isDuplicateName = categoryNames.Contains(protoCategory.Name);
-                if (isDuplicateName)
-                {
-                    throw new DuplicateCategoryNameException(protoCategory.Name);
-                }
-                else
-                {
-                    categoryNames.Add(protoCategory.Name);
-                }
-            }
-        }
-
-        void DetectDuplicateTraitNamesInASingleCategory(List<ProtoTraitCategory> trait_categories)
-        {
-            foreach (ProtoTraitCategory protoCategory in trait_categories)
-            {
-                List<string> traitNames = new List<string>();
-                foreach (ProtoTrait protoTrait in protoCategory.traits)
-                {
-                    bool isDuplicateName = traitNames.Contains(protoTrait.Name);
-                    if (isDuplicateName)
-                    {
-                        throw new DuplicateTraitNamesInCategoryException(category: protoCategory.Name, trait: protoTrait.Name);
-                    }
-                    else
-                    {
-                        traitNames.Add(protoTrait.Name);
-                    }
                 }
             }
         }
