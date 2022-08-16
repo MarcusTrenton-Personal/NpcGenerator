@@ -39,8 +39,10 @@ namespace NpcGenerator
             {
                 return Array.Empty<string>();
             }
-
-            Trace.Assert(m_remainingTraits.Count >= count, "Not enough traits for all selections.");
+            if (m_remainingTraits.Count < count)
+            {
+                throw new TooFewTraitsException(requested: count, available: m_remainingTraits.Count);
+            }
 
             //Number of selected traits is actually variable, with a maximum of SelectionCount. If a hidden trait is selected,
             //it consumes a selection count but is not added to the selected list.
@@ -80,5 +82,17 @@ namespace NpcGenerator
         private readonly IRandom m_random;
         private readonly List<Trait> m_remainingTraits = new List<Trait>();
         private int m_remainingWeight = 0;
+    }
+
+    public class TooFewTraitsException : ArgumentException
+    {
+        public TooFewTraitsException(int requested, int available)
+        {
+            Requested = requested;
+            Available = available;
+        }
+
+        public int Requested { get; private set; }
+        public int Available { get; private set; }
     }
 }

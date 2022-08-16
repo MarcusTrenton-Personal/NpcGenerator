@@ -189,22 +189,31 @@ namespace NpcGenerator
         private void ExecuteGenerateNpcs(object _)
         {
             List<Replacement> replacements = GetReplacements(m_replacementSubModels, m_traitSchema);
-            m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements, m_random);
-
-            DataTable table = new DataTable("Npc Table");
-            for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
+            try
             {
-                table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
-            }
-            for (int i = 0; i < m_npcGroup.NpcCount; ++i)
-            {
-                string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.CategoryOrder);
-                table.Rows.Add(text);
-            }
-            m_table = table;
-            NotifyPropertyChanged("ResultNpcs");
+                m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements, m_random);
 
-            m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
+                DataTable table = new DataTable("Npc Table");
+                for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
+                {
+                    table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
+                }
+                for (int i = 0; i < m_npcGroup.NpcCount; ++i)
+                {
+                    string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.CategoryOrder);
+                    table.Rows.Add(text);
+                }
+                m_table = table;
+                NotifyPropertyChanged("ResultNpcs");
+
+                m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
+            }
+            catch(TooFewTraitsInCategoryException exception)
+            {
+                string message = m_localization.GetText("too_few_traits_in_category", 
+                    exception.Requested, exception.Category, exception.Available);
+                MessageBox.Show(message);
+            }
         }
 
         private static List<Replacement> GetReplacements(List<ReplacementSubModel> replacementSubModels, TraitSchema schema)

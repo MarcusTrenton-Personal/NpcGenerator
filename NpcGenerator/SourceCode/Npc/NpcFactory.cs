@@ -91,14 +91,21 @@ namespace NpcGenerator
             {
                 GetElementOf(selectionsPerCategory, out TraitCategory category, out int count);
                 TraitChooser chooser = chooserForCategory[category];
-                string[] traits = chooser.Choose(count, out List<BonusSelection> bonusSelections);
-                npc.Add(category: category.Name, traits: traits);
-
-                selectionsPerCategory.Remove(category);
-
-                foreach (BonusSelection bonusSelection in bonusSelections)
+                try
                 {
-                    selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
+                    string[] traits = chooser.Choose(count, out List<BonusSelection> bonusSelections);
+                    npc.Add(category: category.Name, traits: traits);
+
+                    selectionsPerCategory.Remove(category);
+
+                    foreach (BonusSelection bonusSelection in bonusSelections)
+                    {
+                        selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
+                    }
+                }
+                catch(TooFewTraitsException exception)
+                {
+                    throw new TooFewTraitsInCategoryException(category.Name, requested: exception.Requested, available: exception.Available);
                 }
             }
 
@@ -113,5 +120,19 @@ namespace NpcGenerator
             category = current.Key;
             count = current.Value;
         }
+    }
+
+    public class TooFewTraitsInCategoryException : ArgumentException
+    {
+        public TooFewTraitsInCategoryException(string category, int requested, int available)
+        {
+            Category = category;
+            Requested = requested;
+            Available = available;
+        }
+
+        public string Category { get; private set; }
+        public int Requested { get; private set; }
+        public int Available { get; private set; }
     }
 }

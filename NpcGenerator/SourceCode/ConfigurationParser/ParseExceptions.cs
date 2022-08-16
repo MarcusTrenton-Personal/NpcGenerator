@@ -53,7 +53,7 @@ namespace NpcGenerator
         public string Category { get; private set; }
     }
 
-    public class DuplicateCategoryNameException : ArgumentException
+    public class DuplicateCategoryNameException : FormatException
     {
         public DuplicateCategoryNameException(string category)
         {
@@ -63,7 +63,7 @@ namespace NpcGenerator
         public string Category { get; private set; }
     }
 
-    public class DuplicateTraitNamesInCategoryException : ArgumentException
+    public class DuplicateTraitNamesInCategoryException : FormatException
     {
         public DuplicateTraitNamesInCategoryException(string category, string trait)
         {
