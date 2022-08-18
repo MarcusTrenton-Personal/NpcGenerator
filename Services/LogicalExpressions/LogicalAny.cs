@@ -13,31 +13,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
-using System;
 using System.Collections.Generic;
 
 namespace Services
 {
-    public class LogicalAny : ILogicalOperator
+    public class LogicalAny : AbstractLogicalOperator
     {
-        public void Add(ILogicalExpression expression)
+        protected override bool EvaluateInternal(IReadOnlyList<ILogicalExpression> expressions)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException("Cannot add null ILogicalExpression as it cannot be evaluated", nameof(expression));
-            }
-
-            m_expressions.Add(expression);
-        }
-
-        public bool Evaluate()
-        {
-            if (m_expressions.Count == 0)
-            {
-                throw new InvalidOperationException("Cannot evaluate an empty Any expression");
-            }
-
-            foreach (ILogicalExpression expression in m_expressions)
+            foreach (ILogicalExpression expression in expressions)
             {
                 bool subExpressionResult = expression.Evaluate();
                 if (subExpressionResult)
@@ -47,7 +31,5 @@ namespace Services
             }
             return false;
         }
-
-        private List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();
     }
 }
