@@ -52,7 +52,7 @@ namespace Services
             return result;
         }
 
-        private List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();
+        private readonly List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();
         private bool m_isEvaluating;
 
         abstract protected bool EvaluateInternal(IReadOnlyList<ILogicalExpression> expressions);
