@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 namespace Services
 {
-    public class LogicalOr : ILogicalOperator
+    public class LogicalNone : ILogicalOperator
     {
         public void Add(ILogicalExpression expression)
         {
@@ -34,7 +34,7 @@ namespace Services
         {
             if (m_expressions.Count == 0)
             {
-                throw new InvalidOperationException("Cannot evaluate an empty Or expression");
+                throw new InvalidOperationException("Cannot evaluate an empty None expression");
             }
 
             foreach (ILogicalExpression expression in m_expressions)
@@ -42,10 +42,10 @@ namespace Services
                 bool subExpressionResult = expression.Evaluate();
                 if (subExpressionResult)
                 {
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
 
         private List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();

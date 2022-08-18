@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 namespace Services
 {
-    public class LogicalAnd : ILogicalOperator
+    public class LogicalAny : ILogicalOperator
     {
         public void Add(ILogicalExpression expression)
         {
@@ -34,18 +34,18 @@ namespace Services
         {
             if (m_expressions.Count == 0)
             {
-                throw new InvalidOperationException("Cannot evaluate an empty And expression");
+                throw new InvalidOperationException("Cannot evaluate an empty Any expression");
             }
 
             foreach (ILogicalExpression expression in m_expressions)
             {
                 bool subExpressionResult = expression.Evaluate();
-                if (!subExpressionResult)
+                if (subExpressionResult)
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         private List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();

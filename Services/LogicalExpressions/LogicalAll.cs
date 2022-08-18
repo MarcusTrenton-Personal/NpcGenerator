@@ -14,10 +14,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
+using System.Collections.Generic;
 
 namespace Services
 {
-    public class LogicalNot : ILogicalOperator
+    public class LogicalAll : ILogicalOperator
     {
         public void Add(ILogicalExpression expression)
         {
@@ -25,25 +26,28 @@ namespace Services
             {
                 throw new ArgumentNullException("Cannot add null ILogicalExpression as it cannot be evaluated", nameof(expression));
             }
-            if (m_expression != null)
-            {
-                throw new InvalidOperationException("LogicalNot can only have a single expression, but another was attempted");
-            }
 
-            m_expression = expression;
+            m_expressions.Add(expression);
         }
 
         public bool Evaluate()
         {
-            if (m_expression == null)
+            if (m_expressions.Count == 0)
             {
-                throw new InvalidOperationException("Cannot evaluate an empty And expression");
+                throw new InvalidOperationException("Cannot evaluate an empty All expression");
             }
 
-            bool subExpressionResult = m_expression.Evaluate();
-            return !subExpressionResult;
+            foreach (ILogicalExpression expression in m_expressions)
+            {
+                bool subExpressionResult = expression.Evaluate();
+                if (!subExpressionResult)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
-        private ILogicalExpression m_expression;
+        private List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();
     }
 }
