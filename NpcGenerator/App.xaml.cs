@@ -97,7 +97,7 @@ namespace NpcGenerator
             CryptoRandom random = new CryptoRandom();
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
-                userSettings, messager, fileIo, configurationParser, npcExporters, localization, random);
+                userSettings, messager, fileIo, configurationParser, npcExporters, localization, random, showErrorMessages: true);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 

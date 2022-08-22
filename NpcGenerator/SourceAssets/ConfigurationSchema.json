@@ -6,9 +6,9 @@
 	"type": "object",
 	"properties": {
 		"replacements": {
-			"description": "Traits that are replaced with a user-selected trait. See the description of 'replacement' for an example.",
+			"description": "Traits that are replaced with a user-specified choice for the next batch of npcs. For example, a trait of 'region-specific' in the 'race' category is replaced with user selected race. The replacement for one batch of npcs could be Japanese and another could be Nigerian. This allows quick generation of region-specific npcs in a globe trotting session.",
 			"type": "array",
-			"items": { "$ref": "#/$defs/replacement"},
+			"items": { "$ref": "#/$defs/trait_id"},
 			"uniqueItems": true
 		},
 		"trait_categories": {
@@ -32,6 +32,13 @@
 					"type": "string"
 				},
 				"selections": { "$ref": "#/$defs/selections"},
+				"requirements": {
+					"description": "Optional object for required traits needed for any selections in this category.",
+					"oneOf": [
+						{"$ref": "#/$defs/logical_operation"},
+						{"$ref": "#/$defs/trait_id"}
+					]
+				},
 				"traits": {
 					"description": "List of all traits in one category. By default an NPC can only have 1 trait from a category.",
 					"type": "array",
@@ -83,20 +90,44 @@
 			"type": "integer",
 			"minimum": 0
 		},
-		"replacement": {
-			"description": "A trait that is replaced with a user-specified choice for the next batch of npcs. For example, a trait of 'region-specific' in the 'race' category is replaced with user selected race. The replacement for one batch of npcs could be Japanese and another could be Nigerian. This allows quick generation of region-specific npcs in a globe trotting session.",
+		"trait_id": {
+			"description": "A reference to a trait. Since multiple categories can have traits of the same name, the category must be specified too. For example a Disability category and Criminal History category both with a None trait.",
 			"type": "object",
 			"properties": {
 				"category_name": {
-					"description": "The category of the trait to be replacement. This is needed to distinguish between identically-named traits in different categories.",
+					"description": "The category of the trait.",
 					"type": "string"
 				},
-				"trait": {
-					"description": "The trait to be replaced. For example 'Region-specific' trait of category 'Race'.",
+				"trait_name": {
+					"description": "The trait name.",
 					"type": "string"
 				}
 			},
-			"required": ["category_name", "trait"],
+			"required": ["category_name", "trait_name"],
+			"additionalProperties": false
+		},
+		"logical_operation": {
+			"description": "A combination of logicalOperators or traits which evaluate to true to false. Operators are Any, All, and None. For example a logical operation can represent 'Any of Mute, Blind, or Deaf.' Logical operators can be nested, for example nesting a None inside an Any for the operation 'Any of Mute or None of Zombie'",
+			"type": "object",
+			"properties": {
+				"operator" : {
+					"description": "The type of operation, whether 'All' the operands must be true for the whole operation to be true, whether 'Any' of the operands are true, and whether 'None' are true.",
+					"enum": ["Any", "All", "None"]
+				},
+				"operands": {
+					"description": "The subjects of the operator. For the logical operator 'Any of Mute, Blind, or Deaf' - Mute, Blind, and Deaf are operands",
+					"type": "array",
+					"items": { 
+						"anyOf": [
+							{"$ref": "#"},
+							{"$ref": "#/$defs/trait_id"}
+						]
+					},
+					"minItems": 1,
+					"uniqueItems": true
+				}
+			},
+			"required": ["operator", "operands"],
 			"additionalProperties": false
 		}
 	}

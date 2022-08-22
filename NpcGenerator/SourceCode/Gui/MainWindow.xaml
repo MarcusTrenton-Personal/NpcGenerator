@@ -63,10 +63,10 @@ along with this program. If not, see<https://www.gnu.org/licenses/> .-->
                     <Label.Style>
                         <Style TargetType="{x:Type Label}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding DoesConfigurationFileExist}" Value="True">
+                                <DataTrigger Binding="{Binding IsConfigurationValid}" Value="True">
                                     <Setter Property="BorderBrush" Value="Black"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding DoesConfigurationFileExist}" Value="False">
+                                <DataTrigger Binding="{Binding IsConfigurationValid}" Value="False">
                                     <Setter Property="BorderBrush" Value="Red"/>
                                 </DataTrigger>
                             </Style.Triggers>

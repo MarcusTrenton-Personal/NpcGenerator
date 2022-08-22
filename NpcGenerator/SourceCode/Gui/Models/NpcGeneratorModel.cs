@@ -35,7 +35,8 @@ namespace NpcGenerator
             IConfigurationParser parser,
             Dictionary<string, INpcExport> npcExporters,
             ILocalization localization,
-            IRandom random)
+            IRandom random,
+            bool showErrorMessages)
         {
             m_userSettings = userSettings;
             m_messager = messager;
@@ -44,10 +45,13 @@ namespace NpcGenerator
             m_npcExporters = npcExporters;
             m_localization = localization;
             m_random = random;
+            m_showErrorMessages = showErrorMessages;
+            m_configurationHasError = false;
 
             CreateFileWatcher();
 
-            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+            //Deliberately do parse the initial schema, as there is no way to show an error message during boot-up.
+            //Instead evaluate lazily.
         }
 
         ~NpcGeneratorModel()
@@ -96,12 +100,16 @@ namespace NpcGenerator
             }
         }
 
-        public bool DoesConfigurationFileExist 
+        public bool IsConfigurationValid 
         { 
             get
             {
+                if (m_traitSchema == null && !m_configurationHasError)
+                {
+                    m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+                }
                 bool doesExist = File.Exists(m_userSettings.ConfigurationPath);
-                return doesExist;
+                return doesExist && !m_configurationHasError;
             }
         }
 
@@ -170,10 +178,10 @@ namespace NpcGenerator
             {
                 m_userSettings.ConfigurationPath = openFileDialog.FileName;
                 NotifyPropertyChanged("ConfigurationPath");
-                NotifyPropertyChanged("DoesConfigurationFileExist");
+                NotifyPropertyChanged("IsConfigurationValid");
                 SetFileWatcherPath();
 
-                ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+                m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
                 m_messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
         }
@@ -210,9 +218,12 @@ namespace NpcGenerator
             }
             catch(TooFewTraitsInCategoryException exception)
             {
-                string message = m_localization.GetText("too_few_traits_in_category", 
+                if (m_showErrorMessages)
+                {
+                    string message = m_localization.GetText("too_few_traits_in_category",
                     exception.Requested, exception.Category, exception.Available);
-                MessageBox.Show(message);
+                    MessageBox.Show(message);
+                }
             }
         }
 
@@ -263,13 +274,17 @@ namespace NpcGenerator
             }
             catch(JsonExportFormatException exception)
             {
-                MessageBox.Show(exception.Message);
+                if (m_showErrorMessages)
+                {
+                    MessageBox.Show(exception.Message);
+                }   
             }
         }
 
         private void SetFileWatcherPath()
         {
-            if (DoesConfigurationFileExist)
+            bool doesConfigurationFileExist = File.Exists(m_userSettings.ConfigurationPath);
+            if (doesConfigurationFileExist)
             {
                 string fileName = Path.GetFileName(ConfigurationPath);
                 string path = Path.GetDirectoryName(ConfigurationPath);
@@ -281,68 +296,96 @@ namespace NpcGenerator
 
         private void OnConfigurationChanged(object sender, FileSystemEventArgs e)
         {
-            NotifyPropertyChanged("DoesConfigurationFileExist");
-            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+            m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+            NotifyPropertyChanged("IsConfigurationValid");
         }   
 
         private void OnConfigurationRenamed(object sender, RenamedEventArgs e)
         {
-            NotifyPropertyChanged("DoesConfigurationFileExist");
+            NotifyPropertyChanged("IsConfigurationValid");
         }
 
-        private void ParseTraitSchema(out TraitSchema traitSchema, out List<ReplacementSubModel> replacementSubModels)
+        private bool ParseTraitSchema(out TraitSchema traitSchema, out List<ReplacementSubModel> replacementSubModels)
         {
+            bool isSuccess = false;
             traitSchema = null;
-            if (DoesConfigurationFileExist)
+            bool doesConfigurationFileExist = File.Exists(m_userSettings.ConfigurationPath);
+            if (doesConfigurationFileExist)
             {
                 try
                 {
                     string cachedConfigurationPath = m_fileIo.CacheFile(m_userSettings.ConfigurationPath);
                     traitSchema = m_parser.Parse(cachedConfigurationPath);
+                    isSuccess = true;
                 }
                 catch (IOException exception)
                 {
-                    MessageBox.Show(exception.Message);
+                    if (m_showErrorMessages)
+                    {
+                        MessageBox.Show(exception.Message);
+                    }
                 }
                 catch (JsonFormatException exception)
                 {
-                    string message = m_localization.GetText("configuration_file_invalid", exception.Path);
-                    message += "\n" + exception.Message;
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("configuration_file_invalid", exception.Path);
+                        message += "\n" + exception.Message;
 
-                    MessageBox.Show(message);
+                        MessageBox.Show(message);
+                    }
                 }
                 catch (MismatchedBonusSelectionException exception)
                 {
-                    string message = m_localization.GetText("mismatched_bonus_selection", exception.Trait, exception.NotFoundCategoryName);
-                    MessageBox.Show(message);
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("mismatched_bonus_selection", exception.Trait, exception.NotFoundCategoryName);
+                        MessageBox.Show(message);
+                    }
                 }
                 catch (MismatchedReplacementTraitException exception)
                 {
-                    string message = m_localization.GetText("mismatched_replacement_trait", exception.Trait, exception.Category);
-                    MessageBox.Show(message);
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("mismatched_replacement_trait", exception.Trait, exception.Category);
+                        MessageBox.Show(message);
+                    }
                 }
                 catch (MismatchedReplacementCategoryException exception)
                 {
-                    string message = m_localization.GetText("mismatched_replacement_category", exception.Category, exception.Trait);
-                    MessageBox.Show(message);
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("mismatched_replacement_category", exception.Category, exception.Trait);
+                        MessageBox.Show(message);
+                    }
                 }
                 catch (DuplicateCategoryNameException exception)
                 {
-                    string message = m_localization.GetText("duplicate_category_name", exception.Category);
-                    MessageBox.Show(message);
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("duplicate_category_name", exception.Category);
+                        MessageBox.Show(message);
+                    }
                 }
                 catch (FormatException exception)
                 {
-                    MessageBox.Show(exception.Message);
+                    if (m_showErrorMessages)
+                    {
+                        MessageBox.Show(exception.Message);
+                    }
                 }
                 catch (ArithmeticException exception)
                 {
-                    MessageBox.Show(exception.Message);
+                    if (m_showErrorMessages)
+                    {
+                        MessageBox.Show(exception.Message);
+                    }
                 }
             }
 
             replacementSubModels = MakeReplacementSubModels(m_traitSchema);
             NotifyPropertyChanged("Replacements");
+            return isSuccess;
         }
 
         private static List<ReplacementSubModel> MakeReplacementSubModels(TraitSchema traitSchema)
@@ -376,6 +419,7 @@ namespace NpcGenerator
         private readonly ILocalization m_localization;
         private readonly IRandom m_random;
         private readonly Dictionary<string, INpcExport> m_npcExporters = new Dictionary<string, INpcExport>();
+        private readonly bool m_showErrorMessages;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;
@@ -386,5 +430,6 @@ namespace NpcGenerator
         private DataTable m_table;
         private TraitSchema m_traitSchema = null;
         private FileSystemWatcher m_configurationFileWatcher;
+        private bool m_configurationHasError = false;
     }
 }

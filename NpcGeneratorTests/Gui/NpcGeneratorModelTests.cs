@@ -42,7 +42,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(), 
+                showErrorMessages: false);
             
             Assert.AreEqual(FILE_PATH1, npcGeneratorModel.ConfigurationPath, 
                 "Configuration path is not the one in UserSettings");
@@ -66,7 +67,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(),
+                showErrorMessages: false);
 
             userSettings.NpcQuantity = QUANTITY1;
             Assert.AreEqual(QUANTITY1, npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
@@ -87,7 +89,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom())
+                new MockRandom(),
+                showErrorMessages: false)
             {
                 NpcQuantity = 0
             };
@@ -106,7 +109,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(),
+                showErrorMessages: false);
 
             userSettings.ConfigurationPath = "Bad file";
             bool canGenerateNpcs = npcGeneratorModel.GenerateNpcs.CanExecute(null);
@@ -131,7 +135,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom()); 
+                new MockRandom(),
+                showErrorMessages: false); 
 
             const int QUANTITY = 5;
             npcGeneratorModel.NpcQuantity = 5;
@@ -157,7 +162,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(),
+                showErrorMessages: false);
 
             bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsFalse(canSave, "Can save even though there are no npcs");
@@ -173,7 +179,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(),
+                showErrorMessages: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -198,7 +205,8 @@ namespace Tests
                 new MockCsvConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(),
+                showErrorMessages: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -216,7 +224,7 @@ namespace Tests
                 'replacements' : [
                     {
                         'category_name' : 'Colour',
-                        'trait' : 'Green'
+                        'trait_name' : 'Green'
                     }
                 ],
                 'trait_categories' : [
@@ -246,15 +254,14 @@ namespace Tests
                 new MockJsonConfigurationParser(),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
-                new MockRandom());
+                new MockRandom(),
+                showErrorMessages: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
-            Assert.AreEqual(1, replacements.Count, "Replacements somehow found for a replacement-less schema");
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
 
             File.Delete(path);
         }
-
-        MockRandom m_random = new MockRandom();
     }
 }

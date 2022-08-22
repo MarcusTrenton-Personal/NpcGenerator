@@ -1,8 +1,8 @@
 {
 	"replacements" :
 	[
-		{ "category_name" : "Race", "trait" : "Region-specific" },
-		{ "category_name" : "Religion", "trait" : "Region-specific" }
+		{ "category_name" : "Race", "trait_name" : "Region-specific" },
+		{ "category_name" : "Religion", "trait_name" : "Region-specific" }
 	],
 	"trait_categories" : 
 	[
@@ -147,7 +147,8 @@
 				{"name" : "Short temper", "weight" : 1},
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},
-				{"name" : "Dancer", "weight" : 1}
+				{"name" : "Dancer", "weight" : 1},
+				{"name" : "Fashionable", "weight" : 1}
 			]
 		},
 		{
@@ -181,6 +182,31 @@
 				{"name" : "Hindu", "weight" : 10},
 				{"name" : "Buddhist", "weight" : 5},
 				{"name" : "Satanist", "weight" : 1}
+			]
+		},
+		{
+			"name": "Hair Dye",
+			"selections": 1,
+			"requirements" : {
+				"operator" : "Any",
+				"operands" : [
+					{"category_name" : "Quirk", "trait_name" : "Fashionable"},
+					{"category_name" : "Age", "trait_name" : "Teenager"},
+					{"category_name" : "Age", "trait_name" : "Adult"},
+				]
+			},
+			"traits" :
+			[
+				{"name" : "Black", "weight" : 1},
+				{"name" : "Brown", "weight" : 1},
+				{"name" : "Blonde", "weight" : 1},
+				{"name" : "Platinum Blonde", "weight" : 1},
+				{"name" : "White", "weight" : 1},
+				{"name" : "Red", "weight" : 1},
+				{"name" : "Blue", "weight" : 1},
+				{"name" : "Green", "weight" : 1},
+				{"name" : "Purple", "weight" : 1},
+				{"name" : "Pink", "weight" : 1}
 			]
 		}
 	]

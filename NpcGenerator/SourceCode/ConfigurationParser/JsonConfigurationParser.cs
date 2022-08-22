@@ -165,23 +165,23 @@ namespace NpcGenerator
         }
 
         private static void ParseReplacements(
-            List<ProtoReplacement> protoReplacements, TraitSchema traitSchema, List<TraitCategory> categories)
+            List<TraitId> protoReplacements, TraitSchema traitSchema, List<TraitCategory> categories)
         {
             if (protoReplacements != null)
             {
-                foreach (ProtoReplacement protoReplacement in protoReplacements)
+                foreach (TraitId protoReplacement in protoReplacements)
                 {
                     TraitCategory category = categories.Find(category => category.Name == protoReplacement.category_name);
                     if (category == null)
                     {
                         throw new MismatchedReplacementCategoryException(category: protoReplacement.category_name,
-                            trait: protoReplacement.trait);
+                            trait: protoReplacement.trait_name);
                     }
-                    Trait trait = category.GetTrait(protoReplacement.trait);
+                    Trait trait = category.GetTrait(protoReplacement.trait_name);
                     if (trait == null)
                     {
                         throw new MismatchedReplacementTraitException(category: protoReplacement.category_name,
-                            trait: protoReplacement.trait);
+                            trait: protoReplacement.trait_name);
                     }
 
                     ReplacementSearch replacement = new ReplacementSearch(trait, category);
@@ -196,7 +196,7 @@ namespace NpcGenerator
         {
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
-            public List<ProtoReplacement> replacements;
+            public List<TraitId> replacements;
             public List<ProtoTraitCategory> trait_categories;
         }
 
@@ -204,6 +204,7 @@ namespace NpcGenerator
         {
             public string Name { get; set; }
             public int Selections { get; set; }
+            public ProtoLogicalExpression requirements;
             public List<ProtoTrait> traits;
         }
 
@@ -232,10 +233,26 @@ namespace NpcGenerator
             public int m_selections;
         }
 
-        private class ProtoReplacement
+        private class TraitId
         {
-            public string trait;
+            public string trait_name;
             public string category_name;
+        }
+
+        private class ProtoLogicalExpression
+        {
+            //In the schema, the expression is either a trait_id with trait_name and category_name or
+            //it is a logical_operation with an operator and operands.
+            //Both are combined into a single class here so they can be in together in a list. A limitation of the C# language.
+            //It is not valid for a single object to have non-null member from both sets.
+
+            //trait_id
+            public string trait_name = null;
+            public string category_name = null;
+
+            //logical_operation
+            public string @operator = null;
+            public List<ProtoLogicalExpression> operands;
         }
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
 
