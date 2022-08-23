@@ -15,6 +15,7 @@ along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -105,27 +106,17 @@ namespace NpcGenerator
 
         private TraitSchema ParseInternal(ProtoTraitSchema protoTraitSchema)
         {
-            ParseCategories(
-                protoTraitSchema,
-                out TraitSchema traitSchema,
-                out List<DeferredBonusSelection> deferredBonusSelections,
-                out List<TraitCategory> categories);
-            ParseDeferredBonusSelections(deferredBonusSelections, categories);
-            ParseReplacements(protoTraitSchema.replacements, traitSchema, categories);
-
+            TraitSchema traitSchema = ParseSimplifiedSchema(protoTraitSchema);
+            ParseBonusSelections(protoTraitSchema, traitSchema);
+            ParseReplacements(protoTraitSchema.replacements, traitSchema);
+            //TODO Parse Requirements.
             return traitSchema;
         }
 
-        private static void ParseCategories(
-            ProtoTraitSchema protoTraitSchema, 
-            out TraitSchema traitSchema, 
-            out List<DeferredBonusSelection> deferredBonusSelections, 
-            out List<TraitCategory> categories)
+        private static TraitSchema ParseSimplifiedSchema(
+            ProtoTraitSchema protoTraitSchema)
         {
-            traitSchema = new TraitSchema();
-            deferredBonusSelections = new List<DeferredBonusSelection>();
-            categories = new List<TraitCategory>();
-
+            TraitSchema traitSchema = new TraitSchema();
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
                 TraitCategory category = new TraitCategory(protoCategory.Name, protoCategory.Selections);
@@ -133,45 +124,48 @@ namespace NpcGenerator
                 {
                     Trait trait = new Trait(protoTrait.Name, protoTrait.Weight, protoTrait.Hidden);
                     category.Add(trait);
-
-                    if (protoTrait.bonus_selection != null)
-                    {
-                        deferredBonusSelections.Add(new DeferredBonusSelection()
-                        {
-                            m_trait = trait,
-                            m_categoryName = protoTrait.bonus_selection.trait_category_name,
-                            m_selections = protoTrait.bonus_selection.Selections
-                        });
-                    }
                 }
                 traitSchema.Add(category);
-                categories.Add(category);
             }
+            return traitSchema;
         }
 
-        private static void ParseDeferredBonusSelections(List<DeferredBonusSelection> deferredBonusSelections, List<TraitCategory> categories)
+        private static void ParseBonusSelections(ProtoTraitSchema protoTraitSchema, TraitSchema schema)
         {
-            foreach (DeferredBonusSelection deferredBonusSelection in deferredBonusSelections)
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
-                TraitCategory category = categories.Find(category => category.Name == deferredBonusSelection.m_categoryName);
-                if (category == null)
+                foreach (ProtoTrait protoTrait in protoCategory.traits)
                 {
-                    throw new MismatchedBonusSelectionException(notFoundCategory: deferredBonusSelection.m_categoryName,
-                        trait: deferredBonusSelection.m_trait.Name);
+                    ProtoBonusSelection protoBonusSelection = protoTrait.bonus_selection;
+                    if (protoBonusSelection != null)
+                    {
+                        TraitCategory originalCategory = ListUtil.Find(categories, category => category.Name == protoCategory.Name);
+                        Trait trait = originalCategory.GetTrait(protoTrait.Name);
+
+                        TraitCategory targetCategory = ListUtil.Find(categories, category => category.Name == protoBonusSelection.trait_category_name);
+                        if (targetCategory == null)
+                        {
+                            throw new MismatchedBonusSelectionException(notFoundCategory: protoBonusSelection.trait_category_name,
+                                sourceCategory: originalCategory.Name,
+                                sourceTrait: trait.Name);
+                        }
+
+                        BonusSelection bonusSelection = new BonusSelection(targetCategory, protoBonusSelection.Selections);
+                        trait.BonusSelection = bonusSelection;
+                    }
                 }
-                BonusSelection bonusSelection = new BonusSelection(category, deferredBonusSelection.m_selections);
-                deferredBonusSelection.m_trait.BonusSelection = bonusSelection;
             }
         }
 
-        private static void ParseReplacements(
-            List<TraitId> protoReplacements, TraitSchema traitSchema, List<TraitCategory> categories)
+        private static void ParseReplacements(List<TraitId> protoReplacements, TraitSchema traitSchema)
         {
             if (protoReplacements != null)
             {
                 foreach (TraitId protoReplacement in protoReplacements)
                 {
-                    TraitCategory category = categories.Find(category => category.Name == protoReplacement.category_name);
+                    IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
+                    TraitCategory category = ListUtil.Find(categories, category => category.Name == protoReplacement.category_name);
                     if (category == null)
                     {
                         throw new MismatchedReplacementCategoryException(category: protoReplacement.category_name,
@@ -226,12 +220,12 @@ namespace NpcGenerator
             public int Selections { get; set; }
         }
 
-        private class DeferredBonusSelection
-        {
-            public Trait m_trait;
-            public string m_categoryName;
-            public int m_selections;
-        }
+        //private class DeferredBonusSelection
+        //{
+        //    public Trait m_trait;
+        //    public string m_categoryName;
+        //    public int m_selections;
+        //}
 
         private class TraitId
         {

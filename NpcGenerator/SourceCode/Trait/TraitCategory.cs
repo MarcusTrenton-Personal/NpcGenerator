@@ -55,14 +55,8 @@ namespace NpcGenerator
 
         private static string ReplacementNameForTrait(IReadOnlyList<Replacement> replacements, Trait trait)
         {
-            foreach (Replacement replacement in replacements)
-            {
-                if (replacement.OriginalTrait == trait)
-                {
-                    return replacement.ReplacementTraitName;
-                }
-            }
-            return trait.Name;
+            Replacement replacement = ListUtil.Find(replacements, replacement => replacement.OriginalTrait == trait);
+            return replacement == null ? trait.Name : replacement.ReplacementTraitName;
         }
 
         private IReadOnlyList<Replacement> ReplacementsForThisCategory(IReadOnlyList<Replacement> replacements)

@@ -19,13 +19,15 @@ namespace NpcGenerator
 {
     public class MismatchedBonusSelectionException : FormatException
     {
-        public MismatchedBonusSelectionException(string notFoundCategory, string trait)
+        public MismatchedBonusSelectionException(string notFoundCategory, string sourceCategory, string sourceTrait)
         {
             NotFoundCategoryName = notFoundCategory;
-            Trait = trait;
+            SourceCategory = sourceCategory;
+            SourceTrait = sourceTrait;
         }
 
-        public string Trait { get; private set; }
+        public string SourceCategory { get; private set; }
+        public string SourceTrait { get; private set; }
         public string NotFoundCategoryName { get; private set; }
     }
 

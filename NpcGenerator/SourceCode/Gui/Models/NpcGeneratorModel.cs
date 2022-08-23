@@ -82,6 +82,14 @@ namespace NpcGenerator
             m_configurationFileWatcher.Changed -= OnConfigurationChanged;
         }
 
+        private void LazyParseTraitSchema()
+        {
+            if (m_traitSchema == null && !m_configurationHasError)
+            {
+                m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+            }
+        }
+
         public ICommand ChooseConfiguration 
         { 
             get
@@ -104,10 +112,7 @@ namespace NpcGenerator
         { 
             get
             {
-                if (m_traitSchema == null && !m_configurationHasError)
-                {
-                    m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
-                }
+                LazyParseTraitSchema();
                 bool doesExist = File.Exists(m_userSettings.ConfigurationPath);
                 return doesExist && !m_configurationHasError;
             }
@@ -130,6 +135,7 @@ namespace NpcGenerator
         { 
             get
             {
+                LazyParseTraitSchema();
                 return m_replacementSubModels;
             }
         }
@@ -196,6 +202,7 @@ namespace NpcGenerator
 
         private void ExecuteGenerateNpcs(object _)
         {
+            LazyParseTraitSchema();
             List<Replacement> replacements = GetReplacements(m_replacementSubModels, m_traitSchema);
             try
             {
@@ -339,7 +346,10 @@ namespace NpcGenerator
                 {
                     if (m_showErrorMessages)
                     {
-                        string message = m_localization.GetText("mismatched_bonus_selection", exception.Trait, exception.NotFoundCategoryName);
+                        string message = m_localization.GetText("mismatched_bonus_selection", 
+                            exception.SourceCategory,
+                            exception.SourceTrait, 
+                            exception.NotFoundCategoryName);
                         MessageBox.Show(message);
                     }
                 }
