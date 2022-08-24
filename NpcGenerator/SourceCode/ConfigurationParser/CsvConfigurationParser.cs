@@ -100,7 +100,7 @@ namespace NpcGenerator
                     bool duplicateFound = matchingNames.Length > 1;
                     if (duplicateFound)
                     {
-                        throw new DuplicateTraitNamesInCategoryException(category: category.Name, trait: traitNames[j]);
+                        throw new DuplicateTraitNamesInCategoryException(new TraitId(category.Name, traitNames[j]));
                     }
                 }
             }

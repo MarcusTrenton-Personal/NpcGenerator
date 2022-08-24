@@ -347,8 +347,8 @@ namespace NpcGenerator
                     if (m_showErrorMessages)
                     {
                         string message = m_localization.GetText("mismatched_bonus_selection", 
-                            exception.SourceCategory,
-                            exception.SourceTrait, 
+                            exception.SourceTraitId.CategoryName,
+                            exception.SourceTraitId.TraitName, 
                             exception.NotFoundCategoryName);
                         MessageBox.Show(message);
                     }
@@ -357,7 +357,8 @@ namespace NpcGenerator
                 {
                     if (m_showErrorMessages)
                     {
-                        string message = m_localization.GetText("mismatched_replacement_trait", exception.Trait, exception.Category);
+                        string message = m_localization.GetText("mismatched_replacement_trait", 
+                            exception.TraitId.TraitName, exception.TraitId.CategoryName);
                         MessageBox.Show(message);
                     }
                 }
@@ -365,7 +366,8 @@ namespace NpcGenerator
                 {
                     if (m_showErrorMessages)
                     {
-                        string message = m_localization.GetText("mismatched_replacement_category", exception.Category, exception.Trait);
+                        string message = m_localization.GetText("mismatched_replacement_category", 
+                            exception.TraitId.CategoryName, exception.TraitId.TraitName);
                         MessageBox.Show(message);
                     }
                 }

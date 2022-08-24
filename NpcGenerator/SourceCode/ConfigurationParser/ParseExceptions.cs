@@ -19,40 +19,34 @@ namespace NpcGenerator
 {
     public class MismatchedBonusSelectionException : FormatException
     {
-        public MismatchedBonusSelectionException(string notFoundCategory, string sourceCategory, string sourceTrait)
+        public MismatchedBonusSelectionException(string notFoundCategory, TraitId sourceTraitId)
         {
             NotFoundCategoryName = notFoundCategory;
-            SourceCategory = sourceCategory;
-            SourceTrait = sourceTrait;
+            SourceTraitId = sourceTraitId;
         }
 
-        public string SourceCategory { get; private set; }
-        public string SourceTrait { get; private set; }
+        public TraitId SourceTraitId { get; private set; }
         public string NotFoundCategoryName { get; private set; }
     }
 
     public class MismatchedReplacementTraitException : FormatException
     {
-        public MismatchedReplacementTraitException(string category, string trait)
+        public MismatchedReplacementTraitException(TraitId traitId)
         {
-            Category = category;
-            Trait = trait;
+            TraitId = traitId;
         }
 
-        public string Trait { get; private set; }
-        public string Category { get; private set; }
+        public TraitId TraitId { get; private set; }
     }
 
     public class MismatchedReplacementCategoryException : FormatException
     {
-        public MismatchedReplacementCategoryException(string category, string trait)
+        public MismatchedReplacementCategoryException(TraitId traitId)
         {
-            Category = category;
-            Trait = trait;
+            TraitId = traitId;
         }
 
-        public string Trait { get; private set; }
-        public string Category { get; private set; }
+        public TraitId TraitId { get; private set; }
     }
 
     public class DuplicateCategoryNameException : FormatException
@@ -67,13 +61,11 @@ namespace NpcGenerator
 
     public class DuplicateTraitNamesInCategoryException : FormatException
     {
-        public DuplicateTraitNamesInCategoryException(string category, string trait)
+        public DuplicateTraitNamesInCategoryException(TraitId traitId)
         {
-            Category = category;
-            Trait = trait;
+            TraitId = traitId;
         }
 
-        public string Category { get; private set; }
-        public string Trait { get; private set; }
+        public TraitId TraitId { get; private set; }
     }
 }

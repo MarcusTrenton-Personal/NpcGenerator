@@ -94,7 +94,7 @@ namespace NpcGenerator
                     bool isDuplicateName = traitNames.Contains(protoTrait.Name);
                     if (isDuplicateName)
                     {
-                        throw new DuplicateTraitNamesInCategoryException(category: protoCategory.Name, trait: protoTrait.Name);
+                        throw new DuplicateTraitNamesInCategoryException(new TraitId(protoCategory.Name, protoTrait.Name));
                     }
                     else
                     {
@@ -108,8 +108,8 @@ namespace NpcGenerator
         {
             TraitSchema traitSchema = ParseSimplifiedSchema(protoTraitSchema);
             ParseBonusSelections(protoTraitSchema, traitSchema);
+            ParseRequirements(protoTraitSchema, traitSchema);
             ParseReplacements(protoTraitSchema.replacements, traitSchema);
-            //TODO Parse Requirements.
             return traitSchema;
         }
 
@@ -147,8 +147,7 @@ namespace NpcGenerator
                         if (targetCategory == null)
                         {
                             throw new MismatchedBonusSelectionException(notFoundCategory: protoBonusSelection.trait_category_name,
-                                sourceCategory: originalCategory.Name,
-                                sourceTrait: trait.Name);
+                                new TraitId(originalCategory.Name, trait.Name));
                         }
 
                         BonusSelection bonusSelection = new BonusSelection(targetCategory, protoBonusSelection.Selections);
@@ -158,24 +157,29 @@ namespace NpcGenerator
             }
         }
 
-        private static void ParseReplacements(List<TraitId> protoReplacements, TraitSchema traitSchema)
+        private static void ParseRequirements(ProtoTraitSchema protoTraitSchema, TraitSchema schema)
+        {
+
+        }
+
+        private static void ParseReplacements(List<ProtoTraitId> protoReplacements, TraitSchema traitSchema)
         {
             if (protoReplacements != null)
             {
-                foreach (TraitId protoReplacement in protoReplacements)
+                foreach (ProtoTraitId protoReplacement in protoReplacements)
                 {
                     IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
                     TraitCategory category = ListUtil.Find(categories, category => category.Name == protoReplacement.category_name);
                     if (category == null)
                     {
-                        throw new MismatchedReplacementCategoryException(category: protoReplacement.category_name,
-                            trait: protoReplacement.trait_name);
+                        throw new MismatchedReplacementCategoryException(
+                            new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
                     Trait trait = category.GetTrait(protoReplacement.trait_name);
                     if (trait == null)
                     {
-                        throw new MismatchedReplacementTraitException(category: protoReplacement.category_name,
-                            trait: protoReplacement.trait_name);
+                        throw new MismatchedReplacementTraitException(
+                            new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
 
                     ReplacementSearch replacement = new ReplacementSearch(trait, category);
@@ -190,7 +194,7 @@ namespace NpcGenerator
         {
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
-            public List<TraitId> replacements;
+            public List<ProtoTraitId> replacements;
             public List<ProtoTraitCategory> trait_categories;
         }
 
@@ -220,14 +224,7 @@ namespace NpcGenerator
             public int Selections { get; set; }
         }
 
-        //private class DeferredBonusSelection
-        //{
-        //    public Trait m_trait;
-        //    public string m_categoryName;
-        //    public int m_selections;
-        //}
-
-        private class TraitId
+        private class ProtoTraitId
         {
             public string trait_name;
             public string category_name;
