@@ -67,7 +67,7 @@ namespace NpcGenerator
             }
         }
 
-        private void DetectDuplicateCategoryNames(List<ProtoTraitCategory> trait_categories)
+        private static void DetectDuplicateCategoryNames(List<ProtoTraitCategory> trait_categories)
         {
             List<string> categoryNames = new List<string>();
             foreach (ProtoTraitCategory protoCategory in trait_categories)
@@ -84,7 +84,7 @@ namespace NpcGenerator
             }
         }
 
-        private void DetectDuplicateTraitNamesInASingleCategory(List<ProtoTraitCategory> trait_categories)
+        private static void DetectDuplicateTraitNamesInASingleCategory(List<ProtoTraitCategory> trait_categories)
         {
             foreach (ProtoTraitCategory protoCategory in trait_categories)
             {
@@ -104,7 +104,7 @@ namespace NpcGenerator
             }
         }
 
-        private TraitSchema ParseInternal(ProtoTraitSchema protoTraitSchema)
+        private static TraitSchema ParseInternal(ProtoTraitSchema protoTraitSchema)
         {
             TraitSchema traitSchema = ParseSimplifiedSchema(protoTraitSchema);
             ParseBonusSelections(protoTraitSchema, traitSchema);
@@ -159,7 +159,103 @@ namespace NpcGenerator
 
         private static void ParseRequirements(ProtoTraitSchema protoTraitSchema, TraitSchema schema)
         {
+            foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
+            {
+                TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
+                Requirement requirement = ParseRequirement(protoCategory.requirements, category, schema);
+                category.Set(requirement);
+            }
+        }
 
+        private static Requirement ParseRequirement(
+            ProtoLogicalExpression protoLogicalExpression, 
+            TraitCategory requirementCategory,
+            TraitSchema schema)
+        {
+            if (protoLogicalExpression != null)
+            {
+                Requirement requirement = new Requirement();
+                ILogicalExpression logicalExpression = ParseLogicalExpression(
+                    protoLogicalExpression,
+                    requirementCategory,
+                    schema,
+                    requirement);
+
+                requirement.Initialize(logicalExpression);
+            }
+            return null;
+        }
+
+        private static ILogicalExpression ParseLogicalExpression
+            (ProtoLogicalExpression protoLogicalExpression,
+            TraitCategory requirementCategory,
+            TraitSchema schema,
+            INpcProvider npcProvider)
+        {
+            ILogicalExpression requirementExpression;
+
+            bool isTraitExpression = !string.IsNullOrEmpty(protoLogicalExpression.trait_name);
+            if (isTraitExpression)
+            {
+                requirementExpression = ParseTraitRequirement(
+                    protoLogicalExpression.category_name,
+                    protoLogicalExpression.trait_name,
+                    requirementCategory,
+                    npcProvider,
+                    schema);
+            }
+            else
+            {
+                requirementExpression = ParseLogicalOperator(
+                    protoLogicalExpression.@operator,
+                    protoLogicalExpression.operands,
+                    requirementCategory,
+                    npcProvider,
+                    schema);
+            }
+
+            return requirementExpression;
+        }
+
+        private static NpcHasTrait ParseTraitRequirement(
+            string categoryName, 
+            string traitName,
+            TraitCategory requirementCategory,
+            INpcProvider npcProvider,
+            TraitSchema schema)
+        {
+            TraitId traitId = new TraitId(categoryName, traitName);
+            bool hasTrait = schema.HasTrait(traitId);
+            if (!hasTrait)
+            {
+                throw new RequirementTraitIdNotFoundException(requirementCategory.Name, traitId);
+            }
+
+            return new NpcHasTrait(traitId, npcProvider: npcProvider);
+        }
+
+        private static ILogicalOperator ParseLogicalOperator(
+            string operatorName, 
+            List<ProtoLogicalExpression> operands,
+            TraitCategory requirementCategory,
+            INpcProvider npcProvider,
+            TraitSchema schema)
+        {
+            ILogicalOperator logicalOperator = operatorName switch
+            {
+                "All" => new LogicalAll(),
+                "Any" => new LogicalAny(),
+                "None" => new LogicalNone(),
+                _ => throw new UnknownLogicalOperatorException(requirementCategory.Name, operatorName),
+            };
+
+            foreach (ProtoLogicalExpression protoSubExpression in operands)
+            {
+                ILogicalExpression subExpression = ParseLogicalExpression(protoSubExpression, requirementCategory, schema, npcProvider);
+                logicalOperator.Add(subExpression);
+            }
+
+            return logicalOperator;
         }
 
         private static void ParseReplacements(List<ProtoTraitId> protoReplacements, TraitSchema traitSchema)
@@ -189,6 +285,7 @@ namespace NpcGenerator
         }
 
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value null
+#pragma warning disable IDE1006 // Naming conventions
         //These values will be assigned through the magic of Newtonsoft's JsonConvert.DeserializeObject();
         private class ProtoTraitSchema
         {
@@ -246,6 +343,7 @@ namespace NpcGenerator
             public List<ProtoLogicalExpression> operands;
         }
 #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value null
+#pragma warning restore IDE1006 // Naming conventions
 
         private readonly JSchema m_schema = null;
     }

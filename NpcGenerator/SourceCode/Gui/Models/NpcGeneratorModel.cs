@@ -379,6 +379,26 @@ namespace NpcGenerator
                         MessageBox.Show(message);
                     }
                 }
+                catch (RequirementTraitIdNotFoundException exception)
+                {
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText(
+                            "requirement_trait_not_found",
+                            exception.RequirementCategory,
+                            exception.TraitIdNotFound.CategoryName,
+                            exception.TraitIdNotFound.TraitName);
+                        MessageBox.Show(message);
+                    }
+                }
+                catch (UnknownLogicalOperatorException exception)
+                {
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("unknown_operator", exception.RequirementCategory, exception.OperatorName);
+                        MessageBox.Show(message);
+                    }
+                }
                 catch (FormatException exception)
                 {
                     if (m_showErrorMessages)

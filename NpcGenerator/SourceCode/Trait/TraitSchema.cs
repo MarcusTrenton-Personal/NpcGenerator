@@ -39,6 +39,18 @@ namespace NpcGenerator
             return m_replacements;
         }
 
+        public bool HasTrait(TraitId traitId)
+        {
+            TraitCategory category = m_categories.Find(category => category.Name == traitId.CategoryName);
+            if (category == null)
+            {
+                return false;
+            }
+
+            bool hasTrait = category.HasTrait(traitId.TraitName);
+            return hasTrait;
+        }
+
         private readonly List<TraitCategory> m_categories = new List<TraitCategory>();
         private readonly List<ReplacementSearch> m_replacements = new List<ReplacementSearch>();
     }

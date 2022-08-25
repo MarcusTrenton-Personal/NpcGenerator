@@ -68,4 +68,28 @@ namespace NpcGenerator
 
         public TraitId TraitId { get; private set; }
     }
+
+    public class RequirementTraitIdNotFoundException : FormatException
+    {
+        public RequirementTraitIdNotFoundException(string requirementCategory, TraitId traitIdNotFound)
+        {
+            RequirementCategory = requirementCategory;
+            TraitIdNotFound = traitIdNotFound;
+        }
+
+        public string RequirementCategory { get; private set; }
+        public TraitId TraitIdNotFound { get; private set; }
+    }
+
+    public class UnknownLogicalOperatorException : FormatException
+    {
+        public UnknownLogicalOperatorException(string requirementCategory, string operatorName)
+        {
+            RequirementCategory = requirementCategory;
+            OperatorName = operatorName;
+        }
+
+        public string RequirementCategory { get; private set; }
+        public string OperatorName { get; private set; }
+    }
 }

@@ -82,6 +82,17 @@ namespace NpcGenerator
             m_traits.Add(trait);
         }
 
+        public void Set(Requirement requirement)
+        {
+            m_requirement = requirement;
+        }
+
+        public bool IsUnlockedFor(Npc npc)
+        {
+            bool isUnlocked = m_requirement == null || m_requirement.IsUnlockedFor(npc);
+            return isUnlocked;
+        }
+
         public TraitChooser CreateTraitChooser(IRandom random)
         {
             return new TraitChooser(m_traits, random);
@@ -90,6 +101,11 @@ namespace NpcGenerator
         public Trait GetTrait(string name)
         {
             return m_traits.Find(trait => trait.Name == name);
+        }
+
+        public bool HasTrait(string name)
+        {
+            return m_traits.FindIndex(trait => trait.Name == name) > -1;
         }
 
         public string[] GetTraitNames()
@@ -131,6 +147,7 @@ namespace NpcGenerator
             private set;
         }
 
+        private Requirement m_requirement;
         private List<Trait> m_traits = new List<Trait>();
     }
 }

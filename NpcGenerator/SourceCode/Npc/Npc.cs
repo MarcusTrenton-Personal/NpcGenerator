@@ -74,6 +74,18 @@ namespace NpcGenerator
             }
         }
 
+        public bool HasTrait(TraitId traitId)
+        {
+            bool hasCategoryOfTrait = m_traitsByCategory.TryGetValue(traitId.CategoryName, out List<string> traits);
+            if (!hasCategoryOfTrait)
+            {
+                return false;
+            }
+
+            bool hasTrait = traits.Contains(traitId.TraitName);
+            return hasTrait;
+        }
+
         private readonly Dictionary<string,List<string>> m_traitsByCategory = new Dictionary<string, List<string>>();
     }
 }
