@@ -122,21 +122,5 @@ namespace Tests
 
             Assert.AreEqual(defaultObject, result, "");
         }
-
-
-        //FindFailElementWithParaterizedConstructor
-
-
-        //public static T Find<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
-        //{
-        //    foreach (T item in list)
-        //    {
-        //        if (test(item))
-        //        {
-        //            return item;
-        //        }
-        //    }
-        //    return default;
-        //}
     }
 }
