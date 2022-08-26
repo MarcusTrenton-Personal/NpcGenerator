@@ -23,6 +23,15 @@ namespace Services
     {
         public static T Find<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
         {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+            if (test == null)
+            {
+                throw new ArgumentNullException(nameof(test));
+            }
+
             foreach (T item in list)
             {
                 if (test(item))
