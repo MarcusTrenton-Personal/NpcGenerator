@@ -15,8 +15,6 @@ along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NpcGenerator
 {
@@ -24,13 +22,13 @@ namespace NpcGenerator
     {
         public NpcHasTrait(TraitId traitId, INpcProvider npcProvider)
         {
-            m_traitId = traitId;
-            m_npcProvider = npcProvider;
+            m_traitId = traitId ?? throw new ArgumentNullException(nameof(traitId));
+            m_npcProvider = npcProvider ?? throw new ArgumentNullException(nameof(npcProvider));
         }
 
         public bool Evaluate()
         {
-            Npc npc = m_npcProvider.GetNpc() ?? throw new InvalidOperationException(nameof(npc) + " is null. Call Initialize first.");
+            Npc npc = m_npcProvider.GetNpc() ?? throw new InvalidOperationException(nameof(npc) + " given by INpcProvider is null.");
             bool hasTrait = npc.HasTrait(m_traitId);
             return hasTrait;
         }
