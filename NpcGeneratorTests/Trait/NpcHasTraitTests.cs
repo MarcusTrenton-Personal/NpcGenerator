@@ -29,11 +29,12 @@ namespace NpcGeneratorTests.Trait
         public const string TraitNotFound = "Velociraptor";
 
         private readonly INpcProvider m_npcProvider;
+        private readonly Npc m_npcWithTrait;
         public TraitId m_foundTraitId = new TraitId(CategoryFound, TraitFound);
 
-        private class NpcProviderStub : INpcProvider
+        private class StubNpcProvider : INpcProvider
         {
-            public NpcProviderStub(Npc npc)
+            public StubNpcProvider(Npc npc)
             {
                 m_npc = npc;
             }
@@ -43,15 +44,20 @@ namespace NpcGeneratorTests.Trait
                 return m_npc;
             }
 
-            private readonly Npc m_npc;
+            public void SetNpc(Npc npc)
+            {
+                m_npc = npc;
+            }
+
+            private Npc m_npc;
         }
 
         public NpcHasTraitTests()
         {
-            Npc npc = new Npc();
-            npc.Add(CategoryFound, new string[] { TraitFound });
+            m_npcWithTrait = new Npc();
+            m_npcWithTrait.Add(CategoryFound, new string[] { TraitFound });
 
-            m_npcProvider = new NpcProviderStub(npc);
+            m_npcProvider = new StubNpcProvider(m_npcWithTrait);
         }
 
         [TestMethod]
@@ -89,7 +95,7 @@ namespace NpcGeneratorTests.Trait
         [TestMethod]
         public void NullNpcProvidedDuringEvaluate()
         {
-            NpcProviderStub npcProvider = new NpcProviderStub(npc: null);
+            StubNpcProvider npcProvider = new StubNpcProvider(npc: null);
             NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: npcProvider);
 
             bool threwException = false;
@@ -135,6 +141,36 @@ namespace NpcGeneratorTests.Trait
             bool found = expression.Evaluate();
 
             Assert.IsFalse(found, "Did find the trait even though the Npc did not have it");
+        }
+
+        [TestMethod]
+        public void NpcHasTraitAfterChangingNpcs()
+        {
+            Npc emptyNpc = new Npc();
+            StubNpcProvider provider = new StubNpcProvider(emptyNpc);
+            NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: provider);
+
+            bool initialIsFound = expression.Evaluate();
+            Assert.IsFalse(initialIsFound, "Incorrectly found a trait in an empty npc");
+
+            provider.SetNpc(m_npcWithTrait);
+            bool followUpIsFound = expression.Evaluate();
+            Assert.IsTrue(followUpIsFound, "Did not find the trait even though the Npc has it");
+        }
+
+        [TestMethod]
+        public void NpcDoesNotHaveTraitAfterChangingNpcs()
+        {
+            StubNpcProvider provider = new StubNpcProvider(m_npcWithTrait);
+            NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: provider);
+
+            bool initialIsFound = expression.Evaluate();
+            Assert.IsTrue(initialIsFound, "Did not find the trait even though the Npc has it");
+            
+            Npc emptyNpc = new Npc();
+            provider.SetNpc(emptyNpc);
+            bool followUpIsFound = expression.Evaluate();
+            Assert.IsFalse(followUpIsFound, "Incorrectly found a trait in an empty npc");
         }
     }
 }
