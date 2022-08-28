@@ -208,5 +208,86 @@ namespace Tests
 
             Assert.IsTrue(threwException);
         }
+
+        [TestMethod]
+        public void HasTraitInEmptyNpc()
+        {
+            Npc npc = new Npc();
+
+            bool hasTrait = npc.HasTrait(new TraitId("Animal", "Bear"));
+
+            Assert.IsFalse(hasTrait, "Incorrectly found trait in empty Npc");
+        }
+
+        [TestMethod]
+        public void HasTraitWhereCategoryDoesNotExist()
+        {
+            Npc npc = new Npc();
+            npc.Add("Colour", new string[] { "Blue" });
+
+            bool hasTrait = npc.HasTrait(new TraitId("Animal", "Bear"));
+
+            Assert.IsFalse(hasTrait, "Incorrectly found trait that is not in Npc");
+        }
+
+        [TestMethod]
+        public void HasTraitWhereTraitDoesNotExit()
+        {
+            const string CATEGORY = "Colour";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { "Blue" });
+
+            bool hasTrait = npc.HasTrait(new TraitId(CATEGORY, "Red"));
+
+            Assert.IsFalse(hasTrait, "Incorrectly found trait that is not in Npc");
+        }
+
+        [TestMethod]
+        public void HasTraitWhereTraitNameIsInDifferentCategory()
+        {
+            const string CATEGORY0 = "Skin";
+            const string CATEGORY1 = "Race";
+            const string TRAIT = "Black";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, new string[] { TRAIT });
+
+            bool hasTrait = npc.HasTrait(new TraitId(CATEGORY1, TRAIT));
+
+            Assert.IsFalse(hasTrait, "Incorrectly found trait that is not in Npc");
+        }
+
+        [TestMethod]
+        public void HasTraitWithNullParameter()
+        {
+            Npc npc = new Npc();
+
+            bool threwException = false;
+            try
+            {
+                bool hasTrait = npc.HasTrait(null);
+            }
+            catch (ArgumentNullException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw an ArgumentNullException for a null TratId");
+        }
+
+        [TestMethod]
+        public void HasTraitThatExists()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+
+            bool hasTrait = npc.HasTrait(new TraitId(CATEGORY, TRAIT));
+
+            Assert.IsTrue(hasTrait, "Failed to found trait that is in Npc");
+        }
     }
 }

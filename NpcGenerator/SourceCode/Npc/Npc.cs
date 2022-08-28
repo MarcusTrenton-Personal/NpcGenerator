@@ -76,6 +76,11 @@ namespace NpcGenerator
 
         public bool HasTrait(TraitId traitId)
         {
+            if (traitId == null)
+            {
+                throw new ArgumentNullException(nameof(traitId));
+            }
+
             bool hasCategoryOfTrait = m_traitsByCategory.TryGetValue(traitId.CategoryName, out List<string> traits);
             if (!hasCategoryOfTrait)
             {
