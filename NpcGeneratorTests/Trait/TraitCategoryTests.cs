@@ -214,5 +214,195 @@ namespace Tests
             int trait1Index = Array.FindIndex(names, name => name == TRAIT_NAME1);
             Assert.IsTrue(trait1Index > -1, TRAIT_NAME1 + " is not found in trait name list");
         }
+
+        [TestMethod]
+        public void SetIsUnlockedWithNullSetRequirement()
+        {
+            TraitCategory category = new TraitCategory("Colour", 1);
+            category.Set(requirement: null);
+
+            bool isUnlocked = category.IsUnlockedFor(new Npc());
+
+            Assert.IsTrue(isUnlocked, "Null requirement should always unlock category for every Npc");
+        }
+
+        [TestMethod]
+        public void IsUnlockedWithoutSettingRequirement()
+        {
+            TraitCategory category = new TraitCategory("Colour", 1);
+
+            bool isUnlocked = category.IsUnlockedFor(new Npc());
+
+            Assert.IsTrue(isUnlocked, "Null requirement should always unlock category for every Npc");
+        }
+
+        [TestMethod]
+        public void IsUnlockedForNullNpc()
+        {
+            TraitCategory category = new TraitCategory("Colour", 1);
+
+            bool threwException = false;
+            try
+            {
+                bool isUnlocked = category.IsUnlockedFor(npc: null);
+            }
+            catch (ArgumentNullException)
+            {
+                threwException = true;
+            }
+            
+            Assert.IsTrue(threwException, "Test whether a null Npc unlocks a category should throw ArgumentNullException");
+        }
+
+        [TestMethod]
+        public void IsUnlockedForNpcTrue()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+
+            Requirement requirement = new Requirement();
+            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, TRAIT), requirement);
+            requirement.Initialize(expression);
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+            category.Set(requirement);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { TRAIT });
+            bool isUnlocked = category.IsUnlockedFor(npc);
+
+            Assert.IsTrue(isUnlocked, "Failed to unlock category despite meeting the requirements");
+        }
+
+        [TestMethod]
+        public void IsUnlockedForNpcFalse()
+        {
+            const string CATEGORY = "Colour";
+
+            Requirement requirement = new Requirement();
+            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, "Blue"), requirement);
+            requirement.Initialize(expression);
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+            category.Set(requirement);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new string[] { "Red" });
+            bool isUnlocked = category.IsUnlockedFor(npc);
+
+            Assert.IsFalse(isUnlocked, "Incorrectly unlocked category despite meeting the requirements");
+        }
+
+        [TestMethod]
+        public void IsUnlockedForTwoDifferentNpcs()
+        {
+            const string CATEGORY = "Colour";
+            const string DESIRED_TRAIT = "Blue";
+            const string OTHER_TRAIT = "Orange";
+
+            Requirement requirement = new Requirement();
+            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, DESIRED_TRAIT), requirement);
+            requirement.Initialize(expression);
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+            category.Set(requirement);
+
+            Npc npcWithDesiredTrait = new Npc();
+            npcWithDesiredTrait.Add(CATEGORY, new string[] { DESIRED_TRAIT });
+            bool isUnlockedForNpcWithDesiredTrait = category.IsUnlockedFor(npcWithDesiredTrait);
+            Assert.IsTrue(isUnlockedForNpcWithDesiredTrait, "Failed to unlock category despite meeting the requirements");
+
+            Npc npcWithOtherTrait = new Npc();
+            npcWithOtherTrait.Add(CATEGORY, new string[] { OTHER_TRAIT });
+            bool isUnlockedForNpcWithOtherTrait = category.IsUnlockedFor(npcWithOtherTrait);
+            Assert.IsFalse(isUnlockedForNpcWithOtherTrait, "Incorrectly unlocked category despite meeting the requirements");
+        }
+
+        [TestMethod]
+        public void IsUnlockedAfterChangingRequirements()
+        {
+            const string CATEGORY = "Colour";
+            const string INITIAL_TRAIT = "Blue";
+            const string SUBSEQUENT_TRAIT = "Orange";
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+            Npc npcWithInitialTrait = new Npc();
+            npcWithInitialTrait.Add(CATEGORY, new string[] { INITIAL_TRAIT });
+
+            Requirement initialRequirement = new Requirement();
+            NpcHasTrait initialExpression = new NpcHasTrait(new TraitId(CATEGORY, INITIAL_TRAIT), initialRequirement);
+            initialRequirement.Initialize(initialExpression);
+            category.Set(initialRequirement);
+
+            bool isInitialRequirementUnlockedForNpc = category.IsUnlockedFor(npcWithInitialTrait);
+            Assert.IsTrue(isInitialRequirementUnlockedForNpc, "Failed to unlock category despite meeting the requirements");
+
+            Requirement subsequentRequirement = new Requirement();
+            NpcHasTrait subsequentExpression = new NpcHasTrait(new TraitId(CATEGORY, SUBSEQUENT_TRAIT), subsequentRequirement);
+            subsequentRequirement.Initialize(subsequentExpression);
+            category.Set(subsequentRequirement);
+
+            bool isSubsequentRequirementUnlockedForNpc = category.IsUnlockedFor(npcWithInitialTrait);
+            Assert.IsFalse(isSubsequentRequirementUnlockedForNpc, "Incorrectly unlocked category despite meeting the requirements");
+        }
+
+        [TestMethod]
+        public void HasTraitNull()
+        {
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            bool hasTrait = category.HasTrait(name: null);
+            
+            Assert.IsFalse(hasTrait, "Found a null trait which should not be possible");
+        }
+
+        [TestMethod]
+        public void HasTraitFound()
+        {
+            const string TRAIT = "Bear";
+            TraitCategory category = new TraitCategory("Animal", 1);
+            category.Add(new Trait(TRAIT, 1, isHidden: false));
+
+            bool hasTrait = category.HasTrait(TRAIT);
+
+            Assert.IsTrue(hasTrait, "Did not find a trait that should have been found");
+        }
+
+        [TestMethod]
+        public void HasTraitNotFound()
+        {
+            TraitCategory category = new TraitCategory("Animal", 1);
+            category.Add(new Trait("Bear", 1, isHidden: false));
+
+            bool hasTrait = category.HasTrait("Lion");
+
+            Assert.IsFalse(hasTrait, "Found a trait that did not exist");
+        }
+
+        [TestMethod]
+        public void HasTraitDifferentCase()
+        {
+            TraitCategory category = new TraitCategory("Animal", 1);
+            category.Add(new Trait("Bear", 1, isHidden: false));
+
+            bool hasTrait = category.HasTrait("bear");
+
+            Assert.IsFalse(hasTrait, "Found a trait incorrectly ignoring case");
+        }
+
+        [TestMethod]
+        public void HasTraitBeforeAndAfterTraitAdded()
+        {
+            const string TRAIT = "Bear";
+            TraitCategory category = new TraitCategory("Animal", 1);
+            bool initialHasTrait = category.HasTrait(TRAIT);
+
+            Assert.IsFalse(initialHasTrait, "Found a trait that did not exist");
+
+            category.Add(new Trait(TRAIT, 1, isHidden: false));
+            bool subsequentHasTrait = category.HasTrait(TRAIT);
+
+            Assert.IsTrue(subsequentHasTrait, "Did not find a trait that should have been found");
+        }
     }
 }

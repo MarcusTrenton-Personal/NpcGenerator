@@ -162,9 +162,41 @@ namespace NpcGenerator
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
                 TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
+
+                bool selfRequiringCategory = RequiresCategory(protoCategory.requirements, category);
+                if (selfRequiringCategory)
+                {
+                    throw new SelfRequiringCategoryException(category.Name);
+                }
+
                 Requirement requirement = ParseRequirement(protoCategory.requirements, category, schema);
                 category.Set(requirement);
             }
+        }
+
+        private static bool RequiresCategory(ProtoLogicalExpression protoExpression, TraitCategory category)
+        {
+            if (protoExpression == null || category == null)
+            {
+                return false;
+            }
+            if (protoExpression.category_name == category.Name)
+            {
+                return true;
+            }
+            if (protoExpression.operands != null)
+            {
+                foreach (ProtoLogicalExpression subExpression in protoExpression.operands)
+                {
+                    bool doeSubExpressionRequireCategory = RequiresCategory(subExpression, category);
+                    if (doeSubExpressionRequireCategory)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static Requirement ParseRequirement(

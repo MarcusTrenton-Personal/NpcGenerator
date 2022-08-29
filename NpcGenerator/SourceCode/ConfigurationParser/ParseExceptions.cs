@@ -92,4 +92,14 @@ namespace NpcGenerator
         public string RequirementCategory { get; private set; }
         public string OperatorName { get; private set; }
     }
+
+    public class SelfRequiringCategoryException : FormatException
+    {
+        public SelfRequiringCategoryException(string category)
+        {
+            Category = category;
+        }
+
+        public string Category { get; private set; }
+    }
 }

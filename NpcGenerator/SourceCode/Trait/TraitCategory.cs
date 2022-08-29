@@ -89,6 +89,11 @@ namespace NpcGenerator
 
         public bool IsUnlockedFor(Npc npc)
         {
+            if (npc == null)
+            {
+                throw new ArgumentNullException(nameof(npc));
+            }
+
             bool isUnlocked = m_requirement == null || m_requirement.IsUnlockedFor(npc);
             return isUnlocked;
         }

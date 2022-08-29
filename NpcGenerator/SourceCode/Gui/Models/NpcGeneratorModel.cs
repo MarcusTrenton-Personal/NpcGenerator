@@ -399,6 +399,14 @@ namespace NpcGenerator
                         MessageBox.Show(message);
                     }
                 }
+                catch (SelfRequiringCategoryException exception)
+                {
+                    if (m_showErrorMessages)
+                    {
+                        string message = m_localization.GetText("self_requiring_category", exception.Category);
+                        MessageBox.Show(message);
+                    }
+                }
                 catch (FormatException exception)
                 {
                     if (m_showErrorMessages)
