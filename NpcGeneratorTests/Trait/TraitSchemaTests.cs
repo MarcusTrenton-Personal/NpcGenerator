@@ -111,5 +111,124 @@ namespace Tests
             Assert.AreEqual(replacement0, replacements[0], "Altered ReplacementSearch was stored");
             Assert.AreEqual(replacement1, replacements[1], "Altered ReplacementSearch was stored");
         }
+
+        [TestMethod]
+        public void HasTraitNull()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+
+            bool threwException = false;
+            try
+            {
+                bool isFound = traitSchema.HasTrait(null);
+            }
+            catch (ArgumentNullException)
+            {
+                threwException = true;
+            }
+            
+            Assert.IsTrue(threwException, "Failed to throw an ArgumentNullException for a null parameter");
+        }
+        
+        public void HasTraitNotFoundDueToEmptyCategories()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+
+            bool isFound = traitSchema.HasTrait(new TraitId("Animal", "Bear"));
+
+            Assert.IsFalse(isFound, "Incorrectly found a trait in an empty schema");
+        }
+
+        public void HasTraitNotFoundDueToTraitName()
+        {
+            const string CATEGORY = "Animal";
+
+            Trait trait = new Trait("Bear", 1, isHidden: false);
+
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(trait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(category);
+
+            bool isFound = traitSchema.HasTrait(new TraitId(CATEGORY, "Velociraptor"));
+
+            Assert.IsFalse(isFound, "Incorrectly found a trait");
+        }
+
+        public void HasTraitNotFoundDueToCategoryName()
+        {
+            const string TRAIT = "Black";
+
+            Trait trait = new Trait(TRAIT, 1, isHidden: false);
+
+            TraitCategory category = new TraitCategory("Race", 1);
+            category.Add(trait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(category);
+
+            bool isFound = traitSchema.HasTrait(new TraitId("Hair Colour", TRAIT));
+
+            Assert.IsFalse(isFound, "Incorrectly found a trait");
+        }
+
+        public void HasTraitFound()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            Trait trait = new Trait(TRAIT, 1, isHidden: false);
+
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(trait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(category);
+
+            bool isFound = traitSchema.HasTrait(new TraitId(CATEGORY, TRAIT));
+
+            Assert.IsTrue(isFound, "Failed to find trait that was in schema");
+        }
+
+        public void HasTraitNotFoundDueToCase()
+        {
+            const string CATEGORY = "Animal";
+
+            Trait trait = new Trait("Bear", 1, isHidden: false);
+
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(trait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(category);
+
+            bool isFound = traitSchema.HasTrait(new TraitId(CATEGORY, "bear"));
+
+            Assert.IsFalse(isFound, "Incorrectly found a trait");
+        }
+
+        public void HasTraitAfterTraitAdded()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            Trait redHerringTrait = new Trait("Velociraptor", 1, isHidden: false);
+
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(redHerringTrait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(category);
+
+            bool isFoundInitially = traitSchema.HasTrait(new TraitId(CATEGORY, TRAIT));
+            Assert.IsFalse(isFoundInitially, "Incorrectly found a trait");
+
+            Trait trait = new Trait(TRAIT, 1, isHidden: false);
+            category.Add(trait);
+
+            bool isFoundSubsequent = traitSchema.HasTrait(new TraitId(CATEGORY, TRAIT));
+            Assert.IsTrue(isFoundSubsequent, "Failed to find trait that was in schema");
+        }
     }
 }

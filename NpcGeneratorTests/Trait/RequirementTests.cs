@@ -18,7 +18,7 @@ using NpcGenerator;
 using Services;
 using System;
 
-namespace NpcGeneratorTests.Trait
+namespace Tests
 {
     [TestClass]
     public class RequirementTests
