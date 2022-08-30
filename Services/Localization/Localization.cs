@@ -77,7 +77,7 @@ namespace Services
             int textIdHash = textId.GetHashCode();
             int hashKey = Hash(textIdHash: textIdHash, languageCodeHash: m_currentLanguageCodeHash);
             string unformattedText = m_localizedText[hashKey];
-            return String.Format(unformattedText, formatParameters);
+            return string.Format(unformattedText, formatParameters);
         }
 
         private static void ParseCsv(string filePath, out Dictionary<int, string> localization, out string[] languageCodes)

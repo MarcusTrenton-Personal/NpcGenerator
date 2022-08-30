@@ -327,10 +327,7 @@ namespace NpcGenerator
                 }
                 catch (IOException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        MessageBox.Show(exception.Message);
-                    }
+                    ShowMessageIfAllowed(exception);
                 }
                 catch (JsonFormatException exception)
                 {
@@ -344,88 +341,72 @@ namespace NpcGenerator
                 }
                 catch (MismatchedBonusSelectionException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText("mismatched_bonus_selection", 
-                            exception.SourceTraitId.CategoryName,
-                            exception.SourceTraitId.TraitName, 
-                            exception.NotFoundCategoryName);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed(
+                        "mismatched_bonus_selection", 
+                        exception.SourceTraitId.CategoryName,
+                        exception.SourceTraitId.TraitName,
+                        exception.NotFoundCategoryName);
                 }
                 catch (MismatchedReplacementTraitException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText("mismatched_replacement_trait", 
-                            exception.TraitId.TraitName, exception.TraitId.CategoryName);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed(
+                        "mismatched_replacement_trait", exception.TraitId.TraitName, exception.TraitId.CategoryName);
                 }
                 catch (MismatchedReplacementCategoryException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText("mismatched_replacement_category", 
-                            exception.TraitId.CategoryName, exception.TraitId.TraitName);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed(
+                        "mismatched_replacement_category", exception.TraitId.CategoryName, exception.TraitId.TraitName);
                 }
                 catch (DuplicateCategoryNameException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText("duplicate_category_name", exception.Category);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed("duplicate_category_name", exception.Category);
                 }
                 catch (RequirementTraitIdNotFoundException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText(
-                            "requirement_trait_not_found",
-                            exception.RequirementCategory,
-                            exception.TraitIdNotFound.CategoryName,
-                            exception.TraitIdNotFound.TraitName);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed(
+                        "requirement_trait_not_found", 
+                        exception.RequirementCategory,
+                        exception.TraitIdNotFound.CategoryName,
+                        exception.TraitIdNotFound.TraitName);
                 }
                 catch (UnknownLogicalOperatorException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText("unknown_operator", exception.RequirementCategory, exception.OperatorName);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed("unknown_operator", exception.RequirementCategory, exception.OperatorName);
                 }
                 catch (SelfRequiringCategoryException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        string message = m_localization.GetText("self_requiring_category", exception.Category);
-                        MessageBox.Show(message);
-                    }
+                    ShowLocalizedErrorMessageIfAllowed("self_requiring_category", exception.Category);
                 }
                 catch (FormatException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        MessageBox.Show(exception.Message);
-                    }
+                    ShowMessageIfAllowed(exception);
                 }
                 catch (ArithmeticException exception)
                 {
-                    if (m_showErrorMessages)
-                    {
-                        MessageBox.Show(exception.Message);
-                    }
+                    ShowMessageIfAllowed(exception);
                 }
             }
 
             replacementSubModels = MakeReplacementSubModels(m_traitSchema);
             NotifyPropertyChanged("Replacements");
             return isSuccess;
+        }
+
+        private void ShowLocalizedErrorMessageIfAllowed(string localizationId, params object[] formatParameters)
+        {
+            if (m_showErrorMessages)
+            {
+                string message = m_localization.GetText(localizationId, formatParameters);
+                MessageBox.Show(message);
+            }
+        }
+
+        private void ShowMessageIfAllowed(Exception exception)
+        {
+            if (m_showErrorMessages)
+            {
+                MessageBox.Show(exception.Message);
+            }
         }
 
         private static List<ReplacementSubModel> MakeReplacementSubModels(TraitSchema traitSchema)
