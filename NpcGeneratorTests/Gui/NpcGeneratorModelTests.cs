@@ -15,6 +15,7 @@ along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -263,5 +264,225 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        [TestMethod]
+        public void GenerateCatchesIOException()
+        {
+            static IOException CreateCallback()
+            {
+                return new IOException();
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesMismatchedBonusSelectionException()
+        {
+            static MismatchedBonusSelectionException CreateCallback()
+            {
+                return new MismatchedBonusSelectionException("Animal", new TraitId("Colour", "Blue"));
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesMismatchedReplacementTraitException()
+        {
+            static MismatchedReplacementTraitException CreateCallback()
+            {
+                return new MismatchedReplacementTraitException(new TraitId("Colour", "Blue"));
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesMismatchedReplacementCategoryException()
+        {
+            static MismatchedReplacementCategoryException CreateCallback()
+            {
+                return new MismatchedReplacementCategoryException(new TraitId("Colour", "Blue"));
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesDuplicateCategoryNameException()
+        {
+            static DuplicateCategoryNameException CreateCallback()
+            {
+                return new DuplicateCategoryNameException("Colour");
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesRequirementTraitIdNotFoundException()
+        {
+            static RequirementTraitIdNotFoundException CreateCallback()
+            {
+                return new RequirementTraitIdNotFoundException("Animal", new TraitId("Colour", "Blue"));
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesUnknownLogicalOperatorException()
+        {
+            static UnknownLogicalOperatorException CreateCallback()
+            {
+                return new UnknownLogicalOperatorException("Animal", "bitshift");
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesSelfRequiringCategoryException()
+        {
+            static SelfRequiringCategoryException CreateCallback()
+            {
+                return new SelfRequiringCategoryException("Animal");
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesFormatException()
+        {
+            static FormatException CreateCallback()
+            {
+                return new FormatException();
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesArithmeticException()
+        {
+            static ArithmeticException CreateCallback()
+            {
+                return new ArithmeticException();
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        private void GenerateCatches<T>(Func<T> createException) where T : Exception
+        {
+            StubUserSettings userSettings = new StubUserSettings();
+            string path = Path.Combine(TestDirectory, "colour.csv");
+            string text = "Colour,Weight\n" +
+                "Green,1\n";
+            File.WriteAllText(path, text);
+            userSettings.ConfigurationPath = path;
+
+            TraitSchema Callback(string path)
+            {
+                throw createException();
+            }
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new CallbackConfigurationParser(Callback),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false)
+            {
+                NpcQuantity = 1
+            };
+
+            bool modelCaughtException = true;
+            try
+            {
+                npcGeneratorModel.GenerateNpcs.Execute(null);
+            }
+            catch (Exception)
+            {
+                modelCaughtException = false;
+            }
+
+            Assert.IsTrue(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() failed to catch " + typeof(T));
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesTooFewTraitsInCategoryException()
+        {
+            StubUserSettings userSettings = new StubUserSettings();
+            string path = Path.Combine(TestDirectory, "too_many_selections.json");
+            string text = @"{
+                'trait_categories' : [
+                    {
+                        'name' : 'Colour',
+                        'selections': 10,
+                        'traits' : [
+                            { 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            },
+                            { 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }
+                        ]
+                    }
+                ]
+            }";
+            File.WriteAllText(path, text);
+            userSettings.ConfigurationPath = path;
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockJsonConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false);
+
+            npcGeneratorModel.NpcQuantity = 1;
+
+            bool modelCaughtException = true;
+            try
+            {
+                npcGeneratorModel.GenerateNpcs.Execute(null);
+            }
+            catch (Exception)
+            {
+                modelCaughtException = false;
+            }
+
+            Assert.IsTrue(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() failed to catch TooFewTraitsInCategoryException");
+
+            File.Delete(path);
+        }
+    }
+
+    internal class CallbackConfigurationParser : IConfigurationParser
+    {
+        public CallbackConfigurationParser(Func<string, TraitSchema> callback)
+        {
+            m_callback = callback;
+        }
+
+        public TraitSchema Parse(string path)
+        {
+            return m_callback(path);
+        }
+
+        private readonly Func<string, TraitSchema> m_callback;
     }
 }

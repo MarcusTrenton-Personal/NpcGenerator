@@ -203,6 +203,11 @@ namespace NpcGenerator
         private void ExecuteGenerateNpcs(object _)
         {
             LazyParseTraitSchema();
+            if (m_traitSchema == null)
+            {
+                return;
+            }
+
             List<Replacement> replacements = GetReplacements(m_replacementSubModels, m_traitSchema);
             try
             {
@@ -225,12 +230,8 @@ namespace NpcGenerator
             }
             catch(TooFewTraitsInCategoryException exception)
             {
-                if (m_showErrorMessages)
-                {
-                    string message = m_localization.GetText("too_few_traits_in_category",
-                    exception.Requested, exception.Category, exception.Available);
-                    MessageBox.Show(message);
-                }
+                ShowLocalizedErrorMessageIfAllowed(
+                    "too_few_traits_in_category", exception.Requested, exception.Category, exception.Available);
             }
         }
 
