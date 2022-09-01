@@ -428,6 +428,52 @@ namespace Tests
             File.Delete(path);
         }
 
+        //Catching generic exceptions is bad, as it promotes laziness in exception handling.
+        //Each exception should be caught individually and localized for the user,
+        //not swallowed into a generic "Something went wrong" message.
+        [TestMethod]
+        public void GenerateDoesNotCatchAllExceptions()
+        {
+            StubUserSettings userSettings = new StubUserSettings();
+            string path = Path.Combine(TestDirectory, "colour.csv");
+            string text = "Colour,Weight\n" +
+                "Green,1\n";
+            File.WriteAllText(path, text);
+            userSettings.ConfigurationPath = path;
+
+            TraitSchema Callback(string path)
+            {
+                throw new Exception();
+            }
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new CallbackConfigurationParser(Callback),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false)
+            {
+                NpcQuantity = 1
+            };
+
+            bool modelCaughtException = true;
+            try
+            {
+                npcGeneratorModel.GenerateNpcs.Execute(null);
+            }
+            catch (Exception)
+            {
+                modelCaughtException = false;
+            }
+
+            Assert.IsFalse(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() caught generic exception when it should not");
+
+            File.Delete(path);
+        }
+
         [TestMethod]
         public void GenerateCatchesTooFewTraitsInCategoryExceptionPostParsing()
         {
