@@ -375,6 +375,17 @@ namespace Tests
             GenerateCatches(CreateCallback);
         }
 
+        [TestMethod]
+        public void GenerateCatchesTooFewTraitsInCategoryException()
+        {
+            static TooFewTraitsInCategoryException CreateCallback()
+            {
+                return new TooFewTraitsInCategoryException("Animal", 3, 1);
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
         private void GenerateCatches<T>(Func<T> createException) where T : Exception
         {
             StubUserSettings userSettings = new StubUserSettings();
@@ -418,7 +429,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GenerateCatchesTooFewTraitsInCategoryException()
+        public void GenerateCatchesTooFewTraitsInCategoryExceptionPostParsing()
         {
             StubUserSettings userSettings = new StubUserSettings();
             string path = Path.Combine(TestDirectory, "too_many_selections.json");
