@@ -694,6 +694,52 @@ namespace Tests
             File.Delete(path);
         }
 
+        public void ReplacementsForSchemaWithReplacements()
+        {
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string REPLACEMENT_TRAIT = "Green";
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{REPLACEMENT_TRAIT}'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            TraitSchema schema = parser.Parse(path);
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category, "Wrong replacement category");
+            Assert.AreEqual(REPLACEMENT_TRAIT, replacements[0].Trait, "Wrong replacement trait");
+
+            File.Delete(path);
+        }
+
+        //TODO: ALSO TEST BONUS SELECTIONS
+        //TODO: EVERY PARSE EXCEPTION
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

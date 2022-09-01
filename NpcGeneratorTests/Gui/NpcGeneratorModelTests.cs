@@ -121,19 +121,28 @@ namespace Tests
         [TestMethod]
         public void GenerateNpcs()
         {
-            StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "colour.csv");
-            string text = "Colour,Weight\n" +
-                "Green,1\n" +
-                "Red,1";
-            File.WriteAllText(path, text);
-            userSettings.ConfigurationPath = path;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+
+            TraitSchema Callback(string path)
+            {
+                Trait green = new Trait("Green", 1, isHidden: false);
+                Trait red = new Trait("Red", 1, isHidden: false);
+                
+                TraitCategory category = new TraitCategory("Colour", 1);
+                category.Add(green);
+                category.Add(red);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+
+                return schema;
+            }
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
                 new StubMessager(),
                 new StubLocalFileIo(),
-                new MockCsvConfigurationParser(),
+                new CallbackConfigurationParser(Callback),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
@@ -149,7 +158,17 @@ namespace Tests
             bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsTrue(canSave, "Have npcs but cannot save");
 
-            File.Delete(path);
+            File.Delete(userSettings.ConfigurationPath);
+        }
+
+        private StubUserSettings UserSettingsWithFakeInputFile()
+        {
+            StubUserSettings userSettings = new StubUserSettings();
+            string path = Path.Combine(TestDirectory, "colour.csv");
+            string text = "Empty";
+            File.WriteAllText(path, text);
+            userSettings.ConfigurationPath = path;
+            return userSettings;
         }
 
         [TestMethod]
@@ -191,19 +210,28 @@ namespace Tests
         [TestMethod]
         public void ReplacementsForSchemaWithoutReplacements()
         {
-            StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "colour2.csv");
-            string text = "Colour,Weight\n" +
-                "Green,1\n" +
-                "Red,1";
-            File.WriteAllText(path, text);
-            userSettings.ConfigurationPath = path;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+
+            TraitSchema Callback(string path)
+            {
+                Trait green = new Trait("Green", 1, isHidden: false);
+                Trait red = new Trait("Red", 1, isHidden: false);
+
+                TraitCategory category = new TraitCategory("Colour", 1);
+                category.Add(green);
+                category.Add(red);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+
+                return schema;
+            }
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
                 new StubMessager(),
                 new StubLocalFileIo(),
-                new MockCsvConfigurationParser(),
+                new CallbackConfigurationParser(Callback),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
@@ -213,46 +241,41 @@ namespace Tests
 
             Assert.AreEqual(0, replacements.Count, "Replacements somehow found for a replacement-less schema");
 
-            File.Delete(path);
+            File.Delete(userSettings.ConfigurationPath);
         }
 
         [TestMethod]
         public void ReplacementsForSchemaWithReplacements()
         {
-            StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "replacements.json");
-            string text = @"{
-                'replacements' : [
-                    {
-                        'category_name' : 'Colour',
-                        'trait_name' : 'Green'
-                    }
-                ],
-                'trait_categories' : [
-                    {
-                        'name' : 'Colour',
-                        'selections': 1,
-                        'traits' : [
-                            { 
-                                'name' : 'Green', 
-                                'weight' : 1
-                            },
-                            { 
-                                'name' : 'Red', 
-                                'weight' : 1
-                            }
-                        ]
-                    }
-                ]
-            }";
-            File.WriteAllText(path, text);
-            userSettings.ConfigurationPath = path;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string ORIGINAL_TRAIT_NAME = "Green";
+            const string REPLACEMENT_CANDIDATE_TRAIT_NAME = "Red";
+
+            TraitSchema Callback(string path)
+            {
+                Trait originalTrait = new Trait(ORIGINAL_TRAIT_NAME, 1, isHidden: false);
+                Trait replacementCandidateTrait = new Trait(REPLACEMENT_CANDIDATE_TRAIT_NAME, 1, isHidden: false);
+
+                TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY, 1);
+                category.Add(originalTrait);
+                category.Add(replacementCandidateTrait);
+
+                ReplacementSearch replacementSearch = new ReplacementSearch(originalTrait, category);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+                schema.Add(replacementSearch);
+
+                return schema;
+            }
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
                 new StubMessager(),
                 new StubLocalFileIo(),
-                new MockJsonConfigurationParser(),
+                new CallbackConfigurationParser(Callback),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
@@ -260,9 +283,20 @@ namespace Tests
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
-            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category, "Wrong replacement category");
+            Assert.AreEqual(ORIGINAL_TRAIT_NAME, replacements[0].OriginalTrait, "Wrong original trait");
+            string[] replacementCandidates = replacements[0].ReplacementTraits;
 
-            File.Delete(path);
+            Assert.AreEqual(2, replacementCandidates.Length, "Wrong number of replacement candidates");
+            bool isOriginalTraitCandidate = Array.FindIndex(replacementCandidates, candidate => candidate == ORIGINAL_TRAIT_NAME) >= 0;
+            Assert.IsTrue(isOriginalTraitCandidate, "Wrong replacement candidates. Should include original trait " + ORIGINAL_TRAIT_NAME);
+            bool isReplacementTraitCandidate = Array.FindIndex(
+                replacementCandidates, candidate => candidate == REPLACEMENT_CANDIDATE_TRAIT_NAME) >= 0;
+            Assert.IsTrue(isOriginalTraitCandidate, "Wrong replacement candidates. Should include original trait " + 
+                REPLACEMENT_CANDIDATE_TRAIT_NAME);
+
+            File.Delete(userSettings.ConfigurationPath);
         }
 
         [TestMethod]
@@ -388,12 +422,7 @@ namespace Tests
 
         private void GenerateCatches<T>(Func<T> createException) where T : Exception
         {
-            StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "colour.csv");
-            string text = "Colour,Weight\n" +
-                "Green,1\n";
-            File.WriteAllText(path, text);
-            userSettings.ConfigurationPath = path;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
 
             TraitSchema Callback(string path)
             {
@@ -425,7 +454,7 @@ namespace Tests
 
             Assert.IsTrue(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() failed to catch " + typeof(T));
 
-            File.Delete(path);
+            File.Delete(userSettings.ConfigurationPath);
         }
 
         //Catching generic exceptions is bad, as it promotes laziness in exception handling.
@@ -434,12 +463,7 @@ namespace Tests
         [TestMethod]
         public void GenerateDoesNotCatchAllExceptions()
         {
-            StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "colour.csv");
-            string text = "Colour,Weight\n" +
-                "Green,1\n";
-            File.WriteAllText(path, text);
-            userSettings.ConfigurationPath = path;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
 
             TraitSchema Callback(string path)
             {
@@ -471,40 +495,32 @@ namespace Tests
 
             Assert.IsFalse(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() caught generic exception when it should not");
 
-            File.Delete(path);
+            File.Delete(userSettings.ConfigurationPath);
         }
 
         [TestMethod]
-        public void GenerateCatchesTooFewTraitsInCategoryExceptionPostParsing()
+        public void GenerateCatchesTooFewTraitsInCategoryExceptionDueBonusSelections()
         {
-            StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "too_many_selections.json");
-            string text = @"{
-                'trait_categories' : [
-                    {
-                        'name' : 'Colour',
-                        'selections': 10,
-                        'traits' : [
-                            { 
-                                'name' : 'Green', 
-                                'weight' : 1
-                            },
-                            { 
-                                'name' : 'Red', 
-                                'weight' : 1
-                            }
-                        ]
-                    }
-                ]
-            }";
-            File.WriteAllText(path, text);
-            userSettings.ConfigurationPath = path;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+
+            TraitSchema Callback(string path)
+            {
+                Trait trait = new Trait("Green", 1, isHidden: false);
+                TraitCategory category = new TraitCategory("Colour", 1);
+                trait.BonusSelection = new BonusSelection(category, 10);
+                category.Add(trait);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+
+                return schema;
+            }
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
                 new StubMessager(),
                 new StubLocalFileIo(),
-                new MockJsonConfigurationParser(),
+                new CallbackConfigurationParser(Callback),
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
@@ -524,7 +540,7 @@ namespace Tests
 
             Assert.IsTrue(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() failed to catch TooFewTraitsInCategoryException");
 
-            File.Delete(path);
+            File.Delete(userSettings.ConfigurationPath);
         }
     }
 

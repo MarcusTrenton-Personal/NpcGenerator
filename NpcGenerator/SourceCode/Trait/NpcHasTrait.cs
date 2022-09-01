@@ -33,7 +33,7 @@ namespace NpcGenerator
             return hasTrait;
         }
 
-        TraitId m_traitId;
-        INpcProvider m_npcProvider;
+        private readonly TraitId m_traitId;
+        private readonly INpcProvider m_npcProvider;
     }
 }
