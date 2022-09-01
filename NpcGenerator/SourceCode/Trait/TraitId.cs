@@ -19,13 +19,63 @@ using System.Text;
 
 namespace NpcGenerator
 {
-    public class TraitId
+    public class TraitId : IEquatable<TraitId>
     {
         public TraitId(string categoryName, string traitName)
         {
             CategoryName = categoryName;
             TraitName = traitName;
         }
+
+        //Taken from Microsoft example at
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/how-to-define-value-equality-for-a-type
+        public bool Equals(TraitId other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (GetType() != other.GetType())
+            {
+                return false;
+            }
+
+            // Return true if the fields match.
+            return (CategoryName == other.CategoryName) && (TraitName == other.TraitName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TraitId other)
+            {
+                return Equals(other);
+            }
+            return false;
+        }
+
+        public override int GetHashCode() => (CategoryName, TraitName).GetHashCode();
+
+        public static bool operator ==(TraitId lhs, TraitId rhs)
+        {
+            if (lhs is null)
+            {
+                if (rhs is null)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(TraitId lhs, TraitId rhs) => !(lhs == rhs);
 
         public string CategoryName { get; private set; }
         public string TraitName { get; private set; }
