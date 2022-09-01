@@ -378,6 +378,11 @@ namespace NpcGenerator
                 {
                     ShowLocalizedErrorMessageIfAllowed("self_requiring_category", exception.Category);
                 }
+                catch (TooFewTraitsInCategoryException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed(
+                        "too_few_traits_in_category", exception.Requested, exception.Category, exception.Available);
+                }
                 catch (FormatException exception)
                 {
                     ShowMessageIfAllowed(exception);

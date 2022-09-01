@@ -609,6 +609,7 @@ namespace Tests
             File.Delete(path);
         }
 
+        [TestMethod]
         public void DuplicateTraitNamesInDifferentCategories()
         {
             const string TRAIT_NAME = "Brown";
@@ -643,10 +644,52 @@ namespace Tests
 
             TraitSchema schema = parser.Parse(path);
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
-            
+
             Assert.AreEqual(2, categories.Count);
             Assert.IsNotNull(categories[0].GetTrait(TRAIT_NAME), "Missing expected trait in category");
             Assert.IsNotNull(categories[1].GetTrait(TRAIT_NAME), "Missing expected trait in category");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void TooFewTraitsinCategory()
+        {
+            const string CATEGORY = "Hair";
+            const int SELECTIONS = 10;
+            string path = Path.Combine(TestDirectory, "hair.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections': {SELECTIONS},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Brown', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (TooFewTraitsInCategoryException exception)
+            {
+                Assert.AreEqual(CATEGORY, exception.Category, "Wrong category name");
+                Assert.AreEqual(SELECTIONS, exception.Requested, "Wrong number of requested traits");
+                Assert.AreEqual(1, exception.Available, "Wrong number of available traits");
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a TooFewTraitsInCategoryException");
 
             File.Delete(path);
         }

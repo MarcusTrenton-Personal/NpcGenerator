@@ -45,6 +45,7 @@ namespace NpcGenerator
             ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
             DetectDuplicateCategoryNames(protoTraitSchema.trait_categories);
             DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
+            DetectTooFewTraitsInCategory(protoTraitSchema.trait_categories);
             TraitSchema traitSchema = ParseInternal(protoTraitSchema);
             return traitSchema;
         }
@@ -100,6 +101,19 @@ namespace NpcGenerator
                     {
                         traitNames.Add(protoTrait.Name);
                     }
+                }
+            }
+        }
+
+        private static void DetectTooFewTraitsInCategory(List<ProtoTraitCategory> categories)
+        {
+            foreach (ProtoTraitCategory category in categories)
+            {
+                int availableTraits = category.traits.Count;
+                int requiredTraits = category.Selections;
+                if (requiredTraits > availableTraits)
+                {
+                    throw new TooFewTraitsInCategoryException(category.Name, requiredTraits, availableTraits);
                 }
             }
         }
