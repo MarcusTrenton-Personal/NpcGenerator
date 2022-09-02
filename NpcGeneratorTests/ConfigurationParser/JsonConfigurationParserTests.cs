@@ -13,22 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see<https://www.gnu.org/licenses/>.*/
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using NpcGenerator;
 using System;
 using System.Collections.Generic;
@@ -135,7 +121,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonReaderException)
             {
                 threwException = true;
             }
@@ -252,7 +238,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -285,7 +271,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -294,7 +280,8 @@ namespace Tests
 
             File.Delete(path);
         }
-
+        
+        [TestMethod]
         public void MissingTraitName()
         {
             string path = Path.Combine(TestDirectory, "missingTraitName.json");
@@ -324,7 +311,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -365,7 +352,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -405,7 +392,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -447,7 +434,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -487,7 +474,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -511,7 +498,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
                 threwException = true;
             }
@@ -524,31 +511,32 @@ namespace Tests
         [TestMethod]
         public void DuplicateCategoryNames()
         {
+            const string CATEGORY = "Colour";
             string path = Path.Combine(TestDirectory, "colour.json");
-            string text = @"{
+            string text = $@"{{
                 'trait_categories' : [
-                    {
-                        'name' : 'Colour',
+                    {{
+                        'name' : '{CATEGORY}',
                         'selections': 1,
                         'traits' : [
-                            { 
+                            {{ 
                                 'name' : 'Green', 
                                 'weight' : 1
-                            }
+                            }}
                         ]
-                    },
-                    {
-                        'name' : 'Colour',
+                    }},
+                    {{
+                        'name' : '{CATEGORY}',
                         'selections': 1,
                         'traits' : [
-                            { 
+                            {{ 
                                 'name' : 'Red', 
                                 'weight' : 1
-                            }
+                            }}
                         ]
-                    }
+                    }}
                 ]
-            }";
+            }}";
             File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
@@ -558,8 +546,10 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch(Exception)
+            catch(DuplicateCategoryNameException exception)
             {
+                Assert.AreEqual(CATEGORY, exception.Category, "Reported category is wrong");
+
                 throwException = true;
             }
             
@@ -571,25 +561,27 @@ namespace Tests
         [TestMethod]
         public void DuplicateTraitNamesInACategory()
         {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
             string path = Path.Combine(TestDirectory, "colour.json");
-            string text = @"{
+            string text = $@"{{
                 'trait_categories' : [
-                    {
-                        'name' : 'Colour',
+                    {{
+                        'name' : '{CATEGORY}',
                         'selections': 1,
                         'traits' : [
-                            { 
-                                'name' : 'Green', 
+                            {{ 
+                                'name' : '{TRAIT}', 
                                 'weight' : 1
-                            },
-                            { 
-                                'name' : 'Green', 
+                            }},
+                            {{ 
+                                'name' : '{TRAIT}', 
                                 'weight' : 1
-                            }
+                            }}
                         ]
-                    }
+                    }}
                 ]
-            }";
+            }}";
             File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
@@ -599,8 +591,54 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (JsonFormatException)
             {
+                throwException = true;
+            }
+
+            Assert.IsTrue(throwException, "Duplicate trait names in the same category were not rejected.");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void DuplicateTraitNamesButDifferentAttributesInACategory()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+            string path = Path.Combine(TestDirectory, "colour.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : '{TRAIT}', 
+                                'weight' : 1,
+                                'hidden' : true
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool throwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (DuplicateTraitNamesInCategoryException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong duplicates identified");
+
                 throwException = true;
             }
 
@@ -694,6 +732,7 @@ namespace Tests
             File.Delete(path);
         }
 
+        [TestMethod]
         public void ReplacementsForSchemaWithReplacements()
         {
             const string REPLACEMENT_CATEGORY = "Colour";
@@ -731,8 +770,8 @@ namespace Tests
 
             IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
             Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
-            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category, "Wrong replacement category");
-            Assert.AreEqual(REPLACEMENT_TRAIT, replacements[0].Trait, "Wrong replacement trait");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category.Name, "Wrong replacement category");
+            Assert.AreEqual(REPLACEMENT_TRAIT, replacements[0].Trait.Name, "Wrong replacement trait");
 
             File.Delete(path);
         }
