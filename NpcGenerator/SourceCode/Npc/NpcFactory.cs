@@ -23,11 +23,11 @@ namespace NpcGenerator
     {
         public static NpcGroup Create(TraitSchema traitSchema, int npcCount, IReadOnlyList<Replacement> replacements, IRandom random)
         {
-            if (traitSchema == null)
+            if (traitSchema is null)
             {
                 throw new ArgumentNullException(nameof(traitSchema));
             }
-            if (replacements == null)
+            if (replacements is null)
             {
                 throw new ArgumentNullException(nameof(replacements));
             }

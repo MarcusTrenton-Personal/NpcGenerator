@@ -199,7 +199,7 @@ namespace NpcGenerator
         {
             string profilePath = filePathProvider.TrackingProfileFilePath;
             TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
-            if (trackingProfile == null)
+            if (trackingProfile is null)
             {
                 trackingProfile = new TrackingProfile();
             }
@@ -211,7 +211,7 @@ namespace NpcGenerator
         {
             string userSettingsPath = filePathProvider.UserSettingsFilePath;
             UserSettings userSettings = UserSettings.Load(userSettingsPath);
-            if (userSettings == null)
+            if (userSettings is null)
             {
                 userSettings = new UserSettings();
             }

@@ -23,7 +23,7 @@ namespace Services
         //Adapted from https://stackoverflow.com/questions/502199/how-to-open-a-web-page-from-my-application
         public static bool OpenUri(Uri uri)
         {
-            if(uri == null)
+            if(uri is null)
             {
                 throw new ArgumentNullException(nameof(uri));
             }

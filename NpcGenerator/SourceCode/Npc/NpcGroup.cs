@@ -34,7 +34,7 @@ namespace NpcGenerator
 
         private static void VerifyCategoryNotNullOrEmpty(IReadOnlyList<string> categoryOrder)
         {
-            if (categoryOrder == null)
+            if (categoryOrder is null)
             {
                 throw new ArgumentNullException(nameof(categoryOrder));
             }

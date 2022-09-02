@@ -28,7 +28,7 @@ namespace Services
             try
             {
                 RegistryKey rk = Registry.LocalMachine.OpenSubKey(path);
-                if (rk == null)
+                if (rk is null)
                 {
                     return string.Empty;
                 }

@@ -27,7 +27,7 @@ namespace NpcGenerator
 
         public void Add(string category, string[] traits)
         {
-            if (category == null)
+            if (category is null)
             {
                 throw new ArgumentNullException(nameof(category));
             }
@@ -35,7 +35,7 @@ namespace NpcGenerator
             {
                 throw new ArgumentException("string must not be null or empty", nameof(category));
             }
-            if (traits == null)
+            if (traits is null)
             {
                 throw new ArgumentNullException(nameof(traits));
             }
@@ -76,7 +76,7 @@ namespace NpcGenerator
 
         public bool HasTrait(TraitId traitId)
         {
-            if (traitId == null)
+            if (traitId is null)
             {
                 throw new ArgumentNullException(nameof(traitId));
             }

@@ -56,7 +56,7 @@ namespace NpcGenerator
         private static string ReplacementNameForTrait(IReadOnlyList<Replacement> replacements, Trait trait)
         {
             Replacement replacement = ListUtil.Find(replacements, replacement => replacement.OriginalTrait == trait);
-            return replacement == null ? trait.Name : replacement.ReplacementTraitName;
+            return replacement is null ? trait.Name : replacement.ReplacementTraitName;
         }
 
         private IReadOnlyList<Replacement> ReplacementsForThisCategory(IReadOnlyList<Replacement> replacements)
@@ -74,7 +74,7 @@ namespace NpcGenerator
 
         public void Add(Trait trait)
         {
-            if (trait == null)
+            if (trait is null)
             {
                 throw new ArgumentNullException(nameof(trait));
             }
@@ -89,12 +89,12 @@ namespace NpcGenerator
 
         public bool IsUnlockedFor(Npc npc)
         {
-            if (npc == null)
+            if (npc is null)
             {
                 throw new ArgumentNullException(nameof(npc));
             }
 
-            bool isUnlocked = m_requirement == null || m_requirement.IsUnlockedFor(npc);
+            bool isUnlocked = m_requirement is null || m_requirement.IsUnlockedFor(npc);
             return isUnlocked;
         }
 

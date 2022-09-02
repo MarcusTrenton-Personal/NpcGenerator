@@ -158,7 +158,7 @@ namespace NpcGenerator
                         Trait trait = originalCategory.GetTrait(protoTrait.Name);
 
                         TraitCategory targetCategory = ListUtil.Find(categories, category => category.Name == protoBonusSelection.trait_category_name);
-                        if (targetCategory == null)
+                        if (targetCategory is null)
                         {
                             throw new MismatchedBonusSelectionException(notFoundCategory: protoBonusSelection.trait_category_name,
                                 new TraitId(originalCategory.Name, trait.Name));
@@ -190,7 +190,7 @@ namespace NpcGenerator
 
         private static bool RequiresCategory(ProtoLogicalExpression protoExpression, TraitCategory category)
         {
-            if (protoExpression == null || category == null)
+            if (protoExpression is null || category is null)
             {
                 return false;
             }
@@ -312,13 +312,13 @@ namespace NpcGenerator
                 {
                     IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
                     TraitCategory category = ListUtil.Find(categories, category => category.Name == protoReplacement.category_name);
-                    if (category == null)
+                    if (category is null)
                     {
                         throw new MismatchedReplacementCategoryException(
                             new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
                     Trait trait = category.GetTrait(protoReplacement.trait_name);
-                    if (trait == null)
+                    if (trait is null)
                     {
                         throw new MismatchedReplacementTraitException(
                             new TraitId(protoReplacement.category_name, protoReplacement.trait_name));

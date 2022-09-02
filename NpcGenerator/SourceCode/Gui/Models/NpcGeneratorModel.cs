@@ -84,7 +84,7 @@ namespace NpcGenerator
 
         private void LazyParseTraitSchema()
         {
-            if (m_traitSchema == null && !m_configurationHasError)
+            if (m_traitSchema is null && !m_configurationHasError)
             {
                 m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
             }
@@ -203,7 +203,7 @@ namespace NpcGenerator
         private void ExecuteGenerateNpcs(object _)
         {
             LazyParseTraitSchema();
-            if (m_traitSchema == null)
+            if (m_traitSchema is null)
             {
                 return;
             }
@@ -418,7 +418,7 @@ namespace NpcGenerator
         private static List<ReplacementSubModel> MakeReplacementSubModels(TraitSchema traitSchema)
         {
             List<ReplacementSubModel> replacements = new List<ReplacementSubModel>();
-            if (traitSchema == null)
+            if (traitSchema is null)
             {
                 return replacements;
             }

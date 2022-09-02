@@ -32,7 +32,7 @@ namespace NpcGenerator
 
         public bool IsUnlockedFor(Npc npc)
         {
-            if (m_logicalExpression == null)
+            if (m_logicalExpression is null)
             {
                 throw new InvalidOperationException(nameof(ILogicalExpression) + " is needed. Call Initalize() first.");
             }

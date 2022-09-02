@@ -42,13 +42,13 @@ namespace NpcGenerator
 
         public bool HasTrait(TraitId traitId)
         {
-            if (traitId == null)
+            if (traitId is null)
             {
                 throw new ArgumentNullException(nameof(traitId));
             }
 
             TraitCategory category = m_categories.Find(category => category.Name == traitId.CategoryName);
-            if (category == null)
+            if (category is null)
             {
                 return false;
             }

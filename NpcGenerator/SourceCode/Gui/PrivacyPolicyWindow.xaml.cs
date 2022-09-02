@@ -33,7 +33,7 @@ namespace NpcGenerator
             IFilePathProvider filePathProvider, 
             ILocalizationModel localizationModel)
         {
-            if (filePathProvider == null)
+            if (filePathProvider is null)
             {
                 throw new ArgumentNullException(nameof(filePathProvider));
             }

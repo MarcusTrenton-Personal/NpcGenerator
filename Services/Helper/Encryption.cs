@@ -26,7 +26,7 @@ namespace Services
         [DebuggerHidden] //Thwart basic debugger attack. Try harder, hacker!
         public static string XorEncryptDecrypt(string text, int key)
         {
-            if(text == null)
+            if(text is null)
             {
                 throw new ArgumentNullException(nameof(text));
             }

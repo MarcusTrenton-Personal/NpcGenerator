@@ -22,7 +22,7 @@ namespace Services
     {
         public void Add(ILogicalExpression expression)
         {
-            if (expression == null)
+            if (expression is null)
             {
                 throw new ArgumentNullException("Cannot add null ILogicalExpression as it cannot be evaluated", nameof(expression));
             }
