@@ -260,9 +260,9 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
 
-            Requirement requirement = new Requirement();
-            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, TRAIT), requirement);
-            requirement.Initialize(expression);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, TRAIT), npcHolder);
+            Requirement requirement = new Requirement(expression, npcHolder);
 
             TraitCategory category = new TraitCategory("Animal", 1);
             category.Set(requirement);
@@ -279,9 +279,9 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
 
-            Requirement requirement = new Requirement();
-            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, "Blue"), requirement);
-            requirement.Initialize(expression);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, "Blue"), npcHolder);
+            Requirement requirement = new Requirement(expression, npcHolder);
 
             TraitCategory category = new TraitCategory("Animal", 1);
             category.Set(requirement);
@@ -300,9 +300,9 @@ namespace Tests
             const string DESIRED_TRAIT = "Blue";
             const string OTHER_TRAIT = "Orange";
 
-            Requirement requirement = new Requirement();
-            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, DESIRED_TRAIT), requirement);
-            requirement.Initialize(expression);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, DESIRED_TRAIT), npcHolder);
+            Requirement requirement = new Requirement(expression, npcHolder);
 
             TraitCategory category = new TraitCategory("Animal", 1);
             category.Set(requirement);
@@ -329,17 +329,16 @@ namespace Tests
             Npc npcWithInitialTrait = new Npc();
             npcWithInitialTrait.Add(CATEGORY, new string[] { INITIAL_TRAIT });
 
-            Requirement initialRequirement = new Requirement();
-            NpcHasTrait initialExpression = new NpcHasTrait(new TraitId(CATEGORY, INITIAL_TRAIT), initialRequirement);
-            initialRequirement.Initialize(initialExpression);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait initialExpression = new NpcHasTrait(new TraitId(CATEGORY, INITIAL_TRAIT), npcHolder);
+            Requirement initialRequirement = new Requirement(initialExpression, npcHolder);
             category.Set(initialRequirement);
 
             bool isInitialRequirementUnlockedForNpc = category.IsUnlockedFor(npcWithInitialTrait);
             Assert.IsTrue(isInitialRequirementUnlockedForNpc, "Failed to unlock category despite meeting the requirements");
 
-            Requirement subsequentRequirement = new Requirement();
-            NpcHasTrait subsequentExpression = new NpcHasTrait(new TraitId(CATEGORY, SUBSEQUENT_TRAIT), subsequentRequirement);
-            subsequentRequirement.Initialize(subsequentExpression);
+            NpcHasTrait subsequentExpression = new NpcHasTrait(new TraitId(CATEGORY, SUBSEQUENT_TRAIT), npcHolder);
+            Requirement subsequentRequirement = new Requirement(subsequentExpression, npcHolder);
             category.Set(subsequentRequirement);
 
             bool isSubsequentRequirementUnlockedForNpc = category.IsUnlockedFor(npcWithInitialTrait);

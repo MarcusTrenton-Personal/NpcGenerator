@@ -24,47 +24,44 @@ namespace Tests
     public class RequirementTests
     {
         [TestMethod]
-        public void InitializeNullLogicalExpression()
+        public void ConstructWithNullLogicalExpression()
         {
-            Requirement req = new Requirement();
+            
             bool threwException = false;
             try
             {
-                req.Initialize(null);
+                Requirement req = new Requirement(logicalExpression: null, new NpcHolder());
             }
             catch(ArgumentNullException)
             {
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException, "Did not throw ArgumentNullException with a null initialization.");
+            Assert.IsTrue(threwException, "Did not throw ArgumentNullException for null LogicalExpression in constructor.");
         }
 
         [TestMethod]
-        public void IsUnlockedWithoutIntialize()
+        public void ConstructWithNullNpcHolder()
         {
-            Npc npc = new Npc();
-            Requirement req = new Requirement();
 
             bool threwException = false;
             try
             {
-                bool isUnlocked = req.IsUnlockedFor(npc);
+                Requirement req = new Requirement(new AlwaysTrue(), npcHolder: null);
             }
-            catch (InvalidOperationException)
+            catch (ArgumentNullException)
             {
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException, "Did not throw ArgumentNullException with a null initialization.");
+            Assert.IsTrue(threwException, "Did not throw ArgumentNullException for null NpcHolder in constructor.");
         }
 
         [TestMethod]
         public void IsUnlockedForAlwaysTrueExpression()
         {
             Npc npc = new Npc();
-            Requirement req = new Requirement();
-            req.Initialize(new AlwaysTrue());
+            Requirement req = new Requirement(new AlwaysTrue(), new NpcHolder());
 
             bool isUnlocked = req.IsUnlockedFor(npc);
 
@@ -75,8 +72,7 @@ namespace Tests
         public void IsUnlockedForAlwaysFalseExpression()
         {
             Npc npc = new Npc();
-            Requirement req = new Requirement();
-            req.Initialize(new AlwaysFalse());
+            Requirement req = new Requirement(new AlwaysFalse(), new NpcHolder());
 
             bool isUnlocked = req.IsUnlockedFor(npc);
 
@@ -90,8 +86,7 @@ namespace Tests
             LogicalAny any = new LogicalAny();
             any.Add(new AlwaysTrue());
             any.Add(new AlwaysFalse());
-            Requirement req = new Requirement();
-            req.Initialize(any);
+            Requirement req = new Requirement(any, new NpcHolder());
 
             bool isUnlocked = req.IsUnlockedFor(npc);
 
@@ -99,23 +94,9 @@ namespace Tests
         }
 
         [TestMethod]
-        public void MultipleInitialize()
-        {
-            Npc npc = new Npc();
-            Requirement req = new Requirement();
-            req.Initialize(new AlwaysTrue());
-            req.Initialize(new AlwaysFalse());
-
-            bool isUnlocked = req.IsUnlockedFor(npc);
-
-            Assert.IsFalse(isUnlocked, "Did not evaluate logical expresssion correctly.");
-        }
-
-        [TestMethod]
         public void IsUnlockedForNullNpc()
         {
-            Requirement req = new Requirement();
-            req.Initialize(new AlwaysTrue());
+            Requirement req = new Requirement(new AlwaysTrue(), new NpcHolder());
 
             bool threwException = false;
             try
@@ -139,8 +120,9 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(CATEGORY, new string[] { TRAIT });
 
-            Requirement req = new Requirement();
-            req.Initialize(new NpcHasTrait(new TraitId(CATEGORY, TRAIT), req));
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(CATEGORY, TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
 
             bool isUnlocked = req.IsUnlockedFor(npc);
 
@@ -155,8 +137,10 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(CATEGORY, new string[] { "blue" });
 
-            Requirement req = new Requirement();
-            req.Initialize(new NpcHasTrait(new TraitId(CATEGORY, "red"), req));
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(CATEGORY, "red"), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+
             bool isUnlocked = req.IsUnlockedFor(npc);
 
             Assert.IsFalse(isUnlocked, "Did not evaluate logical expresssion correctly.");
@@ -171,11 +155,11 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(CATEGORY, new string[] { TRAIT });
 
-            Requirement req = new Requirement();
+            NpcHolder npcHolder = new NpcHolder();
             LogicalAny any = new LogicalAny();
-            any.Add(new NpcHasTrait(new TraitId(CATEGORY, TRAIT), req));
-            any.Add(new NpcHasTrait(new TraitId(CATEGORY, "red"), req));
-            req.Initialize(any);
+            any.Add(new NpcHasTrait(new TraitId(CATEGORY, TRAIT), npcHolder));
+            any.Add(new NpcHasTrait(new TraitId(CATEGORY, "red"), npcHolder));
+            Requirement req = new Requirement(any, npcHolder);
 
             bool isUnlocked = req.IsUnlockedFor(npc);
 

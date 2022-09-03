@@ -17,6 +17,6 @@ namespace NpcGenerator
 {
     public interface INpcProvider
     {
-        Npc GetNpc();
+        Npc Npc { get; }
     }
 }

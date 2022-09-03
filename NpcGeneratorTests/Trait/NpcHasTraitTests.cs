@@ -35,20 +35,10 @@ namespace Tests
         {
             public StubNpcProvider(Npc npc)
             {
-                m_npc = npc;
+                Npc = npc;
             }
 
-            public Npc GetNpc()
-            {
-                return m_npc;
-            }
-
-            public void SetNpc(Npc npc)
-            {
-                m_npc = npc;
-            }
-
-            private Npc m_npc;
+            public Npc Npc { get; set; }
         }
 
         public NpcHasTraitTests()
@@ -152,7 +142,7 @@ namespace Tests
             bool initialIsFound = expression.Evaluate();
             Assert.IsFalse(initialIsFound, "Incorrectly found a trait in an empty npc");
 
-            provider.SetNpc(m_npcWithTrait);
+            provider.Npc = m_npcWithTrait;
             bool followUpIsFound = expression.Evaluate();
             Assert.IsTrue(followUpIsFound, "Did not find the trait even though the Npc has it");
         }
@@ -167,7 +157,7 @@ namespace Tests
             Assert.IsTrue(initialIsFound, "Did not find the trait even though the Npc has it");
             
             Npc emptyNpc = new Npc();
-            provider.SetNpc(emptyNpc);
+            provider.Npc = emptyNpc;
             bool followUpIsFound = expression.Evaluate();
             Assert.IsFalse(followUpIsFound, "Incorrectly found a trait in an empty npc");
         }

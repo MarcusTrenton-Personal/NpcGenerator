@@ -13,27 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
-using Services;
-using System;
-
 namespace NpcGenerator
 {
-    public class NpcHasTrait : ILogicalExpression
+    public class NpcHolder : INpcProvider
     {
-        public NpcHasTrait(TraitId traitId, INpcProvider npcProvider)
-        {
-            m_traitId = traitId ?? throw new ArgumentNullException(nameof(traitId));
-            m_npcProvider = npcProvider ?? throw new ArgumentNullException(nameof(npcProvider));
-        }
-
-        public bool Evaluate()
-        {
-            Npc npc = m_npcProvider.Npc ?? throw new InvalidOperationException(nameof(npc) + " given by INpcProvider is null.");
-            bool hasTrait = npc.HasTrait(m_traitId);
-            return hasTrait;
-        }
-
-        private readonly TraitId m_traitId;
-        private readonly INpcProvider m_npcProvider;
+        public Npc Npc { get; set; }
     }
 }

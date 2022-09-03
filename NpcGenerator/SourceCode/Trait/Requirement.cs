@@ -18,16 +18,12 @@ using System;
 
 namespace NpcGenerator
 {
-    public class Requirement : INpcProvider
+    public class Requirement
     {
-        public void Initialize(ILogicalExpression logicalExpression)
+        public Requirement (ILogicalExpression logicalExpression, NpcHolder npcHolder)
         {
             m_logicalExpression = logicalExpression ?? throw new ArgumentNullException(nameof(logicalExpression));
-        }
-
-        public Npc GetNpc()
-        {
-            return m_npc;
+            m_npcHolder = npcHolder ?? throw new ArgumentNullException(nameof(npcHolder));
         }
 
         public bool IsUnlockedFor(Npc npc)
@@ -36,14 +32,18 @@ namespace NpcGenerator
             {
                 throw new InvalidOperationException(nameof(ILogicalExpression) + " is needed. Call Initalize() first.");
             }
+            if (npc is null)
+            {
+                throw new ArgumentNullException(nameof(npc));
+            }
 
-            m_npc = npc ?? throw new ArgumentNullException(nameof(npc));
+            m_npcHolder.Npc = npc;
             bool result = m_logicalExpression.Evaluate();
-            m_npc = null;
+            m_npcHolder.Npc = null;
             return result;
         }
 
-        private ILogicalExpression m_logicalExpression;
-        private Npc m_npc = null;
+        private readonly ILogicalExpression m_logicalExpression;
+        private readonly NpcHolder m_npcHolder;
     }
 }

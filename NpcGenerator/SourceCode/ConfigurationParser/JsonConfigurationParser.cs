@@ -220,14 +220,13 @@ namespace NpcGenerator
         {
             if (protoLogicalExpression != null)
             {
-                Requirement requirement = new Requirement();
+                NpcHolder npcHolder = new NpcHolder();
                 ILogicalExpression logicalExpression = ParseLogicalExpression(
                     protoLogicalExpression,
                     requirementCategory,
                     schema,
-                    requirement);
-
-                requirement.Initialize(logicalExpression);
+                    npcHolder);
+                return new Requirement(logicalExpression, npcHolder);
             }
             return null;
         }
