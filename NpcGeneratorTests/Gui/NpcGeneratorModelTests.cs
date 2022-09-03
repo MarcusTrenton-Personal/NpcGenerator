@@ -123,7 +123,7 @@ namespace Tests
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile();
 
-            TraitSchema Callback(string path)
+            static TraitSchema Callback(string path)
             {
                 Trait green = new Trait("Green", 1, isHidden: false);
                 Trait red = new Trait("Red", 1, isHidden: false);
@@ -212,7 +212,7 @@ namespace Tests
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile();
 
-            TraitSchema Callback(string path)
+            static TraitSchema Callback(string path)
             {
                 Trait green = new Trait("Green", 1, isHidden: false);
                 Trait red = new Trait("Red", 1, isHidden: false);
@@ -253,7 +253,7 @@ namespace Tests
             const string ORIGINAL_TRAIT_NAME = "Green";
             const string REPLACEMENT_CANDIDATE_TRAIT_NAME = "Red";
 
-            TraitSchema Callback(string path)
+            static TraitSchema Callback(string path)
             {
                 Trait originalTrait = new Trait(ORIGINAL_TRAIT_NAME, 1, isHidden: false);
                 Trait replacementCandidateTrait = new Trait(REPLACEMENT_CANDIDATE_TRAIT_NAME, 1, isHidden: false);
@@ -305,6 +305,72 @@ namespace Tests
             static IOException CreateCallback()
             {
                 return new IOException();
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesEmptyFileException()
+        {
+            static EmptyFileException CreateCallback()
+            {
+                return new EmptyFileException("test.csv");
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesEmptyCategoryNameException()
+        {
+            static EmptyCategoryNameException CreateCallback()
+            {
+                return new EmptyCategoryNameException();
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesCategoryWeightMismatchException()
+        {
+            static CategoryWeightMismatchException CreateCallback()
+            {
+                return new CategoryWeightMismatchException();
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesTraitMissingCategoryException()
+        {
+            static TraitMissingCategoryException CreateCallback()
+            {
+                return new TraitMissingCategoryException("Blue");
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesMissingWeightException()
+        {
+            static MissingWeightException CreateCallback()
+            {
+                return new MissingWeightException(new TraitId("Animal", "Bear"));
+            }
+
+            GenerateCatches(CreateCallback);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesWeightIsNotWholeNumberException()
+        {
+            static WeightIsNotWholeNumberException CreateCallback()
+            {
+                return new WeightIsNotWholeNumberException(new TraitId("Animal", "Bear"), "-1.5");
             }
 
             GenerateCatches(CreateCallback);
@@ -388,28 +454,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GenerateCatchesFormatException()
-        {
-            static FormatException CreateCallback()
-            {
-                return new FormatException();
-            }
-
-            GenerateCatches(CreateCallback);
-        }
-
-        [TestMethod]
-        public void GenerateCatchesArithmeticException()
-        {
-            static ArithmeticException CreateCallback()
-            {
-                return new ArithmeticException();
-            }
-
-            GenerateCatches(CreateCallback);
-        }
-
-        [TestMethod]
         public void GenerateCatchesTooFewTraitsInCategoryException()
         {
             static TooFewTraitsInCategoryException CreateCallback()
@@ -465,7 +509,7 @@ namespace Tests
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile();
 
-            TraitSchema Callback(string path)
+            static TraitSchema Callback(string path)
             {
                 throw new Exception();
             }
@@ -503,7 +547,7 @@ namespace Tests
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile();
 
-            TraitSchema Callback(string path)
+            static TraitSchema Callback(string path)
             {
                 Trait trait = new Trait("Green", 1, isHidden: false);
                 TraitCategory category = new TraitCategory("Colour", 1);
@@ -524,9 +568,10 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
-
-            npcGeneratorModel.NpcQuantity = 1;
+                showErrorMessages: false)
+            {
+                NpcQuantity = 1
+            };
 
             bool modelCaughtException = true;
             try

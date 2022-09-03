@@ -95,7 +95,7 @@ namespace NpcGenerator
                     bool isDuplicateName = traitNames.Contains(protoTrait.Name);
                     if (isDuplicateName)
                     {
-                        throw new DuplicateTraitNamesInCategoryException(new TraitId(protoCategory.Name, protoTrait.Name));
+                        throw new DuplicateTraitNameInCategoryException(new TraitId(protoCategory.Name, protoTrait.Name));
                     }
                     else
                     {

@@ -30,10 +30,11 @@ namespace NpcGenerator
             bool hasTitleRow = enumerator.MoveNext();
             if (!hasTitleRow)
             {
-                throw new IOException("The file is empty: " + path);
+                string fileName = Path.GetFileName(path);
+                throw new EmptyFileException(fileName);
             }
 
-            TraitSchema traitSchema = ParseTitles(enumerator.Current);
+            TraitSchema traitSchema = ParseCategories(enumerator.Current);
 
             while (enumerator.MoveNext())
             {
@@ -45,13 +46,13 @@ namespace NpcGenerator
             return traitSchema;
         }
 
-        private static TraitSchema ParseTitles(string titleRow)
+        private static TraitSchema ParseCategories(string titleRow)
         {
             string[] titleCells = titleRow.Split(',');
             bool hasMatchingTraitWeightPairs = titleCells.Length % 2 == 0;
             if (!hasMatchingTraitWeightPairs)
             {
-                throw new IOException("The configuration file must have an equal number of trait and weight columns with no empty columns in between.");
+                throw new CategoryWeightMismatchException();
             }
 
             TraitSchema traitSchema = new TraitSchema();
@@ -61,7 +62,7 @@ namespace NpcGenerator
                 bool isEmpty = string.IsNullOrEmpty(title);
                 if (isEmpty)
                 {
-                    throw new FormatException("Missing title for trait column");
+                    throw new EmptyCategoryNameException();
                 }
                 traitSchema.Add(new TraitCategory(title, selectionCount: 1));
             }
@@ -100,7 +101,7 @@ namespace NpcGenerator
                     bool duplicateFound = matchingNames.Length > 1;
                     if (duplicateFound)
                     {
-                        throw new DuplicateTraitNamesInCategoryException(new TraitId(category.Name, traitNames[j]));
+                        throw new DuplicateTraitNameInCategoryException(new TraitId(category.Name, traitNames[j]));
                     }
                 }
             }
@@ -117,22 +118,28 @@ namespace NpcGenerator
                 {
                     if (i >= categories.Count)
                     {
-                        throw new FormatException("Trait " + traitName + " is missing a column title.");
+                        throw new TraitMissingCategoryException(traitName);
                     }
 
-                    string traitWeightString = cells[i * 2 + 1];
+                    int weightIndex = i * 2 + 1;
+                    if (weightIndex >= cells.Length)
+                    {
+                        throw new MissingWeightException(new TraitId(categories[i].Name, traitName));
+                    }
+
+                    string traitWeightString = cells[weightIndex];
                     if (!string.IsNullOrEmpty(traitWeightString))
                     {
                         bool isInteger = int.TryParse(traitWeightString, out int weight);
                         if (!isInteger || weight < 0)
                         {
-                            throw new ArithmeticException("Weight for " + traitWeightString + " is not a whole number of at least 0");
+                            throw new WeightIsNotWholeNumberException(new TraitId(categories[i].Name, traitName), traitWeightString);
                         }
                         categories[i].Add(new Trait(traitName, weight, isHidden: false));
                     }
                     else
                     {
-                        throw new FormatException("Trait " + traitName + " is missing a weight");
+                        throw new MissingWeightException(new TraitId(categories[i].Name, traitName));
                     }
                 }
             }

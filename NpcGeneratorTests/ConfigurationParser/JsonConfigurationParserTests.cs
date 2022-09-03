@@ -635,7 +635,7 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (DuplicateTraitNamesInCategoryException exception)
+            catch (DuplicateTraitNameInCategoryException exception)
             {
                 Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong duplicates identified");
 

@@ -14,9 +14,60 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see<https://www.gnu.org/licenses/>.*/
 
 using System;
+using System.IO;
 
 namespace NpcGenerator
 {
+    public class EmptyFileException : IOException
+    {
+        public EmptyFileException(string fileName)
+        {
+            FileName = fileName;
+        }
+
+        public string FileName { get; private set; }
+    }
+
+    public class CategoryWeightMismatchException : FormatException
+    {
+    }
+
+    public class EmptyCategoryNameException : FormatException
+    {
+    }
+
+    public class TraitMissingCategoryException : FormatException
+    {
+        public TraitMissingCategoryException(string traitName)
+        {
+            TraitName = traitName;
+        }
+
+        public string TraitName { get; private set; }
+    }
+
+    public class MissingWeightException : FormatException
+    {
+        public MissingWeightException(TraitId traitId)
+        {
+            TraitId = traitId;
+        }
+
+        public TraitId TraitId { get; private set; }
+    }
+
+    public class WeightIsNotWholeNumberException : FormatException
+    {
+        public WeightIsNotWholeNumberException(TraitId traitId, string invalidWeight)
+        {
+            TraitId = traitId;
+            InvalidWeight = invalidWeight;
+        }
+
+        public TraitId TraitId { get; private set; }
+        public string InvalidWeight { get; private set; }
+    }
+
     public class MismatchedBonusSelectionException : FormatException
     {
         public MismatchedBonusSelectionException(string notFoundCategory, TraitId sourceTraitId)
@@ -59,9 +110,9 @@ namespace NpcGenerator
         public string Category { get; private set; }
     }
 
-    public class DuplicateTraitNamesInCategoryException : FormatException
+    public class DuplicateTraitNameInCategoryException : FormatException
     {
-        public DuplicateTraitNamesInCategoryException(TraitId traitId)
+        public DuplicateTraitNameInCategoryException(TraitId traitId)
         {
             TraitId = traitId;
         }

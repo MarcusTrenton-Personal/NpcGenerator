@@ -326,9 +326,33 @@ namespace NpcGenerator
                     traitSchema = m_parser.Parse(cachedConfigurationPath);
                     isSuccess = true;
                 }
-                catch (IOException exception)
+                catch (EmptyFileException exception)
                 {
-                    ShowMessageIfAllowed(exception);
+                    ShowLocalizedErrorMessageIfAllowed("empty_file", exception.FileName);
+                }
+                catch (CategoryWeightMismatchException)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("category_weight_mismatch");
+                }
+                catch (EmptyCategoryNameException)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("empty_category_name");
+                }
+                catch (TraitMissingCategoryException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("trait_has_no_category", exception.TraitName);
+                }
+                catch (MissingWeightException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("trait_has_no_weight", exception.TraitId.CategoryName, exception.TraitId.TraitName);
+                }
+                catch (WeightIsNotWholeNumberException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed(
+                        "trait_weight_is_not_whole_number", 
+                        exception.TraitId.CategoryName, 
+                        exception.TraitId.TraitName, 
+                        exception.InvalidWeight);
                 }
                 catch (JsonFormatException exception)
                 {
@@ -383,11 +407,7 @@ namespace NpcGenerator
                     ShowLocalizedErrorMessageIfAllowed(
                         "too_few_traits_in_category", exception.Requested, exception.Category, exception.Available);
                 }
-                catch (FormatException exception)
-                {
-                    ShowMessageIfAllowed(exception);
-                }
-                catch (ArithmeticException exception)
+                catch (IOException exception)
                 {
                     ShowMessageIfAllowed(exception);
                 }

@@ -41,6 +41,32 @@ namespace Tests
         }
 
         [TestMethod]
+        public void EmptyFile()
+        {
+            const string FILE_NAME = "empty.csv";
+            string path = Path.Combine(TestDirectory, FILE_NAME);
+            string text = "";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (EmptyFileException exception)
+            {
+                Assert.AreEqual(FILE_NAME, exception.FileName, "Wrong file name returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Empty file failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
         public void TraitSchemaHasTraitsInCorrectTraitCategories()
         {
             const string CATEGORY1_TITLE = "Colour";
@@ -102,7 +128,7 @@ namespace Tests
                 CsvConfigurationParser parser = new CsvConfigurationParser();
                 TraitSchema schema = parser.Parse(path);
             }
-            catch(Exception)
+            catch(EmptyCategoryNameException)
             {
                 threwException = true;
             }
@@ -115,9 +141,11 @@ namespace Tests
         [TestMethod]
         public void MissingSecondTitleThrowsException()
         {
+            const string FIRST_TRAIT_MISSING_CATEGORY = "Gorilla";
+
             string path = Path.Combine(TestDirectory, "missingSecondTitle.csv");
             string text = "Colour,Weight\n" +
-                "Green,1,Gorilla,1\n" +
+                "Green,1," + FIRST_TRAIT_MISSING_CATEGORY + ",1\n" +
                 "Red,1,Rhino,1";
             File.WriteAllText(path, text);
 
@@ -127,8 +155,10 @@ namespace Tests
                 CsvConfigurationParser parser = new CsvConfigurationParser();
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (TraitMissingCategoryException exception)
             {
+                Assert.AreEqual(FIRST_TRAIT_MISSING_CATEGORY, exception.TraitName, "Wrong trait name returned");
+
                 threwException = true;
             }
 
@@ -138,10 +168,325 @@ namespace Tests
         }
 
         [TestMethod]
+        public void MissingWeightColumn()
+        {
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = "Colour\n" +
+                "Green,1\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (CategoryWeightMismatchException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Missing weight column failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ExtraColumn()
+        {
+            string path = Path.Combine(TestDirectory, "bonusSelection.csv");
+            string text = "Colour,Weight,Bonus Selection\n" +
+                "Green,1\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (CategoryWeightMismatchException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Extra column failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void SkipFirstColumn()
+        {
+            string path = Path.Combine(TestDirectory, "skipFirstColumn.csv");
+            string text = ",Colour,Weight\n" +
+                ",Green,1\n" +
+                ",Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (CategoryWeightMismatchException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Skipping first column failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void SkipMiddleColumn()
+        {
+            string path = Path.Combine(TestDirectory, "skipMiddleColumn.csv");
+            string text = "Colour,,Weight\n" +
+                "Green,,1\n" +
+                "Red,,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (CategoryWeightMismatchException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Skipping middle column failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void SkipColumnBetweenCategories()
+        {
+            string path = Path.Combine(TestDirectory, "skipMiddleColumn.csv");
+            string text = "Colour,Weight,,Animal,Weight\n" +
+                "Green,1,,Bear,1\n" +
+                "Red,1,,Rhino,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (CategoryWeightMismatchException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Skipping column between categories failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MissingWeightCell()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + "\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (MissingWeightException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Missing weight cell failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void EmptyWeightCell()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + ",\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (MissingWeightException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void WeightIsNegative()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+            const string WEIGHT = "-2";
+
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + "," + WEIGHT + "\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (WeightIsNotWholeNumberException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
+                Assert.AreEqual(WEIGHT, exception.InvalidWeight, "Wrong weight returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void WeightIsFraction()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+            const string WEIGHT = "2.0";
+
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + "," + WEIGHT + "\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (WeightIsNotWholeNumberException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
+                Assert.AreEqual(WEIGHT, exception.InvalidWeight, "Wrong weight returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void WeightIsWord()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+            const string WEIGHT = "One";
+
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + "," + WEIGHT + "\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (WeightIsNotWholeNumberException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
+                Assert.AreEqual(WEIGHT, exception.InvalidWeight, "Wrong weight returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void WeightIsBool()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+            const string WEIGHT = "false";
+
+            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + "," + WEIGHT + "\n" +
+                "Red,1";
+            File.WriteAllText(path, text);
+
+            bool threwException = false;
+            try
+            {
+                CsvConfigurationParser parser = new CsvConfigurationParser();
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (WeightIsNotWholeNumberException exception)
+            {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
+                Assert.AreEqual(WEIGHT, exception.InvalidWeight, "Wrong weight returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
         public void DuplicateCategoryNames()
         {
+            const string CATEGORY = "Colour";
+
             string path = Path.Combine(TestDirectory, "colour.csv");
-            string text = "Colour,Weight,Colour,Weight\n" +
+            string text = CATEGORY + ",Weight," + CATEGORY + ",Weight\n" +
                 "Green,1,Red,1";
             File.WriteAllText(path, text);
 
@@ -152,8 +497,10 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch(Exception)
+            catch(DuplicateCategoryNameException exception)
             {
+                Assert.AreEqual(CATEGORY, exception.Category, "Wrong duplicate detected");
+
                 threwException = true;
             }
             
@@ -165,10 +512,13 @@ namespace Tests
         [TestMethod]
         public void DuplicateTraitNamesInACategory()
         {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Green";
+
             string path = Path.Combine(TestDirectory, "colour.csv");
-            string text = "Colour,Weight\n" +
-                "Green,1\n" +
-                "Green,1";
+            string text = CATEGORY + ",Weight\n" +
+                TRAIT + ",1\n" +
+                TRAIT + ",1";
             File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
@@ -178,8 +528,10 @@ namespace Tests
             {
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception)
+            catch (DuplicateTraitNameInCategoryException exception)
             {
+                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong duplicate TraitId detected");
+
                 threwException = true;
             }
 
@@ -209,6 +561,6 @@ namespace Tests
             File.Delete(path);
         }
 
-        MockRandom m_random = new MockRandom();
+        readonly MockRandom m_random = new MockRandom();
     }
 }
