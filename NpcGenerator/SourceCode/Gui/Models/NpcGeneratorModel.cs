@@ -372,12 +372,12 @@ namespace NpcGenerator
                         exception.SourceTraitId.TraitName,
                         exception.NotFoundCategoryName);
                 }
-                catch (MismatchedReplacementTraitException exception)
+                catch (MissingReplacementTraitException exception)
                 {
                     ShowLocalizedErrorMessageIfAllowed(
                         "mismatched_replacement_trait", exception.TraitId.TraitName, exception.TraitId.CategoryName);
                 }
-                catch (MismatchedReplacementCategoryException exception)
+                catch (MissingReplacementCategoryException exception)
                 {
                     ShowLocalizedErrorMessageIfAllowed(
                         "mismatched_replacement_category", exception.TraitId.CategoryName, exception.TraitId.TraitName);

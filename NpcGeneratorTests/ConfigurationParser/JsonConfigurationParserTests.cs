@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -747,11 +748,11 @@ namespace Tests
                 ],
                 'trait_categories' : [
                     {{
-                        'name' : 'Colour',
+                        'name' : '{REPLACEMENT_CATEGORY}',
                         'selections': 1,
                         'traits' : [
                             {{ 
-                                'name' : 'Green', 
+                                'name' : '{REPLACEMENT_TRAIT}', 
                                 'weight' : 1
                             }},
                             {{ 
@@ -776,8 +777,739 @@ namespace Tests
             File.Delete(path);
         }
 
-        //TODO: ALSO TEST BONUS SELECTIONS
+        [TestMethod]
+        public void ReplacementsForSchemaWithMultipleReplacements()
+        {
+            const string REPLACEMENT_CATEGORY0 = "Colour";
+            const string REPLACEMENT_TRAIT0 = "Green";
+            const string REPLACEMENT_CATEGORY1 = "Animal";
+            const string REPLACEMENT_TRAIT1 = "Bear";
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY0}',
+                        'trait_name' : '{REPLACEMENT_TRAIT0}'
+                    }},
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY1}',
+                        'trait_name' : '{REPLACEMENT_TRAIT1}'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{REPLACEMENT_CATEGORY0}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REPLACEMENT_TRAIT0}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{REPLACEMENT_CATEGORY1}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REPLACEMENT_TRAIT1}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Rhino', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            TraitSchema schema = parser.Parse(path);
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
+            Assert.AreEqual(2, replacements.Count, "Wrong number of replacements found.");
+
+            ReplacementSearch replacement0 = ListUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY0);
+            Assert.AreEqual(REPLACEMENT_CATEGORY0, replacement0.Category.Name, "Wrong replacement category");
+            Assert.AreEqual(REPLACEMENT_TRAIT0, replacement0.Trait.Name, "Wrong replacement trait");
+
+            ReplacementSearch replacement1 = ListUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY1);
+            Assert.AreEqual(REPLACEMENT_CATEGORY1, replacement1.Category.Name, "Wrong replacement category");
+            Assert.AreEqual(REPLACEMENT_TRAIT1, replacement1.Trait.Name, "Wrong replacement trait");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementHasMissingTrait()
+        {
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string MISSING_REPLACEMENT_TRAIT = "Blue";
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{MISSING_REPLACEMENT_TRAIT}'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{REPLACEMENT_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (MissingReplacementTraitException exception)
+            {
+                Assert.AreEqual(new TraitId(REPLACEMENT_CATEGORY, MISSING_REPLACEMENT_TRAIT), exception.TraitId);
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementHasMissingCategory()
+        {
+            const string MISSING_REPLACEMENT_CATEGORY = "Hair";
+            const string REPLACEMENT_TRAIT = "Green";
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{MISSING_REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{REPLACEMENT_TRAIT}'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REPLACEMENT_TRAIT}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (MissingReplacementCategoryException exception)
+            {
+                Assert.AreEqual(new TraitId(MISSING_REPLACEMENT_CATEGORY, REPLACEMENT_TRAIT), exception.TraitId);
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementHasNoCategory()
+        {
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : 'Colour'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementHasNoTrait()
+        {
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'trait_name' : 'Green'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementIsEmpty()
+        {
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Green', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void ReplacementHasMultipleIdenticalObjects()
+        {
+            const string REPLACEMENT_CATEGORY = "Hair";
+            const string REPLACEMENT_TRAIT = "Green";
+            string path = Path.Combine(TestDirectory, "replacements.json");
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{REPLACEMENT_TRAIT}'
+                    }},
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{REPLACEMENT_TRAIT}'
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{REPLACEMENT_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REPLACEMENT_TRAIT}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionForMissingCategory()
+        {
+            const string PRESENT_CATEGORY = "Animal";
+            const string PRESENT_TRAIT = "Bear";
+            const string MISSING_CATEGORY = "Hair";
+            string path = Path.Combine(TestDirectory, "missingHair.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{PRESENT_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{PRESENT_TRAIT}', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : '{MISSING_CATEGORY}', 'selections' : 1 }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (MismatchedBonusSelectionException exception)
+            {
+                Assert.AreEqual(MISSING_CATEGORY, exception.NotFoundCategoryName, "Wrong missing category name");
+                Assert.AreEqual(new TraitId(PRESENT_CATEGORY, PRESENT_TRAIT), exception.SourceTraitId, "Wrong SourceTraitId");
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a MismatchedBonusSelectionException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithMissingTraitName()
+        {
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'selections' : 1 }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithMissingSelection()
+        {
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : 'Animal' }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithNegativeSelection()
+        {
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : 'Animal', 'selections' : -1 }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithFractionSelection()
+        {
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : 'Animal', 'selections' : 1.5 }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithTextSelection()
+        {
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : 'Animal', 'selections' : '1' }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithOneSelfSelection()
+        {
+            const string TRAIT = "Bear";
+            const string CATEGORY = "Animal";
+            const int SELECTION_COUNT = 1;
+
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT}', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY}', 'selections' : {SELECTION_COUNT} }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            TraitSchema schema = parser.Parse(path);
+
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            TraitCategory category = categories[0];
+            Trait trait = category.GetTrait(TRAIT);
+            BonusSelection bonusSelection = trait.BonusSelection;
+
+            Assert.IsNotNull(bonusSelection);
+            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name);
+            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionWithZeroSelections()
+        {
+            const string TRAIT = "Bear";
+            const string CATEGORY = "Animal";
+            const int SELECTION_COUNT = 0;
+
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT}', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY}', 'selections' : {SELECTION_COUNT} }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            TraitSchema schema = parser.Parse(path);
+
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            TraitCategory category = categories[0];
+            Trait trait = category.GetTrait(TRAIT);
+            BonusSelection bonusSelection = trait.BonusSelection;
+
+            Assert.IsNotNull(bonusSelection);
+            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name);
+            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount);
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void BonusSelectionForADifferentCategory()
+        {
+            const string TRAIT = "Bear";
+            const string SOURCE_CATEGORY = "Animal";
+            const string TARGET_CATEGORY = "Hair";
+            const int SELECTION_COUNT = 1;
+
+            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{SOURCE_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT}', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : '{TARGET_CATEGORY}', 'selections' : {SELECTION_COUNT} }}
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{TARGET_CATEGORY}',
+                        'selections': 0,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Fuzzy', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+
+            TraitSchema schema = parser.Parse(path);
+
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            TraitCategory category = ListUtil.Find(categories, category => category.Name == SOURCE_CATEGORY);
+            Trait trait = category.GetTrait(TRAIT);
+            BonusSelection bonusSelection = trait.BonusSelection;
+
+            Assert.IsNotNull(bonusSelection);
+            Assert.AreEqual(TARGET_CATEGORY, bonusSelection.TraitCategory.Name);
+            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount);
+
+            File.Delete(path);
+        }
+
         //TODO: EVERY PARSE EXCEPTION
+        //RequirementTraitIdNotFoundException
+        //UnknownLogicalOperatorException
+        //SelfRequiringCategoryException
 
         private readonly MockRandom m_random = new MockRandom();
     }

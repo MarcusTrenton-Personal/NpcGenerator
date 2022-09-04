@@ -390,9 +390,9 @@ namespace Tests
         [TestMethod]
         public void GenerateCatchesMismatchedReplacementTraitException()
         {
-            static MismatchedReplacementTraitException CreateCallback()
+            static MissingReplacementTraitException CreateCallback()
             {
-                return new MismatchedReplacementTraitException(new TraitId("Colour", "Blue"));
+                return new MissingReplacementTraitException(new TraitId("Colour", "Blue"));
             }
 
             GenerateCatches(CreateCallback);
@@ -401,9 +401,9 @@ namespace Tests
         [TestMethod]
         public void GenerateCatchesMismatchedReplacementCategoryException()
         {
-            static MismatchedReplacementCategoryException CreateCallback()
+            static MissingReplacementCategoryException CreateCallback()
             {
-                return new MismatchedReplacementCategoryException(new TraitId("Colour", "Blue"));
+                return new MissingReplacementCategoryException(new TraitId("Colour", "Blue"));
             }
 
             GenerateCatches(CreateCallback);

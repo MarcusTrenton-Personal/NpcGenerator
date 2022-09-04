@@ -313,13 +313,13 @@ namespace NpcGenerator
                     TraitCategory category = ListUtil.Find(categories, category => category.Name == protoReplacement.category_name);
                     if (category is null)
                     {
-                        throw new MismatchedReplacementCategoryException(
+                        throw new MissingReplacementCategoryException(
                             new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
                     Trait trait = category.GetTrait(protoReplacement.trait_name);
                     if (trait is null)
                     {
-                        throw new MismatchedReplacementTraitException(
+                        throw new MissingReplacementTraitException(
                             new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
 

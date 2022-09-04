@@ -80,9 +80,9 @@ namespace NpcGenerator
         public string NotFoundCategoryName { get; private set; }
     }
 
-    public class MismatchedReplacementTraitException : FormatException
+    public class MissingReplacementTraitException : FormatException
     {
-        public MismatchedReplacementTraitException(TraitId traitId)
+        public MissingReplacementTraitException(TraitId traitId)
         {
             TraitId = traitId;
         }
@@ -90,9 +90,9 @@ namespace NpcGenerator
         public TraitId TraitId { get; private set; }
     }
 
-    public class MismatchedReplacementCategoryException : FormatException
+    public class MissingReplacementCategoryException : FormatException
     {
-        public MismatchedReplacementCategoryException(TraitId traitId)
+        public MissingReplacementCategoryException(TraitId traitId)
         {
             TraitId = traitId;
         }
