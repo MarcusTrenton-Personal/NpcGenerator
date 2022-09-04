@@ -15,11 +15,11 @@ source_code	View source code for this app	MMMMM	Source Code	Source Code	Code Sou
 donate	Donate money to the maker of this app	NNNNNN	Donate	Donate	Faire un don
 empty_file	User error message pop-up.	OOOOOO	The file is empty: {0} 	The file is empty: {0} 	
 configuration_file_invalid	User error message pop-up for npc configuration file.	PPPPPP	Error parsing configuration file {0}.	Error parsing configuration file {0}.	Erreur lors de l'analyse du fichier de configuration {0}.
-category_weight_mismatch	User error message pop-up for npc configuration file.	QQQQQQ	The configuration file must have an equal number of trait and weight columns with no empty columns in between	The configuration file must have an equal number of trait and weight columns with no empty columns in between	
-empty_category_name	User error message pop-up for npc configuration file.	RRRRRR	Trait column is missing a category	Trait column is missing a category	
-trait_has_no_category	User error message pop-up for npc configuration file.	SSSSSS	Trait {0} doesn’t have a category name	Trait {0} doesn’t have a category name	
-trait_has_no_weight	User error message pop-up for npc configuration file.	TTTTTTT	Category {0}, trait {1} doesn’t have a weight	Category {0}, trait {1} doesn’t have a weight	
-trait_weight_is_not_whole_number	User error message pop-up for npc configuration file.	UUUUUU	Category {0}, trait {1} doesn’t have a whole number for the weight: {2}	Category {0}, trait {1} doesn’t have a whole number for the weight	
+category_weight_mismatch	User error message pop-up for npc csv configuration file.	QQQQQQ	The configuration file must have an equal number of trait and weight columns with no empty columns in between	The configuration file must have an equal number of trait and weight columns with no empty columns in between	
+empty_category_name	User error message pop-up for npc csv configuration file.	RRRRRR	Trait column is missing a category	Trait column is missing a category	
+trait_has_no_category	User error message pop-up for npc csv configuration file.	SSSSSS	Trait {0} doesn’t have a category name	Trait {0} doesn’t have a category name	
+trait_has_no_weight	User error message pop-up for npc csv configuration file.	TTTTTTT	Category {0}, trait {1} doesn’t have a weight	Category {0}, trait {1} doesn’t have a weight	
+trait_weight_is_not_whole_number	User error message pop-up for npc csv configuration file.	UUUUUU	Category {0}, trait {1} doesn’t have a whole number for the weight: {2}	Category {0}, trait {1} doesn’t have a whole number for the weight	
 mismatched_bonus_selection	User error message pop-up for npc json configuration file.	VVVVVV	Category {0}, trait {1} has a bonus selection in category {2} that does not exist. 	Category {0}, trait {1} has a bonus selection in category {2} that does not exist. 	
 mismatched_replacement_trait	User error message pop-up for npc json configuration file.	WWWWW	Trait {0} doesn’t exist for replacement in category {1}. 	Trait {0} doesn’t exist for replacement in category {1}. 	
 mismatched_replacement_category	User error message pop-up for npc json configuration file.	XXXXXX	Category {0} doesn’t exist in a replacement with trait {1}	Category {0} doesn’t exist in a replacement with trait {1}	
