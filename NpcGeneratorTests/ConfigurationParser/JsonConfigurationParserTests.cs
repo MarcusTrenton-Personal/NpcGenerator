@@ -26,7 +26,7 @@ namespace Tests
     [TestClass]
     public class JsonConfigurationParserTests : FileCreatingTests
     {
-        const string schemaPath = "ConfigurationSchema.json";
+        const string SCHEMA_PATH = "ConfigurationSchema.json";
 
         [TestMethod]
         public void GeneratesTraitSchema()
@@ -52,7 +52,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
             TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
@@ -115,7 +115,7 @@ namespace Tests
             ";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -179,7 +179,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
             TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
@@ -232,7 +232,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -265,7 +265,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -305,7 +305,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -346,7 +346,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -386,7 +386,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -428,7 +428,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -468,7 +468,7 @@ namespace Tests
             }";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -492,7 +492,7 @@ namespace Tests
             string text = "{}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -540,7 +540,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool throwException = false;
             try
@@ -585,7 +585,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool throwException = false;
             try
@@ -629,7 +629,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool throwException = false;
             try
@@ -679,7 +679,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             TraitSchema schema = parser.Parse(path);
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
@@ -713,7 +713,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -765,7 +765,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
             TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
@@ -829,7 +829,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
             TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
@@ -879,7 +879,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -888,12 +888,12 @@ namespace Tests
             }
             catch (MissingReplacementTraitException exception)
             {
-                Assert.AreEqual(new TraitId(REPLACEMENT_CATEGORY, MISSING_REPLACEMENT_TRAIT), exception.TraitId);
+                Assert.AreEqual(new TraitId(REPLACEMENT_CATEGORY, MISSING_REPLACEMENT_TRAIT), exception.TraitId, "Wrong replacement trait");
 
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException);
+            Assert.IsTrue(threwException, "Faile to throw a MissingReplacementTraitException exception");
 
             File.Delete(path);
         }
@@ -930,7 +930,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -939,12 +939,12 @@ namespace Tests
             }
             catch (MissingReplacementCategoryException exception)
             {
-                Assert.AreEqual(new TraitId(MISSING_REPLACEMENT_CATEGORY, REPLACEMENT_TRAIT), exception.TraitId);
+                Assert.AreEqual(new TraitId(MISSING_REPLACEMENT_CATEGORY, REPLACEMENT_TRAIT), exception.TraitId, "Wrong replacement trait");
 
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException);
+            Assert.IsTrue(threwException, "Failed to throw MissingReplacementCategoryException");
 
             File.Delete(path);
         }
@@ -978,7 +978,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -990,7 +990,7 @@ namespace Tests
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException);
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
 
             File.Delete(path);
         }
@@ -1024,7 +1024,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1036,7 +1036,7 @@ namespace Tests
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException);
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
 
             File.Delete(path);
         }
@@ -1069,7 +1069,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1081,7 +1081,7 @@ namespace Tests
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException);
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
 
             File.Delete(path);
         }
@@ -1122,7 +1122,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1134,7 +1134,7 @@ namespace Tests
                 threwException = true;
             }
 
-            Assert.IsTrue(threwException);
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
 
             File.Delete(path);
         }
@@ -1163,7 +1163,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1203,7 +1203,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1241,7 +1241,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1279,7 +1279,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1317,7 +1317,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1355,7 +1355,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
@@ -1397,7 +1397,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             TraitSchema schema = parser.Parse(path);
 
@@ -1406,9 +1406,9 @@ namespace Tests
             Trait trait = category.GetTrait(TRAIT);
             BonusSelection bonusSelection = trait.BonusSelection;
 
-            Assert.IsNotNull(bonusSelection);
-            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name);
-            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount);
+            Assert.IsNotNull(bonusSelection, "BonusSelection is null");
+            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name, "Wrong category name in BonusSelection");
+            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "Wrong selection count in BonusSelection");
 
             File.Delete(path);
         }
@@ -1438,7 +1438,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             TraitSchema schema = parser.Parse(path);
 
@@ -1447,9 +1447,9 @@ namespace Tests
             Trait trait = category.GetTrait(TRAIT);
             BonusSelection bonusSelection = trait.BonusSelection;
 
-            Assert.IsNotNull(bonusSelection);
-            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name);
-            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount);
+            Assert.IsNotNull(bonusSelection, "BonusSelection is null");
+            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name, "BonusSelection has the wrong category name");
+            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "BonusSelection has the wrong selection count");
 
             File.Delete(path);
         }
@@ -1490,7 +1490,7 @@ namespace Tests
             }}";
             File.WriteAllText(path, text);
 
-            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath);
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             TraitSchema schema = parser.Parse(path);
 
@@ -1499,17 +1499,485 @@ namespace Tests
             Trait trait = category.GetTrait(TRAIT);
             BonusSelection bonusSelection = trait.BonusSelection;
 
-            Assert.IsNotNull(bonusSelection);
-            Assert.AreEqual(TARGET_CATEGORY, bonusSelection.TraitCategory.Name);
-            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount);
+            Assert.IsNotNull(bonusSelection, "BonusSelection is null");
+            Assert.AreEqual(TARGET_CATEGORY, bonusSelection.TraitCategory.Name, "BonusSelection category is wrong");
+            Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "BonusSelection selection count is wrong");
 
             File.Delete(path);
         }
 
-        //TODO: EVERY PARSE EXCEPTION
-        //RequirementTraitIdNotFoundException
-        //UnknownLogicalOperatorException
-        //SelfRequiringCategoryException
+        [TestMethod]
+        public void RequirementTrait()
+        {
+            const string REQUIREMENT_CATEGORY = "Colour";
+            const string REQUIREMENT_TRAIT = "Blue";
+
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{REQUIREMENT_CATEGORY}',
+				            'trait_name' : '{REQUIREMENT_TRAIT}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{REQUIREMENT_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REQUIREMENT_TRAIT}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            TraitSchema schema = parser.Parse(path);
+
+            Assert.IsNotNull(schema, "Schema is null");
+            TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == REQUIREMENT_CATEGORY);
+            //TODO: Interrogate category requirement object.
+
+            File.Delete(path);
+        }
+
+        //RequirementTrait
+        //RequirementOr
+        //RequirementAnd
+        //RequirementNone
+        //RequirementNested
+
+        [TestMethod]
+        public void RequirementNoOperands()
+        {
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{
+                            'operator' : 'Any'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch(JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementEmptyOperand()
+        {
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{
+                            'operator' : 'Any',
+				            'operands' : []
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementNoOperator()
+        {
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{
+				            'operands' : [
+                                {{'category_name': 'Quirk', 'trait_name' : 'Fashionable'}}
+                            ]
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementPresentButEmpty()
+        {
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{}},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementTraitIdNotFoundException()
+        {
+            const string REQUIREMENT_CATEGORY = "Animal";
+            const string NOT_FOUND_CATEGORY = "Colour";
+            const string NOT_FOUND_TRAIT = "Blue";
+
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{REQUIREMENT_CATEGORY}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{NOT_FOUND_CATEGORY}',
+				            'trait_name' : '{NOT_FOUND_TRAIT}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (RequirementTraitIdNotFoundException exception)
+            {
+                Assert.AreEqual(REQUIREMENT_CATEGORY, exception.RequirementCategory, "Wrong requirement category");
+                Assert.AreEqual(NOT_FOUND_CATEGORY, exception.TraitIdNotFound.CategoryName, "Wrong category was not found");
+                Assert.AreEqual(NOT_FOUND_TRAIT, exception.TraitIdNotFound.TraitName, "Wrong trait was not found");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw RequirementTraitIdNotFoundException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementUnknownLogicalOperatorException()
+        {
+            const string OPERATOR = "BitShift";
+
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{
+                            'operator' : '{OPERATOR}',
+				            'operands' : [
+                                {{'category_name': 'Colour', 'trait_name' : 'Blue'}}
+                            ]
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (JsonFormatException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementUnknownLogicalOperatorExceptionWithoutSchema()
+        {
+            const string OPERATOR = "BitShift";
+
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : 'Animal',
+                        'selections': 1,
+                        'requirements' : {{
+                            'operator' : '{OPERATOR}',
+				            'operands' : [
+                                {{'category_name': 'Colour', 'trait_name' : 'Blue'}}
+                            ]
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath: null);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (UnknownLogicalOperatorException exception)
+            {
+                Assert.AreEqual(OPERATOR, exception.OperatorName, "Wrong unknown operator");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw UnknownLogicalOperatorException");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void RequirementSelfRequiringCategoryException()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            string path = Path.Combine(TestDirectory, "replacement.json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{CATEGORY}',
+				            'trait_name' : '{TRAIT}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Colour',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (SelfRequiringCategoryException exception)
+            {
+                Assert.AreEqual(CATEGORY, exception.Category, "Wrong category in SelfRequiringCategoryException");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw SelfRequiringCategoryException");
+
+            File.Delete(path);
+        }
+
+        //Requirement chain tests.
 
         private readonly MockRandom m_random = new MockRandom();
     }
