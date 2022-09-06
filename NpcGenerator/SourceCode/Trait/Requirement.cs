@@ -44,7 +44,7 @@ namespace NpcGenerator
             return result;
         }
 
-        public HashSet<string> DependentCategories()
+        public HashSet<string> DependentCategoryNames()
         {
             HashSet<string> dependentCategories = new HashSet<string>();
             HashSet<TraitId> dependentTraits = Dependencies();

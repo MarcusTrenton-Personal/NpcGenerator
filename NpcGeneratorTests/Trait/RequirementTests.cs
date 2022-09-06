@@ -176,7 +176,7 @@ namespace Tests
             NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(CATEGORY, "Bear"), npcHolder);
             Requirement req = new Requirement(npcHasTrait, npcHolder);
 
-            HashSet<string> dependencies = req.DependentCategories();
+            HashSet<string> dependencies = req.DependentCategoryNames();
 
             Assert.AreEqual(1, dependencies.Count, "Wrong number of dependencies");
             foreach(string dep in dependencies)
@@ -201,7 +201,7 @@ namespace Tests
 
             Requirement req = new Requirement(logicalNone, npcHolder);
 
-            HashSet<string> dependencies = req.DependentCategories();
+            HashSet<string> dependencies = req.DependentCategoryNames();
 
             Assert.AreEqual(2, dependencies.Count, "Wrong number of dependencies");
 
@@ -233,7 +233,7 @@ namespace Tests
 
             Requirement req = new Requirement(logicalNone, npcHolder);
 
-            HashSet<string> dependencies = req.DependentCategories();
+            HashSet<string> dependencies = req.DependentCategoryNames();
 
             Assert.AreEqual(2, dependencies.Count, "Wrong number of dependencies");
 

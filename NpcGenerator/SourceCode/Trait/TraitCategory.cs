@@ -140,6 +140,12 @@ namespace NpcGenerator
             }
         }
 
+        public HashSet<string> DependentCategoryNames()
+        {
+            HashSet<string> categories = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
+            return categories;
+        }
+
         public string Name
         {
             get;

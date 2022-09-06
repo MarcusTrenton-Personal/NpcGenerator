@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using Services;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tests.JsonConfigurationParserTests
@@ -28,6 +29,7 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void RequirementTrait()
         {
+            const string GUARDED_CATEGORY = "Animal";
             const string REQUIREMENT_CATEGORY = "Colour";
             const string REQUIREMENT_TRAIT = "Blue";
 
@@ -36,7 +38,7 @@ namespace Tests.JsonConfigurationParserTests
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : 'Animal',
+                        'name' : '{GUARDED_CATEGORY}',
                         'selections': 1,
                         'requirements' : {{
                             'category_name' : '{REQUIREMENT_CATEGORY}',
@@ -67,15 +69,126 @@ namespace Tests.JsonConfigurationParserTests
             TraitSchema schema = parser.Parse(path);
 
             Assert.IsNotNull(schema, "Schema is null");
-            TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == REQUIREMENT_CATEGORY);
-            //TODO: Interrogate category requirement object.
+            
+            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+            Assert.AreEqual(1, dependentCategoryNames.Count, "Wrong number of dependencies");
+            foreach (string dependency in dependentCategoryNames)
+            {
+                Assert.AreEqual(REQUIREMENT_CATEGORY, dependency, "Wrong dependency");
+            }
+
+            TraitId requiredTraitId = new TraitId(REQUIREMENT_CATEGORY, REQUIREMENT_TRAIT);
+            Npc npcWithTrait = new Npc();
+            npcWithTrait.Add(REQUIREMENT_CATEGORY, new string[] { REQUIREMENT_TRAIT });
+            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait), "Category is incorrectly locked for npc with required trait");
+            
+            Npc npcWithoutTrait = new Npc();
+            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutTrait), "Category is incorrectly unlocked for npc without required trait");
 
             File.Delete(path);
         }
 
-        //RequirementTrait
-        //RequirementOr
-        //RequirementAnd
+        [TestMethod]
+        public void RequirementAny()
+        {
+            const string GUARDED_CATEGORY = "Animal";
+            const string REQUIREMENT_CATEGORY0 = "Colour";
+            const string REQUIREMENT_TRAIT0 = "Blue";
+            const string REQUIREMENT_CATEGORY1 = "Hair";
+            const string REQUIREMENT_TRAIT1 = "Shaggy";
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{GUARDED_CATEGORY}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'operator' : 'Any',
+                            'operands' : [
+                                {{
+                                    'category_name' : '{REQUIREMENT_CATEGORY0}',
+				                    'trait_name' : '{REQUIREMENT_TRAIT0}'
+                                }},
+                                {{
+                                    'category_name' : '{REQUIREMENT_CATEGORY1}',
+				                    'trait_name' : '{REQUIREMENT_TRAIT1}'
+                                }}
+                            ]
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{REQUIREMENT_CATEGORY0}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REQUIREMENT_TRAIT0}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{REQUIREMENT_CATEGORY1}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REQUIREMENT_TRAIT1}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+            File.WriteAllText(path, text);
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            TraitSchema schema = parser.Parse(path);
+
+            Assert.IsNotNull(schema, "Schema is null");
+
+            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+            Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
+            SortedList<string, string> alphabeticalCategoryDependencies = new SortedList<string, string>();
+            foreach (string dep in dependentCategoryNames)
+            {
+                alphabeticalCategoryDependencies.Add(dep, dep);
+            }
+            Assert.AreEqual(REQUIREMENT_CATEGORY0, alphabeticalCategoryDependencies.Values[0], "Wrong dependency");
+            Assert.AreEqual(REQUIREMENT_CATEGORY1, alphabeticalCategoryDependencies.Values[1], "Wrong dependency");
+
+            TraitId requiredTraitId0 = new TraitId(REQUIREMENT_CATEGORY0, REQUIREMENT_TRAIT0);
+            TraitId requiredTraitId1 = new TraitId(REQUIREMENT_CATEGORY1, REQUIREMENT_TRAIT1);
+
+            Npc npcWithTrait0 = new Npc();
+            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
+            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly locked for npc with required trait");
+
+            Npc npcWithTrait1 = new Npc();
+            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly locked for npc with required trait");
+
+            Npc npcWithBothTraits = new Npc();
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithBothTraits), "Category is incorrectly locked for npc with required trait");
+
+            Npc npcWithoutAnyRequiredTraits = new Npc();
+            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits), 
+                "Category is incorrectly unlocked for npc without required trait");
+
+            File.Delete(path);
+        }
+
+        //RequirementAll
         //RequirementNone
         //RequirementNested
 

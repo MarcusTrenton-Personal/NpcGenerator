@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -402,6 +403,122 @@ namespace Tests
             bool subsequentHasTrait = category.HasTrait(TRAIT);
 
             Assert.IsTrue(subsequentHasTrait, "Did not find a trait that should have been found");
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesEmpty()
+        {
+            TraitCategory category = new TraitCategory("Animal", 1);
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(0, dependentCategoryNames.Count, "Incorrect number of dependencies");
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesSingle()
+        {
+            const string DEPENDENT_CATEGORY = "Colour";
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY, "Blue"), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            category.Set(req);
+
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(1, dependentCategoryNames.Count, "Incorrect number of dependencies");
+            foreach (string dependency in dependentCategoryNames)
+            {
+                Assert.AreEqual(DEPENDENT_CATEGORY, dependency, "Wrong category dependency");
+            }
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesChangeWithRequirements()
+        {
+            const string DEPENDENT_CATEGORY = "Colour";
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            HashSet<string> dependentCategoryNames0 = category.DependentCategoryNames();
+            Assert.AreEqual(0, dependentCategoryNames0.Count, "Incorrect number of dependencies");
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY, "Blue"), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            category.Set(req);
+
+            HashSet<string> dependentCategoryNames1 = category.DependentCategoryNames();
+
+            Assert.AreEqual(1, dependentCategoryNames1.Count, "Incorrect number of dependencies");
+            foreach (string dependency in dependentCategoryNames1)
+            {
+                Assert.AreEqual(DEPENDENT_CATEGORY, dependency, "Wrong category dependency");
+            }
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesMultipleIndependent()
+        {
+            const string DEPENDENT_CATEGORY0 = "Colour";
+            const string DEPENDENT_CATEGORY1 = "Hair";
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY0, "Blue"), npcHolder);
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "Blue"), npcHolder);
+            LogicalAny expression = new LogicalAny();
+            expression.Add(npcHasTrait0);
+            expression.Add(npcHasTrait1);
+            Requirement req = new Requirement(expression, npcHolder);
+            category.Set(req);
+
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(2, dependentCategoryNames.Count, "Incorrect number of dependencies");
+            SortedList<string, string> alphabeticalCategoryDependencies = new SortedList<string, string>();
+            foreach (string dep in dependentCategoryNames)
+            {
+                alphabeticalCategoryDependencies.Add(dep, dep);
+            }
+
+            Assert.AreEqual(DEPENDENT_CATEGORY0, alphabeticalCategoryDependencies.Values[0], "Wrong dependency");
+            Assert.AreEqual(DEPENDENT_CATEGORY1, alphabeticalCategoryDependencies.Values[1], "Wrong dependency");
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesMultipleOverlapping()
+        {
+            const string DEPENDENT_CATEGORY0 = "Colour";
+            const string DEPENDENT_CATEGORY1 = "Hair";
+
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY0, "Blue"), npcHolder);
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "BLue"), npcHolder);
+            NpcHasTrait npcHasTrait2 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "Green"), npcHolder);
+            LogicalAny expression = new LogicalAny();
+            expression.Add(npcHasTrait0);
+            expression.Add(npcHasTrait1);
+            expression.Add(npcHasTrait2);
+            Requirement req = new Requirement(expression, npcHolder);
+            category.Set(req);
+
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(2, dependentCategoryNames.Count, "Incorrect number of dependencies");
+            SortedList<string, string> alphabeticalCategoryDependencies = new SortedList<string, string>();
+            foreach (string dep in dependentCategoryNames)
+            {
+                alphabeticalCategoryDependencies.Add(dep, dep);
+            }
+
+            Assert.AreEqual(DEPENDENT_CATEGORY0, alphabeticalCategoryDependencies.Values[0], "Wrong dependency");
+            Assert.AreEqual(DEPENDENT_CATEGORY1, alphabeticalCategoryDependencies.Values[1], "Wrong dependency");
         }
     }
 }
