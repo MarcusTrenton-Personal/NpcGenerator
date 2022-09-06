@@ -165,15 +165,12 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SubExpressions()
+        public void GetTraitId()
         {
             StubNpcProvider provider = new StubNpcProvider(m_npcWithTrait);
             NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: provider);
 
-            IReadOnlyList<ILogicalExpression> subExpressions = expression.SubExpressions;
-
-            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(subExpressions);
-            Assert.IsTrue(isNullOrEmpty, "SubExpressions should be null or empty");
+            Assert.AreEqual(m_foundTraitId, expression.TraitId, "Wrong TraitId returned");
         }
     }
 }

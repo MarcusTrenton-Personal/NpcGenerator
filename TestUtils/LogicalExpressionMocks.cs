@@ -24,14 +24,6 @@ namespace Tests
         {
             return true;
         }
-
-        public IReadOnlyList<ILogicalExpression> SubExpressions
-        {
-            get
-            {
-                return null;
-            }
-        }
     }
 
     public class AlwaysFalse : ILogicalExpression
@@ -39,14 +31,6 @@ namespace Tests
         public bool Evaluate()
         {
             return false;
-        }
-
-        public IReadOnlyList<ILogicalExpression> SubExpressions
-        {
-            get
-            {
-                return null;
-            }
         }
     }
 }

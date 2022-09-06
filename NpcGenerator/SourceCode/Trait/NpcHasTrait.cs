@@ -23,26 +23,18 @@ namespace NpcGenerator
     {
         public NpcHasTrait(TraitId traitId, INpcProvider npcProvider)
         {
-            m_traitId = traitId ?? throw new ArgumentNullException(nameof(traitId));
+            TraitId = traitId ?? throw new ArgumentNullException(nameof(traitId));
             m_npcProvider = npcProvider ?? throw new ArgumentNullException(nameof(npcProvider));
         }
 
         public bool Evaluate()
         {
             Npc npc = m_npcProvider.Npc ?? throw new InvalidOperationException(nameof(npc) + " given by INpcProvider is null.");
-            bool hasTrait = npc.HasTrait(m_traitId);
+            bool hasTrait = npc.HasTrait(TraitId);
             return hasTrait;
         }
 
-        public IReadOnlyList<ILogicalExpression> SubExpressions
-        {
-            get 
-            {
-                return null;
-            }
-        }
-
-        private readonly TraitId m_traitId;
+        public TraitId TraitId { get; private set; }
         private readonly INpcProvider m_npcProvider;
     }
 }

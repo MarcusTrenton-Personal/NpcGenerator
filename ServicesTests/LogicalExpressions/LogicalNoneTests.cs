@@ -204,8 +204,7 @@ namespace Tests
 
             IReadOnlyList<ILogicalExpression> subExpressions = expression.SubExpressions;
 
-            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(subExpressions);
-            Assert.IsTrue(isNullOrEmpty, "Subexpression lists should be empty or null");
+            Assert.IsNotNull(subExpressions, "Subexpression list should be empty");
         }
 
         [TestMethod]

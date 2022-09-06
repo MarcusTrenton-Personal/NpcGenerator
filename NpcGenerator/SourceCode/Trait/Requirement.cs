@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Services;
 using System;
+using System.Collections.Generic;
 
 namespace NpcGenerator
 {
@@ -41,6 +42,47 @@ namespace NpcGenerator
             bool result = m_logicalExpression.Evaluate();
             m_npcHolder.Npc = null;
             return result;
+        }
+
+        public HashSet<string> DependentCategories()
+        {
+            HashSet<string> dependentCategories = new HashSet<string>();
+            HashSet<TraitId> dependentTraits = Dependencies();
+            foreach (TraitId traitId in dependentTraits)
+            {
+                dependentCategories.Add(traitId.CategoryName);
+            }
+
+            return dependentCategories;
+        }
+
+        private HashSet<TraitId> Dependencies()
+        {
+            HashSet<TraitId> dependencies = new HashSet<TraitId>();
+            AddDependencyTo(m_logicalExpression, dependencies);
+            return dependencies;
+        }
+
+        private void AddDependencyTo(ILogicalExpression expression, HashSet<TraitId> dependencies)
+        {
+            if (expression is NpcHasTrait)
+            {
+                NpcHasTrait npcHasTrait = expression as NpcHasTrait;
+                dependencies.Add(npcHasTrait.TraitId);
+            }
+            else if (expression is ILogicalOperator)
+            {
+                ILogicalOperator logicalOperator = expression as ILogicalOperator;
+                IReadOnlyList<ILogicalExpression> subExpressions = logicalOperator.SubExpressions;
+                foreach(ILogicalExpression subExpression in subExpressions)
+                {
+                    AddDependencyTo(subExpression, dependencies);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown ILogicalExpression. Add dependency gathering logic.");
+            }
         }
 
         private readonly ILogicalExpression m_logicalExpression;
