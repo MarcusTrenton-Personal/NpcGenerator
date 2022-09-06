@@ -14,13 +14,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using NpcGenerator;
 using Services;
-using System.Collections.Generic;
 using System.IO;
 
-namespace Tests
+namespace Tests.JsonConfigurationParserTests
 {
     [TestClass]
     public class RequirementJsonConfigurationParserTests : FileCreatingTests
