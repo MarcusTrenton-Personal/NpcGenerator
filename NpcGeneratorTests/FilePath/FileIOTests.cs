@@ -36,12 +36,13 @@ namespace Tests
         [TestMethod]
         public void CacheFileIsCopy()
         {
-            const string originalFile = "Test.txt";
-            const string originalContent = "Test test test";
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string originalFile = method + ".txt";
+            const string ORIGINAL_CONTENT = "Test test test";
 
             using (StreamWriter writer = File.CreateText(originalFile))
             {
-                writer.Write(originalContent);
+                writer.Write(ORIGINAL_CONTENT);
                 writer.Close();
             }
 
@@ -49,7 +50,7 @@ namespace Tests
             Assert.IsTrue(File.Exists(cacheFile), "Cache file doesn't exist: " + cacheFile);
 
             string cacheText = File.ReadAllText(cacheFile);
-            Assert.AreEqual(originalContent, cacheText, "Cache file text is different than original");
+            Assert.AreEqual(ORIGINAL_CONTENT, cacheText, "Cache file text is different than original");
 
             File.Delete(cacheFile);
             File.Delete(originalFile);
@@ -58,13 +59,14 @@ namespace Tests
         [TestMethod]
         public void CacheFileAllowsReadOfOriginalFile()
         {
-            const string originalFile = "Test.txt";
-            const string originalContent = "Test test test";
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string originalFile = method + ".txt";
+            const string ORIGINAL_CONTENT = "Test test test";
 
             //Create original file with a read/write lock.
             using (StreamWriter writer = File.CreateText(originalFile))
             {
-                writer.Write(originalContent);
+                writer.Write(ORIGINAL_CONTENT);
 
                 //While writing, cache the original file.
                 string cacheFile = m_fileIO.CacheFile(originalFile);

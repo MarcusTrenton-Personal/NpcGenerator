@@ -29,7 +29,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void GeneratesTraitSchema()
         {
-            string path = Path.Combine(TestDirectory, "colour.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -60,7 +61,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void SchemaIsOptional()
         {
-            string path = Path.Combine(TestDirectory, "colour.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -91,7 +93,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MalformedJson()
         {
-            string path = Path.Combine(TestDirectory, "malformed.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             //The initial { and final } are missing.
             string text = @"
                 'trait_categories' : [
@@ -142,7 +145,8 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY2_TRAIT1 = "Gorilla";
             const string CATEGORY2_TRAIT2 = "Rhino";
 
-            string path = Path.Combine(TestDirectory, "colourAndAnimal.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -215,7 +219,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MissingTraitTitleThrowsException()
         {
-            string path = Path.Combine(TestDirectory, "missingTitle.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     { 
@@ -250,7 +255,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MissingTraitsThrowsException()
         {
-            string path = Path.Combine(TestDirectory, "missingTraits.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -283,7 +289,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MissingTraitName()
         {
-            string path = Path.Combine(TestDirectory, "missingTraitName.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -323,7 +330,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void NegativeWeightTrait()
         {
-            string path = Path.Combine(TestDirectory, "negativeWeightTrait.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -364,7 +372,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MissingWeightTrait()
         {
-            string path = Path.Combine(TestDirectory, "missingWeightTrait.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -404,7 +413,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MissingTraitCategoryName()
         {
-            string path = Path.Combine(TestDirectory, "missingTraitCategoryName.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : 
                 [ 
@@ -446,7 +456,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void MissingSelections()
         {
-            string path = Path.Combine(TestDirectory, "colour.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = @"{
                 'trait_categories' : [
                     {
@@ -486,7 +497,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void EmptyJsonObject()
         {
-            string path = Path.Combine(TestDirectory, "empty.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = "{}";
             File.WriteAllText(path, text);
 
@@ -511,7 +523,9 @@ namespace Tests.JsonConfigurationParserTests
         public void DuplicateCategoryNames()
         {
             const string CATEGORY = "Colour";
-            string path = Path.Combine(TestDirectory, "colour.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -562,7 +576,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
-            string path = Path.Combine(TestDirectory, "colour.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -605,7 +621,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
-            string path = Path.Combine(TestDirectory, "colour.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -650,7 +668,9 @@ namespace Tests.JsonConfigurationParserTests
         public void DuplicateTraitNamesInDifferentCategories()
         {
             const string TRAIT_NAME = "Brown";
-            string path = Path.Combine(TestDirectory, "person.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -694,7 +714,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string CATEGORY = "Hair";
             const int SELECTIONS = 10;
-            string path = Path.Combine(TestDirectory, "hair.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{

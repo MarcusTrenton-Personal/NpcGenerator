@@ -32,7 +32,9 @@ namespace Tests.JsonConfigurationParserTests
             const string PRESENT_CATEGORY = "Animal";
             const string PRESENT_TRAIT = "Bear";
             const string MISSING_CATEGORY = "Hair";
-            string path = Path.Combine(TestDirectory, "missingHair.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -72,7 +74,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void BonusSelectionWithMissingTraitName()
         {
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -110,7 +113,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void BonusSelectionWithMissingSelection()
         {
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -148,7 +152,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void BonusSelectionWithNegativeSelection()
         {
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -186,7 +191,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void BonusSelectionWithFractionSelection()
         {
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -224,7 +230,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void BonusSelectionWithTextSelection()
         {
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -266,7 +273,8 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY = "Animal";
             const int SELECTION_COUNT = 1;
 
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -307,7 +315,8 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY = "Animal";
             const int SELECTION_COUNT = 0;
 
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -349,7 +358,8 @@ namespace Tests.JsonConfigurationParserTests
             const string TARGET_CATEGORY = "Hair";
             const int SELECTION_COUNT = 1;
 
-            string path = Path.Combine(TestDirectory, "bonusSelection.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{

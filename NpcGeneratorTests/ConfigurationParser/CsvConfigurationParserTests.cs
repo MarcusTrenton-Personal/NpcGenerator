@@ -27,7 +27,8 @@ namespace Tests
         [TestMethod]
         public void GeneratesTraitSchema()
         {
-            string path = Path.Combine(TestDirectory, "colour.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
@@ -43,8 +44,9 @@ namespace Tests
         [TestMethod]
         public void EmptyFile()
         {
-            const string FILE_NAME = "empty.csv";
-            string path = Path.Combine(TestDirectory, FILE_NAME);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string fileName = method + ".csv";
+            string path = Path.Combine(TestDirectory, fileName);
             string text = "";
             File.WriteAllText(path, text);
 
@@ -56,7 +58,7 @@ namespace Tests
             }
             catch (EmptyFileException exception)
             {
-                Assert.AreEqual(FILE_NAME, exception.FileName, "Wrong file name returned");
+                Assert.AreEqual(fileName, exception.FileName, "Wrong file name returned");
 
                 threwException = true;
             }
@@ -76,7 +78,8 @@ namespace Tests
             const string CATEGORY2_TRAIT1 = "Gorilla";
             const string CATEGORY2_TRAIT2 = "Rhino";
 
-            string path = Path.Combine(TestDirectory, "colourAndAnimal.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY1_TITLE + ",Weight," + CATEGORY2_TITLE + ",Weight\n" +
                 CATEGORY1_TRAIT1 + ",1," + CATEGORY2_TRAIT1 + ",1\n" +
                 CATEGORY1_TRAIT2 + ",1," + CATEGORY2_TRAIT2 + ",1";
@@ -116,7 +119,8 @@ namespace Tests
         [TestMethod]
         public void MissingFirstTitleThrowsException()
         {
-            string path = Path.Combine(TestDirectory, "missingFirstTitle.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = ",Weight\n" +
                "Green,1\n" +
                "Red,1";
@@ -143,7 +147,8 @@ namespace Tests
         {
             const string FIRST_TRAIT_MISSING_CATEGORY = "Gorilla";
 
-            string path = Path.Combine(TestDirectory, "missingSecondTitle.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight\n" +
                 "Green,1," + FIRST_TRAIT_MISSING_CATEGORY + ",1\n" +
                 "Red,1,Rhino,1";
@@ -170,7 +175,8 @@ namespace Tests
         [TestMethod]
         public void MissingWeightColumn()
         {
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour\n" +
                 "Green,1\n" +
                 "Red,1";
@@ -195,7 +201,8 @@ namespace Tests
         [TestMethod]
         public void ExtraColumn()
         {
-            string path = Path.Combine(TestDirectory, "bonusSelection.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight,Bonus Selection\n" +
                 "Green,1\n" +
                 "Red,1";
@@ -220,7 +227,8 @@ namespace Tests
         [TestMethod]
         public void SkipFirstColumn()
         {
-            string path = Path.Combine(TestDirectory, "skipFirstColumn.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = ",Colour,Weight\n" +
                 ",Green,1\n" +
                 ",Red,1";
@@ -245,7 +253,8 @@ namespace Tests
         [TestMethod]
         public void SkipMiddleColumn()
         {
-            string path = Path.Combine(TestDirectory, "skipMiddleColumn.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,,Weight\n" +
                 "Green,,1\n" +
                 "Red,,1";
@@ -270,7 +279,8 @@ namespace Tests
         [TestMethod]
         public void SkipColumnBetweenCategories()
         {
-            string path = Path.Combine(TestDirectory, "skipMiddleColumn.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight,,Animal,Weight\n" +
                 "Green,1,,Bear,1\n" +
                 "Red,1,,Rhino,1";
@@ -298,7 +308,8 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
 
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "\n" +
                 "Red,1";
@@ -328,7 +339,8 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
 
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + ",\n" +
                 "Red,1";
@@ -359,7 +371,8 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "-2";
 
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
@@ -391,7 +404,8 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "2.0";
 
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
@@ -423,7 +437,8 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "One";
 
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
@@ -455,7 +470,8 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "false";
 
-            string path = Path.Combine(TestDirectory, "missingWeight.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
@@ -485,7 +501,8 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
 
-            string path = Path.Combine(TestDirectory, "colour.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight," + CATEGORY + ",Weight\n" +
                 "Green,1,Red,1";
             File.WriteAllText(path, text);
@@ -515,7 +532,8 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
 
-            string path = Path.Combine(TestDirectory, "colour.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + ",1\n" +
                 TRAIT + ",1";
@@ -544,7 +562,9 @@ namespace Tests
         public void DuplicateTraitNamesInDifferentCategories()
         {
             const string TRAIT_NAME = "Brown";
-            string path = Path.Combine(TestDirectory, "person.csv");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Hair,Weight,Skin,Weight\n" +
                 TRAIT_NAME + ",1," + TRAIT_NAME + ",1";
             File.WriteAllText(path, text);

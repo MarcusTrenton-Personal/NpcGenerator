@@ -310,7 +310,8 @@ namespace Tests
                 return new IOException();
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -321,7 +322,8 @@ namespace Tests
                 return new EmptyFileException("test.csv");
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -332,7 +334,8 @@ namespace Tests
                 return new EmptyCategoryNameException();
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -343,7 +346,8 @@ namespace Tests
                 return new CategoryWeightMismatchException();
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -354,7 +358,8 @@ namespace Tests
                 return new TraitMissingCategoryException("Blue");
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -365,7 +370,8 @@ namespace Tests
                 return new MissingWeightException(new TraitId("Animal", "Bear"));
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -376,7 +382,8 @@ namespace Tests
                 return new WeightIsNotWholeNumberException(new TraitId("Animal", "Bear"), "-1.5");
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -387,7 +394,8 @@ namespace Tests
                 return new MismatchedBonusSelectionException("Animal", new TraitId("Colour", "Blue"));
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -398,7 +406,8 @@ namespace Tests
                 return new MissingReplacementTraitException(new TraitId("Colour", "Blue"));
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -409,7 +418,8 @@ namespace Tests
                 return new MissingReplacementCategoryException(new TraitId("Colour", "Blue"));
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -420,7 +430,8 @@ namespace Tests
                 return new DuplicateCategoryNameException("Colour");
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -431,7 +442,8 @@ namespace Tests
                 return new RequirementTraitIdNotFoundException("Animal", new TraitId("Colour", "Blue"));
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -442,7 +454,8 @@ namespace Tests
                 return new UnknownLogicalOperatorException("Animal", "bitshift");
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -453,7 +466,8 @@ namespace Tests
                 return new SelfRequiringCategoryException("Animal");
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
         [TestMethod]
@@ -464,12 +478,13 @@ namespace Tests
                 return new TooFewTraitsInCategoryException("Animal", 3, 1);
             }
 
-            GenerateCatches(CreateCallback);
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
         }
 
-        private void GenerateCatches<T>(Func<T> createException) where T : Exception
+        private void GenerateCatches<T>(Func<T> createException, string fileName) where T : Exception
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile("GenerateCatches");
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(fileName);
 
             TraitSchema Callback(string path)
             {

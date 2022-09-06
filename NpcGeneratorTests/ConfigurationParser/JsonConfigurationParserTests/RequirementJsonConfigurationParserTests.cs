@@ -31,7 +31,8 @@ namespace Tests.JsonConfigurationParserTests
             const string REQUIREMENT_CATEGORY = "Colour";
             const string REQUIREMENT_TRAIT = "Blue";
 
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -81,7 +82,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void RequirementNoOperands()
         {
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -131,7 +133,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void RequirementEmptyOperand()
         {
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -182,7 +185,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void RequirementNoOperator()
         {
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -234,7 +238,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void RequirementPresentButEmpty()
         {
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -286,7 +291,8 @@ namespace Tests.JsonConfigurationParserTests
             const string NOT_FOUND_CATEGORY = "Colour";
             const string NOT_FOUND_TRAIT = "Blue";
 
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -333,7 +339,8 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string OPERATOR = "BitShift";
 
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -388,7 +395,8 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string OPERATOR = "BitShift";
 
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -446,7 +454,8 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
 
-            string path = Path.Combine(TestDirectory, "replacement.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{

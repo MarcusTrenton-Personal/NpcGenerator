@@ -31,7 +31,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string REPLACEMENT_CATEGORY = "Colour";
             const string REPLACEMENT_TRAIT = "Green";
-            string path = Path.Combine(TestDirectory, "replacements.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -77,7 +79,9 @@ namespace Tests.JsonConfigurationParserTests
             const string REPLACEMENT_TRAIT0 = "Green";
             const string REPLACEMENT_CATEGORY1 = "Animal";
             const string REPLACEMENT_TRAIT1 = "Bear";
-            string path = Path.Combine(TestDirectory, "replacements.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -145,7 +149,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string REPLACEMENT_CATEGORY = "Colour";
             const string MISSING_REPLACEMENT_TRAIT = "Blue";
-            string path = Path.Combine(TestDirectory, "replacements.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -196,7 +202,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string MISSING_REPLACEMENT_CATEGORY = "Hair";
             const string REPLACEMENT_TRAIT = "Green";
-            string path = Path.Combine(TestDirectory, "replacements.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -245,7 +253,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void ReplacementHasNoCategory()
         {
-            string path = Path.Combine(TestDirectory, "replacements.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -291,7 +300,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void ReplacementHasNoTrait()
         {
-            string path = Path.Combine(TestDirectory, "replacements.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -337,7 +347,8 @@ namespace Tests.JsonConfigurationParserTests
         [TestMethod]
         public void ReplacementIsEmpty()
         {
-            string path = Path.Combine(TestDirectory, "replacements.json");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -384,7 +395,9 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string REPLACEMENT_CATEGORY = "Hair";
             const string REPLACEMENT_TRAIT = "Green";
-            string path = Path.Combine(TestDirectory, "replacements.json");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{

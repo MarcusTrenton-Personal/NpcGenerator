@@ -27,7 +27,8 @@ namespace Tests
         [TestMethod]
         public void GeneratesTraitSchemaFromSupportedFileType()
         {
-            string path = Path.Combine(TestDirectory, "colour.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
@@ -47,7 +48,8 @@ namespace Tests
         [TestMethod]
         public void NoSchemaFromUnsupportedFileType()
         {
-            string path = Path.Combine(TestDirectory, "colour.xml");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".xml");
             string text = "<trait_categories>\n"+
                 "\t<array>\n" +
                 "\t\t<item>\n" +

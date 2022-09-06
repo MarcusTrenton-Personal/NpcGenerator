@@ -31,8 +31,9 @@ namespace Tests
             
             string textId = "window_title";
             string text = "Test Window";
-            
-            string path = Path.Combine(TestDirectory, "language.csv");
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t"+ languageCode + "\n" +
                 textId + "\t\t" + text;
             
@@ -62,7 +63,8 @@ namespace Tests
             string martianText = "Test Window";
             string dwarvishText = "Mock Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + defaultLanguageCode + "\t"+ languageCode2 + "\n" +
                 textId + "\t\t" + martianText + "\t" + dwarvishText;
             
@@ -113,7 +115,8 @@ namespace Tests
             string text2 = "Goodbye";
             stringBuilder.Append(textId2 + "\t\t" + text2);
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             File.WriteAllText(path, stringBuilder.ToString());
 
             Services.Localization localization = new Services.Localization(path, languageCode);
@@ -134,7 +137,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -163,7 +167,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -191,7 +196,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -219,7 +225,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID,Context," + languageCode + "\n" +
                 textId + ",," + text;
 
@@ -247,7 +254,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text +"\n" +
                 textId + "\t\t" + text;
@@ -276,7 +284,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = textId + "\t\t" + text;
 
             File.WriteAllText(path, sourceText);
@@ -303,7 +312,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\t" + languageCode + "\n" +
                 textId + "\t" + text;
 
@@ -331,7 +341,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\tExtra\t" + languageCode + "\n" +
                 textId + "\t\t\t" + text + "\n" +
                 textId + "\t\t\t" + text;
@@ -359,7 +370,8 @@ namespace Tests
             string languageCode = "Martian";
             string textId = "window_title";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t";
 
@@ -386,7 +398,8 @@ namespace Tests
             string languageCode = "Martian";
             string textId = "window_title";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t\n" +
                 textId + "\t";
 
@@ -414,7 +427,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -443,7 +457,8 @@ namespace Tests
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -466,7 +481,8 @@ namespace Tests
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -490,7 +506,8 @@ namespace Tests
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -520,7 +537,8 @@ namespace Tests
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -551,7 +569,8 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
@@ -571,7 +590,8 @@ namespace Tests
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
-            string path = Path.Combine(TestDirectory, "language.csv");
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
