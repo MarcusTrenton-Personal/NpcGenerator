@@ -121,7 +121,8 @@ namespace Tests
         [TestMethod]
         public void GenerateNpcs()
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
 
             static TraitSchema Callback(string path)
             {
@@ -161,10 +162,10 @@ namespace Tests
             File.Delete(userSettings.ConfigurationPath);
         }
 
-        private StubUserSettings UserSettingsWithFakeInputFile()
+        private StubUserSettings UserSettingsWithFakeInputFile(string fileNameWithoutDot)
         {
             StubUserSettings userSettings = new StubUserSettings();
-            string path = Path.Combine(TestDirectory, "colour.csv");
+            string path = Path.Combine(TestDirectory, fileNameWithoutDot + ".csv");
             string text = "Empty";
             File.WriteAllText(path, text);
             userSettings.ConfigurationPath = path;
@@ -210,7 +211,8 @@ namespace Tests
         [TestMethod]
         public void ReplacementsForSchemaWithoutReplacements()
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
 
             static TraitSchema Callback(string path)
             {
@@ -247,7 +249,8 @@ namespace Tests
         [TestMethod]
         public void ReplacementsForSchemaWithReplacements()
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
 
             const string REPLACEMENT_CATEGORY = "Colour";
             const string ORIGINAL_TRAIT_NAME = "Green";
@@ -466,7 +469,7 @@ namespace Tests
 
         private void GenerateCatches<T>(Func<T> createException) where T : Exception
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile("GenerateCatches");
 
             TraitSchema Callback(string path)
             {
@@ -507,7 +510,8 @@ namespace Tests
         [TestMethod]
         public void GenerateDoesNotCatchAllExceptions()
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
 
             static TraitSchema Callback(string path)
             {
@@ -545,7 +549,8 @@ namespace Tests
         [TestMethod]
         public void GenerateCatchesTooFewTraitsInCategoryExceptionDueBonusSelections()
         {
-            StubUserSettings userSettings = UserSettingsWithFakeInputFile();
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
 
             static TraitSchema Callback(string path)
             {
