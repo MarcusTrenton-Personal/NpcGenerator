@@ -52,6 +52,14 @@ namespace Services
             return result;
         }
 
+        public IReadOnlyList<ILogicalExpression> SubExpressions 
+        {
+            get
+            {
+                return m_expressions;
+            }
+        }
+
         private readonly List<ILogicalExpression> m_expressions = new List<ILogicalExpression>();
         private bool m_isEvaluating;
 

@@ -15,7 +15,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -160,6 +162,18 @@ namespace Tests
             provider.Npc = emptyNpc;
             bool followUpIsFound = expression.Evaluate();
             Assert.IsFalse(followUpIsFound, "Incorrectly found a trait in an empty npc");
+        }
+
+        [TestMethod]
+        public void SubExpressions()
+        {
+            StubNpcProvider provider = new StubNpcProvider(m_npcWithTrait);
+            NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: provider);
+
+            IReadOnlyList<ILogicalExpression> subExpressions = expression.SubExpressions;
+
+            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(subExpressions);
+            Assert.IsTrue(isNullOrEmpty, "SubExpressions should be null or empty");
         }
     }
 }

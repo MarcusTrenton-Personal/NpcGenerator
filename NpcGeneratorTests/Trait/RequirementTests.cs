@@ -58,7 +58,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsUnlockedForAlwaysTrueExpression()
+        public void IsUnlockedForAlwaysAlwaysTrue()
         {
             Npc npc = new Npc();
             Requirement req = new Requirement(new AlwaysTrue(), new NpcHolder());
@@ -69,7 +69,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsUnlockedForAlwaysFalseExpression()
+        public void IsUnlockedForAlwaysAlwaysFalse()
         {
             Npc npc = new Npc();
             Requirement req = new Requirement(new AlwaysFalse(), new NpcHolder());
@@ -112,7 +112,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetNpcForSingleTrueExpression()
+        public void GetNpcForSingleAlwaysTrue()
         {
             const string CATEGORY = "colour";
             const string TRAIT = "blue";
@@ -130,7 +130,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetNpcForSingleFalseExpression()
+        public void GetNpcForSingleAlwaysFalse()
         {
             const string CATEGORY = "colour";
 
@@ -164,22 +164,6 @@ namespace Tests
             bool isUnlocked = req.IsUnlockedFor(npc);
 
             Assert.IsTrue(isUnlocked, "Did not evaluate logical expresssion correctly.");
-        }
-
-        private class AlwaysTrue : ILogicalExpression
-        {
-            public bool Evaluate()
-            {
-                return true;
-            }
-        }
-
-        private class AlwaysFalse : ILogicalExpression
-        {
-            public bool Evaluate()
-            {
-                return false;
-            }
         }
     }
 }

@@ -14,35 +14,39 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Services;
-using System;
 using System.Collections.Generic;
 
-namespace NpcGenerator
+namespace Tests
 {
-    public class NpcHasTrait : ILogicalExpression
+    public class AlwaysTrue : ILogicalExpression
     {
-        public NpcHasTrait(TraitId traitId, INpcProvider npcProvider)
-        {
-            m_traitId = traitId ?? throw new ArgumentNullException(nameof(traitId));
-            m_npcProvider = npcProvider ?? throw new ArgumentNullException(nameof(npcProvider));
-        }
-
         public bool Evaluate()
         {
-            Npc npc = m_npcProvider.Npc ?? throw new InvalidOperationException(nameof(npc) + " given by INpcProvider is null.");
-            bool hasTrait = npc.HasTrait(m_traitId);
-            return hasTrait;
+            return true;
         }
 
         public IReadOnlyList<ILogicalExpression> SubExpressions
         {
-            get 
+            get
             {
                 return null;
             }
         }
+    }
 
-        private readonly TraitId m_traitId;
-        private readonly INpcProvider m_npcProvider;
+    public class AlwaysFalse : ILogicalExpression
+    {
+        public bool Evaluate()
+        {
+            return false;
+        }
+
+        public IReadOnlyList<ILogicalExpression> SubExpressions
+        {
+            get
+            {
+                return null;
+            }
+        }
     }
 }

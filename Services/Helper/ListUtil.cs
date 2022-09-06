@@ -41,5 +41,10 @@ namespace Services
             }
             return default;
         }
+
+        public static bool IsNullOrEmpty<T>(IReadOnlyList<T> list) where T : notnull
+        {
+            return list is null || list.Count == 0;
+        }
     }
 }

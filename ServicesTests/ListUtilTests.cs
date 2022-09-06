@@ -100,6 +100,42 @@ namespace Tests
             Assert.IsTrue(threwException, "Cannot find element of null list. Should throw exception.");
         }
 
+        [TestMethod]
+        public void IsNullOrEmptyWithNull()
+        {
+            List<int> nullList = null;
+            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(nullList);
+
+            Assert.IsTrue(isNullOrEmpty, "IsNullOrEmpty should be true");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithEmpty()
+        {
+            List<int> emptyList = new List<int>();
+            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(emptyList);
+
+            Assert.IsTrue(isNullOrEmpty, "IsNullOrEmpty should be true");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithSingleElement()
+        {
+            List<int> singleElementList = new List<int>() { 3 };
+            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(singleElementList);
+
+            Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithMultipleElements()
+        {
+            List<int> multipleElementList = new List<int>() { 3, 4, 5 };
+            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(multipleElementList);
+
+            Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
+        }
+
         private struct TestClass
         {
             public TestClass(int x, object y)

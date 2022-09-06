@@ -16,28 +16,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Services;
 using System;
+using System.Collections.Generic;
 
 namespace Tests
 {
     [TestClass]
     public class LogicalAllTests
     {
-        private class TrueExpression : ILogicalExpression
-        {
-            public bool Evaluate()
-            {
-                return true;
-            }
-        }
-
-        private class FalseExpression : ILogicalExpression
-        {
-            public bool Evaluate()
-            {
-                return false;
-            }
-        }
-
         [TestMethod]
         public void EmptyExpression()
         {
@@ -212,7 +197,58 @@ namespace Tests
             Assert.IsTrue(result, "Nested evaluation should not throw an exception but instead true");
         }
 
-        private TrueExpression m_true = new TrueExpression();
-        private FalseExpression m_false = new FalseExpression();
+        [TestMethod]
+        public void SubExpressionsEmpty()
+        {
+            LogicalAll expression = new LogicalAll();
+
+            IReadOnlyList<ILogicalExpression> subExpressions = expression.SubExpressions;
+            
+            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(subExpressions);
+            Assert.IsTrue(isNullOrEmpty, "Subexpression lists should be empty or null");
+        }
+
+        [TestMethod]
+        public void SubExpressionsSingle()
+        {
+            LogicalAll expression = new LogicalAll();
+            expression.Add(m_true);
+
+            IReadOnlyList<ILogicalExpression> subExpressions = expression.SubExpressions;
+
+            Assert.AreEqual(1, subExpressions.Count, "Wrong number of SubExpressions");
+            Assert.IsTrue(subExpressions[0] is AlwaysTrue, "Wrong type of SubExpression");
+        }
+
+        [TestMethod]
+        public void SubExpressionsMultiple()
+        {
+            LogicalAll expression = new LogicalAll();
+            expression.Add(m_true);
+            expression.Add(m_false);
+
+            IReadOnlyList<ILogicalExpression> subExpressions = expression.SubExpressions;
+
+            Assert.AreEqual(2, subExpressions.Count, "Wrong number of SubExpressions");
+
+            int trueCount = 0;
+            int falseCount = 0;
+            foreach (ILogicalExpression subExpression in subExpressions)
+            {
+                if (subExpression is AlwaysTrue)
+                {
+                    trueCount++;
+                }
+                else if (subExpression is AlwaysFalse)
+                {
+                    falseCount++;
+                }
+            }
+            Assert.AreEqual(1, trueCount, "Wrong number of AlwaysTrue SubExpressions");
+            Assert.AreEqual(1, falseCount, "Wrong number of AlwaysFalse SubExpressions");
+        }
+
+        private readonly AlwaysTrue m_true = new AlwaysTrue();
+        private readonly AlwaysFalse m_false = new AlwaysFalse();
     }
 }
