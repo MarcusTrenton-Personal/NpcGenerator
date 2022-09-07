@@ -119,7 +119,7 @@
 					"type": "array",
 					"items": { 
 						"anyOf": [
-							{"$ref": "#"},
+							{"$ref": "#/$defs/logical_operation"},
 							{"$ref": "#/$defs/trait_id"}
 						]
 					},
