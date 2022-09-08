@@ -34,13 +34,10 @@ namespace NpcGenerator
             }
         }
 
-        public string SupportedFileExtension { get; } = ".json";
-
-        public TraitSchema Parse(string path)
+        public TraitSchema Parse(string text)
         {
-            string text = File.ReadAllText(path);
             JToken json = JToken.Parse(text);
-            ValidateJson(json, m_schema, path);
+            ValidateJson(json, m_schema);
 
             ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
             DetectDuplicateCategoryNames(protoTraitSchema.trait_categories);
@@ -50,7 +47,7 @@ namespace NpcGenerator
             return traitSchema;
         }
 
-        private static void ValidateJson(JToken json, JSchema m_schema, string path)
+        private static void ValidateJson(JToken json, JSchema m_schema)
         {
             if (m_schema != null)
             {
@@ -63,7 +60,7 @@ namespace NpcGenerator
                     {
                         message += error + "\n";
                     }
-                    throw new JsonFormatException(message, path);
+                    throw new JsonFormatException(message);
                 }
             }
         }
@@ -395,10 +392,8 @@ namespace NpcGenerator
 
     public class JsonFormatException : FormatException
     {
-        public JsonFormatException(string message, string path) : base(message)
+        public JsonFormatException(string message) : base(message)
         {
-            Path = path;
         }
-        public string Path { get; private set; }
     }
 }

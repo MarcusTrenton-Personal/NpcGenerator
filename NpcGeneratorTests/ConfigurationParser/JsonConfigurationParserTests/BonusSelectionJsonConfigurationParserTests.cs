@@ -22,7 +22,7 @@ using System.IO;
 namespace Tests.JsonConfigurationParserTests
 {
     [TestClass]
-    public class BonusSelectionJsonConfigurationParserTests : FileCreatingTests
+    public class BonusSelectionJsonConfigurationParserTests
     {
         const string SCHEMA_PATH = "ConfigurationSchema.json";
 
@@ -33,8 +33,6 @@ namespace Tests.JsonConfigurationParserTests
             const string PRESENT_TRAIT = "Bear";
             const string MISSING_CATEGORY = "Hair";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -50,14 +48,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (MismatchedBonusSelectionException exception)
             {
@@ -67,15 +64,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a MismatchedBonusSelectionException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void BonusSelectionWithMissingTraitName()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -91,14 +84,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -106,15 +98,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void BonusSelectionWithMissingSelection()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -130,14 +118,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -145,15 +132,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void BonusSelectionWithNegativeSelection()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -169,14 +152,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -184,15 +166,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void BonusSelectionWithFractionSelection()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -208,14 +186,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -223,15 +200,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void BonusSelectionWithTextSelection()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -247,14 +220,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -262,8 +234,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -273,8 +243,6 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY = "Animal";
             const int SELECTION_COUNT = 1;
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -290,11 +258,10 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
             TraitCategory category = categories[0];
@@ -304,8 +271,6 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(bonusSelection, "BonusSelection is null");
             Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name, "Wrong category name in BonusSelection");
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "Wrong selection count in BonusSelection");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -315,8 +280,6 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY = "Animal";
             const int SELECTION_COUNT = 0;
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -332,11 +295,10 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
             TraitCategory category = categories[0];
@@ -346,8 +308,6 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(bonusSelection, "BonusSelection is null");
             Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name, "BonusSelection has the wrong category name");
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "BonusSelection has the wrong selection count");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -358,8 +318,6 @@ namespace Tests.JsonConfigurationParserTests
             const string TARGET_CATEGORY = "Hair";
             const int SELECTION_COUNT = 1;
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -385,11 +343,10 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
             TraitCategory category = ListUtil.Find(categories, category => category.Name == SOURCE_CATEGORY);
@@ -399,8 +356,6 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(bonusSelection, "BonusSelection is null");
             Assert.AreEqual(TARGET_CATEGORY, bonusSelection.TraitCategory.Name, "BonusSelection category is wrong");
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "BonusSelection selection count is wrong");
-
-            File.Delete(path);
         }
     }
 }

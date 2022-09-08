@@ -21,24 +21,15 @@ namespace NpcGenerator
 {
     public class CsvConfigurationParser : IFormatConfigurationParser
     {
-        public string SupportedFileExtension { get; } = ".csv";
-
-        public TraitSchema Parse(string path)
+        public TraitSchema Parse(string text)
         {
-            IEnumerable<string> lines = File.ReadAllLines(path);
-            IEnumerator<string> enumerator = lines.GetEnumerator();
-            bool hasTitleRow = enumerator.MoveNext();
-            if (!hasTitleRow)
-            {
-                string fileName = Path.GetFileName(path);
-                throw new EmptyFileException(fileName);
-            }
+            string[] lines = text.Split('\n');
 
-            TraitSchema traitSchema = ParseCategories(enumerator.Current);
+            TraitSchema traitSchema = ParseCategories(lines[0]);
 
-            while (enumerator.MoveNext())
+            for(int i = 1; i < lines.Length; ++i)
             {
-                ParseOptionsRow(traitSchema, enumerator.Current);
+                ParseOptionsRow(traitSchema, lines[i]);
             }
 
             DetectDuplicateTraitNamesInASingleCategory(traitSchema);

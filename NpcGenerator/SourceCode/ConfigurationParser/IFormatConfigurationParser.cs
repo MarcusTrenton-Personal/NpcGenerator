@@ -17,7 +17,6 @@ namespace NpcGenerator
 {
     public interface IFormatConfigurationParser
     {
-        public string SupportedFileExtension { get; } //Include the . in the extension (ex: .csv)
         public TraitSchema Parse(string path);
     }
 }

@@ -21,13 +21,13 @@ namespace NpcGenerator
 {
     public class ConfigurationParser : IConfigurationParser
     {
-        public ConfigurationParser(IEnumerable<IFormatConfigurationParser> parsers)
+        public ConfigurationParser(IEnumerable<FormatParser> parsers)
         {
-            IEnumerator<IFormatConfigurationParser> enumerator = parsers.GetEnumerator();
+            IEnumerator<FormatParser> enumerator = parsers.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                IFormatConfigurationParser parser = enumerator.Current;
-                m_parsers[parser.SupportedFileExtension] = parser;
+                IFormatConfigurationParser parser = enumerator.Current.Parser;
+                m_parsers[enumerator.Current.FileExtensionWithDot] = parser;
             }
         }
 
@@ -37,7 +37,14 @@ namespace NpcGenerator
             bool isFound = m_parsers.TryGetValue(fileType, out IFormatConfigurationParser parser);
             if (isFound)
             {
-                return parser.Parse(path);
+                string text = File.ReadAllText(path);
+                bool isEmpty = string.IsNullOrWhiteSpace(text);
+                if (isEmpty)
+                {
+                    string fileName = Path.GetFileName(path);
+                    throw new EmptyFileException(fileName);
+                }
+                return parser.Parse(text);
             }
 
             string acceptedFileTypes = "";
@@ -50,5 +57,17 @@ namespace NpcGenerator
 
         private readonly Dictionary<string, IFormatConfigurationParser> m_parsers = 
             new Dictionary<string, IFormatConfigurationParser>();
+    }
+
+    public class FormatParser
+    {
+        public FormatParser(string fileExtensionWithDot, IFormatConfigurationParser parser)
+        {
+            FileExtensionWithDot = fileExtensionWithDot;
+            Parser = parser;
+        }
+
+        public string FileExtensionWithDot { get; private set; }
+        public IFormatConfigurationParser Parser { get; private set; }
     }
 }

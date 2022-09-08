@@ -35,35 +35,8 @@ namespace Tests
             File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
-
-            File.Delete(path);
-        }
-
-        [TestMethod]
-        public void EmptyFile()
-        {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string fileName = method + ".csv";
-            string path = Path.Combine(TestDirectory, fileName);
-            string text = "";
-            File.WriteAllText(path, text);
-
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
-            }
-            catch (EmptyFileException exception)
-            {
-                Assert.AreEqual(fileName, exception.FileName, "Wrong file name returned");
-
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Empty file failed to throw exception");
 
             File.Delete(path);
         }
@@ -86,7 +59,7 @@ namespace Tests
             File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
@@ -130,7 +103,7 @@ namespace Tests
             try 
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch(EmptyCategoryNameException)
             {
@@ -158,7 +131,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (TraitMissingCategoryException exception)
             {
@@ -186,7 +159,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (CategoryWeightMismatchException)
             {
@@ -212,7 +185,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (CategoryWeightMismatchException)
             {
@@ -238,7 +211,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (CategoryWeightMismatchException)
             {
@@ -264,7 +237,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (CategoryWeightMismatchException)
             {
@@ -290,7 +263,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (CategoryWeightMismatchException)
             {
@@ -319,7 +292,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (MissingWeightException exception)
             {
@@ -350,7 +323,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (MissingWeightException exception)
             {
@@ -382,7 +355,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (WeightIsNotWholeNumberException exception)
             {
@@ -415,7 +388,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (WeightIsNotWholeNumberException exception)
             {
@@ -448,7 +421,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (WeightIsNotWholeNumberException exception)
             {
@@ -481,7 +454,7 @@ namespace Tests
             try
             {
                 CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (WeightIsNotWholeNumberException exception)
             {
@@ -512,7 +485,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch(DuplicateCategoryNameException exception)
             {
@@ -544,7 +517,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (DuplicateTraitNameInCategoryException exception)
             {
@@ -571,7 +544,7 @@ namespace Tests
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
 
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
 
             Assert.AreEqual(2, categories.Count);

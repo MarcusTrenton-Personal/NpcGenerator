@@ -84,8 +84,11 @@ namespace NpcGenerator
             CsvConfigurationParser csvConfigurationParser = new CsvConfigurationParser();
             JsonConfigurationParser jsonConfigurationParser = new JsonConfigurationParser(
                 filePathProvider.ConfigurationJsonSchema);
-            List<IFormatConfigurationParser> parsers = new List<IFormatConfigurationParser>()
-                { csvConfigurationParser, jsonConfigurationParser };
+            List<FormatParser> parsers = new List<FormatParser>()
+            { 
+                new FormatParser(".csv", csvConfigurationParser), 
+                new FormatParser(".json", jsonConfigurationParser)
+            };
             ConfigurationParser configurationParser = new ConfigurationParser(parsers);
 
             Dictionary<string, INpcExport> npcExporters = new Dictionary<string, INpcExport>();

@@ -22,7 +22,7 @@ using System.IO;
 namespace Tests.JsonConfigurationParserTests
 {
     [TestClass]
-    public class ReplacementJsonConfigurationParserTests : FileCreatingTests
+    public class ReplacementJsonConfigurationParserTests
     {
         const string SCHEMA_PATH = "ConfigurationSchema.json";
 
@@ -32,8 +32,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REPLACEMENT_CATEGORY = "Colour";
             const string REPLACEMENT_TRAIT = "Green";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -58,18 +56,15 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
             Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
             Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category.Name, "Wrong replacement category");
             Assert.AreEqual(REPLACEMENT_TRAIT, replacements[0].Trait.Name, "Wrong replacement trait");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -80,8 +75,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REPLACEMENT_CATEGORY1 = "Animal";
             const string REPLACEMENT_TRAIT1 = "Bear";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -124,10 +117,9 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
 
             IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
@@ -140,8 +132,6 @@ namespace Tests.JsonConfigurationParserTests
             ReplacementSearch replacement1 = ListUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY1);
             Assert.AreEqual(REPLACEMENT_CATEGORY1, replacement1.Category.Name, "Wrong replacement category");
             Assert.AreEqual(REPLACEMENT_TRAIT1, replacement1.Trait.Name, "Wrong replacement trait");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -150,8 +140,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REPLACEMENT_CATEGORY = "Colour";
             const string MISSING_REPLACEMENT_TRAIT = "Blue";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -176,14 +164,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (MissingReplacementTraitException exception)
             {
@@ -193,8 +180,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Faile to throw a MissingReplacementTraitException exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -203,8 +188,6 @@ namespace Tests.JsonConfigurationParserTests
             const string MISSING_REPLACEMENT_CATEGORY = "Hair";
             const string REPLACEMENT_TRAIT = "Green";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -229,14 +212,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (MissingReplacementCategoryException exception)
             {
@@ -246,15 +228,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw MissingReplacementCategoryException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void ReplacementHasNoCategory()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -278,14 +256,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -293,15 +270,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void ReplacementHasNoTrait()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -325,14 +298,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -340,15 +312,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void ReplacementIsEmpty()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -371,14 +339,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -386,8 +353,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -396,8 +361,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REPLACEMENT_CATEGORY = "Hair";
             const string REPLACEMENT_TRAIT = "Green";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'replacements' : [
                     {{
@@ -426,14 +389,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -441,8 +403,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
     }
 }

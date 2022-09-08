@@ -33,8 +33,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REQUIREMENT_CATEGORY = "Colour";
             const string REQUIREMENT_TRAIT = "Blue";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -63,10 +61,9 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             Assert.IsNotNull(schema, "Schema is null");
             
@@ -85,8 +82,6 @@ namespace Tests.JsonConfigurationParserTests
             
             Npc npcWithoutTrait = new Npc();
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutTrait), "Category is incorrectly unlocked for npc without required trait");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -98,8 +93,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REQUIREMENT_CATEGORY1 = "Hair";
             const string REQUIREMENT_TRAIT1 = "Shaggy";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -147,10 +140,9 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             Assert.IsNotNull(schema, "Schema is null");
 
@@ -184,8 +176,6 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithoutAnyRequiredTraits = new Npc();
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits), 
                 "Category is incorrectly unlocked for npc without required trait");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -197,8 +187,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REQUIREMENT_CATEGORY1 = "Hair";
             const string REQUIREMENT_TRAIT1 = "Shaggy";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -246,10 +234,9 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             Assert.IsNotNull(schema, "Schema is null");
 
@@ -283,8 +270,6 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithoutAnyRequiredTraits = new Npc();
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits),
                 "Category is incorrectly unlocked for npc without required trait");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -296,8 +281,6 @@ namespace Tests.JsonConfigurationParserTests
             const string REQUIREMENT_CATEGORY1 = "Hair";
             const string REQUIREMENT_TRAIT1 = "Shaggy";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -345,10 +328,9 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             Assert.IsNotNull(schema, "Schema is null");
 
@@ -382,8 +364,6 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithoutAnyRequiredTraits = new Npc();
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits),
                 "Category is incorrectly locked for npc without disqualifying traits");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -395,8 +375,6 @@ namespace Tests.JsonConfigurationParserTests
             const string DISQUALIFYING_CATEGORY = "Hair";
             const string DISQUALIFYING_TRAIT = "Shaggy";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -449,10 +427,9 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
-            TraitSchema schema = parser.Parse(path);
+            TraitSchema schema = parser.Parse(text);
 
             Assert.IsNotNull(schema, "Schema is null");
 
@@ -488,15 +465,11 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithoutAnyRequiredTraits = new Npc();
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits),
                 "Category is incorrectly unlocked for npc without required trait");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void RequirementNoOperands()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -524,14 +497,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -539,15 +511,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void RequirementEmptyOperand()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -576,14 +544,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -591,15 +558,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void RequirementNoOperator()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -629,14 +592,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -644,15 +606,11 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void RequirementPresentButEmpty()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -678,14 +636,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -693,8 +650,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -704,8 +659,6 @@ namespace Tests.JsonConfigurationParserTests
             const string NOT_FOUND_CATEGORY = "Colour";
             const string NOT_FOUND_TRAIT = "Blue";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -724,14 +677,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (RequirementTraitIdNotFoundException exception)
             {
@@ -743,8 +695,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw RequirementTraitIdNotFoundException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -752,8 +702,6 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string OPERATOR = "BitShift";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -784,14 +732,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (JsonFormatException)
             {
@@ -799,8 +746,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -808,8 +753,6 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string OPERATOR = "BitShift";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -840,14 +783,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath: null);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (UnknownLogicalOperatorException exception)
             {
@@ -857,8 +799,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw UnknownLogicalOperatorException");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -867,8 +807,6 @@ namespace Tests.JsonConfigurationParserTests
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".json");
             string text = $@"{{
                 'trait_categories' : [
                     {{
@@ -897,14 +835,13 @@ namespace Tests.JsonConfigurationParserTests
                     }}
                 ]
             }}";
-            File.WriteAllText(path, text);
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(path);
+                TraitSchema schema = parser.Parse(text);
             }
             catch (SelfRequiringCategoryException exception)
             {
@@ -914,8 +851,6 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw SelfRequiringCategoryException");
-
-            File.Delete(path);
         }
 
         //Requirement chain tests.

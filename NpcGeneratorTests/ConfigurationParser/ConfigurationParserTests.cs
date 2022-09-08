@@ -34,13 +34,39 @@ namespace Tests
                 "Red,1";
             File.WriteAllText(path, text);
 
-            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser()
-            {
-                SupportedFileExtension = ".csv"
-            };
-            ConfigurationParser parser = new ConfigurationParser(new List<IFormatConfigurationParser>() { stubParser });
+            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
+            ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
             TraitSchema schema = parser.Parse(path);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void EmptyText()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string fileName = method + ".csv";
+            string path = Path.Combine(TestDirectory, fileName);
+            string text = string.Empty;
+            File.WriteAllText(path, text);
+
+            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
+            ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(path);
+            }
+            catch (EmptyFileException exception)
+            {
+                Assert.AreEqual(fileName, exception.FileName, "Wrong file name returned");
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Empty file failed to throw exception");
 
             File.Delete(path);
         }
@@ -78,11 +104,8 @@ namespace Tests
             bool threwException = false;
             try
             {
-                StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser()
-                {
-                    SupportedFileExtension = ".csv"
-                };
-                ConfigurationParser parser = new ConfigurationParser(new List<IFormatConfigurationParser>() { stubParser });
+                StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
+                ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) }); ;
                 TraitSchema schema = parser.Parse(path);
             }
             catch (Exception e)

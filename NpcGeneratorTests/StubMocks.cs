@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using WpfServices;
@@ -153,7 +154,6 @@ namespace Tests
 
     internal class StubFormatConfigurationParser : IFormatConfigurationParser
     {
-        public string SupportedFileExtension { get; set; }
         public TraitSchema Parse(string path)
         {
             return new TraitSchema();
@@ -172,17 +172,18 @@ namespace Tests
     {
         public TraitSchema Parse(string path)
         {
+            string text = File.ReadAllText(path);
             CsvConfigurationParser parser = new CsvConfigurationParser();
-            return parser.Parse(path);
+            return parser.Parse(text);
         }
     }
 
     internal class MockJsonConfigurationParser : IConfigurationParser
     {
-        public TraitSchema Parse(string path)
+        public TraitSchema Parse(string text)
         {
             JsonConfigurationParser parser = new JsonConfigurationParser(null);
-            return parser.Parse(path);
+            return parser.Parse(text);
         }
     }
 
