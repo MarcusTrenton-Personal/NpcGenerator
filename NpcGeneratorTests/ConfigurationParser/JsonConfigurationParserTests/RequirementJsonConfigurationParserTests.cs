@@ -22,7 +22,7 @@ using System.IO;
 namespace Tests.JsonConfigurationParserTests
 {
     [TestClass]
-    public class RequirementJsonConfigurationParserTests : FileCreatingTests
+    public class RequirementJsonConfigurationParserTests
     {
         const string SCHEMA_PATH = "ConfigurationSchema.json";
 

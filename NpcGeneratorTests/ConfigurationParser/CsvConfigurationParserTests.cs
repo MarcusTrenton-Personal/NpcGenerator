@@ -22,23 +22,18 @@ using System.IO;
 namespace Tests
 {
     [TestClass]
-    public class CsvConfigurationParserTests : FileCreatingTests
+    public class CsvConfigurationParserTests
     {
         [TestMethod]
         public void GeneratesTraitSchema()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
             TraitSchema schema = parser.Parse(text);
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -51,12 +46,9 @@ namespace Tests
             const string CATEGORY2_TRAIT1 = "Gorilla";
             const string CATEGORY2_TRAIT2 = "Rhino";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY1_TITLE + ",Weight," + CATEGORY2_TITLE + ",Weight\n" +
                 CATEGORY1_TRAIT1 + ",1," + CATEGORY2_TRAIT1 + ",1\n" +
                 CATEGORY1_TRAIT2 + ",1," + CATEGORY2_TRAIT2 + ",1";
-            File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
             TraitSchema schema = parser.Parse(text);
@@ -85,19 +77,14 @@ namespace Tests
             Assert.AreEqual(1, animals.Length, "Wrong number of traits selected from " + CATEGORY2_TITLE);
             Assert.IsTrue(animals[0] == CATEGORY2_TRAIT1 || animals[0] == CATEGORY2_TRAIT2, 
                 CATEGORY2_TITLE + " chose an invalid trait " + animals[0]);
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void MissingFirstTitleThrowsException()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = ",Weight\n" +
                "Green,1\n" +
                "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try 
@@ -111,8 +98,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Missing title failed to throw exception");
-
-            File.Delete(path); 
         }
 
         [TestMethod]
@@ -120,12 +105,9 @@ namespace Tests
         {
             const string FIRST_TRAIT_MISSING_CATEGORY = "Gorilla";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight\n" +
                 "Green,1," + FIRST_TRAIT_MISSING_CATEGORY + ",1\n" +
                 "Red,1,Rhino,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -141,19 +123,14 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Missing title failed to throw exception");
-
-            File.Delete(path); 
         }
 
         [TestMethod]
         public void MissingWeightColumn()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour\n" +
                 "Green,1\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -167,19 +144,14 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Missing weight column failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void ExtraColumn()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight,Bonus Selection\n" +
                 "Green,1\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -193,19 +165,14 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Extra column failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void SkipFirstColumn()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = ",Colour,Weight\n" +
                 ",Green,1\n" +
                 ",Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -219,19 +186,14 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Skipping first column failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void SkipMiddleColumn()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,,Weight\n" +
                 "Green,,1\n" +
                 "Red,,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -245,19 +207,14 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Skipping middle column failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void SkipColumnBetweenCategories()
         {
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Colour,Weight,,Animal,Weight\n" +
                 "Green,1,,Bear,1\n" +
                 "Red,1,,Rhino,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -271,8 +228,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Skipping column between categories failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -281,12 +236,9 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -302,8 +254,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Missing weight cell failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -312,12 +262,9 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + ",\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -333,8 +280,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -344,12 +289,9 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "-2";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -366,8 +308,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -377,12 +317,9 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "2.0";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -399,8 +336,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -410,12 +345,9 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "One";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -432,8 +364,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -443,12 +373,9 @@ namespace Tests
             const string TRAIT = "Green";
             const string WEIGHT = "false";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + "," + WEIGHT + "\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
 
             bool threwException = false;
             try
@@ -465,8 +392,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -474,11 +399,8 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight," + CATEGORY + ",Weight\n" +
                 "Green,1,Red,1";
-            File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
 
@@ -495,8 +417,6 @@ namespace Tests
             }
             
             Assert.IsTrue(threwException, "Failed to throw exception for categories with duplicate names");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -505,12 +425,9 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Green";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = CATEGORY + ",Weight\n" +
                 TRAIT + ",1\n" +
                 TRAIT + ",1";
-            File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
 
@@ -527,8 +444,6 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Failed to throw exception for categories with duplicate names");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -536,11 +451,8 @@ namespace Tests
         {
             const string TRAIT_NAME = "Brown";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string text = "Hair,Weight,Skin,Weight\n" +
                 TRAIT_NAME + ",1," + TRAIT_NAME + ",1";
-            File.WriteAllText(path, text);
 
             CsvConfigurationParser parser = new CsvConfigurationParser();
 
@@ -550,8 +462,6 @@ namespace Tests
             Assert.AreEqual(2, categories.Count);
             Assert.IsNotNull(categories[0].GetTrait(TRAIT_NAME), "Missing expected trait in category");
             Assert.IsNotNull(categories[1].GetTrait(TRAIT_NAME), "Missing expected trait in category");
-
-            File.Delete(path);
         }
 
         readonly MockRandom m_random = new MockRandom();
