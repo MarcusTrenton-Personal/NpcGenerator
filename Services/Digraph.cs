@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 namespace Services
 {
-    public class DirectedArrowGraph<T> where T : notnull
+    public class Digraph<T> where T : notnull
     {
         public bool AddNode(T node)
         {

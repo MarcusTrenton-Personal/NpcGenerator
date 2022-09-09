@@ -22,12 +22,12 @@ using System.Text;
 namespace Tests
 {
     [TestClass]
-    public class DirectedArrowGraphTests
+    public class DigraphTests
     {
         [TestMethod]
         public void AddNewIntNode()
         {
-            DirectedArrowGraph<int> graph = new DirectedArrowGraph<int>();
+            Digraph<int> graph = new Digraph<int>();
 
             bool success = graph.AddNode(1);
             
@@ -37,7 +37,7 @@ namespace Tests
         [TestMethod]
         public void AddNewObjectNode()
         {
-            DirectedArrowGraph<TestObject> graph = new DirectedArrowGraph<TestObject>();
+            Digraph<TestObject> graph = new Digraph<TestObject>();
 
             bool success = graph.AddNode(new TestObject());
 
@@ -47,7 +47,7 @@ namespace Tests
         [TestMethod]
         public void AddMultipleNodes()
         {
-            DirectedArrowGraph<float> graph = new DirectedArrowGraph<float>();
+            Digraph<float> graph = new Digraph<float>();
 
             float[] values = new float[] { 1.5f, 2.4f, 3.3f, 4.2f, 5.1f };
             foreach (float value in values)
@@ -60,7 +60,7 @@ namespace Tests
         [TestMethod]
         public void AddRedundantNode()
         {
-            DirectedArrowGraph<string> graph = new DirectedArrowGraph<string>();
+            Digraph<string> graph = new Digraph<string>();
 
             const string VALUE = "Chocolate";
             graph.AddNode(new string(VALUE));
@@ -72,7 +72,7 @@ namespace Tests
         [TestMethod]
         public void AddNullNode()
         {
-            DirectedArrowGraph<StringBuilder> graph = new DirectedArrowGraph<StringBuilder>();
+            Digraph<StringBuilder> graph = new Digraph<StringBuilder>();
 
             bool threwExcepion = false;
             try
@@ -90,7 +90,7 @@ namespace Tests
         [TestMethod]
         public void AddEdgeNullStart()
         {
-            DirectedArrowGraph<string> graph = new DirectedArrowGraph<string>();
+            Digraph<string> graph = new Digraph<string>();
 
             bool threwExcepion = false;
             try
@@ -108,7 +108,7 @@ namespace Tests
         [TestMethod]
         public void AddEdgeNullEnd()
         {
-            DirectedArrowGraph<string> graph = new DirectedArrowGraph<string>();
+            Digraph<string> graph = new Digraph<string>();
 
             bool threwExcepion = false;
             try
@@ -126,7 +126,7 @@ namespace Tests
         [TestMethod]
         public void AddEdgeToSelf()
         {
-            DirectedArrowGraph<string> graph = new DirectedArrowGraph<string>();
+            Digraph<string> graph = new Digraph<string>();
 
             const string VALUE = "World";
             bool success = graph.AddEdge(start: VALUE, end: VALUE);
@@ -137,7 +137,7 @@ namespace Tests
         [TestMethod]
         public void AddEdge()
         {
-            DirectedArrowGraph<string> graph = new DirectedArrowGraph<string>();
+            Digraph<string> graph = new Digraph<string>();
 
             bool success = graph.AddEdge(start: "Dinosaur", end: "Civilization");
 
@@ -147,7 +147,7 @@ namespace Tests
         [TestMethod]
         public void DetectIntCycleWithOnlyIsolatedNodes()
         {
-            DirectedArrowGraph<int> graph = new DirectedArrowGraph<int>();
+            Digraph<int> graph = new Digraph<int>();
 
             graph.AddNode(0);
             graph.AddNode(1);
@@ -163,7 +163,7 @@ namespace Tests
         [TestMethod]
         public void DetectIntCycleTrue()
         {
-            DirectedArrowGraph<int> graph = new DirectedArrowGraph<int>();
+            Digraph<int> graph = new Digraph<int>();
 
             graph.AddEdge(0, 1);
             graph.AddEdge(1, 2);
@@ -188,7 +188,7 @@ namespace Tests
         [TestMethod]
         public void DetectCycleFalse()
         {
-            DirectedArrowGraph<int> graph = new DirectedArrowGraph<int>();
+            Digraph<int> graph = new Digraph<int>();
 
             graph.AddEdge(0, 1);
             graph.AddEdge(1, 2);
@@ -204,7 +204,7 @@ namespace Tests
         [TestMethod]
         public void DetectCycleTrueWithMixedIsolatedNodes()
         {
-            DirectedArrowGraph<int> graph = new DirectedArrowGraph<int>();
+            Digraph<int> graph = new Digraph<int>();
 
             graph.AddNode(-1);
             graph.AddNode(-2);
@@ -232,7 +232,7 @@ namespace Tests
         [TestMethod]
         public void DetectObjectCycleTrue()
         {
-            DirectedArrowGraph<string> graph = new DirectedArrowGraph<string>();
+            Digraph<string> graph = new Digraph<string>();
 
             graph.AddEdge("A", "B");
             graph.AddEdge("B", "C");
