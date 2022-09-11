@@ -146,6 +146,20 @@ namespace NpcGenerator
             return categories;
         }
 
+        public HashSet<string> BonusSelectionCategoryNames()
+        {
+            HashSet<string> categories = new HashSet<string>();
+            foreach (Trait trait in m_traits)
+            {
+                if (trait.BonusSelection != null)
+                {
+                    categories.Add(trait.BonusSelection.TraitCategory.Name);
+                }
+            }
+
+            return categories;
+        }
+
         public string Name
         {
             get;

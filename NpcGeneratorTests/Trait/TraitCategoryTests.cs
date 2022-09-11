@@ -18,7 +18,6 @@ using NpcGenerator;
 using Services;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Tests
 {
@@ -157,6 +156,83 @@ namespace Tests
 
             Assert.AreEqual(category, trait1.BonusSelection.TraitCategory, "Category was incorrectly replaced.");
             Assert.AreEqual(newCategory, trait2.BonusSelection.TraitCategory, "Category was not replaced.");
+        }
+
+        [TestMethod]
+        public void GetEmptyBonusSelectionCategories()
+        {
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            HashSet<string> bonusSelectionCategories = category.BonusSelectionCategoryNames();
+
+            Assert.AreEqual(0, bonusSelectionCategories.Count, "Wrong number of BonusSelectionCategories");
+        }
+
+        [TestMethod]
+        public void GetSingleBonusSelectionCategory()
+        {
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+
+            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false);
+            trait1.BonusSelection = new BonusSelection(category1, 1);
+            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false);
+            trait2.BonusSelection = new BonusSelection(category1, 1);
+            category0.Add(trait0);
+            category0.Add(trait1);
+            category0.Add(trait2);
+
+            HashSet<string> bonusSelectionCategories = category0.BonusSelectionCategoryNames();
+
+            Assert.AreEqual(1, bonusSelectionCategories.Count, "Wrong number of BonusSelectionCategories");
+            Assert.IsTrue(bonusSelectionCategories.Contains(category1.Name), "Wrong bonus selection category");
+        }
+
+        [TestMethod]
+        public void GetSingleSelfBonusSelectionCategory()
+        {
+            TraitCategory category = new TraitCategory("Animal", 1);
+
+            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false);
+            trait1.BonusSelection = new BonusSelection(category, 1);
+            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false);
+            trait2.BonusSelection = new BonusSelection(category, 1);
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+
+            HashSet<string> bonusSelectionCategories = category.BonusSelectionCategoryNames();
+
+            Assert.AreEqual(1, bonusSelectionCategories.Count, "Wrong number of BonusSelectionCategories");
+            Assert.IsTrue(bonusSelectionCategories.Contains(category.Name), "Wrong bonus selection category");
+        }
+
+        [TestMethod]
+        public void GetMultipleBonusSelectionCategory()
+        {
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category2 = new TraitCategory("Shape", 1);
+
+            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false);
+            trait1.BonusSelection = new BonusSelection(category1, 1);
+            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false);
+            trait2.BonusSelection = new BonusSelection(category1, 1);
+            Trait trait3 = new Trait("Ankylosaurus", 1, isHidden: false);
+            trait2.BonusSelection = new BonusSelection(category2, 1);
+            category0.Add(trait0);
+            category0.Add(trait1);
+            category0.Add(trait2);
+            category0.Add(trait3);
+
+            HashSet<string> bonusSelectionCategories = category0.BonusSelectionCategoryNames();
+
+            Assert.AreEqual(2, bonusSelectionCategories.Count, "Wrong number of BonusSelectionCategories");
+            Assert.IsTrue(bonusSelectionCategories.Contains(category1.Name), "Wrong bonus selection category");
+            Assert.IsTrue(bonusSelectionCategories.Contains(category2.Name), "Wrong bonus selection category");
         }
 
         [TestMethod]
