@@ -255,6 +255,100 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        public void TraversalOfIsolatedNodes()
+        {
+            Digraph<int> graph = new Digraph<int>();
+
+            List<int> nodes = new List<int> { 0, 1, 2 };
+            foreach (int node in nodes)
+            {
+                graph.AddNode(node);
+            }
+
+            List<int> path = graph.GetPrerequisiteTraversalPath();
+
+            Assert.AreEqual(nodes.Count, path.Count, "Path did not contain all nodes");
+            foreach (int node in nodes)
+            {
+                Assert.IsTrue(path.Contains(node), "Path did not contain node " + node);
+            }
+        }
+
+        [TestMethod]
+        public void TraversalOfSimpleRequirementNodes()
+        {
+            Digraph<int> graph = new Digraph<int>();
+
+            List<int> nodes = new List<int> { 0, 1, 2 };
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
+
+            List<int> path = graph.GetPrerequisiteTraversalPath();
+
+            Assert.AreEqual(nodes.Count, path.Count, "Path did not contain all nodes");
+            foreach (int node in nodes)
+            {
+                Assert.IsTrue(path.Contains(node), "Path did not contain node " + node);
+            }
+            //Path must be 0, 1, 2.
+            Assert.AreEqual(0, path[0], "Returned path is wrong.");
+            Assert.AreEqual(1, path[1], "Returned path is wrong.");
+            Assert.AreEqual(2, path[2], "Returned path is wrong.");
+        }
+
+        [TestMethod]
+        public void TraversalOfManyMixedNodes()
+        {
+            Digraph<string> graph = new Digraph<string>();
+
+            List<string> nodes = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
+            graph.AddNode("A");
+            graph.AddNode("B");
+            graph.AddEdge("C", "D");
+            graph.AddEdge("K", "D");
+            graph.AddEdge("D", "E");
+            graph.AddEdge("D", "H");
+            graph.AddEdge("D", "I");
+            graph.AddEdge("E", "F");
+            graph.AddEdge("H", "F");
+            graph.AddEdge("H", "J");
+            graph.AddEdge("I", "J");
+            graph.AddEdge("F", "G");
+            graph.AddEdge("J", "G");
+            graph.AddNode("L");
+
+            List<string> path = graph.GetPrerequisiteTraversalPath();
+
+            Assert.AreEqual(nodes.Count, path.Count, "Path did not contain all nodes");
+            foreach (string node in nodes)
+            {
+                Assert.IsTrue(path.Contains(node), "Path did not contain node " + node);
+            }
+            //Many potential paths, so just check for contradiction of the requirements.
+            int c = path.IndexOf("C");
+            int d = path.IndexOf("D");
+            int e = path.IndexOf("E");
+            int f = path.IndexOf("F");
+            int g = path.IndexOf("G");
+            int h = path.IndexOf("H");
+            int i = path.IndexOf("I");
+            int j = path.IndexOf("J");
+            int k = path.IndexOf("K");
+            Assert.IsTrue(c < d, "Returned path violated a requirement.");
+            Assert.IsTrue(k < d, "Returned path violated a requirement.");
+            Assert.IsTrue(d < e, "Returned path violated a requirement.");
+            Assert.IsTrue(d < h, "Returned path violated a requirement.");
+            Assert.IsTrue(d < i, "Returned path violated a requirement.");
+            Assert.IsTrue(e < f, "Returned path violated a requirement.");
+            Assert.IsTrue(h < f, "Returned path violated a requirement.");
+            Assert.IsTrue(h < j, "Returned path violated a requirement.");
+            Assert.IsTrue(i < j, "Returned path violated a requirement.");
+            Assert.IsTrue(f < g, "Returned path violated a requirement.");
+            Assert.IsTrue(j < g, "Returned path violated a requirement.");
+        }
+
         private struct TestObject
         {
 #pragma warning disable CS0169 // Field is never used. Don't care as it's a test object. 

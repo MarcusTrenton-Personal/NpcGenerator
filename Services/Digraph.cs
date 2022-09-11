@@ -152,6 +152,63 @@ namespace Services
             return path;
         }
 
+        //Traverse all nodes a single time. Edges represent prerequisites.
+        //A node can only be visited when all nodes with edges into it have already been visited.
+        //An example of this traversal is researching techs in a tech tree.
+        //This traversal will throw an exception if the Digraph has a cycle.
+        public List<T> GetPrerequisiteTraversalPath()
+        {
+            bool hasCycle = HasCycle(out _);
+            if (hasCycle)
+            {
+                throw new InvalidOperationException("Digraph has a cycle, so cannot do prerequisite traversal");
+            }
+
+            List<T> path = new List<T>();
+            HashSet<T> toVisit = new HashSet<T>(m_nodeEdges.Keys);
+            while (toVisit.Count > 0)
+            {
+                bool foundNextNode = false;
+                foreach (T candidate in toVisit)
+                {
+                    bool canVisit = AllPrerequisitesMet(candidate, path);
+                    if (canVisit)
+                    {
+                        foundNextNode = true;
+                        path.Add(candidate);
+                        toVisit.Remove(candidate);
+                        break;
+                    }
+                }
+                if (!foundNextNode)
+                {
+                    throw new InvalidOperationException("Cannot find traversal candidate in graph with no cycles. This should be impossible.");
+                }
+            }
+            return path;
+        }
+
+        private bool AllPrerequisitesMet(T candidate, List<T> visited)
+        {
+            foreach (KeyValuePair<T, HashSet<T>> nodeEdges in m_nodeEdges)
+            {
+                if (candidate.Equals(nodeEdges.Key))
+                {
+                    continue;
+                }
+
+                bool candidateHasPrerequisite = nodeEdges.Value.Contains(candidate);
+                T prerequisite = nodeEdges.Key;
+                bool prequisiteIsVisited = visited.Contains(prerequisite);
+                if (candidateHasPrerequisite && !prequisiteIsVisited)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private class CycleMarker
         {
             public bool Visited { get; set; } = false;
