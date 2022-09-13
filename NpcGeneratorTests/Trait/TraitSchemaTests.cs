@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -129,7 +130,8 @@ namespace Tests
             
             Assert.IsTrue(threwException, "Failed to throw an ArgumentNullException for a null parameter");
         }
-        
+
+        [TestMethod]
         public void HasTraitNotFoundDueToEmptyCategories()
         {
             TraitSchema traitSchema = new TraitSchema();
@@ -139,6 +141,7 @@ namespace Tests
             Assert.IsFalse(isFound, "Incorrectly found a trait in an empty schema");
         }
 
+        [TestMethod]
         public void HasTraitNotFoundDueToTraitName()
         {
             const string CATEGORY = "Animal";
@@ -156,6 +159,7 @@ namespace Tests
             Assert.IsFalse(isFound, "Incorrectly found a trait");
         }
 
+        [TestMethod]
         public void HasTraitNotFoundDueToCategoryName()
         {
             const string TRAIT = "Black";
@@ -173,6 +177,7 @@ namespace Tests
             Assert.IsFalse(isFound, "Incorrectly found a trait");
         }
 
+        [TestMethod]
         public void HasTraitFound()
         {
             const string CATEGORY = "Animal";
@@ -191,6 +196,7 @@ namespace Tests
             Assert.IsTrue(isFound, "Failed to find trait that was in schema");
         }
 
+        [TestMethod]
         public void HasTraitNotFoundDueToCase()
         {
             const string CATEGORY = "Animal";
@@ -208,6 +214,7 @@ namespace Tests
             Assert.IsFalse(isFound, "Incorrectly found a trait");
         }
 
+        [TestMethod]
         public void HasTraitAfterTraitAdded()
         {
             const string CATEGORY = "Animal";
@@ -229,6 +236,253 @@ namespace Tests
 
             bool isFoundSubsequent = traitSchema.HasTrait(new TraitId(CATEGORY, TRAIT));
             Assert.IsTrue(isFoundSubsequent, "Failed to find trait that was in schema");
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsForEmptySchema()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsFalse(hasCircularRequirements, "Incorrectly detected cycle in empty schema");
+            Assert.IsNull(cycle, "Cycle list should be null when there is no cycle");
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsForIsolatedCategories()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+            traitSchema.Add(category1);
+            TraitCategory category2 = new TraitCategory("Age", 1);
+            traitSchema.Add(category2);
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsFalse(hasCircularRequirements, "Incorrectly detected cycle in schema of isolated categories");
+            Assert.IsNull(cycle, "Cycle list should be null when there is no cycle");
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsForCategoriesWithBonusSelections()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            traitSchema.Add(category0);
+
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+            traitSchema.Add(category1);
+
+            Trait c0t0 = new Trait("Bear", 1, isHidden: false);
+            category0.Add(c0t0);
+            Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1, 1)
+            };
+            category0.Add(c0t1);
+
+            Trait c1t0 = new Trait("Blue", 1, isHidden: false);
+            category1.Add(c1t0);
+            Trait c1t1 = new Trait("Red", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category0, 1)
+            };
+            category1.Add(c1t1);
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsFalse(hasCircularRequirements, "Incorrectly detected cycle in schema of categories connected by only bonus selections");
+            Assert.IsNull(cycle, "Cycle list should be null when there is no cycle");
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsNotForCategoriesWithNonCircularRequirements()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+            traitSchema.Add(category1);
+            TraitCategory category2 = new TraitCategory("Age", 1);
+            traitSchema.Add(category2);
+
+            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            category0.Add(trait0);
+            Trait trait1 = new Trait("Blue", 1, isHidden: false);
+            category1.Add(trait1);
+            Trait trait2 = new Trait("Young", 1, isHidden: false);
+            category2.Add(trait2);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait0 = new NpcHasTrait(new TraitId(category0.Name, trait0.Name), npcHolder);
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, trait1.Name), npcHolder);
+            LogicalAll logicalAll = new LogicalAll();
+            logicalAll.Add(hasTrait0);
+            logicalAll.Add(hasTrait1);
+            Requirement requirement = new Requirement(logicalAll, npcHolder);
+            category2.Set(requirement);
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsFalse(hasCircularRequirements, "Incorrectly detected cycle in schema of categories with non-circular requirements");
+            Assert.IsNull(cycle, "Cycle list should be null when there is no cycle");
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsNotForCategoriesWithNonCircularRequirementsAndBonusSelections()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+            traitSchema.Add(category1);
+            TraitCategory category2 = new TraitCategory("Age", 1);
+            traitSchema.Add(category2);
+
+            Trait c0t0 = new Trait("Bear", 1, isHidden: false);
+            category0.Add(c0t0);
+            Trait c1t0 = new Trait("Blue", 1, isHidden: false);
+            category1.Add(c1t0);
+            Trait c2t0 = new Trait("Young", 1, isHidden: false);
+            category2.Add(c2t0);
+
+            Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1, 1)
+            };
+            category0.Add(c0t1);
+            Trait c1t1 = new Trait("Red", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category0, 1)
+            };
+            category1.Add(c1t1);
+
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait0 = new NpcHasTrait(new TraitId(category0.Name, c0t0.Name), npcHolder);
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, c1t0.Name), npcHolder);
+            LogicalAll logicalAll = new LogicalAll();
+            logicalAll.Add(hasTrait0);
+            logicalAll.Add(hasTrait1);
+            Requirement requirement = new Requirement(logicalAll, npcHolder);
+            category2.Set(requirement);
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsFalse(hasCircularRequirements, 
+                "Incorrectly detected cycle in schema of categories with bonus selection and non-circular requirements");
+            Assert.IsNull(cycle, "Cycle list should be null when there is no cycle");
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsWithTwoCategoriesDependentOnEachOther()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Colour", 1);
+            traitSchema.Add(category1);
+
+            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            category0.Add(trait0);
+            Trait trait1 = new Trait("Blue", 1, isHidden: false);
+            category1.Add(trait1);
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, trait1.Name), npcHolder0);
+            Requirement requirement0 = new Requirement(hasTrait1, npcHolder0);
+            category0.Set(requirement0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait hasTrait0 = new NpcHasTrait(new TraitId(category0.Name, trait0.Name), npcHolder1);
+            Requirement requirement1 = new Requirement(hasTrait0, npcHolder1);
+            category1.Set(requirement1);
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsTrue(hasCircularRequirements, "Failed to detected cycle in schema");
+            Assert.AreEqual(2, cycle.Count, "Cycle list has wrong number of elements");
+
+            foreach (TraitSchema.Dependency dep in cycle)
+            {
+                Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, dep.DependencyType, "Wrong dependency type");
+
+                if (dep.OriginalCategory == category0.Name)
+                {
+                    Assert.AreEqual(category1.Name, dep.DependentCategory, "Wrong dependent category");
+                }
+                else
+                {
+                    Assert.AreEqual(dep.OriginalCategory, category1.Name, "Incorrect OriginalCategory name in Dependency");
+                    Assert.AreEqual(category0.Name, dep.DependentCategory, "Wrong dependent category");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void HasCircularRequirementsDueToBonusSelection()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal", 1);
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Building", 1);
+            traitSchema.Add(category1);
+            TraitCategory category2 = new TraitCategory("Colour", 1);
+            traitSchema.Add(category2);
+
+            Trait c0t0 = new Trait("Bear", 1, isHidden: false);
+            category0.Add(c0t0);
+            Trait c1t0 = new Trait("School", 1, isHidden: false);
+            category1.Add(c1t0);
+            Trait c2t0 = new Trait("Blue", 1, isHidden: false);
+            category2.Add(c2t0);
+
+            Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1, 1)
+            };
+            category0.Add(c0t1);
+
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait hasTrait2 = new NpcHasTrait(new TraitId(category2.Name, c2t0.Name), npcHolder0);
+            Requirement requirement0 = new Requirement(hasTrait2, npcHolder0);
+            category0.Set(requirement0);
+
+            NpcHolder npcHolder2 = new NpcHolder();
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, c0t0.Name), npcHolder2);
+            Requirement requirement2 = new Requirement(hasTrait1, npcHolder2);
+            category2.Set(requirement2);
+
+            bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+
+            Assert.IsTrue(hasCircularRequirements, "Failed to detected cycle in schema");
+            Assert.AreEqual(3, cycle.Count, "Cycle list has wrong number of elements");
+
+            foreach (TraitSchema.Dependency dep in cycle)
+            {
+                if (dep.OriginalCategory == category0.Name)
+                {
+                    Assert.AreEqual(TraitSchema.Dependency.Type.BonusSelection, dep.DependencyType, "Wrong dependency type");
+                    Assert.AreEqual(category1.Name, dep.DependentCategory, "Wrong dependent category");
+                }
+                else if (dep.OriginalCategory == category1.Name)
+                {
+                    Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, dep.DependencyType, "Wrong dependency type");
+                    Assert.AreEqual(category2.Name, dep.DependentCategory, "Wrong dependent category");
+                }
+                else
+                {
+                    Assert.AreEqual(category2.Name, dep.OriginalCategory, "Incorrect OriginalCategory name in Dependency");
+                    Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, dep.DependencyType, "Wrong dependency type");
+                    Assert.AreEqual(category0.Name, dep.DependentCategory, "Wrong dependent category");
+
+                }
+            }
         }
     }
 }
