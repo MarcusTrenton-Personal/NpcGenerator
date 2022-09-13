@@ -81,7 +81,7 @@ namespace Tests
         {
             TraitSchema traitSchema = new TraitSchema();
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait = new Trait("Red", 1, isHidden: false);
+            Trait trait = new Trait("Red");
             ReplacementSearch replacement = new ReplacementSearch(trait, category);
             traitSchema.Add(replacement);
 
@@ -97,8 +97,8 @@ namespace Tests
         {
             TraitSchema traitSchema = new TraitSchema();
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait0 = new Trait("Green", 1, isHidden: false);
-            Trait trait1 = new Trait("Red", 1, isHidden: false);
+            Trait trait0 = new Trait("Green");
+            Trait trait1 = new Trait("Red");
 
             ReplacementSearch replacement0 = new ReplacementSearch(trait0, category);
             traitSchema.Add(replacement0);
@@ -146,7 +146,7 @@ namespace Tests
         {
             const string CATEGORY = "Animal";
 
-            Trait trait = new Trait("Bear", 1, isHidden: false);
+            Trait trait = new Trait("Bear");
 
             TraitCategory category = new TraitCategory(CATEGORY, 1);
             category.Add(trait);
@@ -164,7 +164,7 @@ namespace Tests
         {
             const string TRAIT = "Black";
 
-            Trait trait = new Trait(TRAIT, 1, isHidden: false);
+            Trait trait = new Trait(TRAIT);
 
             TraitCategory category = new TraitCategory("Race", 1);
             category.Add(trait);
@@ -183,7 +183,7 @@ namespace Tests
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
 
-            Trait trait = new Trait(TRAIT, 1, isHidden: false);
+            Trait trait = new Trait(TRAIT);
 
             TraitCategory category = new TraitCategory(CATEGORY, 1);
             category.Add(trait);
@@ -201,7 +201,7 @@ namespace Tests
         {
             const string CATEGORY = "Animal";
 
-            Trait trait = new Trait("Bear", 1, isHidden: false);
+            Trait trait = new Trait("Bear");
 
             TraitCategory category = new TraitCategory(CATEGORY, 1);
             category.Add(trait);
@@ -220,7 +220,7 @@ namespace Tests
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
 
-            Trait redHerringTrait = new Trait("Velociraptor", 1, isHidden: false);
+            Trait redHerringTrait = new Trait("Velociraptor");
 
             TraitCategory category = new TraitCategory(CATEGORY, 1);
             category.Add(redHerringTrait);
@@ -231,7 +231,7 @@ namespace Tests
             bool isFoundInitially = traitSchema.HasTrait(new TraitId(CATEGORY, TRAIT));
             Assert.IsFalse(isFoundInitially, "Incorrectly found a trait");
 
-            Trait trait = new Trait(TRAIT, 1, isHidden: false);
+            Trait trait = new Trait(TRAIT);
             category.Add(trait);
 
             bool isFoundSubsequent = traitSchema.HasTrait(new TraitId(CATEGORY, TRAIT));
@@ -277,17 +277,17 @@ namespace Tests
             TraitCategory category1 = new TraitCategory("Colour", 1);
             traitSchema.Add(category1);
 
-            Trait c0t0 = new Trait("Bear", 1, isHidden: false);
+            Trait c0t0 = new Trait("Bear");
             category0.Add(c0t0);
-            Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
+            Trait c0t1 = new Trait("Rhino")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };
             category0.Add(c0t1);
 
-            Trait c1t0 = new Trait("Blue", 1, isHidden: false);
+            Trait c1t0 = new Trait("Blue");
             category1.Add(c1t0);
-            Trait c1t1 = new Trait("Red", 1, isHidden: false)
+            Trait c1t1 = new Trait("Red")
             {
                 BonusSelection = new BonusSelection(category0.Name, 1)
             };
@@ -310,11 +310,11 @@ namespace Tests
             TraitCategory category2 = new TraitCategory("Age", 1);
             traitSchema.Add(category2);
 
-            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            Trait trait0 = new Trait("Bear");
             category0.Add(trait0);
-            Trait trait1 = new Trait("Blue", 1, isHidden: false);
+            Trait trait1 = new Trait("Blue");
             category1.Add(trait1);
-            Trait trait2 = new Trait("Young", 1, isHidden: false);
+            Trait trait2 = new Trait("Young");
             category2.Add(trait2);
 
             NpcHolder npcHolder = new NpcHolder();
@@ -343,19 +343,19 @@ namespace Tests
             TraitCategory category2 = new TraitCategory("Age", 1);
             traitSchema.Add(category2);
 
-            Trait c0t0 = new Trait("Bear", 1, isHidden: false);
+            Trait c0t0 = new Trait("Bear");
             category0.Add(c0t0);
-            Trait c1t0 = new Trait("Blue", 1, isHidden: false);
+            Trait c1t0 = new Trait("Blue");
             category1.Add(c1t0);
-            Trait c2t0 = new Trait("Young", 1, isHidden: false);
+            Trait c2t0 = new Trait("Young");
             category2.Add(c2t0);
 
-            Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
+            Trait c0t1 = new Trait("Rhino")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };
             category0.Add(c0t1);
-            Trait c1t1 = new Trait("Red", 1, isHidden: false)
+            Trait c1t1 = new Trait("Red")
             {
                 BonusSelection = new BonusSelection(category0.Name, 1)
             };
@@ -387,9 +387,9 @@ namespace Tests
             TraitCategory category1 = new TraitCategory("Colour", 1);
             traitSchema.Add(category1);
 
-            Trait trait0 = new Trait("Bear", 1, isHidden: false);
+            Trait trait0 = new Trait("Bear");
             category0.Add(trait0);
-            Trait trait1 = new Trait("Blue", 1, isHidden: false);
+            Trait trait1 = new Trait("Blue");
             category1.Add(trait1);
 
             NpcHolder npcHolder0 = new NpcHolder();
@@ -434,14 +434,14 @@ namespace Tests
             TraitCategory category2 = new TraitCategory("Colour", 1);
             traitSchema.Add(category2);
 
-            Trait c0t0 = new Trait("Bear", 1, isHidden: false);
+            Trait c0t0 = new Trait("Bear");
             category0.Add(c0t0);
-            Trait c1t0 = new Trait("School", 1, isHidden: false);
+            Trait c1t0 = new Trait("School");
             category1.Add(c1t0);
-            Trait c2t0 = new Trait("Blue", 1, isHidden: false);
+            Trait c2t0 = new Trait("Blue");
             category2.Add(c2t0);
 
-            Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
+            Trait c0t1 = new Trait("Rhino")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };

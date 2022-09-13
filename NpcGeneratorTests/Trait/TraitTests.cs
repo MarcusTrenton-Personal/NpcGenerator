@@ -38,7 +38,7 @@ namespace Tests
         [TestMethod]
         public void DeepCopyWithRename()
         {
-            Trait original = new Trait("Blue", 1, isHidden: false);
+            Trait original = new Trait("Blue");
             TraitCategory category = new TraitCategory("Animal", 1);
             original.BonusSelection = new BonusSelection(category.Name, 1);
 

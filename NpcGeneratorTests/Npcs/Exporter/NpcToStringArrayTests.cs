@@ -55,11 +55,11 @@ namespace Tests
         {
             const string COLOUR_TRAIT = "Blue";
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            colourCategory.Add(new Trait(COLOUR_TRAIT, 1, isHidden: false));
+            colourCategory.Add(new Trait(COLOUR_TRAIT));
 
             const string ANIMAL_TRAIT = "Bear";
             TraitCategory animalCategory = new TraitCategory("Animal", 1);
-            animalCategory.Add(new Trait(ANIMAL_TRAIT, 1, isHidden: false));
+            animalCategory.Add(new Trait(ANIMAL_TRAIT));
 
             Npc npc = new Npc();
             npc.Add("Colour", new string[] { COLOUR_TRAIT });

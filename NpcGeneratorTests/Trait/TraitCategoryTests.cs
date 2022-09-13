@@ -44,7 +44,10 @@ namespace Tests
             const string TRAIT1_NAME = "Blue";
             const string TRAIT2_NAME = "Green";
             Trait trait1 = new Trait(TRAIT1_NAME, 1, isHidden: true);
-            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false);
+            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection("Animal", 1)
+            };
             original.Add(trait1);
             original.Add(trait2);
 
@@ -52,8 +55,21 @@ namespace Tests
 
             Assert.AreEqual(NAME, copy.Name, "Assigned the wrong name");
             Assert.AreEqual(DEFAULT_SELECTIONS, copy.DefaultSelectionCount, "Assigned the wrong default selections");
-            Assert.AreEqual(TRAIT1_NAME, copy.GetTrait(TRAIT1_NAME).Name, TRAIT1_NAME + " was not copied correctly");
-            Assert.AreEqual(TRAIT2_NAME, copy.GetTrait(TRAIT2_NAME).Name, TRAIT2_NAME + " was not copied correctly");
+            
+            Trait copy1 = copy.GetTrait(TRAIT1_NAME);
+            Assert.AreEqual(TRAIT1_NAME, copy1.Name, TRAIT1_NAME + " was not copied correctly");
+            Assert.AreEqual(trait1.Weight, copy1.Weight, TRAIT1_NAME + " was not copied correctly");
+            Assert.AreEqual(trait1.IsHidden, copy1.IsHidden, TRAIT1_NAME + " was not copied correctly");
+            Assert.AreEqual(trait1.BonusSelection, copy1.BonusSelection, TRAIT1_NAME + " was not copied correctly");
+
+            Trait copy2 = copy.GetTrait(TRAIT2_NAME);
+            Assert.AreEqual(TRAIT2_NAME, copy2.Name, TRAIT2_NAME + " was not copied correctly");
+            Assert.AreEqual(trait2.Weight, copy2.Weight, TRAIT2_NAME + " was not copied correctly");
+            Assert.AreEqual(trait2.IsHidden, copy2.IsHidden, TRAIT2_NAME + " was not copied correctly");
+            Assert.AreEqual(trait2.BonusSelection.CategoryName, copy2.BonusSelection.CategoryName, 
+                TRAIT2_NAME + " was not copied correctly");
+            Assert.AreEqual(trait2.BonusSelection.SelectionCount, copy2.BonusSelection.SelectionCount, 
+                TRAIT2_NAME + " was not copied correctly");
         }
 
         [TestMethod]
@@ -64,14 +80,14 @@ namespace Tests
             TraitCategory original = new TraitCategory(NAME, DEFAULT_SELECTIONS);
             const string TRAIT1_NAME = "Blue";
             const string TRAIT2_NAME = "Green";
-            Trait trait1 = new Trait(TRAIT1_NAME, 1, isHidden: true);
-            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false);
+            Trait trait1 = new Trait(TRAIT1_NAME);
+            Trait trait2 = new Trait(TRAIT2_NAME);
             original.Add(trait1);
             original.Add(trait2);
 
             const string IRRELEVANT_TRAIT_ORIGINAL_NAME = "Lion";
             TraitCategory irreleventCategory = new TraitCategory("Animal", 1);
-            Trait irreleventTrait = new Trait(IRRELEVANT_TRAIT_ORIGINAL_NAME, 1, isHidden: false);
+            Trait irreleventTrait = new Trait(IRRELEVANT_TRAIT_ORIGINAL_NAME);
             irreleventCategory.Add(irreleventTrait);
 
             const string TRAIT1_REPLACEMENT = "Red";
@@ -109,7 +125,7 @@ namespace Tests
         {
             const string TRAIT_NAME = "Blue";
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
             Assert.AreEqual(trait, category.GetTrait(TRAIT_NAME), TRAIT_NAME + " was not found in the copy");
@@ -120,7 +136,7 @@ namespace Tests
         {
             const string TRAIT_NAME = "Blue";
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
             Trait foundTrait = category.GetTrait("Purple");
@@ -144,12 +160,12 @@ namespace Tests
             TraitCategory category0 = new TraitCategory("Animal", 1);
             TraitCategory category1 = new TraitCategory("Colour", 1);
 
-            Trait trait0 = new Trait("Bear", 1, isHidden: false);
-            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false)
+            Trait trait0 = new Trait("Bear");
+            Trait trait1 = new Trait("Velociraptor")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };
-            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false)
+            Trait trait2 = new Trait("Tyrannosaurus Rex")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };
@@ -168,12 +184,12 @@ namespace Tests
         {
             TraitCategory category = new TraitCategory("Animal", 1);
 
-            Trait trait0 = new Trait("Bear", 1, isHidden: false);
-            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false)
+            Trait trait0 = new Trait("Bear");
+            Trait trait1 = new Trait("Velociraptor")
             {
                 BonusSelection = new BonusSelection(category.Name, 1)
             };
-            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false)
+            Trait trait2 = new Trait("Tyrannosaurus Rex")
             {
                 BonusSelection = new BonusSelection(category.Name, 1)
             };
@@ -194,16 +210,16 @@ namespace Tests
             TraitCategory category1 = new TraitCategory("Colour", 1);
             TraitCategory category2 = new TraitCategory("Shape", 1);
 
-            Trait trait0 = new Trait("Bear", 1, isHidden: false);
-            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false)
+            Trait trait0 = new Trait("Bear");
+            Trait trait1 = new Trait("Velociraptor")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };
-            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false)
+            Trait trait2 = new Trait("Tyrannosaurus Rex")
             {
                 BonusSelection = new BonusSelection(category1.Name, 1)
             };
-            Trait trait3 = new Trait("Ankylosaurus", 1, isHidden: false);
+            Trait trait3 = new Trait("Ankylosaurus");
             trait2.BonusSelection = new BonusSelection(category2.Name, 1);
             category0.Add(trait0);
             category0.Add(trait1);
@@ -222,7 +238,7 @@ namespace Tests
         {
             const string TRAIT_NAME = "Blue";
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
             TraitChooser chooser = category.CreateTraitChooser(new MockRandom());
@@ -245,7 +261,7 @@ namespace Tests
         {
             const string TRAIT_NAME = "Blue";
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait = new Trait(TRAIT_NAME, 1, isHidden: true);
+            Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
             string[] names = category.GetTraitNames();
@@ -260,8 +276,8 @@ namespace Tests
             const string TRAIT_NAME0 = "Blue";
             const string TRAIT_NAME1 = "Red";
             TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait0 = new Trait(TRAIT_NAME0, 1, isHidden: true);
-            Trait trait1 = new Trait(TRAIT_NAME1, 1, isHidden: true);
+            Trait trait0 = new Trait(TRAIT_NAME0);
+            Trait trait1 = new Trait(TRAIT_NAME1);
             category.Add(trait0);
             category.Add(trait1);
 
@@ -419,7 +435,7 @@ namespace Tests
         {
             const string TRAIT = "Bear";
             TraitCategory category = new TraitCategory("Animal", 1);
-            category.Add(new Trait(TRAIT, 1, isHidden: false));
+            category.Add(new Trait(TRAIT));
 
             bool hasTrait = category.HasTrait(TRAIT);
 
@@ -430,7 +446,7 @@ namespace Tests
         public void HasTraitNotFound()
         {
             TraitCategory category = new TraitCategory("Animal", 1);
-            category.Add(new Trait("Bear", 1, isHidden: false));
+            category.Add(new Trait("Bear"));
 
             bool hasTrait = category.HasTrait("Lion");
 
@@ -441,7 +457,7 @@ namespace Tests
         public void HasTraitDifferentCase()
         {
             TraitCategory category = new TraitCategory("Animal", 1);
-            category.Add(new Trait("Bear", 1, isHidden: false));
+            category.Add(new Trait("Bear"));
 
             bool hasTrait = category.HasTrait("bear");
 
@@ -457,7 +473,7 @@ namespace Tests
 
             Assert.IsFalse(initialHasTrait, "Found a trait that did not exist");
 
-            category.Add(new Trait(TRAIT, 1, isHidden: false));
+            category.Add(new Trait(TRAIT));
             bool subsequentHasTrait = category.HasTrait(TRAIT);
 
             Assert.IsTrue(subsequentHasTrait, "Did not find a trait that should have been found");

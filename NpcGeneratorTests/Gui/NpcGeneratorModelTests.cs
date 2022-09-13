@@ -126,8 +126,8 @@ namespace Tests
 
             static TraitSchema Callback(string path)
             {
-                Trait green = new Trait("Green", 1, isHidden: false);
-                Trait red = new Trait("Red", 1, isHidden: false);
+                Trait green = new Trait("Green");
+                Trait red = new Trait("Red");
                 
                 TraitCategory category = new TraitCategory("Colour", 1);
                 category.Add(green);
@@ -216,8 +216,8 @@ namespace Tests
 
             static TraitSchema Callback(string path)
             {
-                Trait green = new Trait("Green", 1, isHidden: false);
-                Trait red = new Trait("Red", 1, isHidden: false);
+                Trait green = new Trait("Green");
+                Trait red = new Trait("Red");
 
                 TraitCategory category = new TraitCategory("Colour", 1);
                 category.Add(green);
@@ -258,8 +258,8 @@ namespace Tests
 
             static TraitSchema Callback(string path)
             {
-                Trait originalTrait = new Trait(ORIGINAL_TRAIT_NAME, 1, isHidden: false);
-                Trait replacementCandidateTrait = new Trait(REPLACEMENT_CANDIDATE_TRAIT_NAME, 1, isHidden: false);
+                Trait originalTrait = new Trait(ORIGINAL_TRAIT_NAME);
+                Trait replacementCandidateTrait = new Trait(REPLACEMENT_CANDIDATE_TRAIT_NAME);
 
                 TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY, 1);
                 category.Add(originalTrait);
@@ -562,14 +562,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GenerateCatchesTooFewTraitsInCategoryExceptionDueBonusSelections()
+        public void GenerateCatchesTooFewTraitsInCategoryExceptionDueToBonusSelections()
         {
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
 
             static TraitSchema Callback(string path)
             {
-                Trait trait = new Trait("Green", 1, isHidden: false);
+                Trait trait = new Trait("Green");
                 TraitCategory category = new TraitCategory("Colour", 1);
                 trait.BonusSelection = new BonusSelection(category.Name, 10);
                 category.Add(trait);

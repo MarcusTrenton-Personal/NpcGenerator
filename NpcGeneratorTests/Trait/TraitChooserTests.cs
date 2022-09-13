@@ -32,8 +32,8 @@ namespace Tests
         {
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 1, isHidden: false),
-                new Trait(TAILS, 1, isHidden: false)
+                new Trait(HEADS, 1),
+                new Trait(TAILS, 1)
             };
 
             int headCount = 0;
@@ -69,8 +69,8 @@ namespace Tests
         {
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 2, isHidden: false),
-                new Trait(TAILS, 1, isHidden: false)
+                new Trait(HEADS, 2),
+                new Trait(TAILS, 1)
             };
 
             int headCount = 0;
@@ -110,8 +110,8 @@ namespace Tests
 
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 1, isHidden: false),
-                new Trait(TAILS, 1, isHidden: false)
+                new Trait(HEADS, 1),
+                new Trait(TAILS, 1)
             };
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
@@ -125,7 +125,7 @@ namespace Tests
         {
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 0, isHidden: false)
+                new Trait(HEADS, 0)
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
@@ -147,8 +147,8 @@ namespace Tests
         {
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 0, isHidden: false),
-                new Trait(TAILS, 1, isHidden: false)
+                new Trait(HEADS, 0),
+                new Trait(TAILS, 1)
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
@@ -170,7 +170,7 @@ namespace Tests
         {
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 1, isHidden: false)
+                new Trait(HEADS, 1)
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
@@ -222,7 +222,7 @@ namespace Tests
         {
             List<Trait> traits = new List<Trait>
             {
-                new Trait(HEADS, 1, isHidden: false)
+                new Trait(HEADS, 1)
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
@@ -236,7 +236,7 @@ namespace Tests
         public void SingleBonusSelection()
         {
             List<Trait> traits = new List<Trait>();
-            Trait trait = new Trait(HEADS, 1, isHidden: false);
+            Trait trait = new Trait(HEADS);
             const string BONUS_CATEGORY = "Animal";
             TraitCategory category = new TraitCategory(BONUS_CATEGORY, 1);
             trait.BonusSelection = new BonusSelection(category.Name, 1);
@@ -256,7 +256,7 @@ namespace Tests
         public void MultipleBonusSelections()
         {
             List<Trait> traits = new List<Trait>();
-            Trait trait = new Trait(HEADS, 1, isHidden: false);
+            Trait trait = new Trait(HEADS);
             const string BONUS_CATEGORY = "Animal";
             TraitCategory category = new TraitCategory(BONUS_CATEGORY, 1);
             trait.BonusSelection = new BonusSelection(category.Name, 2);

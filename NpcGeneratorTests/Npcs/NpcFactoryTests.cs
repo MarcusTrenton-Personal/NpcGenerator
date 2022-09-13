@@ -29,7 +29,7 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
-            colourCategory.Add(new Trait(TRAIT, 1, isHidden: false));
+            colourCategory.Add(new Trait(TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -51,7 +51,7 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
-            colourCategory.Add(new Trait(TRAIT, 1, isHidden: false));
+            colourCategory.Add(new Trait(TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -76,7 +76,7 @@ namespace Tests
         public void CreateZeroNpcs()
         {
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            colourCategory.Add(new Trait("Blue", 1, isHidden: false));
+            colourCategory.Add(new Trait("Blue"));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -94,8 +94,8 @@ namespace Tests
             const string TRAIT0 = "Blue";
             const string TRAIT1 = "Green";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 2);
-            colourCategory.Add(new Trait(TRAIT0, 1, isHidden: false));
-            colourCategory.Add(new Trait(TRAIT1, 1, isHidden: false));
+            colourCategory.Add(new Trait(TRAIT0));
+            colourCategory.Add(new Trait(TRAIT1));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -120,12 +120,12 @@ namespace Tests
             const string CATEGORY0 = "Colour";
             const string CATEGORY0_TRAIT = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY0, 1);
-            colourCategory.Add(new Trait(CATEGORY0_TRAIT, 1, isHidden: false));
+            colourCategory.Add(new Trait(CATEGORY0_TRAIT));
 
             const string CATEGORY1 = "Animal";
             const string CATEGORY1_TRAIT = "Bear";
             TraitCategory animalCategory = new TraitCategory(CATEGORY1, 1);
-            animalCategory.Add(new Trait(CATEGORY1_TRAIT, 1, isHidden: false));
+            animalCategory.Add(new Trait(CATEGORY1_TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -153,13 +153,13 @@ namespace Tests
             const string CATEGORY0_TRAIT0 = "Blue";
             const string CATEGORY0_TRAIT1 = "Green";
             TraitCategory colourCategory = new TraitCategory(CATEGORY0, 2);
-            colourCategory.Add(new Trait(CATEGORY0_TRAIT0, 1, isHidden: false));
-            colourCategory.Add(new Trait(CATEGORY0_TRAIT1, 1, isHidden: false));
+            colourCategory.Add(new Trait(CATEGORY0_TRAIT0));
+            colourCategory.Add(new Trait(CATEGORY0_TRAIT1));
 
             const string CATEGORY1 = "Animal";
             const string CATEGORY1_TRAIT = "Bear";
             TraitCategory animalCategory = new TraitCategory(CATEGORY1, 1);
-            animalCategory.Add(new Trait(CATEGORY1_TRAIT, 1, isHidden: false));
+            animalCategory.Add(new Trait(CATEGORY1_TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -205,7 +205,7 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
-            colourCategory.Add(new Trait(TRAIT, 1, isHidden: false));
+            colourCategory.Add(new Trait(TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -229,7 +229,7 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
-            colourCategory.Add(new Trait(TRAIT, 1, isHidden: false));
+            colourCategory.Add(new Trait(TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
@@ -286,7 +286,7 @@ namespace Tests
         public void BonusSelectionForMissingCategory()
         {
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait trait = new Trait("Blue", 1, isHidden: false)
+            Trait trait = new Trait("Blue")
             {
                 BonusSelection = new BonusSelection("NotInSchema", selectionCount: 1)
             };
@@ -312,7 +312,7 @@ namespace Tests
         public void BonusSelectionExceedsTraits()
         {
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait trait = new Trait("Blue", 1, isHidden: false)
+            Trait trait = new Trait("Blue")
             {
                 BonusSelection = new BonusSelection(colourCategory.Name, 1)
             };
@@ -341,12 +341,12 @@ namespace Tests
             const string GREEN = "Green";
 
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait blue = new Trait(BLUE, 1, isHidden: false)
+            Trait blue = new Trait(BLUE)
             {
                 BonusSelection = new BonusSelection(colourCategory.Name, 1)
             };
             colourCategory.Add(blue);
-            Trait green = new Trait(GREEN, 1, isHidden: false);
+            Trait green = new Trait(GREEN);
             colourCategory.Add(green);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -368,12 +368,12 @@ namespace Tests
             const string GREEN = "Green";
 
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait blue = new Trait(BLUE, 1, isHidden: false)
+            Trait blue = new Trait(BLUE)
             {
                 BonusSelection = new BonusSelection(colourCategory.Name, 1)
             };
             colourCategory.Add(blue);
-            Trait green = new Trait(GREEN, 1, isHidden: false);
+            Trait green = new Trait(GREEN);
             colourCategory.Add(green);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -393,10 +393,10 @@ namespace Tests
             const string BEAR = "Bear";
 
             TraitCategory animalCategory = new TraitCategory("Animal", 0);
-            animalCategory.Add(new Trait(BEAR, 1, isHidden: false));
+            animalCategory.Add(new Trait(BEAR));
 
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
-            Trait blue = new Trait(BLUE, 1, isHidden: false)
+            Trait blue = new Trait(BLUE)
             {
                 BonusSelection = new BonusSelection(animalCategory.Name, 1)
             };
@@ -423,7 +423,7 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
-            Trait trait = new Trait("Blue", 1, isHidden: false);
+            Trait trait = new Trait("Blue");
             colourCategory.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -443,7 +443,7 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
             TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
-            Trait trait = new Trait("Blue", 1, isHidden: false);
+            Trait trait = new Trait("Blue");
             colourCategory.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();

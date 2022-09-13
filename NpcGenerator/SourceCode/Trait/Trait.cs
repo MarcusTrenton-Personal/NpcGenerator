@@ -17,6 +17,14 @@ namespace NpcGenerator
 {
     public class Trait
     {
+        public Trait(string name) : this(name, weight: 1, isHidden: false)
+        {
+        }
+
+        public Trait(string name, int weight) : this(name, weight, isHidden: false)
+        { 
+        }
+
         public Trait(string name, int weight, bool isHidden)
         {
             Name = name;

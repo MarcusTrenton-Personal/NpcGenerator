@@ -126,7 +126,7 @@ namespace NpcGenerator
                         {
                             throw new WeightIsNotWholeNumberException(new TraitId(categories[i].Name, traitName), traitWeightString);
                         }
-                        categories[i].Add(new Trait(traitName, weight, isHidden: false));
+                        categories[i].Add(new Trait(traitName, weight));
                     }
                     else
                     {
