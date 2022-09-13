@@ -21,6 +21,10 @@ namespace NpcGenerator
 {
     public class TraitCategory
     {
+        public TraitCategory(string name) : this(name, selectionCount: 1)
+        {
+        }
+
         public TraitCategory(string name, int selectionCount)
         {
             if (selectionCount < 0)

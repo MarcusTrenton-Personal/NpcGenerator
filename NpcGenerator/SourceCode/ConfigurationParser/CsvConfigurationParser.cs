@@ -55,7 +55,7 @@ namespace NpcGenerator
                 {
                     throw new EmptyCategoryNameException();
                 }
-                traitSchema.Add(new TraitCategory(title, selectionCount: 1));
+                traitSchema.Add(new TraitCategory(title));
             }
 
             DetectDuplicateCategoryNames(traitSchema);

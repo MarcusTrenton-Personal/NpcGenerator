@@ -124,7 +124,7 @@ namespace Tests
         public void AddAndGetTrait()
         {
             const string TRAIT_NAME = "Blue";
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
@@ -135,7 +135,7 @@ namespace Tests
         public void GetTraitThatDoesNotExist()
         {
             const string TRAIT_NAME = "Blue";
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
@@ -147,7 +147,7 @@ namespace Tests
         [TestMethod]
         public void GetEmptyBonusSelectionCategories()
         {
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             HashSet<string> bonusSelectionCategories = category.BonusSelectionCategoryNames();
 
@@ -157,8 +157,8 @@ namespace Tests
         [TestMethod]
         public void GetSingleBonusSelectionCategory()
         {
-            TraitCategory category0 = new TraitCategory("Animal", 1);
-            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
+            TraitCategory category1 = new TraitCategory("Colour");
 
             Trait trait0 = new Trait("Bear");
             Trait trait1 = new Trait("Velociraptor")
@@ -182,7 +182,7 @@ namespace Tests
         [TestMethod]
         public void GetSingleSelfBonusSelectionCategory()
         {
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             Trait trait0 = new Trait("Bear");
             Trait trait1 = new Trait("Velociraptor")
@@ -206,9 +206,9 @@ namespace Tests
         [TestMethod]
         public void GetMultipleBonusSelectionCategory()
         {
-            TraitCategory category0 = new TraitCategory("Animal", 1);
-            TraitCategory category1 = new TraitCategory("Colour", 1);
-            TraitCategory category2 = new TraitCategory("Shape", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
+            TraitCategory category1 = new TraitCategory("Colour");
+            TraitCategory category2 = new TraitCategory("Shape");
 
             Trait trait0 = new Trait("Bear");
             Trait trait1 = new Trait("Velociraptor")
@@ -237,7 +237,7 @@ namespace Tests
         public void CreateTraitChooser()
         {
             const string TRAIT_NAME = "Blue";
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
@@ -249,7 +249,7 @@ namespace Tests
         [TestMethod]
         public void GetTraitNamesWhenEmpty()
         {
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
 
             string[] names = category.GetTraitNames();
 
@@ -260,7 +260,7 @@ namespace Tests
         public void GetSingleTraitName()
         {
             const string TRAIT_NAME = "Blue";
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
@@ -275,7 +275,7 @@ namespace Tests
         {
             const string TRAIT_NAME0 = "Blue";
             const string TRAIT_NAME1 = "Red";
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait0 = new Trait(TRAIT_NAME0);
             Trait trait1 = new Trait(TRAIT_NAME1);
             category.Add(trait0);
@@ -293,7 +293,7 @@ namespace Tests
         [TestMethod]
         public void SetIsUnlockedWithNullSetRequirement()
         {
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             category.Set(requirement: null);
 
             bool isUnlocked = category.IsUnlockedFor(new Npc());
@@ -304,7 +304,7 @@ namespace Tests
         [TestMethod]
         public void IsUnlockedWithoutSettingRequirement()
         {
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
 
             bool isUnlocked = category.IsUnlockedFor(new Npc());
 
@@ -314,7 +314,7 @@ namespace Tests
         [TestMethod]
         public void IsUnlockedForNullNpc()
         {
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
 
             bool threwException = false;
             try
@@ -339,7 +339,7 @@ namespace Tests
             NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, TRAIT), npcHolder);
             Requirement requirement = new Requirement(expression, npcHolder);
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             category.Set(requirement);
 
             Npc npc = new Npc();
@@ -358,7 +358,7 @@ namespace Tests
             NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, "Blue"), npcHolder);
             Requirement requirement = new Requirement(expression, npcHolder);
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             category.Set(requirement);
 
             Npc npc = new Npc();
@@ -379,7 +379,7 @@ namespace Tests
             NpcHasTrait expression = new NpcHasTrait(new TraitId(CATEGORY, DESIRED_TRAIT), npcHolder);
             Requirement requirement = new Requirement(expression, npcHolder);
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             category.Set(requirement);
 
             Npc npcWithDesiredTrait = new Npc();
@@ -400,7 +400,7 @@ namespace Tests
             const string INITIAL_TRAIT = "Blue";
             const string SUBSEQUENT_TRAIT = "Orange";
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             Npc npcWithInitialTrait = new Npc();
             npcWithInitialTrait.Add(CATEGORY, new string[] { INITIAL_TRAIT });
 
@@ -423,7 +423,7 @@ namespace Tests
         [TestMethod]
         public void HasTraitNull()
         {
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             bool hasTrait = category.HasTrait(name: null);
             
@@ -434,7 +434,7 @@ namespace Tests
         public void HasTraitFound()
         {
             const string TRAIT = "Bear";
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             category.Add(new Trait(TRAIT));
 
             bool hasTrait = category.HasTrait(TRAIT);
@@ -445,7 +445,7 @@ namespace Tests
         [TestMethod]
         public void HasTraitNotFound()
         {
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             category.Add(new Trait("Bear"));
 
             bool hasTrait = category.HasTrait("Lion");
@@ -456,7 +456,7 @@ namespace Tests
         [TestMethod]
         public void HasTraitDifferentCase()
         {
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             category.Add(new Trait("Bear"));
 
             bool hasTrait = category.HasTrait("bear");
@@ -468,7 +468,7 @@ namespace Tests
         public void HasTraitBeforeAndAfterTraitAdded()
         {
             const string TRAIT = "Bear";
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             bool initialHasTrait = category.HasTrait(TRAIT);
 
             Assert.IsFalse(initialHasTrait, "Found a trait that did not exist");
@@ -482,7 +482,7 @@ namespace Tests
         [TestMethod]
         public void DependentCategoryNamesEmpty()
         {
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
             HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
 
             Assert.AreEqual(0, dependentCategoryNames.Count, "Incorrect number of dependencies");
@@ -493,7 +493,7 @@ namespace Tests
         {
             const string DEPENDENT_CATEGORY = "Colour";
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY, "Blue"), npcHolder);
@@ -514,7 +514,7 @@ namespace Tests
         {
             const string DEPENDENT_CATEGORY = "Colour";
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             HashSet<string> dependentCategoryNames0 = category.DependentCategoryNames();
             Assert.AreEqual(0, dependentCategoryNames0.Count, "Incorrect number of dependencies");
@@ -539,7 +539,7 @@ namespace Tests
             const string DEPENDENT_CATEGORY0 = "Colour";
             const string DEPENDENT_CATEGORY1 = "Hair";
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY0, "Blue"), npcHolder);
@@ -569,7 +569,7 @@ namespace Tests
             const string DEPENDENT_CATEGORY0 = "Colour";
             const string DEPENDENT_CATEGORY1 = "Hair";
 
-            TraitCategory category = new TraitCategory("Animal", 1);
+            TraitCategory category = new TraitCategory("Animal");
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY0, "Blue"), npcHolder);

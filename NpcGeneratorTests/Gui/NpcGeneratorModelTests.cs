@@ -129,7 +129,7 @@ namespace Tests
                 Trait green = new Trait("Green");
                 Trait red = new Trait("Red");
                 
-                TraitCategory category = new TraitCategory("Colour", 1);
+                TraitCategory category = new TraitCategory("Colour");
                 category.Add(green);
                 category.Add(red);
 
@@ -219,7 +219,7 @@ namespace Tests
                 Trait green = new Trait("Green");
                 Trait red = new Trait("Red");
 
-                TraitCategory category = new TraitCategory("Colour", 1);
+                TraitCategory category = new TraitCategory("Colour");
                 category.Add(green);
                 category.Add(red);
 
@@ -261,7 +261,7 @@ namespace Tests
                 Trait originalTrait = new Trait(ORIGINAL_TRAIT_NAME);
                 Trait replacementCandidateTrait = new Trait(REPLACEMENT_CANDIDATE_TRAIT_NAME);
 
-                TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY, 1);
+                TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY);
                 category.Add(originalTrait);
                 category.Add(replacementCandidateTrait);
 

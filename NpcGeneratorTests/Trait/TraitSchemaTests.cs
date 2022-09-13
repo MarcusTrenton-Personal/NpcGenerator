@@ -39,7 +39,7 @@ namespace Tests
         public void SingleTraitCategory()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             traitSchema.Add(category);
 
             IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
@@ -53,9 +53,9 @@ namespace Tests
         public void MultipleTraitCategories()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category0 = new TraitCategory("Colour", 1);
+            TraitCategory category0 = new TraitCategory("Colour");
             traitSchema.Add(category0);
-            TraitCategory category1 = new TraitCategory("Animal", 1);
+            TraitCategory category1 = new TraitCategory("Animal");
             traitSchema.Add(category1);
 
             IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
@@ -80,7 +80,7 @@ namespace Tests
         public void SingleReplacement()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait = new Trait("Red");
             ReplacementSearch replacement = new ReplacementSearch(trait, category);
             traitSchema.Add(replacement);
@@ -96,7 +96,7 @@ namespace Tests
         public void MultipleReplacements()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             Trait trait0 = new Trait("Green");
             Trait trait1 = new Trait("Red");
 
@@ -148,7 +148,7 @@ namespace Tests
 
             Trait trait = new Trait("Bear");
 
-            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            TraitCategory category = new TraitCategory(CATEGORY);
             category.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -166,7 +166,7 @@ namespace Tests
 
             Trait trait = new Trait(TRAIT);
 
-            TraitCategory category = new TraitCategory("Race", 1);
+            TraitCategory category = new TraitCategory("Race");
             category.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -185,7 +185,7 @@ namespace Tests
 
             Trait trait = new Trait(TRAIT);
 
-            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            TraitCategory category = new TraitCategory(CATEGORY);
             category.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -203,7 +203,7 @@ namespace Tests
 
             Trait trait = new Trait("Bear");
 
-            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            TraitCategory category = new TraitCategory(CATEGORY);
             category.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -222,7 +222,7 @@ namespace Tests
 
             Trait redHerringTrait = new Trait("Velociraptor");
 
-            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            TraitCategory category = new TraitCategory(CATEGORY);
             category.Add(redHerringTrait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -253,11 +253,11 @@ namespace Tests
         public void HasCircularRequirementsForIsolatedCategories()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
             traitSchema.Add(category0);
-            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category1 = new TraitCategory("Colour");
             traitSchema.Add(category1);
-            TraitCategory category2 = new TraitCategory("Age", 1);
+            TraitCategory category2 = new TraitCategory("Age");
             traitSchema.Add(category2);
 
             bool hasCircularRequirements = traitSchema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
@@ -271,10 +271,10 @@ namespace Tests
         {
             TraitSchema traitSchema = new TraitSchema();
 
-            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
             traitSchema.Add(category0);
 
-            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category1 = new TraitCategory("Colour");
             traitSchema.Add(category1);
 
             Trait c0t0 = new Trait("Bear");
@@ -303,11 +303,11 @@ namespace Tests
         public void HasCircularRequirementsNotForCategoriesWithNonCircularRequirements()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
             traitSchema.Add(category0);
-            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category1 = new TraitCategory("Colour");
             traitSchema.Add(category1);
-            TraitCategory category2 = new TraitCategory("Age", 1);
+            TraitCategory category2 = new TraitCategory("Age");
             traitSchema.Add(category2);
 
             Trait trait0 = new Trait("Bear");
@@ -336,11 +336,11 @@ namespace Tests
         public void HasCircularRequirementsNotForCategoriesWithNonCircularRequirementsAndBonusSelections()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
             traitSchema.Add(category0);
-            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category1 = new TraitCategory("Colour");
             traitSchema.Add(category1);
-            TraitCategory category2 = new TraitCategory("Age", 1);
+            TraitCategory category2 = new TraitCategory("Age");
             traitSchema.Add(category2);
 
             Trait c0t0 = new Trait("Bear");
@@ -382,9 +382,9 @@ namespace Tests
         public void HasCircularRequirementsWithTwoCategoriesDependentOnEachOther()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
             traitSchema.Add(category0);
-            TraitCategory category1 = new TraitCategory("Colour", 1);
+            TraitCategory category1 = new TraitCategory("Colour");
             traitSchema.Add(category1);
 
             Trait trait0 = new Trait("Bear");
@@ -427,11 +427,11 @@ namespace Tests
         public void HasCircularRequirementsDueToBonusSelection()
         {
             TraitSchema traitSchema = new TraitSchema();
-            TraitCategory category0 = new TraitCategory("Animal", 1);
+            TraitCategory category0 = new TraitCategory("Animal");
             traitSchema.Add(category0);
-            TraitCategory category1 = new TraitCategory("Building", 1);
+            TraitCategory category1 = new TraitCategory("Building");
             traitSchema.Add(category1);
-            TraitCategory category2 = new TraitCategory("Colour", 1);
+            TraitCategory category2 = new TraitCategory("Colour");
             traitSchema.Add(category2);
 
             Trait c0t0 = new Trait("Bear");

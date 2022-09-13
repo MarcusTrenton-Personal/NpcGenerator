@@ -24,7 +24,7 @@ namespace Tests
         [TestMethod]
         public void ValueConstructor()
         {
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             const int SELECTION_COUNT = 1;
             BonusSelection bonusSelection = new BonusSelection(category.Name, SELECTION_COUNT);
 
@@ -35,7 +35,7 @@ namespace Tests
         [TestMethod]
         public void ShallowCopy()
         {
-            TraitCategory category = new TraitCategory("Colour", 1);
+            TraitCategory category = new TraitCategory("Colour");
             BonusSelection original = new BonusSelection(category.Name, 1);
 
             BonusSelection copy = original.ShallowCopy();
