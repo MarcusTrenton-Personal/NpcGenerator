@@ -60,19 +60,6 @@ namespace NpcGenerator
                 replacementCategories.Add(replacementCategory);
             }
 
-            //The copies made above have references to the old categories that must be updated.
-            Dictionary<TraitCategory, TraitCategory> originalCategoriesToReplacements = new Dictionary<TraitCategory, TraitCategory>();
-            for (int i = 0; i < originalCategories.Count; ++i)
-            {
-                TraitCategory originalCategory = originalCategories[i];
-                TraitCategory replacementCategory = replacementCategories[i];
-                originalCategoriesToReplacements[originalCategory] = replacementCategory;
-            }
-            foreach (TraitCategory category in replacementCategories)
-            {
-                category.ReplaceTraitReferences(originalCategoriesToReplacements);
-            }
-
             return replacementCategories;
         }
 
@@ -100,7 +87,8 @@ namespace NpcGenerator
 
                     foreach (BonusSelection bonusSelection in bonusSelections)
                     {
-                        selectionsPerCategory[bonusSelection.TraitCategory] = bonusSelection.SelectionCount;
+                        TraitCategory cat = ListUtil.Find(categories, category => category.Name == bonusSelection.CategoryName);
+                        selectionsPerCategory[cat] = bonusSelection.SelectionCount;
                     }
                 }
                 catch(TooFewTraitsException exception)

@@ -571,7 +571,7 @@ namespace Tests
             {
                 Trait trait = new Trait("Green", 1, isHidden: false);
                 TraitCategory category = new TraitCategory("Colour", 1);
-                trait.BonusSelection = new BonusSelection(category, 10);
+                trait.BonusSelection = new BonusSelection(category.Name, 10);
                 category.Add(trait);
 
                 TraitSchema schema = new TraitSchema();

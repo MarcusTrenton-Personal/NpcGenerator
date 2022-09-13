@@ -269,7 +269,7 @@ namespace Tests.JsonConfigurationParserTests
             BonusSelection bonusSelection = trait.BonusSelection;
 
             Assert.IsNotNull(bonusSelection, "BonusSelection is null");
-            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name, "Wrong category name in BonusSelection");
+            Assert.AreEqual(CATEGORY, bonusSelection.CategoryName, "Wrong category name in BonusSelection");
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "Wrong selection count in BonusSelection");
         }
 
@@ -306,7 +306,7 @@ namespace Tests.JsonConfigurationParserTests
             BonusSelection bonusSelection = trait.BonusSelection;
 
             Assert.IsNotNull(bonusSelection, "BonusSelection is null");
-            Assert.AreEqual(CATEGORY, bonusSelection.TraitCategory.Name, "BonusSelection has the wrong category name");
+            Assert.AreEqual(CATEGORY, bonusSelection.CategoryName, "BonusSelection has the wrong category name");
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "BonusSelection has the wrong selection count");
         }
 
@@ -354,7 +354,7 @@ namespace Tests.JsonConfigurationParserTests
             BonusSelection bonusSelection = trait.BonusSelection;
 
             Assert.IsNotNull(bonusSelection, "BonusSelection is null");
-            Assert.AreEqual(TARGET_CATEGORY, bonusSelection.TraitCategory.Name, "BonusSelection category is wrong");
+            Assert.AreEqual(TARGET_CATEGORY, bonusSelection.CategoryName, "BonusSelection category is wrong");
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "BonusSelection selection count is wrong");
         }
     }

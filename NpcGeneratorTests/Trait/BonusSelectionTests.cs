@@ -26,39 +26,23 @@ namespace Tests
         {
             TraitCategory category = new TraitCategory("Colour", 1);
             const int SELECTION_COUNT = 1;
-            BonusSelection bonusSelection = new BonusSelection(category, SELECTION_COUNT);
+            BonusSelection bonusSelection = new BonusSelection(category.Name, SELECTION_COUNT);
 
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "Wrong SelectionCount was stored");
-            Assert.AreEqual(category, bonusSelection.TraitCategory, "Wrong TraitCategory was stored");
+            Assert.AreEqual(category.Name, bonusSelection.CategoryName, "Wrong TraitCategory was stored");
         }
 
         [TestMethod]
         public void ShallowCopy()
         {
             TraitCategory category = new TraitCategory("Colour", 1);
-            const int SELECTION_COUNT = 1;
-            BonusSelection original = new BonusSelection(category, SELECTION_COUNT);
+            BonusSelection original = new BonusSelection(category.Name, 1);
 
             BonusSelection copy = original.ShallowCopy();
 
             Assert.IsFalse(ReferenceEquals(original, copy), "Original and copy are the same object, which is not a copy");
-            Assert.AreEqual(SELECTION_COUNT, copy.SelectionCount, "SelectionCount was not copied correctly.");
-            Assert.AreEqual(category, copy.TraitCategory, "TraitCategory was not copied correctly");
-        }
-
-        [TestMethod]
-        public void ShallowCopyWithNewCategory()
-        {
-            TraitCategory oldCategory = new TraitCategory("Colour", 1);
-            const int SELECTION_COUNT = 1;
-            BonusSelection original = new BonusSelection(oldCategory, SELECTION_COUNT);
-
-            TraitCategory newCategory = new TraitCategory("Animal", 1);
-            BonusSelection copy = original.ShallowCopyWithNewCategory(newCategory);
-
-            Assert.IsFalse(ReferenceEquals(original, copy), "Original and copy are the same object, which is not a copy");
-            Assert.AreEqual(SELECTION_COUNT, copy.SelectionCount, "SelectionCount was not copied correctly.");
-            Assert.AreEqual(newCategory, copy.TraitCategory, "TraitCategory was not copied correctly");
+            Assert.AreEqual(original.SelectionCount, copy.SelectionCount, "SelectionCount was not copied correctly.");
+            Assert.AreEqual(original.CategoryName, copy.CategoryName, "TraitCategory was not copied correctly");
         }
     }
 }

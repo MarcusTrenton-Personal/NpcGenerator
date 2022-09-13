@@ -281,7 +281,7 @@ namespace Tests
             category0.Add(c0t0);
             Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(category1, 1)
+                BonusSelection = new BonusSelection(category1.Name, 1)
             };
             category0.Add(c0t1);
 
@@ -289,7 +289,7 @@ namespace Tests
             category1.Add(c1t0);
             Trait c1t1 = new Trait("Red", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(category0, 1)
+                BonusSelection = new BonusSelection(category0.Name, 1)
             };
             category1.Add(c1t1);
 
@@ -352,12 +352,12 @@ namespace Tests
 
             Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(category1, 1)
+                BonusSelection = new BonusSelection(category1.Name, 1)
             };
             category0.Add(c0t1);
             Trait c1t1 = new Trait("Red", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(category0, 1)
+                BonusSelection = new BonusSelection(category0.Name, 1)
             };
             category1.Add(c1t1);
 
@@ -443,7 +443,7 @@ namespace Tests
 
             Trait c0t1 = new Trait("Rhino", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(category1, 1)
+                BonusSelection = new BonusSelection(category1.Name, 1)
             };
             category0.Add(c0t1);
 

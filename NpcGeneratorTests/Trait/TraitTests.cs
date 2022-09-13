@@ -40,7 +40,7 @@ namespace Tests
         {
             Trait original = new Trait("Blue", 1, isHidden: false);
             TraitCategory category = new TraitCategory("Animal", 1);
-            original.BonusSelection = new BonusSelection(category, 1);
+            original.BonusSelection = new BonusSelection(category.Name, 1);
 
             const string COPY_NAME = "Green";
             Trait copy = original.DeepCopyWithRename(COPY_NAME);
@@ -53,7 +53,7 @@ namespace Tests
                 "Original and copy BonusSelection are the same object, which is not a deep copy");
             Assert.AreEqual(original.BonusSelection.SelectionCount, copy.BonusSelection.SelectionCount,
                 "BonusSelection SelectionCount was not copied");
-            Assert.AreEqual(original.BonusSelection.TraitCategory, copy.BonusSelection.TraitCategory, 
+            Assert.AreEqual(original.BonusSelection.CategoryName, copy.BonusSelection.CategoryName, 
                 "BonusSelection TraitCategory was not copied");
         }
     }

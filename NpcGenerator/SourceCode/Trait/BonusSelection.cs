@@ -17,9 +17,9 @@ namespace NpcGenerator
 {
     public class BonusSelection
     {
-        public BonusSelection(TraitCategory traitCategory, int selectionCount)
+        public BonusSelection(string categoryName, int selectionCount)
         {
-            TraitCategory = traitCategory;
+            CategoryName = categoryName;
             SelectionCount = selectionCount;
         }
 
@@ -28,14 +28,7 @@ namespace NpcGenerator
             return (BonusSelection)MemberwiseClone();
         }
 
-        public BonusSelection ShallowCopyWithNewCategory(TraitCategory newTraitCategory)
-        {
-            BonusSelection copy = (BonusSelection)MemberwiseClone();
-            copy.TraitCategory = newTraitCategory;
-            return copy;
-        }
-
-        public TraitCategory TraitCategory { get; private set; }
+        public string CategoryName { get; private set; }
         public int SelectionCount { get; private set; }
     }
 }

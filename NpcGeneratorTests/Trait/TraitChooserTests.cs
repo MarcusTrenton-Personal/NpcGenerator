@@ -229,6 +229,7 @@ namespace Tests
             string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelection);
 
             Assert.AreEqual(0, bonusSelection.Count, "Returned a bonus selection where there should be none.");
+            Assert.AreEqual(1, selections.Length, "Wrong number of selections");
         }
 
         [TestMethod]
@@ -238,7 +239,7 @@ namespace Tests
             Trait trait = new Trait(HEADS, 1, isHidden: false);
             const string BONUS_CATEGORY = "Animal";
             TraitCategory category = new TraitCategory(BONUS_CATEGORY, 1);
-            trait.BonusSelection = new BonusSelection(category, 1);
+            trait.BonusSelection = new BonusSelection(category.Name, 1);
             traits.Add(trait);
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
@@ -247,7 +248,7 @@ namespace Tests
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(1, bonusSelections.Count, "Wrong number of bonusSelections");
-            Assert.AreEqual(category, bonusSelections[0].TraitCategory, "Incorrect bonus category selected");
+            Assert.AreEqual(category.Name, bonusSelections[0].CategoryName, "Incorrect bonus category selected");
             Assert.AreEqual(1, bonusSelections[0].SelectionCount, "Incorrect bonus selection count");
         }
 
@@ -258,7 +259,7 @@ namespace Tests
             Trait trait = new Trait(HEADS, 1, isHidden: false);
             const string BONUS_CATEGORY = "Animal";
             TraitCategory category = new TraitCategory(BONUS_CATEGORY, 1);
-            trait.BonusSelection = new BonusSelection(category, 2);
+            trait.BonusSelection = new BonusSelection(category.Name, 2);
             traits.Add(trait);
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
@@ -267,10 +268,10 @@ namespace Tests
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(1, bonusSelections.Count, "Wrong number of bonusSelections");
-            Assert.AreEqual(category, bonusSelections[0].TraitCategory, "Incorrect bonus category selected");
+            Assert.AreEqual(category.Name, bonusSelections[0].CategoryName, "Incorrect bonus category selected");
             Assert.AreEqual(2, bonusSelections[0].SelectionCount, "Incorrect bonus selection count");
         }
 
-        MockRandom m_random = new MockRandom();
+        private readonly MockRandom m_random = new MockRandom();
     }
 }

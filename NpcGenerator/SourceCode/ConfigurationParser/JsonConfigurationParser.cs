@@ -161,7 +161,7 @@ namespace NpcGenerator
                                 new TraitId(originalCategory.Name, trait.Name));
                         }
 
-                        BonusSelection bonusSelection = new BonusSelection(targetCategory, protoBonusSelection.Selections);
+                        BonusSelection bonusSelection = new BonusSelection(targetCategory.Name, protoBonusSelection.Selections);
                         trait.BonusSelection = bonusSelection;
                     }
                 }

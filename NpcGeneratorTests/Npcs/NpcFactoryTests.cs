@@ -288,7 +288,7 @@ namespace Tests
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
             Trait trait = new Trait("Blue", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(new TraitCategory("NotInSchema", 1), selectionCount: 1)
+                BonusSelection = new BonusSelection("NotInSchema", selectionCount: 1)
             };
             colourCategory.Add(trait);
 
@@ -314,7 +314,7 @@ namespace Tests
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
             Trait trait = new Trait("Blue", 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(colourCategory, 1)
+                BonusSelection = new BonusSelection(colourCategory.Name, 1)
             };
             colourCategory.Add(trait);
 
@@ -343,7 +343,7 @@ namespace Tests
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
             Trait blue = new Trait(BLUE, 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(colourCategory, 1)
+                BonusSelection = new BonusSelection(colourCategory.Name, 1)
             };
             colourCategory.Add(blue);
             Trait green = new Trait(GREEN, 1, isHidden: false);
@@ -370,7 +370,7 @@ namespace Tests
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
             Trait blue = new Trait(BLUE, 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(colourCategory, 1)
+                BonusSelection = new BonusSelection(colourCategory.Name, 1)
             };
             colourCategory.Add(blue);
             Trait green = new Trait(GREEN, 1, isHidden: false);
@@ -398,7 +398,7 @@ namespace Tests
             TraitCategory colourCategory = new TraitCategory("Colour", 1);
             Trait blue = new Trait(BLUE, 1, isHidden: false)
             {
-                BonusSelection = new BonusSelection(animalCategory, 1)
+                BonusSelection = new BonusSelection(animalCategory.Name, 1)
             };
             colourCategory.Add(blue);
 
@@ -460,6 +460,6 @@ namespace Tests
             Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait1, "Replacement was not honoured");
         }
 
-        MockRandom m_random = new MockRandom();
+        private readonly MockRandom m_random = new MockRandom();
     }
 }

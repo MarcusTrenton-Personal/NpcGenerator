@@ -124,22 +124,6 @@ namespace NpcGenerator
             return names;
         }
 
-        public void ReplaceTraitReferences(Dictionary<TraitCategory,TraitCategory> originalsToReplacements)
-        {
-            foreach (Trait trait in m_traits)
-            {
-                if (trait.BonusSelection != null)
-                {
-                    TraitCategory original = trait.BonusSelection.TraitCategory;
-                    bool found = originalsToReplacements.TryGetValue(original, out TraitCategory replacement);
-                    if (found)
-                    {
-                        trait.BonusSelection = trait.BonusSelection.ShallowCopyWithNewCategory(replacement);
-                    }
-                }
-            }
-        }
-
         public HashSet<string> DependentCategoryNames()
         {
             HashSet<string> categories = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
@@ -153,7 +137,7 @@ namespace NpcGenerator
             {
                 if (trait.BonusSelection != null)
                 {
-                    categories.Add(trait.BonusSelection.TraitCategory.Name);
+                    categories.Add(trait.BonusSelection.CategoryName);
                 }
             }
 

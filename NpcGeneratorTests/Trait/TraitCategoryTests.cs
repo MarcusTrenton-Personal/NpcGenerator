@@ -129,36 +129,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ReplaceReferences()
-        {
-            TraitCategory oldCategory = new TraitCategory("Animal", 1);
-
-            const string TRAIT1_NAME = "Blue";
-            TraitCategory category = new TraitCategory("Colour", 1);
-            Trait trait1 = new Trait(TRAIT1_NAME, 1, isHidden: true);
-            BonusSelection bonusSelection1 = new BonusSelection(category, 1);
-            trait1.BonusSelection = bonusSelection1;
-            category.Add(trait1);
-
-            const string TRAIT2_NAME = "Green";
-            Trait trait2 = new Trait(TRAIT2_NAME, 1, isHidden: false);
-            BonusSelection bonusSelection2 = new BonusSelection(oldCategory, 1);
-            trait2.BonusSelection = bonusSelection2;
-            category.Add(trait2);
-
-            TraitCategory newCategory = new TraitCategory("Terrain", 1);
-
-            Dictionary<TraitCategory, TraitCategory> replacements = new Dictionary<TraitCategory, TraitCategory>
-            {
-                [oldCategory] = newCategory
-            };
-            category.ReplaceTraitReferences(replacements);
-
-            Assert.AreEqual(category, trait1.BonusSelection.TraitCategory, "Category was incorrectly replaced.");
-            Assert.AreEqual(newCategory, trait2.BonusSelection.TraitCategory, "Category was not replaced.");
-        }
-
-        [TestMethod]
         public void GetEmptyBonusSelectionCategories()
         {
             TraitCategory category = new TraitCategory("Animal", 1);
@@ -175,10 +145,14 @@ namespace Tests
             TraitCategory category1 = new TraitCategory("Colour", 1);
 
             Trait trait0 = new Trait("Bear", 1, isHidden: false);
-            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false);
-            trait1.BonusSelection = new BonusSelection(category1, 1);
-            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false);
-            trait2.BonusSelection = new BonusSelection(category1, 1);
+            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1.Name, 1)
+            };
+            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1.Name, 1)
+            };
             category0.Add(trait0);
             category0.Add(trait1);
             category0.Add(trait2);
@@ -195,10 +169,14 @@ namespace Tests
             TraitCategory category = new TraitCategory("Animal", 1);
 
             Trait trait0 = new Trait("Bear", 1, isHidden: false);
-            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false);
-            trait1.BonusSelection = new BonusSelection(category, 1);
-            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false);
-            trait2.BonusSelection = new BonusSelection(category, 1);
+            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category.Name, 1)
+            };
+            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category.Name, 1)
+            };
             category.Add(trait0);
             category.Add(trait1);
             category.Add(trait2);
@@ -217,12 +195,16 @@ namespace Tests
             TraitCategory category2 = new TraitCategory("Shape", 1);
 
             Trait trait0 = new Trait("Bear", 1, isHidden: false);
-            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false);
-            trait1.BonusSelection = new BonusSelection(category1, 1);
-            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false);
-            trait2.BonusSelection = new BonusSelection(category1, 1);
+            Trait trait1 = new Trait("Velociraptor", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1.Name, 1)
+            };
+            Trait trait2 = new Trait("Tyrannosaurus Rex", 1, isHidden: false)
+            {
+                BonusSelection = new BonusSelection(category1.Name, 1)
+            };
             Trait trait3 = new Trait("Ankylosaurus", 1, isHidden: false);
-            trait2.BonusSelection = new BonusSelection(category2, 1);
+            trait2.BonusSelection = new BonusSelection(category2.Name, 1);
             category0.Add(trait0);
             category0.Add(trait1);
             category0.Add(trait2);
