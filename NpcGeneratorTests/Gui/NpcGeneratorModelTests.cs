@@ -482,6 +482,18 @@ namespace Tests
             GenerateCatches(CreateCallback, method);
         }
 
+        [TestMethod]
+        public void GenerateCatchesCircularRequirementsException()
+        {
+            static CircularRequirementsException CreateCallback()
+            {
+                return new CircularRequirementsException(new List<TraitSchema.Dependency>());
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
+        }
+
         private void GenerateCatches<T>(Func<T> createException, string fileName) where T : Exception
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile(fileName);

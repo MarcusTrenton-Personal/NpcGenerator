@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using WpfServices;
@@ -406,6 +407,25 @@ namespace NpcGenerator
                 {
                     ShowLocalizedErrorMessageIfAllowed(
                         "too_few_traits_in_category", exception.Requested, exception.Category, exception.Available);
+                }
+                catch (CircularRequirementsException exception)
+                {
+                    if (m_showErrorMessages)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        string header = m_localization.GetText("circular_requirements");
+                        builder.Append(header);
+                        foreach (TraitSchema.Dependency dependency in exception.Cycle)
+                        {
+                            builder.Append('\n');
+                            string localizationId = dependency.DependencyType == TraitSchema.Dependency.Type.Requirement ?
+                                "circular_requirement_link" : "circular_requirement_link_bonus_selection";
+                            string link = m_localization.GetText(localizationId, dependency.OriginalCategory, dependency.DependentCategory);
+                            builder.Append(link);
+                        }
+
+                        MessageBox.Show(builder.ToString());
+                    }
                 }
                 catch (IOException exception)
                 {

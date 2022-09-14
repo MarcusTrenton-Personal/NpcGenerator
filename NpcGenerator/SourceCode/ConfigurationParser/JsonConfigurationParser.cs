@@ -44,6 +44,7 @@ namespace NpcGenerator
             DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
             DetectTooFewTraitsInCategory(protoTraitSchema.trait_categories);
             TraitSchema traitSchema = ParseInternal(protoTraitSchema);
+            DetectCircularRequirements(traitSchema);
             return traitSchema;
         }
 
@@ -112,6 +113,15 @@ namespace NpcGenerator
                 {
                     throw new TooFewTraitsInCategoryException(category.Name, requiredTraits, availableTraits);
                 }
+            }
+        }
+
+        private static void DetectCircularRequirements(TraitSchema schema)
+        {
+            bool isCircularRequirements = schema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
+            if (isCircularRequirements)
+            {
+                throw new CircularRequirementsException(cycle);
             }
         }
 

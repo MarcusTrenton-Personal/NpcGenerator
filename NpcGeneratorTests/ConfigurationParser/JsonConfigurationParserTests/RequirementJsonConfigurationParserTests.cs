@@ -853,6 +853,166 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsTrue(threwException, "Failed to throw SelfRequiringCategoryException");
         }
 
-        //Requirement chain tests.
+        [TestMethod]
+        public void RequirementCircularRequirementsException()
+        {
+            const string CATEGORY0 = "Animal";
+            const string TRAIT0 = "Bear";
+            const string CATEGORY1 = "Colour";
+            const string TRAIT1 = "Blue";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{CATEGORY1}',
+				            'trait_name' : '{TRAIT1}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT0}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{CATEGORY0}',
+				            'trait_name' : '{TRAIT0}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT1}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(text);
+            }
+            catch (CircularRequirementsException exception)
+            {
+                Assert.AreEqual(2, exception.Cycle.Count, "Wrong number of links in the CircularRequirementsException");
+                foreach (TraitSchema.Dependency cycle in exception.Cycle)
+                {
+                    if (cycle.DependentCategory == CATEGORY0)
+                    {
+                        Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY1, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                    else
+                    {
+                        Assert.AreEqual(CATEGORY1, cycle.DependentCategory, "Wrong OriginalCategory");
+                        Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY0, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                }
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw CircularRequirementsException");
+        }
+
+        [TestMethod]
+        public void RequirementBonusSelectionCircularRequirementsException()
+        {
+            const string CATEGORY0 = "Animal";
+            const string TRAIT0 = "Bear";
+            const string CATEGORY1 = "Building";
+            const string TRAIT1 = "School";
+            const string CATEGORY2 = "Colour";
+            const string TRAIT2 = "Blue";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{CATEGORY2}',
+				            'trait_name' : '{TRAIT2}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT0}', 
+                                'weight' : 1,
+                                'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY1}', 'selections' : 1 }}
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT1}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY2}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{CATEGORY1}',
+				            'trait_name' : '{TRAIT1}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT2}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(text);
+            }
+            catch (CircularRequirementsException exception)
+            {
+                Assert.AreEqual(3, exception.Cycle.Count, "Wrong number of links in the CircularRequirementsException");
+                foreach (TraitSchema.Dependency cycle in exception.Cycle)
+                {
+                    if (cycle.DependentCategory == CATEGORY0)
+                    {
+                        Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY2, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                    else if (cycle.DependentCategory == CATEGORY1)
+                    {
+                        Assert.AreEqual(TraitSchema.Dependency.Type.BonusSelection, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY0, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                    else
+                    {
+                        Assert.AreEqual(CATEGORY2, cycle.DependentCategory, "Wrong OriginalCategory");
+                        Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY1, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                }
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw CircularRequirementsException");
+        }
     }
 }

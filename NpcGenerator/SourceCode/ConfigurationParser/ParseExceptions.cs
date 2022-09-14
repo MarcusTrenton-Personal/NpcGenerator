@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NpcGenerator
@@ -152,5 +153,15 @@ namespace NpcGenerator
         }
 
         public string Category { get; private set; }
+    }
+
+    public class CircularRequirementsException : FormatException
+    {
+        public CircularRequirementsException(List<TraitSchema.Dependency> cycle)
+        {
+            Cycle = cycle;
+        }
+
+        public List<TraitSchema.Dependency> Cycle;
     }
 }
