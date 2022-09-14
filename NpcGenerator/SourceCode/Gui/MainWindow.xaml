@@ -135,6 +135,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/> .-->
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=(Validation.HasError), ElementName=npcQuantityText}" Value="False"/>
+                                        <Condition Binding="{Binding Path=IsConfigurationValid}" Value="True"/>
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True"/>
                                 </MultiDataTrigger>

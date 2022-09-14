@@ -87,7 +87,7 @@ namespace NpcGenerator
         {
             if (m_traitSchema is null && !m_configurationHasError)
             {
-                m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+                ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
             }
         }
 
@@ -188,7 +188,7 @@ namespace NpcGenerator
                 NotifyPropertyChanged("IsConfigurationValid");
                 SetFileWatcherPath();
 
-                m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+                ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
                 m_messager.Send(sender: this, message: new Message.SelectConfiguration());
             }
         }
@@ -305,7 +305,7 @@ namespace NpcGenerator
 
         private void OnConfigurationChanged(object sender, FileSystemEventArgs e)
         {
-            m_configurationHasError = !ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
+            ParseTraitSchema(out m_traitSchema, out m_replacementSubModels);
             NotifyPropertyChanged("IsConfigurationValid");
         }   
 
@@ -314,9 +314,10 @@ namespace NpcGenerator
             NotifyPropertyChanged("IsConfigurationValid");
         }
 
-        private bool ParseTraitSchema(out TraitSchema traitSchema, out List<ReplacementSubModel> replacementSubModels)
+        private void ParseTraitSchema(out TraitSchema traitSchema, out List<ReplacementSubModel> replacementSubModels)
         {
-            bool isSuccess = false;
+            bool originallyHadError = m_configurationHasError;
+            m_configurationHasError = true;
             traitSchema = null;
             bool doesConfigurationFileExist = File.Exists(m_userSettings.ConfigurationPath);
             if (doesConfigurationFileExist)
@@ -325,7 +326,7 @@ namespace NpcGenerator
                 {
                     string cachedConfigurationPath = m_fileIo.CacheFile(m_userSettings.ConfigurationPath);
                     traitSchema = m_parser.Parse(cachedConfigurationPath);
-                    isSuccess = true;
+                    m_configurationHasError = false;
                 }
                 catch (EmptyFileException exception)
                 {
@@ -435,7 +436,10 @@ namespace NpcGenerator
 
             replacementSubModels = MakeReplacementSubModels(m_traitSchema);
             NotifyPropertyChanged("Replacements");
-            return isSuccess;
+            if (originallyHadError != m_configurationHasError)
+            {
+                NotifyPropertyChanged("IsConfigurationValid");
+            }
         }
 
         private void ShowLocalizedErrorMessageIfAllowed(string localizationId, params object[] formatParameters)
