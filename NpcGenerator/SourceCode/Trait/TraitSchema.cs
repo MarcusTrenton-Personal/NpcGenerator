@@ -70,6 +70,13 @@ namespace NpcGenerator
             return hasCycle;
         }
 
+        public IReadOnlyList<string> CalculateTraversalOrder()
+        {
+            Digraph<string> requirementGraph = CalculateRequirementGraph();
+            List<string> order = requirementGraph.GetPrerequisiteTraversalPath();
+            return order;
+        }
+
         private Digraph<string> CalculateRequirementGraph()
         {
             Digraph<string> requirementGraph = new Digraph<string>();

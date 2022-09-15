@@ -23,20 +23,10 @@ namespace Tests
     [TestClass]
     public class ListUtilTests
     {
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void FindWithNullList()
         {
-            bool threwException = false;
-            try
-            {
-                int result = ListUtil.Find<int>(null, x => x > 0);
-            }
-            catch(ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Cannot find element of null list. Should throw exception.");
+            ListUtil.Find<int>(list: null, test: x => x > 0);
         }
 
         [TestMethod]
@@ -83,21 +73,11 @@ namespace Tests
             Assert.IsTrue(findSuccessful, "Wrong result returned from the search.");
         }
 
-        [TestMethod]
-        public void FindWithNullPredicate()
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void FindWithNullTest()
         {
-            bool threwException = false;
-            try
-            {
-                List<int> list = new List<int>() { -1, 2, -6, 3, -4 };
-                int result = ListUtil.Find(list, null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Cannot find element of null list. Should throw exception.");
+            List<int> list = new List<int>() { -1, 2, -6, 3, -4 };
+            ListUtil.Find(list, test: null);
         }
 
         [TestMethod]
@@ -149,7 +129,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void FindFailElementWithParaterizedConstructor()
+        public void FindFailElementWithParameterizedConstructor()
         {
             TestClass defaultObject = default;
 
@@ -157,6 +137,112 @@ namespace Tests
             TestClass result = ListUtil.Find(list, i => i.x > 0);
 
             Assert.AreEqual(defaultObject, result, "");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ConvertAllWithNullList()
+        {
+            IReadOnlyList<string> result = ListUtil.ConvertAll<string, int>(list: null, converter: number => number.ToString());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ConvertAllWithNullConverter()
+        {
+            IReadOnlyList<int> list = new List<int>() { 1, 2, 3 };
+            ListUtil.ConvertAll<string, int>(list: list, converter: null);
+        }
+
+        [TestMethod]
+        public void ConvertAllWithEmptyList()
+        {
+            IReadOnlyList<int> list = new List<int>();
+            IReadOnlyList<string> result = ListUtil.ConvertAll(list: list, converter: number => number.ToString());
+
+            Assert.AreEqual(list.Count, result.Count, "Resulting list should be empty");
+        }
+
+        [TestMethod]
+        public void ConvertAllIntToString()
+        {
+            IReadOnlyList<int> list = new List<int>() { 1, 2, 3 };
+            IReadOnlyList<string> result = ListUtil.ConvertAll(list: list, converter: number => number.ToString());
+
+            Assert.AreEqual(list.Count, result.Count, "Resulting list has wrong number of elements");
+            for (int i = 0; i < list.Count; ++i)
+            {
+                Assert.AreEqual(list[i].ToString(), result[i], "Converter produces incorrect results");
+            }
+        }
+
+        [TestMethod]
+        public void ConvertAllStringToString()
+        {
+            IReadOnlyList<string> list = new List<string>() { "Chaos" };
+            IReadOnlyList<string> result = ListUtil.ConvertAll(list: list, converter: element => element.ToUpper());
+
+            Assert.AreEqual(list.Count, result.Count, "Resulting list has wrong number of elements");
+            for (int i = 0; i < list.Count; ++i)
+            {
+                Assert.AreEqual(list[i].ToUpper(), result[i], "Converter produces incorrect results");
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void IndexOfNullList()
+        {
+            ListUtil.IndexOf<int>(list: null, x => x > 0);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void IndexOfNullTest()
+        {
+            IReadOnlyList<float> list = new List<float>() { 1.0f, 1.1f, 1.2f }.AsReadOnly();
+            ListUtil.IndexOf(list: list, test: null);
+        }
+
+        [TestMethod]
+        public void IndexOfEmptyList()
+        {
+            IReadOnlyList<object> list = new List<object>().AsReadOnly();
+            int result = ListUtil.IndexOf(list: list, test: x => x.Equals(null));
+
+            Assert.AreEqual(ListUtil.NOT_FOUND, result, "Should not find an element in an empty list");
+        }
+
+        [TestMethod]
+        public void IndexOfNotFound()
+        {
+            IReadOnlyList<int> list = new List<int>() { 1, 1, 2 }.AsReadOnly();
+            int result = ListUtil.IndexOf(list: list, test: x => x < 0);
+
+            Assert.AreEqual(ListUtil.NOT_FOUND, result, "Incorrectly found an element despite the test");
+        }
+
+        [TestMethod]
+        public void IndexOfFoundFirst()
+        {
+            IReadOnlyList<int> list = new List<int>() { 1, -3, -2 }.AsReadOnly();
+            int result = ListUtil.IndexOf(list: list, test: x => x > 0);
+
+            Assert.AreEqual(0, result, "Found element at wrong index");
+        }
+
+        [TestMethod]
+        public void IndexOfFoundLast()
+        {
+            IReadOnlyList<int> list = new List<int>() { -1, -3, 2 }.AsReadOnly();
+            int result = ListUtil.IndexOf(list: list, test: x => x > 0);
+
+            Assert.AreEqual(2, result, "Found element at wrong index");
+        }
+
+        [TestMethod]
+        public void IndexOfFoundMultiple()
+        {
+            IReadOnlyList<string> list = new List<string>() { "Ant", "Bear", "Antelope" }.AsReadOnly();
+            int result = ListUtil.IndexOf(list: list, test: x => x.StartsWith('A'));
+
+            Assert.AreEqual(0, result, "Found element at wrong index");
         }
     }
 }

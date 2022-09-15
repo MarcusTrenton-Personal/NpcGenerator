@@ -46,5 +46,49 @@ namespace Services
         {
             return list is null || list.Count == 0;
         }
+
+        public static IReadOnlyList<T> ConvertAll<T,U>(IReadOnlyList<U> list, Func<U, T> converter) 
+            where T : notnull 
+            where U : notnull
+        {
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+            if (converter is null)
+            {
+                throw new ArgumentNullException(nameof(converter));
+            }
+
+            List<T> result = new List<T>();
+            foreach(U item in list)
+            {
+                result.Add(converter(item));
+            }
+            return result.AsReadOnly();
+        }
+
+        public const int NOT_FOUND = -1;
+        public static int IndexOf<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
+        {
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+            if (test is null)
+            {
+                throw new ArgumentNullException(nameof(test));
+            }
+
+            for (int i = 0; i < list.Count; ++i)
+            {
+                bool isFound = test(list[i]);
+                if (isFound)
+                {
+                    return i;
+                }
+            }
+            return NOT_FOUND;
+        }
     }
 }

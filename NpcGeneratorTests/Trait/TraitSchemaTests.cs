@@ -484,5 +484,177 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void CalculateTraversalOrderEmpty()
+        {
+            TraitSchema schema = new TraitSchema();
+
+            IReadOnlyList<string> order = schema.CalculateTraversalOrder();
+
+            Assert.AreEqual(0, order.Count, "Order should be empty");
+        }
+
+        [TestMethod]
+        public void CalculateTraversalOrderIsolatedCategories()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(new TraitCategory(CATEGORY0));
+            schema.Add(new TraitCategory(CATEGORY1));
+
+            IReadOnlyList<string> order = schema.CalculateTraversalOrder();
+
+            Assert.AreEqual(2, order.Count, "Order has wrong number of elements");
+            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY0), "Order did not contain " + CATEGORY0);
+            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY1), "Order did not contain " + CATEGORY1);
+        }
+
+        [TestMethod]
+        public void CalculateTraversalOrderBonusSelection()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+
+            TraitSchema traitSchema = new TraitSchema();
+
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            traitSchema.Add(category0);
+
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            traitSchema.Add(category1);
+
+            Trait c0t0 = new Trait("Bear");
+            category0.Add(c0t0);
+            Trait c0t1 = new Trait("Rhino")
+            {
+                BonusSelection = new BonusSelection(category1.Name, 1)
+            };
+            category0.Add(c0t1);
+
+            Trait c1t0 = new Trait("Blue");
+            category1.Add(c1t0);
+            Trait c1t1 = new Trait("Red")
+            {
+                BonusSelection = new BonusSelection(category0.Name, 1)
+            };
+            category1.Add(c1t1);
+
+            IReadOnlyList<string> order = traitSchema.CalculateTraversalOrder();
+
+            Assert.AreEqual(2, order.Count, "Order has wrong number of elements");
+            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY0), "Order did not contain " + CATEGORY0);
+            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY1), "Order did not contain " + CATEGORY1);
+        }
+
+        [TestMethod]
+        public void CalculateTraversalOrderLinearRequirements()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Building";
+            const string CATEGORY2 = "Colour";
+
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            traitSchema.Add(category1);
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            traitSchema.Add(category2);
+
+            Trait trait0 = new Trait("Bear");
+            category0.Add(trait0);
+            Trait trait1 = new Trait("School");
+            category1.Add(trait1);
+            Trait trait2 = new Trait("Blue");
+            category2.Add(trait2);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait0 = new NpcHasTrait(new TraitId(category0.Name, trait0.Name), npcHolder);
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, trait1.Name), npcHolder);
+            LogicalAll logicalAll = new LogicalAll();
+            logicalAll.Add(hasTrait0);
+            logicalAll.Add(hasTrait1);
+            Requirement requirement = new Requirement(logicalAll, npcHolder);
+            category2.Set(requirement);
+
+            IReadOnlyList<string> order = traitSchema.CalculateTraversalOrder();
+
+            Assert.AreEqual(traitSchema.GetTraitCategories().Count, order.Count, "Order has wrong number of elements");
+
+            int a = ListUtil.IndexOf(order, x => x == CATEGORY0);
+            int b = ListUtil.IndexOf(order, x => x == CATEGORY1);
+            int c = ListUtil.IndexOf(order, x => x == CATEGORY2);
+
+            Assert.IsTrue(a < c, "Ordering of elements is wrong");
+            Assert.IsTrue(b < c, "Ordering of elements is wrong");
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        public void CalculateTraversalOrderCycleOfRequirements()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal");
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Colour");
+            traitSchema.Add(category1);
+
+            Trait trait0 = new Trait("Bear");
+            category0.Add(trait0);
+            Trait trait1 = new Trait("Blue");
+            category1.Add(trait1);
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, trait1.Name), npcHolder0);
+            Requirement requirement0 = new Requirement(hasTrait1, npcHolder0);
+            category0.Set(requirement0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait hasTrait0 = new NpcHasTrait(new TraitId(category0.Name, trait0.Name), npcHolder1);
+            Requirement requirement1 = new Requirement(hasTrait0, npcHolder1);
+            category1.Set(requirement1);
+
+            traitSchema.CalculateTraversalOrder();
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        public void CalculateTraversalOrderCycleOfRequirementsAndBonusSelections()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category0 = new TraitCategory("Animal");
+            traitSchema.Add(category0);
+            TraitCategory category1 = new TraitCategory("Building");
+            traitSchema.Add(category1);
+            TraitCategory category2 = new TraitCategory("Colour");
+            traitSchema.Add(category2);
+
+            Trait c0t0 = new Trait("Bear");
+            category0.Add(c0t0);
+            Trait c1t0 = new Trait("School");
+            category1.Add(c1t0);
+            Trait c2t0 = new Trait("Blue");
+            category2.Add(c2t0);
+
+            Trait c0t1 = new Trait("Rhino")
+            {
+                BonusSelection = new BonusSelection(category1.Name, 1)
+            };
+            category0.Add(c0t1);
+
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait hasTrait2 = new NpcHasTrait(new TraitId(category2.Name, c2t0.Name), npcHolder0);
+            Requirement requirement0 = new Requirement(hasTrait2, npcHolder0);
+            category0.Set(requirement0);
+
+            NpcHolder npcHolder2 = new NpcHolder();
+            NpcHasTrait hasTrait1 = new NpcHasTrait(new TraitId(category1.Name, c0t0.Name), npcHolder2);
+            Requirement requirement2 = new Requirement(hasTrait1, npcHolder2);
+            category2.Set(requirement2);
+
+            traitSchema.CalculateTraversalOrder();
+        }
     }
 }
