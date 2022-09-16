@@ -35,14 +35,18 @@ namespace NpcGenerator
             {
                 throw new ArgumentException("npcCount must be greater than or equal to 0.", nameof(npcCount));
             }
-
+            
             List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
             List<string> traitCategoryNames = categoriesWithReplacements.ConvertAll(category => category.Name);
             NpcGroup group = new NpcGroup(traitCategoryNames);
 
+            IReadOnlyList<string> categoryNameOrder = traitSchema.CalculateTraversalOrder();
+            IReadOnlyList<TraitCategory> categoryOrder = 
+                ListUtil.ConvertAll(categoryNameOrder, name => categoriesWithReplacements.Find(category => category.Name == name));
+
             for (int i = 0; i < npcCount; ++i)
             {
-                Npc npc = CreateNpc(categoriesWithReplacements, random);
+                Npc npc = CreateNpc(categoryOrder, random);
                 group.Add(npc);
             }
 
@@ -63,50 +67,91 @@ namespace NpcGenerator
             return replacementCategories;
         }
 
-        private static Npc CreateNpc(IReadOnlyList<TraitCategory> categories, IRandom random)
+        private static Npc CreateNpc(IReadOnlyList<TraitCategory> categoryOrder, IRandom random)
         {
             Npc npc = new Npc();
             Dictionary<TraitCategory, TraitChooser> chooserForCategory = new Dictionary<TraitCategory, TraitChooser>();
             Dictionary<TraitCategory, int> selectionsPerCategory = new Dictionary<TraitCategory, int>();
-            foreach (TraitCategory category in categories)
+            foreach (TraitCategory category in categoryOrder)
             {
                 selectionsPerCategory[category] = category.DefaultSelectionCount;
                 chooserForCategory[category] = category.CreateTraitChooser(random);
             }
 
-            while (selectionsPerCategory.Count > 0)
+            bool gainedNewTraitThisIteration;
+            do
             {
-                GetElementOf(selectionsPerCategory, out TraitCategory category, out int count);
-                TraitChooser chooser = chooserForCategory[category];
+                gainedNewTraitThisIteration = false;
+                foreach(TraitCategory category in categoryOrder)
+                {
+                    TraitChooser chooser = chooserForCategory[category];
+                    gainedNewTraitThisIteration |= TryAddTraitFromCategory(
+                        category,
+                        categoryOrder,
+                        npc,
+                        chooser,
+                        selectionsPerCategory);
+                }
+            }
+            while (gainedNewTraitThisIteration);
+
+            return npc;
+        }
+
+        private static bool TryAddTraitFromCategory(
+            TraitCategory category,
+            IReadOnlyList<TraitCategory> categories,
+            Npc npc,
+            TraitChooser chooser,
+            Dictionary<TraitCategory, int> selectionsPerCategory)
+        {
+            bool wasTraitAdded = false;
+
+            int selectionCount = selectionsPerCategory[category];
+            bool canUseCategory = category.IsUnlockedFor(npc);
+            if (selectionCount > 0 && canUseCategory)
+            {
                 try
                 {
-                    string[] traits = chooser.Choose(count, out List<BonusSelection> bonusSelections);
-                    npc.Add(category: category.Name, traits: traits);
+                    wasTraitAdded = ChooseTraitsFromCategory(
+                        chooser, selectionCount, npc, category.Name, out IReadOnlyList<BonusSelection> bonusSelections);
 
-                    selectionsPerCategory.Remove(category);
+                    selectionsPerCategory[category] = 0;
 
-                    foreach (BonusSelection bonusSelection in bonusSelections)
-                    {
-                        TraitCategory cat = ListUtil.Find(categories, category => category.Name == bonusSelection.CategoryName);
-                        selectionsPerCategory[cat] = bonusSelection.SelectionCount;
-                    }
+                    AddBonusSelections(bonusSelections, categories, selectionsPerCategory);
                 }
-                catch(TooFewTraitsException exception)
+                catch (TooFewTraitsException exception)
                 {
                     throw new TooFewTraitsInCategoryException(category.Name, requested: exception.Requested, available: exception.Available);
                 }
             }
 
-            return npc;
+            return wasTraitAdded;
         }
 
-        private static void GetElementOf(Dictionary<TraitCategory, int> selectionsPerCategory, out TraitCategory category, out int count)
+        private static bool ChooseTraitsFromCategory(
+            TraitChooser chooser, 
+            int selectionCount, 
+            Npc npc, 
+            string outputCategoryName, 
+            out IReadOnlyList<BonusSelection> bonusSelections)
         {
-            Dictionary<TraitCategory, int>.Enumerator enumerator = selectionsPerCategory.GetEnumerator();
-            enumerator.MoveNext();
-            KeyValuePair<TraitCategory, int> current = enumerator.Current;
-            category = current.Key;
-            count = current.Value;
+            string[] traits = chooser.Choose(selectionCount, out bonusSelections);
+            npc.Add(category: outputCategoryName, traits: traits);
+            bool wasTraitAdded = traits.Length > 0;
+            return wasTraitAdded;
+        }
+
+        private static void AddBonusSelections(
+            IReadOnlyList<BonusSelection> bonusSelections, 
+            IReadOnlyList<TraitCategory> categories, 
+            Dictionary<TraitCategory, int> selectionsPerCategory)
+        {
+            foreach (BonusSelection bonusSelection in bonusSelections)
+            {
+                TraitCategory cat = ListUtil.Find(categories, category => category.Name == bonusSelection.CategoryName);
+                selectionsPerCategory[cat] = bonusSelection.SelectionCount;
+            }
         }
     }
 

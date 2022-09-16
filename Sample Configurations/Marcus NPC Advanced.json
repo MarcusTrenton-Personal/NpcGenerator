@@ -147,8 +147,7 @@
 				{"name" : "Short temper", "weight" : 1},
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},
-				{"name" : "Dancer", "weight" : 1},
-				{"name" : "Fashionable", "weight" : 1}
+				{"name" : "Dancer", "weight" : 1}
 			]
 		},
 		{
@@ -190,9 +189,8 @@
 			"requirements" : {
 				"operator" : "Any",
 				"operands" : [
-					{"category_name" : "Quirk", "trait_name" : "Fashionable"},
+					{"category_name" : "Quirk", "trait_name" : "Stylish"},
 					{"category_name" : "Age", "trait_name" : "Teenager"},
-					{"category_name" : "Age", "trait_name" : "Adult"},
 				]
 			},
 			"traits" :

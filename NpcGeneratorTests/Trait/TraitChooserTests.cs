@@ -226,7 +226,7 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelection);
+            string[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelection);
 
             Assert.AreEqual(0, bonusSelection.Count, "Returned a bonus selection where there should be none.");
             Assert.AreEqual(1, selections.Length, "Wrong number of selections");
@@ -244,7 +244,7 @@ namespace Tests
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelections);
+            string[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(1, bonusSelections.Count, "Wrong number of bonusSelections");
@@ -264,7 +264,7 @@ namespace Tests
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out List<BonusSelection> bonusSelections);
+            string[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(1, bonusSelections.Count, "Wrong number of bonusSelections");

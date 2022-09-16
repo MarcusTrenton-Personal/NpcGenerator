@@ -32,9 +32,10 @@ namespace NpcGenerator
             }
         }
 
-        public string[] Choose(int count, out List<BonusSelection> bonusSelections)
+        public string[] Choose(int count, out IReadOnlyList<BonusSelection> bonusSelectionsReadonly)
         {
-            bonusSelections = new List<BonusSelection>();
+            List<BonusSelection> bonusSelections = new List<BonusSelection>();
+            bonusSelectionsReadonly = bonusSelections.AsReadOnly();
             if (count == 0)
             {
                 return Array.Empty<string>();

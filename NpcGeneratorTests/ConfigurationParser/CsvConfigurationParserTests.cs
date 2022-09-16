@@ -62,7 +62,7 @@ namespace Tests
             Assert.IsNotNull(firstCategory, "Schema has a null first TraitCategory");
             Assert.AreEqual(firstCategory.Name, CATEGORY1_TITLE, "First category doesn't have name " + CATEGORY1_TITLE);
             TraitChooser firstChooser = firstCategory.CreateTraitChooser(m_random);
-            string[] colours = firstChooser.Choose(firstCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections1);
+            string[] colours = firstChooser.Choose(firstCategory.DefaultSelectionCount, out IReadOnlyList<BonusSelection> bonusSelections1);
             Assert.AreEqual(0, bonusSelections1.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(1, colours.Length, "Wrong number of traits selected from " + CATEGORY1_TITLE);
             Assert.IsTrue(colours[0] == CATEGORY1_TRAIT1 || colours[0] == CATEGORY1_TRAIT2, 
@@ -72,7 +72,7 @@ namespace Tests
             Assert.IsNotNull(secondCategory, "Schema has a null second TraitCategory");
             Assert.AreEqual(secondCategory.Name, CATEGORY2_TITLE, "Second category doesn't have name " + CATEGORY2_TITLE);
             TraitChooser secondChooser = secondCategory.CreateTraitChooser(m_random);
-            string[] animals = secondChooser.Choose(secondCategory.DefaultSelectionCount, out List<BonusSelection> bonusSelections2);
+            string[] animals = secondChooser.Choose(secondCategory.DefaultSelectionCount, out IReadOnlyList<BonusSelection> bonusSelections2);
             Assert.AreEqual(0, bonusSelections2.Count, "Bonus selection returned where there should be none.");
             Assert.AreEqual(1, animals.Length, "Wrong number of traits selected from " + CATEGORY2_TITLE);
             Assert.IsTrue(animals[0] == CATEGORY2_TRAIT1 || animals[0] == CATEGORY2_TRAIT2, 
