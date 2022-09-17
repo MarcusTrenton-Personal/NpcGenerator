@@ -85,12 +85,19 @@ namespace NpcGenerator
                 foreach(TraitCategory category in categoryOrder)
                 {
                     TraitChooser chooser = chooserForCategory[category];
-                    gainedNewTraitThisIteration |= TryAddTraitFromCategory(
+                    gainedNewTraitThisIteration = TryAddTraitFromCategory(
                         category,
                         categoryOrder,
                         npc,
                         chooser,
                         selectionsPerCategory);
+                    if (gainedNewTraitThisIteration)
+                    {
+                        //Reset back to the first category in the order every time any trait is gained.
+                        //Evaluation of a requirement must be deferred as long as possible.
+                        //A requirement to not have a trait implies that all potential bonus selections into that category have been exhausted.
+                        break; 
+                    }
                 }
             }
             while (gainedNewTraitThisIteration);

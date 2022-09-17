@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -674,6 +675,59 @@ namespace Tests
             string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(1, lockedTraits.Length, "Requirement was not honoured");
             Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0], "Requirement was not honoured");
+        }
+
+        [TestMethod]
+        public void NpcFailsRequirementDueToPingPongingBonusSelections()
+        {
+            const string CATEGORY0 = "Size";
+            const string CATEGORY1 = "Animal";
+
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            
+            const string C0T0 = "Small";
+            Trait c0t0 = new Trait(C0T0);
+            c0t0.BonusSelection = new BonusSelection(CATEGORY1, 1);
+            category0.Add(c0t0);
+
+            const string C0T1 = "Large";
+            Trait c0t1 = new Trait(C0T1);
+            c0t0.BonusSelection = new BonusSelection(CATEGORY1, 1);
+            category0.Add(c0t0);
+
+            TraitCategory category1 = new TraitCategory(CATEGORY1, 0);
+            
+            const string C1T0 = "Rhino";
+            Trait c1t0 = new Trait(C1T0);
+            c1t0.BonusSelection = new BonusSelection(CATEGORY0, 1);
+            category1.Add(c1t0);
+
+            const string C1T1 = "Bear";
+            Trait c1t1 = new Trait(C1T1);
+            category1.Add(c1t1);
+
+            const string LOCKED_CATEGORY = "Colour";
+            TraitCategory lockedCategory = new TraitCategory(LOCKED_CATEGORY);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId(CATEGORY1, C1T1), npcHolder);
+            LogicalNone logicalNone = new LogicalNone();
+            logicalNone.Add(hasTrait);
+            lockedCategory.Set(new Requirement(logicalNone, npcHolder));
+            const string LOCKED_TRAIT = "Blue";
+            Trait trait = new Trait(LOCKED_TRAIT);
+            lockedCategory.Add(trait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(lockedCategory);
+            traitSchema.Add(category1);
+            traitSchema.Add(category0);
+
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
+
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
         }
 
         private readonly MockRandom m_random = new MockRandom();
