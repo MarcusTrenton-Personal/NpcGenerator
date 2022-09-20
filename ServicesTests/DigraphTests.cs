@@ -349,6 +349,141 @@ namespace Tests
             Assert.IsTrue(j < g, "Returned path violated a requirement.");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NodesReachableFromNull()
+        {
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddNode("A");
+
+            graph.NodesReachableFrom(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NodesReachableFromEmpty()
+        {
+            Digraph<string> graph = new Digraph<string>();
+
+            graph.NodesReachableFrom("A");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NodesReachableFromNotFound()
+        {
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddNode("A");
+
+            graph.NodesReachableFrom("B");
+        }
+
+        [TestMethod]
+        public void NodesReachableFromSingleNode()
+        {
+            const string NODE = "A";
+
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddNode(NODE);
+
+            HashSet<string> reachable = graph.NodesReachableFrom(NODE);
+
+            Assert.AreEqual(1, reachable.Count, "Wrong number of nodes returned");
+            Assert.IsTrue(reachable.Contains(NODE), "Wrong element returned");
+        }
+
+        [TestMethod]
+        public void NodesReachableFromIsolatedNodes()
+        {
+            const string INITIAL_NODE = "A";
+
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddNode(INITIAL_NODE);
+            graph.AddNode("B");
+            graph.AddNode("C");
+
+            HashSet<string> reachable = graph.NodesReachableFrom(INITIAL_NODE);
+
+            Assert.AreEqual(1, reachable.Count, "Wrong number of nodes returned");
+            Assert.IsTrue(reachable.Contains(INITIAL_NODE), "Wrong element returned");
+        }
+
+        [TestMethod]
+        public void NodesReachableFromSingleJump()
+        {
+            const string INITIAL_NODE = "F";
+
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddNode("A");
+            graph.AddNode("B");
+            graph.AddNode("C");
+            graph.AddNode("D");
+            graph.AddNode("E");
+            graph.AddEdge(INITIAL_NODE, "C");
+            graph.AddEdge(INITIAL_NODE, "D");
+            graph.AddEdge(INITIAL_NODE, "E");
+
+            HashSet<string> reachable = graph.NodesReachableFrom(INITIAL_NODE);
+
+            Assert.AreEqual(4, reachable.Count, "Wrong number of nodes returned");
+            Assert.IsTrue(reachable.Contains(INITIAL_NODE), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("C"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("D"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("E"), "Wrong element returned");
+        }
+
+        [TestMethod]
+        public void NodesReachableFromMultipleJumps()
+        {
+            const string INITIAL_NODE = "F";
+
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddNode("A");
+            graph.AddNode("B");
+            graph.AddNode("C");
+            graph.AddNode("D");
+            graph.AddNode("E");
+            graph.AddEdge(INITIAL_NODE, "C"); //Deliberately not have the start node be the first node with edges.
+            graph.AddEdge(INITIAL_NODE, "D");
+            graph.AddEdge(INITIAL_NODE, "E");
+            graph.AddEdge("E", "G");
+            graph.AddEdge("G", "H");
+
+            HashSet<string> reachable = graph.NodesReachableFrom(INITIAL_NODE);
+
+            Assert.AreEqual(6, reachable.Count, "Wrong number of nodes returned");
+            Assert.IsTrue(reachable.Contains(INITIAL_NODE), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("C"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("D"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("E"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("G"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("H"), "Wrong element returned");
+        }
+
+        [TestMethod]
+        public void NodesReachableFromCycles()
+        {
+            const string INITIAL_NODE = "A";
+
+            Digraph<string> graph = new Digraph<string>();
+            graph.AddEdge("B", INITIAL_NODE);
+            graph.AddEdge(INITIAL_NODE, "C");
+            graph.AddEdge(INITIAL_NODE, "D");
+            graph.AddEdge(INITIAL_NODE, "E");
+            graph.AddEdge("E", "F");
+            graph.AddEdge("F", "G");
+            graph.AddEdge("G", "H");
+            graph.AddEdge("H", "A");
+
+            HashSet<string> reachable = graph.NodesReachableFrom(INITIAL_NODE);
+
+            Assert.AreEqual(7, reachable.Count, "Wrong number of nodes returned");
+            Assert.IsTrue(reachable.Contains(INITIAL_NODE), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("C"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("D"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("E"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("F"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("G"), "Wrong element returned");
+            Assert.IsTrue(reachable.Contains("H"), "Wrong element returned");
+        }
+
         private struct TestObject
         {
 #pragma warning disable CS0169 // Field is never used. Don't care as it's a test object. 

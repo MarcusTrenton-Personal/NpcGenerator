@@ -209,6 +209,36 @@ namespace Services
             return true;
         }
 
+        //Return a list of nodes reachable from the start, including the start, by traversing edges.
+        //This traversal will throw an exception if the Digraph has a cycle.
+        public HashSet<T> NodesReachableFrom(T start)
+        {
+            if (start is null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+            if (!m_nodeEdges.ContainsKey(start))
+            {
+                throw new ArgumentException("Initial node must be in the diagraph");
+            }
+
+            HashSet<T> visited = new HashSet<T>();
+            AddReachableNodesFrom(start, visited);
+            return visited;
+        }
+
+        private void AddReachableNodesFrom(T start, HashSet<T> visited)
+        {
+            bool isNew = visited.Add(start);
+            if (isNew)
+            {
+                foreach (T node in m_nodeEdges[start])
+                {
+                    AddReachableNodesFrom(node, visited);
+                }
+            }
+        }
+
         private class CycleMarker
         {
             public bool Visited { get; set; } = false;
