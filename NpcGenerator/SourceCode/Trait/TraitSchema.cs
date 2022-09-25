@@ -80,6 +80,7 @@ namespace NpcGenerator
         private Digraph<string> CalculateRequirementGraph()
         {
             Digraph<string> requirementGraph = new Digraph<string>();
+            Digraph<string> bonusSelectionGraph = CalculateBonusSelectionGraph();
 
             foreach (TraitCategory category in m_categories)
             {
@@ -93,26 +94,28 @@ namespace NpcGenerator
                 }
 
                 //Indirect dependency via BonusSelection into a Required trait's category
-                foreach (TraitCategory candidateBonusCategory in m_categories)
-                {
-                    if (candidateBonusCategory == category)
-                    {
-                        continue;
-                    }
 
-                    HashSet<string> bonusCategories = candidateBonusCategory.BonusSelectionCategoryNames();
-                    foreach (string bonusCategory in bonusCategories)
+                //This is tricky, so let's walk through an example.
+                //If category A has a dependency on B and C has a bonus selection into B then A has a depenendcy on C too.
+                //Not B has depedency on C.
+                //B and C can have bonus selections with each other without wrecking the trait selection algorithm.
+                //The algorithm can just repeats trait selection in B and C until all bonus selections are done.
+                //But, trait selection in A cannot happen until B and C are finished trait selection, thus A depends on C.
+                foreach (string dependency in dependencies)
+                {
+                    //Reachable means bonus selections flow into the category.
+                    //Edge of A -> B means bonus selection in B targets A.
+                    HashSet<string> bonusSelectionsDependencies = bonusSelectionGraph.NodesReachableFrom(dependency);
+                    foreach (string bonusSelection in bonusSelectionsDependencies)
                     {
-                        bool doesCandidateCategoryHaveBonusSelectionIntoDependency = dependencies.Contains(bonusCategory);
-                        if (doesCandidateCategoryHaveBonusSelectionIntoDependency)
+                        requirementGraph.AddEdge(bonusSelection, category.Name);
+
+                        //If the source has a requirement, those depedencies to this category's dependcies.
+                        TraitCategory bonusSource = m_categories.Find(category => category.Name == bonusSelection);
+                        HashSet<string> bonusDependencies = bonusSource.DependentCategoryNames();
+                        foreach (string bonusDependency in bonusDependencies)
                         {
-                            //This is tricky, so let's walk through an example.
-                            //If category A has a dependency on B and C has a bonus selection into B then A has a depenendcy on C too.
-                            //Not B has depedency on C.
-                            //B and C can have bonus selections with each other without wrecking the trait selection algorithm.
-                            //The algorithm can just repeats trait selection in B and C until all bonus selections are done.
-                            //But, trait selection in A cannot happen until B and C are finished trait selection, thus A depends on C.
-                            requirementGraph.AddEdge(candidateBonusCategory.Name, category.Name);
+                            requirementGraph.AddEdge(bonusDependency, category.Name);
                         }
                     }
                 }
@@ -130,6 +133,8 @@ namespace NpcGenerator
         private List<Dependency> DetailDependencyCycle(List<string> cycle) 
         {
             List<Dependency> dependencies = new List<Dependency>();
+            Digraph<string> bonusSelectionsConnections = CalculateBonusSelectionGraph();
+
             for (int i = 0; i < cycle.Count - 1; ++i)
             {
                 TraitCategory successorCategory = m_categories.Find(category => category.Name == cycle[i+1]);
@@ -147,27 +152,56 @@ namespace NpcGenerator
                 }
 
                 //Detect hard case of indirect bonus selection
-                TraitCategory originalCategory = m_categories.Find(category => category.Name == cycle[i]);
-                HashSet<string> bonusCategories = originalCategory.BonusSelectionCategoryNames();
-                foreach (string bonusCategory in bonusCategories)
+                foreach (string successorDependency in successorDependencies)
                 {
-                    bool isIndirectDependency = successorDependencies.Contains(bonusCategory);
-                    if (isIndirectDependency)
+                    HashSet<string> bonusSelectionsContributingToDependentCategory = 
+                        bonusSelectionsConnections.NodesReachableFrom(successorDependency);
+                    if (bonusSelectionsContributingToDependentCategory.Contains(cycle[i]))
                     {
-                        dependencies.Add(new Dependency(
-                            originalCategory: cycle[i],
-                            dependentCategory: bonusCategory,
-                            dependencyType: Dependency.Type.BonusSelection));
-                        dependencies.Add(new Dependency(
-                            originalCategory: bonusCategory,
-                            dependentCategory: cycle[i+1],
-                            dependencyType: Dependency.Type.Requirement));
-                        break;
+                        List<string> path = bonusSelectionsConnections.ShortestPathBetween(successorDependency, cycle[i], out _);
+                        if (path != null)
+                        {
+                            path.Reverse(); //Goes from cycle[i] to bonusCategory now.
+                            for (int j = 0; j < path.Count - 1; ++j)
+                            {
+                                dependencies.Add(new Dependency(
+                                    originalCategory: path[j],
+                                    dependentCategory: path[j + 1],
+                                    dependencyType: Dependency.Type.BonusSelection));
+                            }
+
+                            dependencies.Add(new Dependency(
+                                originalCategory: successorDependency,
+                                dependentCategory: cycle[i + 1],
+                                dependencyType: Dependency.Type.Requirement));
+
+                            break;
+                        }
                     }
                 }
             }
 
             return dependencies;
+        }
+
+        private Digraph<string> CalculateBonusSelectionGraph()
+        {
+            //The edges unintutively DESTINATION -> SOURCE
+            //to ease calculation of the web of category bonus selections that can affect a given cateogry.
+            Digraph<string> graph = new Digraph<string>();
+
+            foreach (TraitCategory category in m_categories)
+            {
+                graph.AddNode(category.Name);
+
+                HashSet<string> bonusCategories = category.BonusSelectionCategoryNames();
+                foreach (string bonusCategory in bonusCategories)
+                {
+                    graph.AddEdge(bonusCategory, category.Name);
+                }
+            }
+
+            return graph;
         }
 
         public class Dependency
