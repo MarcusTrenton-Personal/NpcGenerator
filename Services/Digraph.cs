@@ -38,6 +38,11 @@ namespace Services
 
         public bool AddEdge(T start, T end)
         {
+            return AddEdge(start, end, 1);
+        }
+
+        public bool AddEdge(T start, T end, int weight)
+        {
             if (start is null)
             {
                 throw new ArgumentNullException(nameof(start));
@@ -46,17 +51,30 @@ namespace Services
             {
                 throw new ArgumentNullException(nameof(end));
             }
+            if (weight <= 0)
+            {
+                throw new ArgumentException(nameof(weight) + " must be greater than 0");
+            }
 
             AddNodeIfNotAlreadyContained(start);
             AddNodeIfNotAlreadyContained(end);
 
-            if (ReferenceEquals(start, end) || start.Equals(end))
+            if (AreEqual(start, end))
             {
                 return false;
             }
 
             bool successful = m_nodeEdges[start].Add(end);
+            if (successful)
+            {
+                m_edgeWeight[(start, end)] = weight;
+            }
             return successful;
+        }
+
+        private bool AreEqual(T a, T b)
+        {
+            return ReferenceEquals(a, b) || a.Equals(b);
         }
 
         private void AddNodeIfNotAlreadyContained(T node)
@@ -239,12 +257,118 @@ namespace Services
             }
         }
 
+        public List<T> ShortestPathBetween(T start, T end, out int distance)
+        {
+            if (start is null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+            if (end is null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+            if (!m_nodeEdges.ContainsKey(start))
+            {
+                throw new ArgumentException(nameof(start) + " is not in the graph");
+            }
+            if (!m_nodeEdges.ContainsKey(end))
+            {
+                throw new ArgumentException(nameof(end) + " is not in the graph");
+            }
+
+            if (AreEqual(start, end))
+            {
+                distance = 0;
+                return new List<T>() { start } ;
+            }
+
+            DijkstraDistanceAlgorithm(start, out Dictionary<T,int> distanceFromStart, out Dictionary<T,T> pathBack);
+
+            if (!pathBack.ContainsKey(end))
+            {
+                distance = int.MinValue;
+                return null;
+            }
+
+            distance = distanceFromStart[end];
+
+            List<T> path = new List<T>();
+            T i = end;
+            while(!AreEqual(i, start))
+            {
+                path.Add(i);
+                i = pathBack[i];
+            }
+            path.Add(i);
+            path.Reverse();
+            return path;
+        }
+
+        //Algorithm modified from https://www.geeksforgeeks.org/shortest-path-in-a-directed-graph-by-dijkstras-algorithm/
+        private void DijkstraDistanceAlgorithm(T start, out Dictionary<T,int> distanceFromStart, out Dictionary<T,T> pathBack)
+        {
+            distanceFromStart = new Dictionary<T,int>(m_nodeEdges.Count);
+            pathBack = new Dictionary<T,T>(m_nodeEdges.Count);
+            Dictionary<T,bool> visited = new Dictionary<T,bool>(m_nodeEdges.Count);
+            foreach (T node in m_nodeEdges.Keys)
+            {
+                visited[node] = false;
+                distanceFromStart[node] = int.MaxValue;
+            }
+            distanceFromStart[start] = 0;
+
+            T current = start;
+            HashSet<T> toSearch = new HashSet<T>();
+            while (true)
+            {
+                visited[current] = true;
+                foreach (T adjacentNode in m_nodeEdges[current])
+                {
+                    if (visited[adjacentNode])
+                    {
+                        continue;
+                    }
+
+                    toSearch.Add(adjacentNode);
+                    int candidateDistance = distanceFromStart[current] + m_edgeWeight[(current, adjacentNode)];
+                    if (candidateDistance < distanceFromStart[adjacentNode])
+                    {
+                        distanceFromStart[adjacentNode] = candidateDistance;
+                        pathBack[adjacentNode] = current;
+                    }
+                }
+
+                toSearch.Remove(current);
+                if (toSearch.Count == 0)
+                {
+                    break;
+                }
+
+                int minimumDistance = int.MaxValue;
+                T next = default;
+
+                foreach (T node in toSearch)
+                {
+                    if (distanceFromStart[node] < minimumDistance)
+                    {
+                        minimumDistance = distanceFromStart[node];
+                        next = node;
+                    }
+                }
+                current = next;
+            }
+        }
+
         private class CycleMarker
         {
             public bool Visited { get; set; } = false;
             public bool InRecursionPath { get; set; } = false;
         }
 
+        //Keep the weights in a separate container for performance reasons.
+        //Using a complex object for an edge combining destination node and a weight results in unneeded allocation when determining
+        //if a node has an edge to a destinaion.
         private readonly Dictionary<T,HashSet<T>> m_nodeEdges = new Dictionary<T,HashSet<T>>();
+        private readonly Dictionary<(T, T), int> m_edgeWeight = new Dictionary<(T, T), int>();
     }
 }

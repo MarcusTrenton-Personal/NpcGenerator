@@ -484,6 +484,143 @@ namespace Tests
             Assert.IsTrue(reachable.Contains("H"), "Wrong element returned");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ShortestPathBetweenNullStart()
+        {
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddNode("A");
+            digraph.AddNode("B");
+
+            digraph.ShortestPathBetween(start: null, end: "A", out _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ShortestPathBetweenNullEnd()
+        {
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddNode("A");
+            digraph.AddNode("B");
+
+            digraph.ShortestPathBetween(start: "A", end: null, out _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ShortestPathBetweenStartNodeNotInGraph()
+        {
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddNode("A");
+            digraph.AddNode("B");
+
+            digraph.ShortestPathBetween(start: "Z", end: "A", out _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ShortestPathBetweenEndNodeNotinGraph()
+        {
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddNode("A");
+            digraph.AddNode("B");
+
+            digraph.ShortestPathBetween(start: "A", end: "Z", out _);
+        }
+
+        [TestMethod]
+        public void ShortestPathBetweenIsolatedNodes()
+        {
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddNode("A");
+            digraph.AddNode("B");
+
+            List<string> path = digraph.ShortestPathBetween(start: "A", end: "B", out int distance);
+
+            Assert.IsNull(path, "Incorrectly returned a path between 2 nodes that are not connected");
+            Assert.AreEqual(int.MinValue, distance, "Incorrect distance");
+        }
+
+        [TestMethod]
+        public void ShortestPathBetweenTheSameNode()
+        {
+            const string NODE = "A";
+
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddNode(NODE);
+
+            List<string> path = digraph.ShortestPathBetween(start: NODE, end: NODE, out int distance);
+
+            Assert.AreEqual(1, path.Count, "Path has the wrong number of nodes");
+            Assert.AreEqual(NODE, path[0], "Path has the wrong node at index 0");
+            Assert.AreEqual(0, distance, "Incorrect distance");
+        }
+
+        [TestMethod]
+        public void ShortestPathBetweenAdjacentNodes()
+        {
+            const string NODE0 = "A";
+            const string NODE1 = "B";
+            const int WEIGHT = 4;
+
+            Digraph<string> digraph = new Digraph<string>();
+            digraph.AddEdge(NODE0, NODE1, WEIGHT);
+
+            List<string> path = digraph.ShortestPathBetween(start: NODE0, end: NODE1, out int distance);
+
+            Assert.AreEqual(2, path.Count, "Path has the wrong number of nodes");
+            Assert.AreEqual(NODE0, path[0], "Path has the wrong node at index 0");
+            Assert.AreEqual(NODE1, path[1], "Path has the wrong node at index 1");
+            Assert.AreEqual(WEIGHT, distance, "Incorrect distance");
+        }
+
+        [TestMethod]
+        public void ShortestPathBetweenRoundAboutShortestPath()
+        {
+            const int NODE0 = 0;
+            const int NODE1 = 1;
+            const int NODE2 = 2;
+            const int WEIGHT_02 = 999;
+            const int WEIGHT_01 = 1;
+            const int WEIGHT_12 = 2;
+
+            Digraph<int> digraph = new Digraph<int>();
+            digraph.AddEdge(NODE0, NODE1, WEIGHT_01);
+            digraph.AddEdge(NODE1, NODE2, WEIGHT_12);
+            digraph.AddEdge(NODE0, NODE2, WEIGHT_02);
+
+            List<int> path = digraph.ShortestPathBetween(start: NODE0, end: NODE2, out int distance);
+
+            Assert.AreEqual(3, path.Count, "Path has the wrong number of nodes");
+            Assert.AreEqual(NODE0, path[0], "Path has the wrong node at index 0");
+            Assert.AreEqual(NODE1, path[1], "Path has the wrong node at index 1");
+            Assert.AreEqual(NODE2, path[2], "Path has the wrong node at index 1");
+            Assert.AreEqual(WEIGHT_01 + WEIGHT_12, distance, "Incorrect distance");
+        }
+
+        [TestMethod]
+        public void ShortestPathBetweenWithCycle()
+        {
+            const int NODE0 = 0;
+            const int NODE1 = 1;
+            const int NODE2 = 2;
+            const int NODE3 = 3;
+            const int WEIGHT_02 = 999;
+            const int WEIGHT_01 = 1;
+            const int WEIGHT_12 = 2;
+            const int WEIGHT_23 = 1;
+
+            Digraph<int> digraph = new Digraph<int>();
+            digraph.AddEdge(NODE0, NODE1, WEIGHT_01);
+            digraph.AddEdge(NODE1, NODE2, WEIGHT_12);
+            digraph.AddEdge(NODE0, NODE2, WEIGHT_02);
+            digraph.AddEdge(NODE2, NODE3, WEIGHT_23);
+
+            List<int> path = digraph.ShortestPathBetween(start: NODE0, end: NODE2, out int distance);
+
+            Assert.AreEqual(3, path.Count, "Path has the wrong number of nodes");
+            Assert.AreEqual(NODE0, path[0], "Path has the wrong node at index 0");
+            Assert.AreEqual(NODE1, path[1], "Path has the wrong node at index 1");
+            Assert.AreEqual(NODE2, path[2], "Path has the wrong node at index 1");
+            Assert.AreEqual(WEIGHT_01 + WEIGHT_12, distance, "Incorrect distance");
+        }
+
         private struct TestObject
         {
 #pragma warning disable CS0169 // Field is never used. Don't care as it's a test object. 
