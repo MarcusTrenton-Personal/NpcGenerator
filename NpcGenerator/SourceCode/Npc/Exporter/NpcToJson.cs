@@ -82,13 +82,13 @@ namespace NpcGenerator
             }
         }
 
-        public void ToJsonObject(Npc npc, JsonWriter writer, IReadOnlyList<string> categoryOrder)
+        public static void ToJsonObject(Npc npc, JsonWriter writer, IReadOnlyList<string> categoryOrder)
         {
             writer.WriteStartObject();
 
             for (int i = 0; i < categoryOrder.Count; ++i)
             {
-                string[] traits = npc.GetTraitsOfCategory(categoryOrder[i]);
+                Npc.Trait[] traits = npc.GetTraitsOfCategory(categoryOrder[i]);
                 bool found = traits.Length > 0;
                 if (found)
                 {
@@ -96,7 +96,10 @@ namespace NpcGenerator
                     writer.WriteStartArray();
                     for (int j = 0; j < traits.Length; ++j)
                     {
-                        writer.WriteValue(traits[j]);
+                        if (!traits[j].IsHidden)
+                        {
+                            writer.WriteValue(traits[j].Name);
+                        }
                     }
                     writer.WriteEndArray();
                 }

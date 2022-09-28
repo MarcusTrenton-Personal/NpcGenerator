@@ -343,7 +343,7 @@ namespace Tests
             category.Set(requirement);
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { TRAIT });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
             bool isUnlocked = category.IsUnlockedFor(npc);
 
             Assert.IsTrue(isUnlocked, "Failed to unlock category despite meeting the requirements");
@@ -362,7 +362,7 @@ namespace Tests
             category.Set(requirement);
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { "Red" });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Red") });
             bool isUnlocked = category.IsUnlockedFor(npc);
 
             Assert.IsFalse(isUnlocked, "Incorrectly unlocked category despite meeting the requirements");
@@ -383,12 +383,12 @@ namespace Tests
             category.Set(requirement);
 
             Npc npcWithDesiredTrait = new Npc();
-            npcWithDesiredTrait.Add(CATEGORY, new string[] { DESIRED_TRAIT });
+            npcWithDesiredTrait.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(DESIRED_TRAIT) });
             bool isUnlockedForNpcWithDesiredTrait = category.IsUnlockedFor(npcWithDesiredTrait);
             Assert.IsTrue(isUnlockedForNpcWithDesiredTrait, "Failed to unlock category despite meeting the requirements");
 
             Npc npcWithOtherTrait = new Npc();
-            npcWithOtherTrait.Add(CATEGORY, new string[] { OTHER_TRAIT });
+            npcWithOtherTrait.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(OTHER_TRAIT) });
             bool isUnlockedForNpcWithOtherTrait = category.IsUnlockedFor(npcWithOtherTrait);
             Assert.IsFalse(isUnlockedForNpcWithOtherTrait, "Incorrectly unlocked category despite meeting the requirements");
         }
@@ -402,7 +402,7 @@ namespace Tests
 
             TraitCategory category = new TraitCategory("Animal");
             Npc npcWithInitialTrait = new Npc();
-            npcWithInitialTrait.Add(CATEGORY, new string[] { INITIAL_TRAIT });
+            npcWithInitialTrait.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(INITIAL_TRAIT) });
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait initialExpression = new NpcHasTrait(new TraitId(CATEGORY, INITIAL_TRAIT), npcHolder);

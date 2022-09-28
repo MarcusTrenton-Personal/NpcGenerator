@@ -143,7 +143,7 @@ namespace NpcGenerator
             string outputCategoryName, 
             out IReadOnlyList<BonusSelection> bonusSelections)
         {
-            string[] traits = chooser.Choose(selectionCount, out bonusSelections);
+            Npc.Trait[] traits = chooser.Choose(selectionCount, out bonusSelections);
             npc.Add(category: outputCategoryName, traits: traits);
             bool wasTraitAdded = traits.Length > 0;
             return wasTraitAdded;

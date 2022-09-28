@@ -46,7 +46,7 @@ namespace Tests
         public NpcHasTraitTests()
         {
             m_npcWithTrait = new Npc();
-            m_npcWithTrait.Add(CategoryFound, new string[] { TraitFound });
+            m_npcWithTrait.Add(CategoryFound, new Npc.Trait[] { new Npc.Trait(TraitFound) });
 
             m_npcProvider = new StubNpcProvider(m_npcWithTrait);
         }

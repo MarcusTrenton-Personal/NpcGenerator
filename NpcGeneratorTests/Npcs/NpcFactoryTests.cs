@@ -41,9 +41,10 @@ namespace Tests
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
 
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
             Assert.AreEqual(1, traits.Length, "Wrong number of traits in category");
-            Assert.AreEqual(TRAIT, traits[0], "Npc created with incorrect trait in category");
+            Assert.AreEqual(TRAIT, traits[0].Name, "Npc created with incorrect trait in category");
+            Assert.IsFalse(traits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -63,14 +64,16 @@ namespace Tests
             Assert.AreEqual(2, npcGroup.NpcCount, "Wrong number of npcs created.");
 
             Npc npc0 = npcGroup.GetNpcAtIndex(0);
-            string[] traits0 = npc0.GetTraitsOfCategory(CATEGORY);
+            Npc.Trait[] traits0 = npc0.GetTraitsOfCategory(CATEGORY);
             Assert.AreEqual(1, traits0.Length, "Wrong number of traits in category");
-            Assert.AreEqual(TRAIT, traits0[0], "Npc created with incorrect trait in category");
+            Assert.AreEqual(TRAIT, traits0[0].Name, "Npc created with incorrect trait in category");
+            Assert.IsFalse(traits0[0].IsHidden, "Npc created with incorrect trait in category");
 
             Npc npc1 = npcGroup.GetNpcAtIndex(0);
-            string[] traits1 = npc1.GetTraitsOfCategory(CATEGORY);
+            Npc.Trait[] traits1 = npc1.GetTraitsOfCategory(CATEGORY);
             Assert.AreEqual(1, traits1.Length, "Wrong number of traits in category");
-            Assert.AreEqual(TRAIT, traits1[0], "Npc created with incorrect trait in category");
+            Assert.AreEqual(TRAIT, traits1[0].Name, "Npc created with incorrect trait in category");
+            Assert.IsFalse(traits1[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -107,11 +110,11 @@ namespace Tests
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
 
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
             Assert.AreEqual(2, traits.Length, "Wrong number of traits in category");
-            bool foundTrait0 = Array.FindIndex(traits, trait => trait == TRAIT0) > -1;
+            bool foundTrait0 = Array.FindIndex(traits, trait => trait.Name == TRAIT0) > -1;
             Assert.IsTrue(foundTrait0, "Npc created with incorrect trait in category");
-            bool foundTrait1 = Array.FindIndex(traits, trait => trait == TRAIT1) > -1;
+            bool foundTrait1 = Array.FindIndex(traits, trait => trait.Name == TRAIT1) > -1;
             Assert.IsTrue(foundTrait1, "Npc created with incorrect trait in category");
         }
 
@@ -138,13 +141,15 @@ namespace Tests
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
 
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] traits0 = npc.GetTraitsOfCategory(CATEGORY0);
+            Npc.Trait[] traits0 = npc.GetTraitsOfCategory(CATEGORY0);
             Assert.AreEqual(1, traits0.Length, "Wrong number of traits in category");
-            Assert.AreEqual(CATEGORY0_TRAIT, traits0[0], "Category has the wrong trait");
+            Assert.AreEqual(CATEGORY0_TRAIT, traits0[0].Name, "Category has the wrong trait");
+            Assert.IsFalse(traits0[0].IsHidden, "Npc created with incorrect trait in category");
 
-            string[] traits1 = npc.GetTraitsOfCategory(CATEGORY1);
+            Npc.Trait[] traits1 = npc.GetTraitsOfCategory(CATEGORY1);
             Assert.AreEqual(1, traits1.Length, "Wrong number of traits in category");
-            Assert.AreEqual(CATEGORY1_TRAIT, traits1[0], "Category has the wrong trait");
+            Assert.AreEqual(CATEGORY1_TRAIT, traits1[0].Name, "Category has the wrong trait");
+            Assert.IsFalse(traits1[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -172,16 +177,17 @@ namespace Tests
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
 
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] traits0 = npc.GetTraitsOfCategory(CATEGORY0);
+            Npc.Trait[] traits0 = npc.GetTraitsOfCategory(CATEGORY0);
             Assert.AreEqual(2, traits0.Length, "Wrong number of traits in category");
-            bool foundTrait0 = Array.FindIndex(traits0, trait => trait == CATEGORY0_TRAIT0) > -1;
+            bool foundTrait0 = Array.FindIndex(traits0, trait => trait.Name == CATEGORY0_TRAIT0) > -1;
             Assert.IsTrue(foundTrait0, "Npc created with incorrect trait in category");
-            bool foundTrait1 = Array.FindIndex(traits0, trait => trait == CATEGORY0_TRAIT1) > -1;
+            bool foundTrait1 = Array.FindIndex(traits0, trait => trait.Name == CATEGORY0_TRAIT1) > -1;
             Assert.IsTrue(foundTrait1, "Npc created with incorrect trait in category");
 
-            string[] traits1 = npc.GetTraitsOfCategory(CATEGORY1);
+            Npc.Trait[] traits1 = npc.GetTraitsOfCategory(CATEGORY1);
             Assert.AreEqual(1, traits1.Length, "Wrong number of traits in category");
-            Assert.AreEqual(CATEGORY1_TRAIT, traits1[0], "Category has the wrong trait");
+            Assert.AreEqual(CATEGORY1_TRAIT, traits1[0].Name, "Category has the wrong trait");
+            Assert.IsFalse(traits1[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -279,8 +285,10 @@ namespace Tests
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
 
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
-            Assert.AreEqual(0, traits.Length, "Wrong number of traits in category");
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            Assert.AreEqual(1, traits.Length, "Wrong number of traits in category");
+            Assert.AreEqual(TRAIT, traits[0].Name, "Wrong trait in category");
+            Assert.IsTrue(traits[0].IsHidden, "Trait should be hidden is not");
         }
 
         [TestMethod]
@@ -355,11 +363,11 @@ namespace Tests
 
             //Mock random always selects the first trait in a category, causing bonus selection.
             NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
-            string[] traits = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(colourCategory.Name);
+            Npc.Trait[] traits = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(colourCategory.Name);
 
             Assert.AreEqual(2, traits.Length, "Bonus selection did not occur.");
-            Assert.IsTrue(traits[0] == BLUE || traits[1] == BLUE, "Both traits were not selected");
-            Assert.IsTrue(traits[0] == GREEN || traits[1] == GREEN, "Both traits were not selected");
+            Assert.IsTrue(traits[0].Name == BLUE || traits[1].Name == BLUE, "Both traits were not selected");
+            Assert.IsTrue(traits[0].Name == GREEN || traits[1].Name == GREEN, "Both traits were not selected");
         }
 
         [TestMethod]
@@ -410,13 +418,15 @@ namespace Tests
             NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
             Npc npc = npcGroup.GetNpcAtIndex(0);
 
-            string[] colours = npc.GetTraitsOfCategory(colourCategory.Name);
+            Npc.Trait[] colours = npc.GetTraitsOfCategory(colourCategory.Name);
             Assert.AreEqual(1, colours.Length, "Normal selection did not occur.");
-            Assert.AreEqual(BLUE, colours[0], "Wrong trait was selected");
+            Assert.AreEqual(BLUE, colours[0].Name, "Wrong trait was selected");
+            Assert.IsFalse(colours[0].IsHidden, "Npc created with incorrect trait in category");
 
-            string[] animals = npc.GetTraitsOfCategory(animalCategory.Name);
+            Npc.Trait[] animals = npc.GetTraitsOfCategory(animalCategory.Name);
             Assert.AreEqual(1, animals.Length, "Bonus selection did not occur.");
-            Assert.AreEqual(BEAR, animals[0], "Wrong trait was selected");
+            Assert.AreEqual(BEAR, animals[0].Name, "Wrong trait was selected");
+            Assert.IsFalse(animals[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -435,7 +445,7 @@ namespace Tests
             NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>() { replacement }, m_random);
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
-            string colourTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
+            string colourTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0].Name;
             Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait, "Replacement was not honoured");
         }
 
@@ -455,9 +465,9 @@ namespace Tests
             NpcGroup npcGroup = NpcFactory.Create(traitSchema, 2, new List<Replacement>() { replacement }, m_random);
 
             Assert.AreEqual(2, npcGroup.NpcCount, "Wrong number of npcs created.");
-            string colourTrait0 = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
+            string colourTrait0 = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0].Name;
             Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait0, "Replacement was not honoured");
-            string colourTrait1 = npcGroup.GetNpcAtIndex(1).GetTraitsOfCategory(CATEGORY)[0];
+            string colourTrait1 = npcGroup.GetNpcAtIndex(1).GetTraitsOfCategory(CATEGORY)[0].Name;
             Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait1, "Replacement was not honoured");
         }
 
@@ -488,7 +498,7 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
         }
 
@@ -518,9 +528,10 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(1, lockedTraits.Length, "Requirement was not honoured");
-            Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0], "Requirement was not honoured");
+            Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0].Name, "Requirement was not honoured");
+            Assert.IsFalse(lockedTraits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -560,13 +571,15 @@ namespace Tests
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
             
-            string[] locked0Traits = npc.GetTraitsOfCategory(LOCKED_CATEGORY0);
+            Npc.Trait[] locked0Traits = npc.GetTraitsOfCategory(LOCKED_CATEGORY0);
             Assert.AreEqual(1, locked0Traits.Length, "Requirement was not honoured");
-            Assert.AreEqual(LOCKED_TRAIT0, locked0Traits[0], "Requirement was not honoured");
+            Assert.AreEqual(LOCKED_TRAIT0, locked0Traits[0].Name, "Requirement was not honoured");
+            Assert.IsFalse(locked0Traits[0].IsHidden, "Npc created with incorrect trait in category");
 
-            string[] locked1Traits = npc.GetTraitsOfCategory(LOCKED_CATEGORY1);
+            Npc.Trait[] locked1Traits = npc.GetTraitsOfCategory(LOCKED_CATEGORY1);
             Assert.AreEqual(1, locked1Traits.Length, "Requirement was not honoured");
-            Assert.AreEqual(LOCKED_TRAIT1, locked1Traits[0], "Requirement was not honoured");
+            Assert.AreEqual(LOCKED_TRAIT1, locked1Traits[0].Name, "Requirement was not honoured");
+            Assert.IsFalse(locked0Traits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -599,9 +612,10 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(1, lockedTraits.Length, "Requirement was not honoured");
-            Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0], "Requirement was not honoured");
+            Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0].Name, "Requirement was not honoured");
+            Assert.IsFalse(lockedTraits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -634,7 +648,7 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
         }
 
@@ -672,9 +686,10 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(1, lockedTraits.Length, "Requirement was not honoured");
-            Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0], "Requirement was not honoured");
+            Assert.AreEqual(LOCKED_TRAIT, lockedTraits[0].Name, "Requirement was not honoured");
+            Assert.IsFalse(lockedTraits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         [TestMethod]
@@ -686,20 +701,26 @@ namespace Tests
             TraitCategory category0 = new TraitCategory(CATEGORY0);
             
             const string C0T0 = "Small";
-            Trait c0t0 = new Trait(C0T0);
-            c0t0.BonusSelection = new BonusSelection(CATEGORY1, 1);
+            Trait c0t0 = new Trait(C0T0)
+            {
+                BonusSelection = new BonusSelection(CATEGORY1, 1)
+            };
             category0.Add(c0t0);
 
             const string C0T1 = "Large";
-            Trait c0t1 = new Trait(C0T1);
-            c0t0.BonusSelection = new BonusSelection(CATEGORY1, 1);
-            category0.Add(c0t0);
+            Trait c0t1 = new Trait(C0T1)
+            {
+                BonusSelection = new BonusSelection(CATEGORY1, 1)
+            };
+            category0.Add(c0t1);
 
             TraitCategory category1 = new TraitCategory(CATEGORY1, 0);
             
             const string C1T0 = "Rhino";
-            Trait c1t0 = new Trait(C1T0);
-            c1t0.BonusSelection = new BonusSelection(CATEGORY0, 1);
+            Trait c1t0 = new Trait(C1T0)
+            {
+                BonusSelection = new BonusSelection(CATEGORY0, 1)
+            };
             category1.Add(c1t0);
 
             const string C1T1 = "Bear";
@@ -726,7 +747,7 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
         }
 
@@ -751,8 +772,10 @@ namespace Tests
             const string SOURCE_CATEGORY = "Building";
             TraitCategory sourceCategory = new TraitCategory(SOURCE_CATEGORY);
             const string SOURCE_TRAIT = "School";
-            Trait sourceTrait = new Trait(SOURCE_TRAIT);
-            sourceTrait.BonusSelection = new BonusSelection(LOCKED_CATEGORY, 1);
+            Trait sourceTrait = new Trait(SOURCE_TRAIT)
+            {
+                BonusSelection = new BonusSelection(LOCKED_CATEGORY, 1)
+            };
             sourceCategory.Add(sourceTrait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -764,13 +787,14 @@ namespace Tests
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Npc.Trait[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
             Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
-            string[] dependencyTraits = npc.GetTraitsOfCategory(DEPENDENCY_CATEGORY);
+            Npc.Trait[] dependencyTraits = npc.GetTraitsOfCategory(DEPENDENCY_CATEGORY);
             Assert.AreEqual(0, dependencyTraits.Length, "Wrong number of dependency traits");
-            string[] sourceTraits = npc.GetTraitsOfCategory(SOURCE_CATEGORY);
+            Npc.Trait[] sourceTraits = npc.GetTraitsOfCategory(SOURCE_CATEGORY);
             Assert.AreEqual(1, sourceTraits.Length, "Wrong number of source traits");
-            Assert.AreEqual(SOURCE_TRAIT, sourceTraits[0], "Wrong source trait");
+            Assert.AreEqual(SOURCE_TRAIT, sourceTraits[0].Name, "Wrong source trait");
+            Assert.IsFalse(sourceTraits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
         private readonly MockRandom m_random = new MockRandom();

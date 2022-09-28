@@ -77,7 +77,7 @@ namespace Tests.JsonConfigurationParserTests
 
             TraitId requiredTraitId = new TraitId(REQUIREMENT_CATEGORY, REQUIREMENT_TRAIT);
             Npc npcWithTrait = new Npc();
-            npcWithTrait.Add(REQUIREMENT_CATEGORY, new string[] { REQUIREMENT_TRAIT });
+            npcWithTrait.Add(REQUIREMENT_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT, isHidden: false) });
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait), "Category is incorrectly locked for npc with required trait");
             
             Npc npcWithoutTrait = new Npc();
@@ -161,16 +161,16 @@ namespace Tests.JsonConfigurationParserTests
             TraitId requiredTraitId1 = new TraitId(REQUIREMENT_CATEGORY1, REQUIREMENT_TRAIT1);
 
             Npc npcWithTrait0 = new Npc();
-            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
+            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, isHidden: false) });
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly locked for npc with required trait");
 
             Npc npcWithTrait1 = new Npc();
-            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, isHidden: false) });
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly locked for npc with required trait");
 
             Npc npcWithBothTraits = new Npc();
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, isHidden: false) });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, isHidden: false) });
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithBothTraits), "Category is incorrectly locked for npc with required trait");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
@@ -255,16 +255,16 @@ namespace Tests.JsonConfigurationParserTests
             TraitId requiredTraitId1 = new TraitId(REQUIREMENT_CATEGORY1, REQUIREMENT_TRAIT1);
 
             Npc npcWithTrait0 = new Npc();
-            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
+            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly unlocked for npc without required trait");
 
             Npc npcWithTrait1 = new Npc();
-            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly unlocked for npc without required trait");
 
             Npc npcWithBothTraits = new Npc();
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, isHidden: false) });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, isHidden: false) });
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithBothTraits), "Category is incorrectly locked for npc with required trait");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
@@ -349,16 +349,16 @@ namespace Tests.JsonConfigurationParserTests
             TraitId requiredTraitId1 = new TraitId(REQUIREMENT_CATEGORY1, REQUIREMENT_TRAIT1);
 
             Npc npcWithTrait0 = new Npc();
-            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
+            npcWithTrait0.Add(REQUIREMENT_CATEGORY0, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithTrait1 = new Npc();
-            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            npcWithTrait1.Add(REQUIREMENT_CATEGORY1, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithBothTraits = new Npc();
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new string[] { REQUIREMENT_TRAIT0 });
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new string[] { REQUIREMENT_TRAIT1 });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, isHidden: false) });
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithBothTraits), "Category is incorrectly unlocked for npc with disqualifying traits");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
@@ -448,17 +448,19 @@ namespace Tests.JsonConfigurationParserTests
             TraitId requiredTraitId1 = new TraitId(DISQUALIFYING_CATEGORY, DISQUALIFYING_TRAIT);
 
             Npc npcWithRequiredTrait = new Npc();
-            npcWithRequiredTrait.Add(REQUIREMENT_CATEGORY, new string[] { REQUIREMENT_TRAIT });
+            npcWithRequiredTrait.Add(REQUIREMENT_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT, isHidden: false) });
             Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithRequiredTrait), "Category is incorrectly locked for npc with required trait");
 
             Npc npcWithDisqualifyingTrait = new Npc();
-            npcWithDisqualifyingTrait.Add(DISQUALIFYING_CATEGORY, new string[] { DISQUALIFYING_TRAIT });
+            npcWithDisqualifyingTrait.Add(DISQUALIFYING_CATEGORY, new Npc.Trait[] { new Npc.Trait(DISQUALIFYING_TRAIT, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithDisqualifyingTrait), 
                 "Category is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithBothRequiredAndDisqualifyingTraits = new Npc();
-            npcWithBothRequiredAndDisqualifyingTraits.Add(REQUIREMENT_CATEGORY, new string[] { REQUIREMENT_TRAIT });
-            npcWithBothRequiredAndDisqualifyingTraits.Add(DISQUALIFYING_CATEGORY, new string[] { DISQUALIFYING_TRAIT });
+            npcWithBothRequiredAndDisqualifyingTraits.Add(
+                REQUIREMENT_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT, isHidden: false) });
+            npcWithBothRequiredAndDisqualifyingTraits.Add(
+                DISQUALIFYING_CATEGORY, new Npc.Trait[] { new Npc.Trait(DISQUALIFYING_TRAIT, isHidden: false) });
             Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithBothRequiredAndDisqualifyingTraits),
                 "Category is incorrectly unlocked for npc with disqualifying trait");
 

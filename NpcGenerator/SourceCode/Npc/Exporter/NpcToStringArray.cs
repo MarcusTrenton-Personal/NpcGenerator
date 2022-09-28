@@ -26,7 +26,7 @@ namespace NpcGenerator
             List<string> traitsPerCategory = new List<string>();
             for (int i = 0; i < categoryOrder.Count; ++i)
             {
-                string[] traits = npc.GetTraitsOfCategory(categoryOrder[i]);
+                Npc.Trait[] traits = npc.GetTraitsOfCategory(categoryOrder[i]);
                 bool found = traits.Length > 0;
                 if (found)
                 {

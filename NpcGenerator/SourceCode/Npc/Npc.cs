@@ -22,10 +22,7 @@ namespace NpcGenerator
 {
     public class Npc
     {
-        public const char CSV_SEPARATOR = ',';
-        public const char MULTI_TRAIT_SEPARATOR = '&';
-
-        public void Add(string category, string[] traits)
+        public void Add(string category, Trait[] traits)
         {
             if (category is null)
             {
@@ -33,44 +30,49 @@ namespace NpcGenerator
             }
             if (category.Length == 0)
             {
-                throw new ArgumentException("string must not be null or empty", nameof(category));
+                throw new ArgumentException("Array must not be empty", nameof(category));
             }
             if (traits is null)
             {
                 throw new ArgumentNullException(nameof(traits));
             }
-            foreach (var trait in traits)
+            foreach (Trait trait in traits)
             {
-                if (string.IsNullOrEmpty(trait))
+                if (trait is null)
                 {
-                    throw new ArgumentException("string array elements must not be null or empty", nameof(traits));
+                    throw new ArgumentException(nameof(traits) + " has a null element");
+                }
+
+                if (string.IsNullOrEmpty(trait.Name))
+                {
+                    throw new ArgumentException("Array elements must not be null or have empty name");
                 }
             }
 
             bool categoryExists = m_traitsByCategory.ContainsKey(category);
-            List<string> traitsList;
+            List<Trait> traitsList;
             if (categoryExists)
             {
                 traitsList = m_traitsByCategory[category];
             }
             else
             {
-                m_traitsByCategory[category] = new List<string>();
+                m_traitsByCategory[category] = new List<Trait>();
                 traitsList = m_traitsByCategory[category];
             }
             traitsList.AddRange(traits);
         }
 
-        public string[] GetTraitsOfCategory(string category)
+        public Trait[] GetTraitsOfCategory(string category)
         {
-            bool success = m_traitsByCategory.TryGetValue(category, out List<string> traits);
+            bool success = m_traitsByCategory.TryGetValue(category, out List<Trait> traits);
             if (success)
             {
                 return traits.ToArray();
             }
             else
             {
-                return Array.Empty<string>();
+                return Array.Empty<Trait>();
             }
         }
 
@@ -81,16 +83,38 @@ namespace NpcGenerator
                 throw new ArgumentNullException(nameof(traitId));
             }
 
-            bool hasCategoryOfTrait = m_traitsByCategory.TryGetValue(traitId.CategoryName, out List<string> traits);
+            bool hasCategoryOfTrait = m_traitsByCategory.TryGetValue(traitId.CategoryName, out List<Trait> traits);
             if (!hasCategoryOfTrait)
             {
                 return false;
             }
 
-            bool hasTrait = traits.Contains(traitId.TraitName);
-            return hasTrait;
+            Trait trait = traits.Find(trait => trait.Name == traitId.TraitName);
+            return trait != null;
         }
 
-        private readonly Dictionary<string,List<string>> m_traitsByCategory = new Dictionary<string, List<string>>();
+        public IReadOnlyList<string> GetCategories()
+        {
+            return new List<string>(m_traitsByCategory.Keys);
+        }
+
+        public class Trait
+        {
+            public Trait(string name) : this(name, isHidden: false)
+            {
+
+            }
+
+            public Trait(string name, bool isHidden)
+            {
+                Name = name;
+                IsHidden = isHidden;
+            }
+
+            public string Name { get; private set; }
+            public bool IsHidden { get; private set; }
+        }
+
+        private readonly Dictionary<string,List<Trait>> m_traitsByCategory = new Dictionary<string, List<Trait>>();
     }
 }

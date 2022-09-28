@@ -21,14 +21,17 @@ namespace NpcGenerator
     {
         public const string MULTI_TRAIT_SEPARATOR = " & ";
 
-        public static void CombineTraits(string[] traits, StringBuilder stringBuilder)
+        public static void CombineTraits(Npc.Trait[] traits, StringBuilder stringBuilder)
         {
             for (int i = 0; i < traits.Length; ++i)
             {
-                stringBuilder.Append(traits[i]);
-                if (i + 1 < traits.Length)
+                if (!traits[i].IsHidden)
                 {
-                    stringBuilder.Append(MULTI_TRAIT_SEPARATOR);
+                    stringBuilder.Append(traits[i].Name);
+                    if (i + 1 < traits.Length)
+                    {
+                        stringBuilder.Append(MULTI_TRAIT_SEPARATOR);
+                    }
                 }
             }
         }

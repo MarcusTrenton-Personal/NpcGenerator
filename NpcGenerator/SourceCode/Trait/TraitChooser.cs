@@ -32,13 +32,13 @@ namespace NpcGenerator
             }
         }
 
-        public string[] Choose(int count, out IReadOnlyList<BonusSelection> bonusSelectionsReadonly)
+        public Npc.Trait[] Choose(int count, out IReadOnlyList<BonusSelection> bonusSelectionsReadonly)
         {
             List<BonusSelection> bonusSelections = new List<BonusSelection>();
             bonusSelectionsReadonly = bonusSelections.AsReadOnly();
             if (count == 0)
             {
-                return Array.Empty<string>();
+                return Array.Empty<Npc.Trait>();
             }
             if (m_remainingTraits.Count < count)
             {
@@ -47,7 +47,7 @@ namespace NpcGenerator
 
             //Number of selected traits is actually variable, with a maximum of SelectionCount. If a hidden trait is selected,
             //it consumes a selection count but is not added to the selected list.
-            List<string> selected = new List<string>();
+            List<Npc.Trait> selected = new List<Npc.Trait>();
             for (int i = 0; i < count; i++)
             {
                 int randomSelection = m_random.Int(0, m_remainingWeight);
@@ -64,10 +64,7 @@ namespace NpcGenerator
                 }
                 Trace.Assert(selectedIndex >= 0, "Failed to choose a trait.");
                 Trait trait = m_remainingTraits[selectedIndex];
-                if (!trait.IsHidden)
-                {
-                    selected.Add(trait.Name);
-                }
+                selected.Add(new Npc.Trait(trait.Name, trait.IsHidden));
                 if (trait.BonusSelection != null)
                 {
                     bonusSelections.Add(trait.BonusSelection);

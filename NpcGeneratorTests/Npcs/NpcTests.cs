@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,12 +34,12 @@ namespace Tests
             const string TRAIT = "Blue";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { TRAIT });
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: false) });
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
             Assert.AreEqual(1, traits.Length, "Wrong number of traits found.");
-            Assert.AreEqual(TRAIT, traits[0], "Wrong trait returned.");
+            Assert.AreEqual(TRAIT, traits[0].Name, "Wrong trait returned.");
         }
 
         [TestMethod]
@@ -47,8 +48,8 @@ namespace Tests
             const string CATEGORY = "Colour";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, Array.Empty<string>());
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            npc.Add(CATEGORY, Array.Empty<Npc.Trait>());
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
             Assert.AreEqual(0, traits.Length, "Wrong number of traits found.");
@@ -62,17 +63,17 @@ namespace Tests
             const string TRAIT1 = "Green";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { TRAIT0, TRAIT1 });
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1) });
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
             Assert.AreEqual(2, traits.Length, "Wrong number of traits found.");
 
-            bool foundTrait0 = Array.FindIndex(traits, name => name == TRAIT0) > -1;
-            Assert.AreEqual(TRAIT0, traits[0], "Wrong trait returned.");
+            bool foundTrait0 = Array.FindIndex(traits, trait => trait.Name == TRAIT0) > -1;
+            Assert.AreEqual(TRAIT0, traits[0].Name, "Wrong trait returned.");
 
-            bool foundTrait1 = Array.FindIndex(traits, name => name == TRAIT1) > -1;
-            Assert.AreEqual(TRAIT1, traits[1], "Wrong trait returned.");
+            bool foundTrait1 = Array.FindIndex(traits, trait => trait.Name == TRAIT1) > -1;
+            Assert.AreEqual(TRAIT1, traits[1].Name, "Wrong trait returned.");
         }
 
         [TestMethod]
@@ -83,18 +84,18 @@ namespace Tests
             const string TRAIT1 = "Green";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { TRAIT0 });
-            npc.Add(CATEGORY, new string[] { TRAIT1 });
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT1) });
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
             Assert.AreEqual(2, traits.Length, "Wrong number of traits found.");
 
-            bool foundTrait0 = Array.FindIndex(traits, name => name == TRAIT0) > -1;
-            Assert.AreEqual(TRAIT0, traits[0], "Wrong trait returned.");
+            bool foundTrait0 = Array.FindIndex(traits, trait => trait.Name == TRAIT0) > -1;
+            Assert.AreEqual(TRAIT0, traits[0].Name, "Wrong trait returned.");
 
-            bool foundTrait1 = Array.FindIndex(traits, name => name == TRAIT1) > -1;
-            Assert.AreEqual(TRAIT1, traits[1], "Wrong trait returned.");
+            bool foundTrait1 = Array.FindIndex(traits, trait => trait.Name == TRAIT1) > -1;
+            Assert.AreEqual(TRAIT1, traits[1].Name, "Wrong trait returned.");
         }
 
         [TestMethod]
@@ -103,7 +104,7 @@ namespace Tests
             const string CATEGORY = "Colour";
 
             Npc npc = new Npc();
-            string[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
             Assert.AreEqual(0, traits.Length, "Wrong number of traits found.");
@@ -119,7 +120,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                npc.Add(null, new string[] { TRAIT });
+                npc.Add(null, new Npc.Trait[] { new Npc.Trait(TRAIT) });
             }
             catch (Exception)
             {
@@ -139,7 +140,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                npc.Add(string.Empty, new string[] { TRAIT });
+                npc.Add(string.Empty, new Npc.Trait[] { new Npc.Trait(TRAIT) });
             }
             catch (Exception)
             {
@@ -179,7 +180,27 @@ namespace Tests
             bool threwException = false;
             try
             {
-                npc.Add(CATEGORY, new string[] { null });
+                npc.Add(CATEGORY, new Npc.Trait[] { null });
+            }
+            catch (Exception)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException);
+        }
+
+        [TestMethod]
+        public void AddNullTraitName()
+        {
+            const string CATEGORY = "Colour";
+
+            Npc npc = new Npc();
+
+            bool threwException = false;
+            try
+            {
+                npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(null) });
             }
             catch (Exception)
             {
@@ -199,7 +220,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                npc.Add(CATEGORY, new string[] { string.Empty });
+                npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(string.Empty) });
             }
             catch (Exception)
             {
@@ -223,7 +244,7 @@ namespace Tests
         public void HasTraitWhereCategoryDoesNotExist()
         {
             Npc npc = new Npc();
-            npc.Add("Colour", new string[] { "Blue" });
+            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait("Blue") });
 
             bool hasTrait = npc.HasTrait(new TraitId("Animal", "Bear"));
 
@@ -236,7 +257,7 @@ namespace Tests
             const string CATEGORY = "Colour";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { "Blue" });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Blue") });
 
             bool hasTrait = npc.HasTrait(new TraitId(CATEGORY, "Red"));
 
@@ -251,7 +272,7 @@ namespace Tests
             const string TRAIT = "Black";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY0, new string[] { TRAIT });
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(TRAIT) });
 
             bool hasTrait = npc.HasTrait(new TraitId(CATEGORY1, TRAIT));
 
@@ -283,11 +304,54 @@ namespace Tests
             const string TRAIT = "Bear";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new string[] { TRAIT });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
 
             bool hasTrait = npc.HasTrait(new TraitId(CATEGORY, TRAIT));
 
             Assert.IsTrue(hasTrait, "Failed to found trait that is in Npc");
+        }
+
+        [TestMethod]
+        public void GetCategoriesEmpty()
+        {
+            Npc npc = new Npc();
+
+            IReadOnlyList<string> categories = npc.GetCategories();
+
+            Assert.AreEqual(0, categories.Count, "Wrong number of categories");
+        }
+
+        [TestMethod]
+        public void GetCategoriesSingle()
+        {
+            const string CATEGORY = "Animal";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Bear") });
+
+            IReadOnlyList<string> categories = npc.GetCategories();
+
+            Assert.AreEqual(1, categories.Count, "Wrong number of categories");
+            Assert.AreEqual(CATEGORY, categories[0], "Wrong category name");
+        }
+
+        [TestMethod]
+        public void GetCategoriesMultiple()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait("Bear") });
+            npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait("Blue") });
+
+            IReadOnlyList<string> categories = npc.GetCategories();
+
+            Assert.AreEqual(2, categories.Count, "Wrong number of categories");
+            string category0 = ListUtil.Find(categories, category => category == CATEGORY0);
+            Assert.AreEqual(CATEGORY0, category0, "Wrong category name");
+            string category1 = ListUtil.Find(categories, category => category == CATEGORY1);
+            Assert.AreEqual(CATEGORY1, category1, "Wrong category name");
         }
     }
 }

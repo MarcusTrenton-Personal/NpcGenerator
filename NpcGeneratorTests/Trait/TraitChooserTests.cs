@@ -43,8 +43,8 @@ namespace Tests
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
                 TraitChooser chooser = new TraitChooser(traits, new CryptoRandom());
-                string[] choice = chooser.Choose(1, out _);
-                switch (choice[0])
+                Npc.Trait[] choice = chooser.Choose(1, out _);
+                switch (choice[0].Name)
                 {
                     case HEADS:
                         headCount++;
@@ -80,8 +80,8 @@ namespace Tests
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
                 TraitChooser chooser = new TraitChooser(traits, new CryptoRandom());
-                string[] choice = chooser.Choose(1, out _);
-                switch (choice[0])
+                Npc.Trait[] choice = chooser.Choose(1, out _);
+                switch (choice[0].Name)
                 {
                     case HEADS:
                         headCount++;
@@ -115,9 +115,9 @@ namespace Tests
             };
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
-            string[] selections = chooser.Choose(SELECTION_COUNT, out _);
+            Npc.Trait[] selections = chooser.Choose(SELECTION_COUNT, out _);
             Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
-            Assert.AreNotEqual(selections[0], selections[1], "Did not select two different traits");
+            Assert.AreNotEqual(selections[0].Name, selections[1].Name, "Did not select two different traits");
         }
 
         [TestMethod]
@@ -132,7 +132,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                string[] selections = chooser.Choose(1, out _);
+                Npc.Trait[] selections = chooser.Choose(1, out _);
             }
             catch (Exception)
             {
@@ -155,7 +155,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                string[] selections = chooser.Choose(2, out _);
+                Npc.Trait[] selections = chooser.Choose(2, out _);
             }
             catch (Exception)
             {
@@ -177,7 +177,7 @@ namespace Tests
             bool threwException = false;
             try
             {
-                string[] selections = chooser.Choose(2, out _);
+                Npc.Trait[] selections = chooser.Choose(2, out _);
             }
             catch (Exception)
             {
@@ -196,9 +196,10 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out _);
+            Npc.Trait[] selections = chooser.Choose(1, out _);
 
-            Assert.AreEqual(0, selections.Length, "Hidden selected trait is incorrectly present in output");
+            Assert.AreEqual(1, selections.Length, "Selected trait count is wrong.");
+            Assert.IsTrue(selections[0].IsHidden, "Trait was incorrectly returned as not hidden");
         }
 
         [TestMethod]
@@ -211,10 +212,13 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(2, out _);
+            Npc.Trait[] selections = chooser.Choose(2, out _);
 
-            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
-            Assert.AreEqual(TAILS, selections[0], "Hidden selected trait is incorrectly present in output");
+            Assert.AreEqual(2, selections.Length, "Selected trait count is wrong.");
+            Npc.Trait heads = Array.Find(selections, trait => trait.Name == HEADS);
+            Assert.IsTrue(heads.IsHidden, "Trait was incorrectly returned as not hidden");
+            Npc.Trait tails = Array.Find(selections, trait => trait.Name == TAILS);
+            Assert.IsFalse(tails.IsHidden, "Trait was incorrectly returned as hidden");
         }
 
         [TestMethod]
@@ -226,7 +230,7 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelection);
+            Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelection);
 
             Assert.AreEqual(0, bonusSelection.Count, "Returned a bonus selection where there should be none.");
             Assert.AreEqual(1, selections.Length, "Wrong number of selections");
@@ -244,7 +248,7 @@ namespace Tests
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+            Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(1, bonusSelections.Count, "Wrong number of bonusSelections");
@@ -264,7 +268,7 @@ namespace Tests
 
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            string[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+            Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
 
             Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
             Assert.AreEqual(1, bonusSelections.Count, "Wrong number of bonusSelections");

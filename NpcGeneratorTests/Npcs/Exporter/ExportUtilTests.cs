@@ -29,7 +29,7 @@ namespace Tests
         public void CombineZeroTraits()
         {
             StringBuilder builder = new StringBuilder();
-            ExportUtil.CombineTraits(Array.Empty<string>(), builder);
+            ExportUtil.CombineTraits(Array.Empty<Npc.Trait>(), builder);
 
             Assert.AreEqual(String.Empty, builder.ToString(), "Combining 0 traits should have produced an empty string");
         }
@@ -38,7 +38,7 @@ namespace Tests
         public void CombineOneTrait()
         {
             const string TRAIT = "Blue";
-            string[] traits = new string[] { TRAIT };
+            Npc.Trait[] traits = new Npc.Trait[] { new Npc.Trait(TRAIT) };
 
             StringBuilder builder = new StringBuilder();
             ExportUtil.CombineTraits(traits, builder);
@@ -52,7 +52,7 @@ namespace Tests
             const string TRAIT0 = "Blue";
             const string TRAIT1 = "Greed";
             const string TRAIT2 = "Red";
-            string[] traits = new string[] { TRAIT0, TRAIT1, TRAIT2 };
+            Npc.Trait[] traits = new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1), new Npc.Trait(TRAIT2) };
 
             StringBuilder builder = new StringBuilder();
             ExportUtil.CombineTraits(traits, builder);
