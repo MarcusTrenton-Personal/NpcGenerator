@@ -730,6 +730,49 @@ namespace Tests
             Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
         }
 
+        [TestMethod]
+        public void BonusSelectionIntoLockedCategory()
+        {
+            const string DEPENDENCY_CATEGORY = "Animal";
+            TraitCategory dependencyCategory = new TraitCategory(DEPENDENCY_CATEGORY, 0);
+            const string DEPENDENCY_TRAIT = "Bear";
+            Trait dependencyTrait = new Trait(DEPENDENCY_TRAIT);
+            dependencyCategory.Add(dependencyTrait);
+
+            const string LOCKED_CATEGORY = "Colour";
+            TraitCategory lockedCategory = new TraitCategory(LOCKED_CATEGORY);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId(DEPENDENCY_CATEGORY, DEPENDENCY_TRAIT), npcHolder);
+            lockedCategory.Set(new Requirement(hasTrait, npcHolder));
+            const string LOCKED_TRAIT = "Blue";
+            Trait lockedTrait = new Trait(LOCKED_TRAIT);
+            lockedCategory.Add(lockedTrait);
+
+            const string SOURCE_CATEGORY = "Building";
+            TraitCategory sourceCategory = new TraitCategory(SOURCE_CATEGORY);
+            const string SOURCE_TRAIT = "School";
+            Trait sourceTrait = new Trait(SOURCE_TRAIT);
+            sourceTrait.BonusSelection = new BonusSelection(LOCKED_CATEGORY, 1);
+            sourceCategory.Add(sourceTrait);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(dependencyCategory);
+            traitSchema.Add(lockedCategory);
+            traitSchema.Add(sourceCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
+
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            string[] lockedTraits = npc.GetTraitsOfCategory(LOCKED_CATEGORY);
+            Assert.AreEqual(0, lockedTraits.Length, "Requirement was not honoured");
+            string[] dependencyTraits = npc.GetTraitsOfCategory(DEPENDENCY_CATEGORY);
+            Assert.AreEqual(0, dependencyTraits.Length, "Wrong number of dependency traits");
+            string[] sourceTraits = npc.GetTraitsOfCategory(SOURCE_CATEGORY);
+            Assert.AreEqual(1, sourceTraits.Length, "Wrong number of source traits");
+            Assert.AreEqual(SOURCE_TRAIT, sourceTraits[0], "Wrong source trait");
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }
