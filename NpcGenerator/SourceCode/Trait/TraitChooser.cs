@@ -64,7 +64,7 @@ namespace NpcGenerator
                 }
                 Trace.Assert(selectedIndex >= 0, "Failed to choose a trait.");
                 Trait trait = m_remainingTraits[selectedIndex];
-                selected.Add(new Npc.Trait(trait.Name, trait.IsHidden));
+                selected.Add(new Npc.Trait(trait.Name, trait.IsHidden, trait.OriginalName));
                 if (trait.BonusSelection != null)
                 {
                     bonusSelections.Add(trait.BonusSelection);

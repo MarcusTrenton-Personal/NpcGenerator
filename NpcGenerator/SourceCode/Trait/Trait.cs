@@ -28,6 +28,7 @@ namespace NpcGenerator
         public Trait(string name, int weight, bool isHidden)
         {
             Name = name;
+            OriginalName = name;
             Weight = weight;
             IsHidden = isHidden;
         }
@@ -41,6 +42,7 @@ namespace NpcGenerator
         }
 
         public string Name { get; private set; }
+        public string OriginalName { get; private set; }
         public int Weight { get; private set; }
         public bool IsHidden { get; private set; }
         public BonusSelection BonusSelection { get; set; } = null;

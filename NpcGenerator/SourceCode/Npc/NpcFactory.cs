@@ -160,6 +160,147 @@ namespace NpcGenerator
                 selectionsPerCategory[cat] = bonusSelection.SelectionCount;
             }
         }
+
+        public static bool IsNpcValid(
+            in Npc npc, in TraitSchema schema, IReadOnlyList<Replacement> replacements, out List<NpcSchemaViolation> violations)
+        {
+            violations = new List<NpcSchemaViolation>();
+
+            AddUnknownTraitViolations(npc, schema, violations);
+            AddUnusedReplacementViolations(npc, replacements, violations);
+            AddLockedCategoryViolations(npc, schema, violations);
+            AddIncorrectTraitCountViolations(npc, schema, violations);
+
+            return violations.Count == 0;
+        }
+
+        private static void AddUnknownTraitViolations(in Npc npc, in TraitSchema schema, List<NpcSchemaViolation> violations)
+        {
+            IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
+            foreach (string npcCategory in npc.GetCategories())
+            {
+                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                if (schemaCategory is null)
+                {
+                    violations.Add(new NpcSchemaViolation(npcCategory, NpcSchemaViolation.Reason.CategoryNotFoundInSchema));
+                    continue;
+                }
+
+                foreach (Npc.Trait npcTrait in npc.GetTraitsOfCategory(npcCategory))
+                {
+                    Trait schemaTrait = schemaCategory.GetTrait(npcTrait.OriginalName) ?? schemaCategory.GetTrait(npcTrait.Name);
+                    if (schemaTrait is null)
+                    {
+                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitNotFoundInSchema));
+                        continue;
+                    }
+                    if (schemaTrait.IsHidden != npcTrait.IsHidden)
+                    {
+                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsHiddenMismatch));
+                        continue;
+                    }
+                }
+            }
+        }
+
+        private static void AddUnusedReplacementViolations(
+            in Npc npc, in IReadOnlyList<Replacement> replacements, List<NpcSchemaViolation> violations)
+        {
+            IReadOnlyList<string> npcCategories = npc.GetCategories();
+            foreach (Replacement replacement in replacements)
+            {
+                string npcCategoryWithReplacement = ListUtil.Find(npcCategories, category => category == replacement.Category.Name);
+                if (!string.IsNullOrEmpty(npcCategoryWithReplacement))
+                {
+                    Npc.Trait[] traits = npc.GetTraitsOfCategory(npcCategoryWithReplacement);
+                    Npc.Trait unreplacedTrait = Array.Find(traits, trait => trait.Name == replacement.OriginalTrait.Name);
+                    if (unreplacedTrait != null)
+                    {
+                        violations.Add(new NpcSchemaViolation(
+                            npcCategoryWithReplacement, 
+                            replacement.OriginalTrait.Name, 
+                            NpcSchemaViolation.Reason.UnusedReplacement));
+                    }
+                }
+            }
+        }
+
+        private static void AddLockedCategoryViolations(in Npc npc, in TraitSchema schema, List<NpcSchemaViolation> violations)
+        {
+            IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
+            IReadOnlyList<string> npcCategories = npc.GetCategories();
+
+            foreach (string npcCategory in npcCategories)
+            {
+                TraitCategory category = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                if (category != null)
+                {
+                    bool couldHaveTraitsFromCategory = category.IsUnlockedFor(npc);
+                    if (!couldHaveTraitsFromCategory)
+                    {
+                        Npc.Trait[] traits = npc.GetTraitsOfCategory(npcCategory);
+                        if (traits.Length > 0)
+                        {
+                            violations.Add(new NpcSchemaViolation(npcCategory, traits[0].Name, NpcSchemaViolation.Reason.HasTraitInLockedCategory));
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void AddIncorrectTraitCountViolations(in Npc npc, in TraitSchema schema, List<NpcSchemaViolation> violations)
+        {
+            Dictionary<string, int> bonusSelectionIntoCount = BonusSelectionIntoCount(npc, schema);
+            IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
+            foreach (string npcCategory in npc.GetCategories())
+            {
+                int foundTraitCount = npc.GetTraitsOfCategory(npcCategory).Length;
+
+                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                if (schemaCategory != null)
+                {
+                    int justifiedTraitCount = schemaCategory.DefaultSelectionCount + bonusSelectionIntoCount[npcCategory];
+
+                    if (foundTraitCount != justifiedTraitCount)
+                    {
+                        NpcSchemaViolation.Reason reason = foundTraitCount < justifiedTraitCount ?
+                            NpcSchemaViolation.Reason.TooFewTraitsInCategory : NpcSchemaViolation.Reason.TooManyTraitsInCategory;
+                        violations.Add(new NpcSchemaViolation(npcCategory, reason));
+                    }
+                }
+            }
+        }
+
+        private static Dictionary<string, int> BonusSelectionIntoCount(in Npc npc, in TraitSchema schema)
+        {
+            Dictionary<string, int> bonusSelectionIntoCount = new Dictionary<string, int>();
+            IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
+            foreach (string npcCategory in npc.GetCategories())
+            {
+                bonusSelectionIntoCount[npcCategory] = 0;
+            }
+
+            foreach (string npcCategory in npc.GetCategories())
+            {
+                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                if (schemaCategory != null)
+                {
+                    foreach (Npc.Trait npcTrait in npc.GetTraitsOfCategory(npcCategory))
+                    {
+                        Trait schemaTrait = schemaCategory.GetTrait(npcTrait.OriginalName) ?? schemaCategory.GetTrait(npcTrait.Name);
+                        if (schemaTrait != null)
+                        {
+                            if (schemaTrait.BonusSelection != null)
+                            {
+                                BonusSelection bonus = schemaTrait.BonusSelection;
+                                bonusSelectionIntoCount[bonus.CategoryName] += bonus.SelectionCount;
+                            }
+                        }
+                    }
+                }
+            }
+            return bonusSelectionIntoCount;
+        }
     }
 
     public class TooFewTraitsInCategoryException : ArgumentException
@@ -174,5 +315,36 @@ namespace NpcGenerator
         public string Category { get; private set; }
         public int Requested { get; private set; }
         public int Available { get; private set; }
+    }
+
+    public class NpcSchemaViolation
+    {
+        public NpcSchemaViolation(string category, Reason violation) : this(category, trait: null, violation)
+        {
+        } 
+
+        public NpcSchemaViolation(string category, string trait, Reason violation)
+        {
+            Category = category;
+            Trait = trait;
+            Violation = violation;
+        }
+
+        public string Category { get; private set; }
+
+        public string Trait { get; private set; }
+
+        public Reason Violation { get; private set; }
+
+        public enum Reason
+        {
+            HasTraitInLockedCategory,
+            TooFewTraitsInCategory,
+            TooManyTraitsInCategory,
+            TraitNotFoundInSchema,
+            CategoryNotFoundInSchema,
+            TraitIsHiddenMismatch,
+            UnusedReplacement
+        }
     }
 }

@@ -797,6 +797,723 @@ namespace Tests
             Assert.IsFalse(sourceTraits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
+        [TestMethod]
+        public void IsNpcValidEmpty()
+        {
+            TraitSchema schema = new TraitSchema();
+            Npc npc = new Npc();
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidEmptyViolationTooFewTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+            const int TRAIT_COUNT = 2;
+
+            Trait trait = new Trait(TRAIT);
+            Trait trait2 = new Trait("Velociraptor");
+            TraitCategory category = new TraitCategory(CATEGORY, TRAIT_COUNT);
+            category.Add(trait);
+            category.Add(trait2);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+            Assert.AreEqual(CATEGORY, violations[0].Category, "Wrong violation category");
+            Assert.IsNull(violations[0].Trait, "Wrong violation trait");
+            Assert.AreEqual(NpcSchemaViolation.Reason.TooFewTraitsInCategory, violations[0].Violation, "Wrong violation reason");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithSingleCategoryAndSingleTrait()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            Trait trait = new Trait(TRAIT);
+            Trait trait2 = new Trait("Velociraptor");
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait);
+            category.Add(trait2);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithSingleCategoryAndMultipleTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT0 = "Bear";
+            const string TRAIT1 = "Velociraptor";
+
+            Trait trait0 = new Trait(TRAIT0);
+            Trait trait1 = new Trait(TRAIT1);
+            Trait trait2 = new Trait("Baby Shark");
+            TraitCategory category = new TraitCategory(CATEGORY, 2);
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithMulipleCategoriesAndMultipleTraits()
+        {
+            const string CATEGORY0 = "Animal";
+            const string C0T0 = "Bear";
+            const string C0T1 = "Velociraptor";
+
+            const string CATEGORY1 = "Colour";
+            const string C1T0 = "Blue";
+
+            Trait c0t0 = new Trait(C0T0);
+            Trait c0t1 = new Trait(C0T1);
+            Trait c0t2 = new Trait("Baby Shark");
+            TraitCategory category0 = new TraitCategory(CATEGORY0, 2);
+            category0.Add(c0t0);
+            category0.Add(c0t1);
+            category0.Add(c0t2);
+
+            Trait c1t0 = new Trait(C1T0);
+            Trait c1t1 = new Trait("Red");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(c1t0);
+            category1.Add(c1t1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
+            npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWith0SelectionCategory()
+        {
+            const string CATEGORY0 = "Animal";
+            const string C0T0 = "Bear";
+            const string C0T1 = "Velociraptor";
+
+            Trait c0t0 = new Trait(C0T0);
+            Trait c0t1 = new Trait(C0T1);
+            Trait c0t2 = new Trait("Baby Shark");
+            TraitCategory category0 = new TraitCategory(CATEGORY0, 2);
+            category0.Add(c0t0);
+            category0.Add(c0t1);
+            category0.Add(c0t2);
+
+            Trait c1t0 = new Trait("Blue");
+            Trait c1t1 = new Trait("Red");
+            TraitCategory category1 = new TraitCategory("Colour", 0);
+            category1.Add(c1t0);
+            category1.Add(c1t1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationTooManyAndTooFewTraits()
+        {
+            const string CATEGORY0 = "Animal";
+            const string C0T0 = "Bear";
+            const string C0T1 = "Velociraptor";
+
+            Trait c0t0 = new Trait(C0T0);
+            Trait c0t1 = new Trait(C0T1);
+            Trait c0t2 = new Trait("Baby Shark");
+            TraitCategory category0 = new TraitCategory(CATEGORY0, 3);
+            category0.Add(c0t0);
+            category0.Add(c0t1);
+            category0.Add(c0t2);
+
+            const string CATEGORY1 = "Colour";
+            const string C1T0 = "Blue";
+
+            Trait c1t0 = new Trait(C1T0);
+            Trait c1t1 = new Trait("Red");
+            TraitCategory category1 = new TraitCategory(CATEGORY1, 0);
+            category1.Add(c1t0);
+            category1.Add(c1t1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
+            npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(2, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation tooFewTraitsViolation = violations.Find(
+                violation => violation.Category == CATEGORY0 && 
+                violation.Trait is null && 
+                violation.Violation == NpcSchemaViolation.Reason.TooFewTraitsInCategory);
+            Assert.IsNotNull(tooFewTraitsViolation, "TooFewTraitsInCategory violation not detected");
+
+            NpcSchemaViolation tooManyTraitsViolation = violations.Find(
+                violation => violation.Category == CATEGORY1 &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.TooManyTraitsInCategory);
+            Assert.IsNotNull(tooManyTraitsViolation, "TooManyTraitsInCategory violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationCategoryNotFound()
+        {
+            const string CATEGORY0 = "Animal";
+            const string C0T0 = "Bear";
+            const string C0T1 = "Velociraptor";
+
+            const string CATEGORY_NOT_FOUND = "Hair Dye";
+            const string TRAIT_NOT_FOUND = "Blonde";
+
+            Trait c0t0 = new Trait(C0T0);
+            Trait c0t1 = new Trait(C0T1);
+            Trait c0t2 = new Trait("Baby Shark");
+            TraitCategory category0 = new TraitCategory(CATEGORY0, 3);
+            category0.Add(c0t0);
+            category0.Add(c0t1);
+            category0.Add(c0t2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY_NOT_FOUND, new Npc.Trait[] { new Npc.Trait(TRAIT_NOT_FOUND) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == CATEGORY_NOT_FOUND &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.CategoryNotFoundInSchema);
+            Assert.IsNotNull(categoryNotFoundViolation, "CategoryNotFoundInSchema violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationTraitNotFound()
+        {
+            const string CATEGORY = "Hair Dye";
+            const string TRAIT_NOT_FOUND = "Blonde";
+
+            Trait c0t0 = new Trait("Purple");
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(c0t0);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT_NOT_FOUND) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait == TRAIT_NOT_FOUND &&
+                violation.Violation == NpcSchemaViolation.Reason.TraitNotFoundInSchema);
+            Assert.IsNotNull(categoryNotFoundViolation, "TraitNotFoundInSchema violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithHiddenTraits()
+        {
+            const string CATEGORY = "Hair Dye";
+            const string TRAIT = "Blonde";
+
+            Trait c0t0 = new Trait(TRAIT, 1, isHidden: true);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(c0t0);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationIsHiddenOnlyInNpc()
+        {
+            const string CATEGORY = "Hair Dye";
+            const string TRAIT = "Blonde";
+
+            Trait c0t0 = new Trait(TRAIT, 1, isHidden: false);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(c0t0);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait == TRAIT &&
+                violation.Violation == NpcSchemaViolation.Reason.TraitIsHiddenMismatch);
+            Assert.IsNotNull(categoryNotFoundViolation, "TraitIsHiddenMismatch violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationIsHiddenOnlyInSchema()
+        {
+            const string CATEGORY = "Hair Dye";
+            const string TRAIT = "Blonde";
+
+            Trait c0t0 = new Trait(TRAIT, 1, isHidden: true);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(c0t0);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: false) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait == TRAIT &&
+                violation.Violation == NpcSchemaViolation.Reason.TraitIsHiddenMismatch);
+            Assert.IsNotNull(categoryNotFoundViolation, "TraitIsHiddenMismatch violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithIntraCategoryBonusSelection()
+        {
+            const string CATEGORY = "Race";
+            const string TRAIT0 = "Caucasian";
+            const string TRAIT1 = "African";
+            const string TRAIT2_WITH_BONUS_SELECTION = "Biracial";
+
+            Trait trait0 = new Trait(TRAIT0);
+            Trait trait1 = new Trait(TRAIT1);
+            Trait trait2 = new Trait(TRAIT2_WITH_BONUS_SELECTION)
+            {
+                BonusSelection = new BonusSelection(CATEGORY, 2)
+            };
+            Trait trait3 = new Trait("Hispanic");
+            Trait trait4 = new Trait("Asian");
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+            category.Add(trait3);
+            category.Add(trait4);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1), new Npc.Trait(TRAIT2_WITH_BONUS_SELECTION) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithInterCategoryBonusSelection()
+        {
+            const string CATEGORY0 = "Animal";
+            const string C0T0 = "Bear";
+            const string C0T1 = "Velociraptor";
+            const string C0T2 = "Baby Shark";
+
+            const string CATEGORY1 = "Colour";
+            const string C1T0 = "Blue";
+            const string C1T1 = "Red";
+
+            Trait c0t0 = new Trait(C0T0)
+            {
+                BonusSelection = new BonusSelection(CATEGORY1, 1)
+            };
+            Trait c0t1 = new Trait(C0T1);
+            Trait c0t2 = new Trait(C0T2);
+            TraitCategory category0 = new TraitCategory(CATEGORY0, 2);
+            category0.Add(c0t0);
+            category0.Add(c0t1);
+            category0.Add(c0t2);
+
+            Trait c1t0 = new Trait(C1T0)
+            {
+                BonusSelection = new BonusSelection(CATEGORY0, 1)
+            };
+            Trait c1t1 = new Trait(C1T1);
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(c1t0);
+            category1.Add(c1t1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1), new Npc.Trait(C0T2) });
+            npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0), new Npc.Trait(C1T1) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationTooFewTraitsWithBonusSelection()
+        {
+            const string CATEGORY = "Race";
+            const string TRAIT0 = "Caucasian";
+            const string TRAIT1 = "African";
+            const string TRAIT2_WITH_BONUS_SELECTION = "Biracial";
+
+            Trait trait0 = new Trait(TRAIT0);
+            Trait trait1 = new Trait(TRAIT1);
+            Trait trait2 = new Trait(TRAIT2_WITH_BONUS_SELECTION)
+            {
+                BonusSelection = new BonusSelection(CATEGORY, 2)
+            };
+            Trait trait3 = new Trait("Hispanic");
+            Trait trait4 = new Trait("Asian");
+            TraitCategory category = new TraitCategory(CATEGORY, 1);
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+            category.Add(trait3);
+            category.Add(trait4);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT2_WITH_BONUS_SELECTION) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.TooFewTraitsInCategory);
+            Assert.IsNotNull(categoryNotFoundViolation, "TooFewTraitsInCategory violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithUnusedReplacement()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+            const string TRAIT_WITH_REPLACEMENT = "Velociraptor";
+
+            Trait trait = new Trait(TRAIT);
+            Trait traitWithReplacement = new Trait(TRAIT_WITH_REPLACEMENT);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait);
+            category.Add(traitWithReplacement);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+
+            Replacement replacement = new Replacement(traitWithReplacement, "Tyrannosaurus Rex", category);
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithReplacement()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+            const string TRAIT_ORIGINAL_NAME = "Velociraptor";
+            const string REPLACEMENT_NAME = "Tyrannosaurus Rex";
+
+            Trait trait = new Trait(TRAIT);
+            Trait traitWithReplacement = new Trait(TRAIT_ORIGINAL_NAME);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait);
+            category.Add(traitWithReplacement);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(REPLACEMENT_NAME, isHidden: false, originalName: TRAIT_ORIGINAL_NAME) });
+
+            Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, category);
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationUnusedReplacement()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+            const string TRAIT_ORIGINAL_NAME = "Velociraptor";
+            const string REPLACEMENT_NAME = "Tyrannosaurus Rex";
+
+            Trait trait = new Trait(TRAIT);
+            Trait traitWithReplacement = new Trait(TRAIT_ORIGINAL_NAME);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait);
+            category.Add(traitWithReplacement);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT_ORIGINAL_NAME) });
+
+            Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, category);
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait == TRAIT_ORIGINAL_NAME &&
+                violation.Violation == NpcSchemaViolation.Reason.UnusedReplacement);
+            Assert.IsNotNull(categoryNotFoundViolation, "UnusedReplacement violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithLockedCategory()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string ALTERNATIVE_TO_REQUIRED_TRAIT = "Rhino";
+
+            Trait c0t0 = new Trait(REQUIRED_TRAIT);
+            Trait c0t1 = new Trait(ALTERNATIVE_TO_REQUIRED_TRAIT);
+            TraitCategory category = new TraitCategory(REQUIRED_CATEGORY);
+            category.Add(c0t0);
+            category.Add(c0t1);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId(categoryName: REQUIRED_CATEGORY, traitName: REQUIRED_TRAIT), npcHolder);
+            Requirement requirement = new Requirement(hasTrait, npcHolder);
+
+            Trait c1t0 = new Trait("Blue");
+            TraitCategory lockedCategory = new TraitCategory("Colour");
+            lockedCategory.Add(c1t0);
+            lockedCategory.Set(requirement);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+            schema.Add(lockedCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(ALTERNATIVE_TO_REQUIRED_TRAIT) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidViolationTraitFromLockedCategory()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string ALTERNATIVE_TO_REQUIRED_TRAIT = "Rhino";
+
+            const string LOCKED_CATEGORY = "Colour";
+            const string LOCKED_TRAIT = "Blue";
+
+            Trait c0t0 = new Trait(REQUIRED_TRAIT);
+            Trait c0t1 = new Trait(ALTERNATIVE_TO_REQUIRED_TRAIT);
+            TraitCategory category = new TraitCategory(REQUIRED_CATEGORY);
+            category.Add(c0t0);
+            category.Add(c0t1);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId(categoryName: REQUIRED_CATEGORY, traitName: REQUIRED_TRAIT), npcHolder);
+            Requirement requirement = new Requirement(hasTrait, npcHolder);
+
+            Trait c1t0 = new Trait(LOCKED_TRAIT);
+            TraitCategory lockedCategory = new TraitCategory(LOCKED_CATEGORY);
+            lockedCategory.Add(c1t0);
+            lockedCategory.Set(requirement);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+            schema.Add(lockedCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(ALTERNATIVE_TO_REQUIRED_TRAIT) });
+            npc.Add(LOCKED_CATEGORY, new Npc.Trait[] { new Npc.Trait(LOCKED_TRAIT) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
+                violation => violation.Category == LOCKED_CATEGORY &&
+                violation.Trait == LOCKED_TRAIT &&
+                violation.Violation == NpcSchemaViolation.Reason.HasTraitInLockedCategory);
+            Assert.IsNotNull(categoryNotFoundViolation, "HasTraitInLockedCategory violation not detected");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithUnlockedCategory()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string ALTERNATIVE_TO_REQUIRED_TRAIT = "Rhino";
+
+            const string LOCKED_CATEGORY = "Colour";
+            const string LOCKED_TRAIT = "Blue";
+
+            Trait c0t0 = new Trait(REQUIRED_TRAIT);
+            Trait c0t1 = new Trait(ALTERNATIVE_TO_REQUIRED_TRAIT);
+            TraitCategory category = new TraitCategory(REQUIRED_CATEGORY);
+            category.Add(c0t0);
+            category.Add(c0t1);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId(categoryName: REQUIRED_CATEGORY, traitName: REQUIRED_TRAIT), npcHolder);
+            Requirement requirement = new Requirement(hasTrait, npcHolder);
+
+            Trait c1t0 = new Trait(LOCKED_TRAIT);
+            TraitCategory lockedCategory = new TraitCategory(LOCKED_CATEGORY);
+            lockedCategory.Add(c1t0);
+            lockedCategory.Set(requirement);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+            schema.Add(lockedCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIRED_TRAIT) });
+            npc.Add(LOCKED_CATEGORY, new Npc.Trait[] { new Npc.Trait(LOCKED_TRAIT) });
+
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsNpcValidWithReplacementUnlockedCategory()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string TRAIT_ORIGINAL_NAME = "Velociraptor";
+            const string REPLACEMENT_NAME = "Tyrannosaurus Rex";
+
+            const string LOCKED_CATEGORY = "Colour";
+            const string LOCKED_TRAIT = "Blue";
+
+            Trait traitWithReplacement = new Trait(TRAIT_ORIGINAL_NAME);
+            Trait c0t1 = new Trait("Rhino");
+            Trait c0t2 = new Trait(REPLACEMENT_NAME);
+            TraitCategory category = new TraitCategory(REQUIRED_CATEGORY);
+            category.Add(traitWithReplacement);
+            category.Add(c0t1);
+            category.Add(c0t2);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId(categoryName: REQUIRED_CATEGORY, traitName: REPLACEMENT_NAME), npcHolder);
+            Requirement requirement = new Requirement(hasTrait, npcHolder);
+
+            Trait c1t0 = new Trait(LOCKED_TRAIT);
+            TraitCategory lockedCategory = new TraitCategory(LOCKED_CATEGORY);
+            lockedCategory.Add(c1t0);
+            lockedCategory.Set(requirement);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+            schema.Add(lockedCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] 
+                { new Npc.Trait(name: REPLACEMENT_NAME, isHidden: false, originalName: TRAIT_ORIGINAL_NAME) });
+            npc.Add(LOCKED_CATEGORY, new Npc.Trait[] { new Npc.Trait(LOCKED_TRAIT) });
+
+            Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, category);
+            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+
+            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

@@ -100,19 +100,24 @@ namespace NpcGenerator
 
         public class Trait
         {
-            public Trait(string name) : this(name, isHidden: false)
+            public Trait(string name) : this(name, isHidden: false, name)
             {
-
             }
 
-            public Trait(string name, bool isHidden)
+            public Trait(string name, bool isHidden) : this(name, isHidden, name)
+            {
+            }
+
+            public Trait(string name, bool isHidden, string originalName)
             {
                 Name = name;
                 IsHidden = isHidden;
+                OriginalName = originalName;
             }
 
             public string Name { get; private set; }
             public bool IsHidden { get; private set; }
+            public string OriginalName { get; private set; }
         }
 
         private readonly Dictionary<string,List<Trait>> m_traitsByCategory = new Dictionary<string, List<Trait>>();
