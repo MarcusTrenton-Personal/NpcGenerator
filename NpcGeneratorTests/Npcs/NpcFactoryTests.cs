@@ -804,44 +804,60 @@ namespace Tests
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void IsNpcValidNullNpc()
+        public void AreNpcsValidNullNpcGroup()
         {
             TraitSchema schema = new TraitSchema();
 
-            NpcFactory.IsNpcValid(npc: null, schema, new List<Replacement>(), out List<NpcSchemaViolation> _);
+            NpcFactory.AreNpcsValid(npcGroup: null, schema, new List<Replacement>(), out Dictionary<Npc,List<NpcSchemaViolation>> _);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void IsNpcValidNullSchema()
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void AreNpcsValidNullNpc()
         {
-            Npc npc = new Npc();
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Animal" });
+            npcGroup.Add(null);
+            TraitSchema schema = new TraitSchema();
 
-            NpcFactory.IsNpcValid(npc, schema: null, new List<Replacement>(), out List<NpcSchemaViolation> _);
+            NpcFactory.AreNpcsValid(npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> _);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void IsNpcValidNullReplacements()
+        public void AreNpcsValidNullSchema()
+        {
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Animal" });
+            npcGroup.Add(new Npc());
+
+            NpcFactory.AreNpcsValid(npcGroup, schema: null, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void AreNpcsValidNullReplacements()
         {
             TraitSchema schema = new TraitSchema();
-            Npc npc = new Npc();
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Animal" });
+            npcGroup.Add(new Npc());
 
-            NpcFactory.IsNpcValid(npc, schema, replacements: null, out List<NpcSchemaViolation> _);
+            NpcFactory.AreNpcsValid(npcGroup, schema, replacements: null, out Dictionary<Npc, List<NpcSchemaViolation>> _);
         }
 
         [TestMethod]
-        public void IsNpcValidEmpty()
+        public void AreNpcsValidEmpty()
         {
             TraitSchema schema = new TraitSchema();
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { "Animal" });
             Npc npc = new Npc();
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidEmptyViolationTooFewTraits()
+        public void AreNpcsValidEmptyViolationTooFewTraits()
         {
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
@@ -857,10 +873,14 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
-
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+            
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
             Assert.AreEqual(CATEGORY, violations[0].Category, "Wrong violation category");
             Assert.IsNull(violations[0].Trait, "Wrong violation trait");
@@ -868,7 +888,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidWithSingleCategoryAndSingleTrait()
+        public void AreNpcsValidWithSingleCategoryAndSingleTrait()
         {
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
@@ -883,15 +903,19 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidWithSingleCategoryAndMultipleTraits()
+        public void AreNpcsValidWithSingleCategoryAndMultipleTraits()
         {
             const string CATEGORY = "Animal";
             const string TRAIT0 = "Bear";
@@ -909,15 +933,19 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidWithMulipleCategoriesAndMultipleTraits()
+        public void AreNpcsValidWithMulipleCategoriesAndMultipleTraits()
         {
             const string CATEGORY0 = "Animal";
             const string C0T0 = "Bear";
@@ -947,15 +975,19 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
             npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidWith0SelectionCategory()
+        public void AreNpcsValidWith0SelectionCategory()
         {
             const string CATEGORY0 = "Animal";
             const string C0T0 = "Bear";
@@ -971,7 +1003,8 @@ namespace Tests
 
             Trait c1t0 = new Trait("Blue");
             Trait c1t1 = new Trait("Red");
-            TraitCategory category1 = new TraitCategory("Colour", 0);
+            const string CATEGORY1 = "Colour";
+            TraitCategory category1 = new TraitCategory(CATEGORY1, 0);
             category1.Add(c1t0);
             category1.Add(c1t1);
 
@@ -981,15 +1014,19 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0 });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidViolationTooManyAndTooFewTraits()
+        public void AreNpcsValidViolationTooManyAndTooFewTraits()
         {
             const string CATEGORY0 = "Animal";
             const string C0T0 = "Bear";
@@ -1019,10 +1056,14 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
             npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly invalid");
+            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(2, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation tooFewTraitsViolation = violations.Find(
@@ -1039,7 +1080,85 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidViolationCategoryNotFound()
+        public void AreNpcsValidMultipleViolationsMultipleNpcs()
+        {
+            const string CATEGORY0 = "Animal";
+            const string C0T0 = "Bear";
+            const string C0T1 = "Velociraptor";
+            const string C0T2 = "Baby Shark";
+
+            Trait c0t0 = new Trait(C0T0);
+            Trait c0t1 = new Trait(C0T1);
+            Trait c0t2 = new Trait(C0T2);
+            TraitCategory category0 = new TraitCategory(CATEGORY0, 3);
+            category0.Add(c0t0);
+            category0.Add(c0t1);
+            category0.Add(c0t2);
+
+            const string CATEGORY1 = "Colour";
+            const string C1T0 = "Blue";
+
+            Trait c1t0 = new Trait(C1T0);
+            Trait c1t1 = new Trait("Red");
+            TraitCategory category1 = new TraitCategory(CATEGORY1, 0);
+            category1.Add(c1t0);
+            category1.Add(c1t1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            Npc npc0 = new Npc();
+            npc0.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1) });
+            npc0.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0) });
+
+            const string TRAIT_NOT_FOUND = "Kraken";
+            Npc npc1 = new Npc();
+            npc1.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1), new Npc.Trait(TRAIT_NOT_FOUND) });
+
+            Npc npc2 = new Npc();
+            npc2.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1), new Npc.Trait(C0T2) });
+
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
+            npcGroup.Add(npc0);
+            npcGroup.Add(npc1);
+            npcGroup.Add(npc2);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+            
+            List<NpcSchemaViolation> violations0 = violationsPerNpc[npc0];
+            Assert.AreEqual(2, violations0.Count, "Wrong number of violations");
+
+            NpcSchemaViolation tooFewTraitsViolation = violations0.Find(
+                violation => violation.Category == CATEGORY0 &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.TooFewTraitsInCategory);
+            Assert.IsNotNull(tooFewTraitsViolation, "TooFewTraitsInCategory violation not detected");
+
+            NpcSchemaViolation tooManyTraitsViolation = violations0.Find(
+                violation => violation.Category == CATEGORY1 &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.TooManyTraitsInCategory);
+            Assert.IsNotNull(tooManyTraitsViolation, "TooManyTraitsInCategory violation not detected");
+
+            List<NpcSchemaViolation> violations1 = violationsPerNpc[npc1];
+            Assert.AreEqual(1, violations1.Count, "Wrong number of violations");
+
+            NpcSchemaViolation traiNotFoundViolation = violations1.Find(
+                violation => violation.Category == CATEGORY0 &&
+                violation.Trait == TRAIT_NOT_FOUND &&
+                violation.Violation == NpcSchemaViolation.Reason.TraitNotFoundInSchema);
+            Assert.IsNotNull(traiNotFoundViolation, "TraitNotFoundInSchema violation not detected");
+
+            List<NpcSchemaViolation> violations2 = violationsPerNpc[npc2];
+            Assert.AreEqual(0, violations2.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationCategoryNotFound()
         {
             const string CATEGORY0 = "Animal";
             const string C0T0 = "Bear";
@@ -1061,10 +1180,14 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY_NOT_FOUND, new Npc.Trait[] { new Npc.Trait(TRAIT_NOT_FOUND) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY_NOT_FOUND });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1075,7 +1198,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidViolationTraitNotFound()
+        public void AreNpcsValidViolationTraitNotFound()
         {
             const string CATEGORY = "Hair Dye";
             const string TRAIT_NOT_FOUND = "Blonde";
@@ -1089,10 +1212,14 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT_NOT_FOUND) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1103,7 +1230,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidWithHiddenTraits()
+        public void AreNpcsValidWithHiddenTraits()
         {
             const string CATEGORY = "Hair Dye";
             const string TRAIT = "Blonde";
@@ -1117,15 +1244,19 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidViolationIsHiddenOnlyInNpc()
+        public void AreNpcsValidViolationIsHiddenOnlyInNpc()
         {
             const string CATEGORY = "Hair Dye";
             const string TRAIT = "Blonde";
@@ -1139,10 +1270,14 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1153,7 +1288,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidViolationIsHiddenOnlyInSchema()
+        public void AreNpcsValidViolationIsHiddenOnlyInSchema()
         {
             const string CATEGORY = "Hair Dye";
             const string TRAIT = "Blonde";
@@ -1167,10 +1302,14 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: false) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1181,7 +1320,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidWithIntraCategoryBonusSelection()
+        public void AreNpcsValidWithIntraCategoryBonusSelection()
         {
             const string CATEGORY = "Race";
             const string TRAIT0 = "Caucasian";
@@ -1207,15 +1346,19 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1), new Npc.Trait(TRAIT2_WITH_BONUS_SELECTION) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidWithInterCategoryBonusSelection()
+        public void AreNpcsValidWithInterCategoryBonusSelection()
         {
             const string CATEGORY0 = "Animal";
             const string C0T0 = "Bear";
@@ -1253,15 +1396,19 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(C0T0), new Npc.Trait(C0T1), new Npc.Trait(C0T2) });
             npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait(C1T0), new Npc.Trait(C1T1) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidViolationTooFewTraitsWithBonusSelection()
+        public void AreNpcsValidViolationTooFewTraitsWithBonusSelection()
         {
             const string CATEGORY = "Race";
             const string TRAIT0 = "Caucasian";
@@ -1287,10 +1434,14 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT2_WITH_BONUS_SELECTION) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1301,7 +1452,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidWithUnusedReplacement()
+        public void AreNpcsValidWithUnusedReplacement()
         {
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
@@ -1317,16 +1468,20 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
             Replacement replacement = new Replacement(traitWithReplacement, "Tyrannosaurus Rex", category);
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidWithReplacement()
+        public void AreNpcsValidWithReplacement()
         {
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
@@ -1343,16 +1498,20 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(REPLACEMENT_NAME, isHidden: false, originalName: TRAIT_ORIGINAL_NAME) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
             Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, category);
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidViolationUnusedReplacement()
+        public void AreNpcsValidViolationUnusedReplacement()
         {
             const string CATEGORY = "Animal";
             const string TRAIT = "Bear";
@@ -1369,11 +1528,15 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT_ORIGINAL_NAME) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
 
             Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, category);
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1384,7 +1547,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidWithLockedCategory()
+        public void AreNpcsValidWithLockedCategory()
         {
             const string REQUIRED_CATEGORY = "Animal";
             const string REQUIRED_TRAIT = "Bear";
@@ -1401,7 +1564,8 @@ namespace Tests
             Requirement requirement = new Requirement(hasTrait, npcHolder);
 
             Trait c1t0 = new Trait("Blue");
-            TraitCategory lockedCategory = new TraitCategory("Colour");
+            const string LOCKED_CATEGORY = "Colour";
+            TraitCategory lockedCategory = new TraitCategory(LOCKED_CATEGORY);
             lockedCategory.Add(c1t0);
             lockedCategory.Set(requirement);
 
@@ -1411,15 +1575,19 @@ namespace Tests
 
             Npc npc = new Npc();
             npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(ALTERNATIVE_TO_REQUIRED_TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { REQUIRED_CATEGORY, LOCKED_CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidViolationTraitFromLockedCategory()
+        public void AreNpcsValidViolationTraitFromLockedCategory()
         {
             const string REQUIRED_CATEGORY = "Animal";
             const string REQUIRED_TRAIT = "Bear";
@@ -1450,10 +1618,14 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(ALTERNATIVE_TO_REQUIRED_TRAIT) });
             npc.Add(LOCKED_CATEGORY, new Npc.Trait[] { new Npc.Trait(LOCKED_TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { REQUIRED_CATEGORY, LOCKED_CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(isValid, "Npc is incorrectly valid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
@@ -1464,7 +1636,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsNpcValidWithUnlockedCategory()
+        public void AreNpcsValidWithUnlockedCategory()
         {
             const string REQUIRED_CATEGORY = "Animal";
             const string REQUIRED_TRAIT = "Bear";
@@ -1495,15 +1667,19 @@ namespace Tests
             Npc npc = new Npc();
             npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIRED_TRAIT) });
             npc.Add(LOCKED_CATEGORY, new Npc.Trait[] { new Npc.Trait(LOCKED_TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { REQUIRED_CATEGORY, LOCKED_CATEGORY });
+            npcGroup.Add(npc);
 
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>(), out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 
         [TestMethod]
-        public void IsNpcValidWithReplacementUnlockedCategory()
+        public void AreNpcsValidWithReplacementUnlockedCategory()
         {
             const string REQUIRED_CATEGORY = "Animal";
             const string TRAIT_ORIGINAL_NAME = "Velociraptor";
@@ -1537,11 +1713,15 @@ namespace Tests
             npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] 
                 { new Npc.Trait(name: REPLACEMENT_NAME, isHidden: false, originalName: TRAIT_ORIGINAL_NAME) });
             npc.Add(LOCKED_CATEGORY, new Npc.Trait[] { new Npc.Trait(LOCKED_TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { REQUIRED_CATEGORY, LOCKED_CATEGORY });
+            npcGroup.Add(npc);
 
             Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, category);
-            bool isValid = NpcFactory.IsNpcValid(npc, schema, new List<Replacement>() { replacement }, out List<NpcSchemaViolation> violations);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsTrue(isValid, "Npc is incorrectly invalid");
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
         }
 

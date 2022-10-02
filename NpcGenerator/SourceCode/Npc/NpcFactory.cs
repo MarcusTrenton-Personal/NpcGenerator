@@ -161,12 +161,20 @@ namespace NpcGenerator
             }
         }
 
-        public static bool IsNpcValid(
-            in Npc npc, in TraitSchema schema, IReadOnlyList<Replacement> replacements, out List<NpcSchemaViolation> violations)
+        public static bool AreNpcsValid(in NpcGroup npcGroup, in TraitSchema schema, IReadOnlyList<Replacement> replacements, 
+            out Dictionary<Npc,List<NpcSchemaViolation>> violationsPerNpc)
         {
-            if (npc is null)
+            if (npcGroup is null)
             {
-                throw new ArgumentNullException(nameof(npc));
+                throw new ArgumentNullException(nameof(npcGroup));
+            }
+            for (int i = 0; i < npcGroup.NpcCount; ++i)
+            {
+                Npc npc = npcGroup.GetNpcAtIndex(i);
+                if (npc is null)
+                {
+                    throw new ArgumentException("An npc in the " + nameof(npcGroup) + " is null");
+                }
             }
             if (schema is null)
             {
@@ -177,6 +185,21 @@ namespace NpcGenerator
                 throw new ArgumentNullException(nameof(replacements));
             }
 
+            bool areValid = true;
+            violationsPerNpc = new Dictionary<Npc, List<NpcSchemaViolation>>();
+            for (int i = 0; i < npcGroup.NpcCount; ++i)
+            {
+                Npc npc = npcGroup.GetNpcAtIndex(i);
+                areValid &= IsNpcValid(npc, schema, replacements, out List<NpcSchemaViolation> violations);
+                violationsPerNpc[npc] = violations;
+            }
+
+            return areValid;
+        }
+
+        private static bool IsNpcValid(
+            in Npc npc, in TraitSchema schema, IReadOnlyList<Replacement> replacements, out List<NpcSchemaViolation> violations)
+        {
             violations = new List<NpcSchemaViolation>();
 
             AddUnknownTraitViolations(npc, schema, violations);
