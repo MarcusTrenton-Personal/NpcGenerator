@@ -43,7 +43,8 @@ namespace Tests
             Npc npc = npcGroup.GetNpcAtIndex(0);
             Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
             Assert.AreEqual(1, traits.Length, "Wrong number of traits in category");
-            Assert.AreEqual(TRAIT, traits[0].Name, "Npc created with incorrect trait in category");
+            Assert.AreEqual(TRAIT, traits[0].Name, "Npc created with incorrect trait");
+            Assert.AreEqual(TRAIT, traits[0].OriginalName, "Npc created with incorrect trait original name");
             Assert.IsFalse(traits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
@@ -433,8 +434,9 @@ namespace Tests
         public void SingleNpcWithReplacement()
         {
             const string CATEGORY = "Colour";
+            const string ORIGINAL_NAME = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY);
-            Trait trait = new Trait("Blue");
+            Trait trait = new Trait(ORIGINAL_NAME);
             colourCategory.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -445,16 +447,18 @@ namespace Tests
             NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>() { replacement }, m_random);
 
             Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
-            string colourTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0].Name;
-            Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait, "Replacement was not honoured");
+            Npc.Trait npcTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
+            Assert.AreEqual(REPLACEMENT_COLOUR, npcTrait.Name, "Replacement was not honoured");
+            Assert.AreEqual(ORIGINAL_NAME, npcTrait.OriginalName, "Replacement original name not recored");
         }
 
         [TestMethod]
         public void MultipleNpcsWithReplacements()
         {
             const string CATEGORY = "Colour";
+            const string ORIGINAL_NAME = "Blue";
             TraitCategory colourCategory = new TraitCategory(CATEGORY);
-            Trait trait = new Trait("Blue");
+            Trait trait = new Trait(ORIGINAL_NAME);
             colourCategory.Add(trait);
 
             TraitSchema traitSchema = new TraitSchema();
@@ -465,10 +469,12 @@ namespace Tests
             NpcGroup npcGroup = NpcFactory.Create(traitSchema, 2, new List<Replacement>() { replacement }, m_random);
 
             Assert.AreEqual(2, npcGroup.NpcCount, "Wrong number of npcs created.");
-            string colourTrait0 = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0].Name;
-            Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait0, "Replacement was not honoured");
-            string colourTrait1 = npcGroup.GetNpcAtIndex(1).GetTraitsOfCategory(CATEGORY)[0].Name;
-            Assert.AreEqual(REPLACEMENT_COLOUR, colourTrait1, "Replacement was not honoured");
+            Npc.Trait npcTrait0 = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
+            Assert.AreEqual(REPLACEMENT_COLOUR, npcTrait0.Name, "Replacement was not honoured");
+            Assert.AreEqual(ORIGINAL_NAME, npcTrait0.OriginalName, "Replacement original name not recored");
+            Npc.Trait npcTrait1 = npcGroup.GetNpcAtIndex(1).GetTraitsOfCategory(CATEGORY)[0];
+            Assert.AreEqual(REPLACEMENT_COLOUR, npcTrait1.Name, "Replacement was not honoured");
+            Assert.AreEqual(ORIGINAL_NAME, npcTrait1.OriginalName, "Replacement original name not recored");
         }
 
         [TestMethod]
