@@ -797,6 +797,31 @@ namespace Tests
             Assert.IsFalse(sourceTraits[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void IsNpcValidNullNpc()
+        {
+            TraitSchema schema = new TraitSchema();
+
+            NpcFactory.IsNpcValid(npc: null, schema, new List<Replacement>(), out List<NpcSchemaViolation> _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void IsNpcValidNullSchema()
+        {
+            Npc npc = new Npc();
+
+            NpcFactory.IsNpcValid(npc, schema: null, new List<Replacement>(), out List<NpcSchemaViolation> _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void IsNpcValidNullReplacements()
+        {
+            TraitSchema schema = new TraitSchema();
+            Npc npc = new Npc();
+
+            NpcFactory.IsNpcValid(npc, schema, replacements: null, out List<NpcSchemaViolation> _);
+        }
+
         [TestMethod]
         public void IsNpcValidEmpty()
         {

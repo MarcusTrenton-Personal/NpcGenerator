@@ -164,6 +164,19 @@ namespace NpcGenerator
         public static bool IsNpcValid(
             in Npc npc, in TraitSchema schema, IReadOnlyList<Replacement> replacements, out List<NpcSchemaViolation> violations)
         {
+            if (npc is null)
+            {
+                throw new ArgumentNullException(nameof(npc));
+            }
+            if (schema is null)
+            {
+                throw new ArgumentNullException(nameof(schema));
+            }
+            if (replacements is null)
+            {
+                throw new ArgumentNullException(nameof(replacements));
+            }
+
             violations = new List<NpcSchemaViolation>();
 
             AddUnknownTraitViolations(npc, schema, violations);
