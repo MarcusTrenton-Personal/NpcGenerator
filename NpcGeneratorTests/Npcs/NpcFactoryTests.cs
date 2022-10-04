@@ -1511,6 +1511,35 @@ namespace Tests
         }
 
         [TestMethod]
+        public void AreNpcsValidWithIdenticalReplacement()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+            const string TRAIT_NAME = "Velociraptor";
+
+            Trait trait = new Trait(TRAIT);
+            Trait traitWithReplacement = new Trait(TRAIT_NAME);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait);
+            category.Add(traitWithReplacement);
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT_NAME, isHidden: false, originalName: TRAIT_NAME) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
+
+            Replacement replacement = new Replacement(traitWithReplacement, TRAIT_NAME, category);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
         public void AreNpcsValidViolationUnusedReplacement()
         {
             const string CATEGORY = "Animal";
