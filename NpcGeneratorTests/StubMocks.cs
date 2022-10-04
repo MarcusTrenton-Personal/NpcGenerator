@@ -52,6 +52,7 @@ namespace Tests
         public ReadOnlyCollection<string> HiddenLanguageCodes { get; set; } = null;
         public string HomeWebsite { get; set; } = null;
         public string DonationWebsite { get; set; } = null;
+        public string SupportEmail { get; set; } = null;
     }
 
     internal class StubMessager : IMessager

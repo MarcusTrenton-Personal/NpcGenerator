@@ -31,6 +31,7 @@ namespace NpcGenerator
     {
         public NpcGeneratorModel(
             IUserSettings userSettings,
+            IAppSettings appSettings,
             IMessager messager,
             ILocalFileIO fileIo,
             IConfigurationParser parser,
@@ -40,6 +41,7 @@ namespace NpcGenerator
             bool showErrorMessages)
         {
             m_userSettings = userSettings;
+            m_appSettings = appSettings;
             m_messager = messager;
             m_fileIo = fileIo;
             m_parser = parser;
@@ -213,6 +215,47 @@ namespace NpcGenerator
             try
             {
                 m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements, m_random);
+
+                bool areValid = NpcFactory.AreNpcsValid(
+                    m_npcGroup, m_traitSchema, replacements, out Dictionary<Npc, List<NpcSchemaViolation>> violations);
+                if (!areValid)
+                {
+                    StringBuilder message = new StringBuilder();
+                    string title = m_localization.GetText("npcs_generated_incorrectly", m_appSettings.SupportEmail);
+                    message.Append(title + "\n");
+                    foreach (List<NpcSchemaViolation> violationList in violations.Values)
+                    {
+                        foreach (NpcSchemaViolation violation in violationList)
+                        {
+                            string errorMessage = violation.Violation switch
+                            {
+                                NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
+                                    m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
+                                NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
+                                    m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
+                                NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
+                                    m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
+                                NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
+                                    m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
+                                NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
+                                    m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
+                                NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
+                                    m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
+                                NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
+                                    m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
+                                NpcSchemaViolation.Reason.UnusedReplacement =>
+                                    m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
+                                _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
+                            };
+                            message.Append("\n" + errorMessage);
+                        }
+                    }
+
+                    if (m_showErrorMessages)
+                    {
+                        MessageBox.Show(message.ToString());
+                    }
+                }
 
                 DataTable table = new DataTable("Npc Table");
                 for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
@@ -484,6 +527,7 @@ namespace NpcGenerator
         }
 
         private readonly IUserSettings m_userSettings;
+        private readonly IAppSettings m_appSettings;
         private readonly ILocalFileIO m_fileIo;
         private readonly IMessager m_messager;
         private readonly IConfigurationParser m_parser;

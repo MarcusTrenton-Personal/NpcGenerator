@@ -230,9 +230,14 @@ namespace NpcGenerator
                         violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitNotFoundInSchema));
                         continue;
                     }
-                    if (schemaTrait.IsHidden != npcTrait.IsHidden)
+                    if (!schemaTrait.IsHidden && npcTrait.IsHidden)
                     {
-                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsHiddenMismatch));
+                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden));
+                        continue;
+                    }
+                    if (schemaTrait.IsHidden && !npcTrait.IsHidden)
+                    {
+                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden));
                         continue;
                     }
                 }
@@ -245,17 +250,21 @@ namespace NpcGenerator
             IReadOnlyList<string> npcCategories = npc.GetCategories();
             foreach (Replacement replacement in replacements)
             {
-                string npcCategoryWithReplacement = ListUtil.Find(npcCategories, category => category == replacement.Category.Name);
-                if (!string.IsNullOrEmpty(npcCategoryWithReplacement))
+                bool didNameChange = replacement.OriginalTrait.Name != replacement.ReplacementTraitName;
+                if (didNameChange)
                 {
-                    Npc.Trait[] traits = npc.GetTraitsOfCategory(npcCategoryWithReplacement);
-                    Npc.Trait unreplacedTrait = Array.Find(traits, trait => trait.Name == replacement.OriginalTrait.Name);
-                    if (unreplacedTrait != null)
+                    string npcCategoryWithReplacement = ListUtil.Find(npcCategories, category => category == replacement.Category.Name);
+                    if (!string.IsNullOrEmpty(npcCategoryWithReplacement))
                     {
-                        violations.Add(new NpcSchemaViolation(
-                            npcCategoryWithReplacement, 
-                            replacement.OriginalTrait.Name, 
-                            NpcSchemaViolation.Reason.UnusedReplacement));
+                        Npc.Trait[] traits = npc.GetTraitsOfCategory(npcCategoryWithReplacement);
+                        Npc.Trait unreplacedTrait = Array.Find(traits, trait => trait.Name == replacement.OriginalTrait.Name);
+                        if (unreplacedTrait != null)
+                        {
+                            violations.Add(new NpcSchemaViolation(
+                                npcCategoryWithReplacement,
+                                replacement.OriginalTrait.Name,
+                                NpcSchemaViolation.Reason.UnusedReplacement));
+                        }
                     }
                 }
             }
@@ -379,7 +388,8 @@ namespace NpcGenerator
             TooManyTraitsInCategory,
             TraitNotFoundInSchema,
             CategoryNotFoundInSchema,
-            TraitIsHiddenMismatch,
+            TraitIsIncorrectlyHidden,
+            TraitIsIncorrectlyNotHidden,
             UnusedReplacement
         }
     }

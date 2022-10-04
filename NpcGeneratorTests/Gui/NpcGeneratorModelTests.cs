@@ -38,6 +38,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -63,6 +64,7 @@ namespace Tests
             StubUserSettings userSettings = new StubUserSettings();
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -85,6 +87,7 @@ namespace Tests
             StubUserSettings userSettings = new StubUserSettings();
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -105,6 +108,7 @@ namespace Tests
             StubUserSettings userSettings = new StubUserSettings();
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -141,6 +145,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new CallbackConfigurationParser(Callback),
@@ -178,6 +183,7 @@ namespace Tests
             StubUserSettings userSettings = new StubUserSettings();
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -195,6 +201,7 @@ namespace Tests
         {
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 new StubUserSettings(),
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -231,6 +238,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new CallbackConfigurationParser(Callback),
@@ -276,6 +284,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new CallbackConfigurationParser(Callback),
@@ -505,6 +514,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new CallbackConfigurationParser(Callback),
@@ -547,6 +557,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new CallbackConfigurationParser(Callback),
@@ -594,6 +605,7 @@ namespace Tests
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
+                new StubAppSettings(),
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new CallbackConfigurationParser(Callback),

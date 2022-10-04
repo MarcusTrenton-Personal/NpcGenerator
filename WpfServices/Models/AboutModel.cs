@@ -23,10 +23,11 @@ namespace WpfServices
 {
     public class AboutModel : BaseModel, IAboutModel
     {
-        public AboutModel(Uri website, Uri donation)
+        public AboutModel(Uri website, Uri donation, string supportEmail)
         {
             Website = website;
             Donation = donation;
+            SupportEmail = supportEmail;
         }
 
         public string Version 
@@ -42,6 +43,8 @@ namespace WpfServices
         public Uri Website { get; }
 
         public Uri Donation { get; }
+        
+        public string SupportEmail { get; }
 
         public ICommand OpenBrowserToUri 
         { 

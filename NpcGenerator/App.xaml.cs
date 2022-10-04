@@ -100,11 +100,12 @@ namespace NpcGenerator
             CryptoRandom random = new CryptoRandom();
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
-                userSettings, messager, fileIo, configurationParser, npcExporters, localization, random, showErrorMessages: true);
+                userSettings, appSettings, messager, fileIo, configurationParser, npcExporters, localization, random, showErrorMessages: true);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
-                donation: new Uri(appSettings.DonationWebsite));
+                donation: new Uri(appSettings.DonationWebsite),
+                supportEmail: appSettings.SupportEmail);
 
             //Temporarily set navigation to null, as it requires a constructed ServiceCentre as a parameter.
             Models models = new Models(localizationModel, aboutModel, navigation: null, trackingModel, npcGeneratorModel);

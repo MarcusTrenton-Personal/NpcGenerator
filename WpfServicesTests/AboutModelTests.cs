@@ -50,7 +50,7 @@ namespace Tests
             Assert.IsTrue(canExecute, "Good uri is rejected from OpenBrowserToUri");
         }
 
-        private readonly AboutModel m_model = new AboutModel(website: null, donation: null);
+        private readonly AboutModel m_model = new AboutModel(website: null, donation: null, supportEmail: null);
     }
 
 

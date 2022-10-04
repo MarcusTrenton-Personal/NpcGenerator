@@ -28,53 +28,56 @@ namespace Tests
         [TestMethod]
         public void ReadSettings()
         {
-            const string fileName = "TestSettings.json";
-            const int encryptionKey = 1;
-            const string additionalIdDev = "Add Dev";
-            const string additionalIdProd = "Add Prod";
-            const string measurementIdDev = "Measure Dev";
-            const string measurementIdProd = "Measure Prod";
-            const string hiddenLanguageCode = "Atlantean";
-            const string homeWebsite = "fake.com";
-            const string donationWebsite = "mock.com";
+            const string FILE_NAME = "TestSettings.json";
+            const int ENCRYPTION_KEY = 1;
+            const string ADDITIONAL_ID_DEV = "Add Dev";
+            const string ADDITIONAL_ID_PROD = "Add Prod";
+            const string MEASUREMENT_ID_DEV = "Measure Dev";
+            const string MEASUREMENT_ID_PROD = "Measure Prod";
+            const string HIDDEN_LANGUAGE_CODE = "Atlantean";
+            const string HOME_WEBSITE = "fake.com";
+            const string DONATION_WEBSITE = "mock.com";
+            const string SUPPORT_EMAIL = "fake@test.com";
 
             //Create the original AppSettings
             GoogleAnalyticsSettings googleAnalytics = new GoogleAnalyticsSettings
             {
-                AdditionalIdDev = additionalIdDev,
-                AdditionalIdProd = additionalIdProd,
-                MeasurementIdDev = measurementIdDev,
-                MeasurementIdProd = measurementIdProd
+                AdditionalIdDev = ADDITIONAL_ID_DEV,
+                AdditionalIdProd = ADDITIONAL_ID_PROD,
+                MeasurementIdDev = MEASUREMENT_ID_DEV,
+                MeasurementIdProd = MEASUREMENT_ID_PROD
             };
 
             AppSettings original = new AppSettings
             {
-                EncryptionKey = encryptionKey,
+                EncryptionKey = ENCRYPTION_KEY,
                 GoogleAnalytics = googleAnalytics,
-                HiddenLanguageCodes = Array.AsReadOnly(new string[] { hiddenLanguageCode }),
-                HomeWebsite = homeWebsite,
-                DonationWebsite = donationWebsite
+                HiddenLanguageCodes = Array.AsReadOnly(new string[] { HIDDEN_LANGUAGE_CODE }),
+                HomeWebsite = HOME_WEBSITE,
+                DonationWebsite = DONATION_WEBSITE,
+                SupportEmail = SUPPORT_EMAIL
             };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
-            using (FileStream fs = File.Create(fileName))
+            using (FileStream fs = File.Create(FILE_NAME))
             {
                 byte[] info = new UTF8Encoding(true).GetBytes(json);
                 fs.Write(info, 0, info.Length);
             }
 
             //Read the settings.
-            AppSettings readSettings = AppSettings.Load(fileName);
+            AppSettings readSettings = AppSettings.Load(FILE_NAME);
 
-            Assert.AreEqual(encryptionKey, readSettings.EncryptionKey, "Read incorrect EncryptionKey");
+            Assert.AreEqual(ENCRYPTION_KEY, readSettings.EncryptionKey, "Read incorrect EncryptionKey");
             Assert.AreEqual(1, readSettings.HiddenLanguageCodes.Count, "Read incorrect number of HiddenLanguageCodes");
-            Assert.AreEqual(hiddenLanguageCode, readSettings.HiddenLanguageCodes[0], "Read incorrect HiddenLanguageCode");
-            Assert.AreEqual(homeWebsite, readSettings.HomeWebsite, "Read incorrect HomeWebsite");
-            Assert.AreEqual(donationWebsite, readSettings.DonationWebsite, "Read incorrect DonationWebsite");
-            Assert.AreEqual(additionalIdDev, readSettings.GoogleAnalytics.AdditionalIdDev, "Read incorrect AdditionalIdDev");
-            Assert.AreEqual(additionalIdProd, readSettings.GoogleAnalytics.AdditionalIdProd, "Read incorrect AdditionalIdProd");
-            Assert.AreEqual(measurementIdDev, readSettings.GoogleAnalytics.MeasurementIdDev, "Read incorrect MeasurementIdDev");
-            Assert.AreEqual(measurementIdProd, readSettings.GoogleAnalytics.MeasurementIdProd, "Read incorrect MeasurementIdProd");
+            Assert.AreEqual(HIDDEN_LANGUAGE_CODE, readSettings.HiddenLanguageCodes[0], "Read incorrect HiddenLanguageCode");
+            Assert.AreEqual(HOME_WEBSITE, readSettings.HomeWebsite, "Read incorrect HomeWebsite");
+            Assert.AreEqual(DONATION_WEBSITE, readSettings.DonationWebsite, "Read incorrect DonationWebsite");
+            Assert.AreEqual(SUPPORT_EMAIL, readSettings.SupportEmail, "Read incorrect SupportEmail");
+            Assert.AreEqual(ADDITIONAL_ID_DEV, readSettings.GoogleAnalytics.AdditionalIdDev, "Read incorrect AdditionalIdDev");
+            Assert.AreEqual(ADDITIONAL_ID_PROD, readSettings.GoogleAnalytics.AdditionalIdProd, "Read incorrect AdditionalIdProd");
+            Assert.AreEqual(MEASUREMENT_ID_DEV, readSettings.GoogleAnalytics.MeasurementIdDev, "Read incorrect MeasurementIdDev");
+            Assert.AreEqual(MEASUREMENT_ID_PROD, readSettings.GoogleAnalytics.MeasurementIdProd, "Read incorrect MeasurementIdProd");
         }
     }
 }

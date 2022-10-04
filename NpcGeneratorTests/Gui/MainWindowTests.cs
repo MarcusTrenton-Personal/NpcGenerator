@@ -62,6 +62,11 @@ namespace Tests
                         NpcQuantity = 5
                     };
 
+                    StubAppSettings testAppSettings = new StubAppSettings
+                    {
+                        SupportEmail = "fake@test.com"
+                    };
+
                     StubMessager testMessager = new StubMessager();
 
                     StubLocalization testLocalization = new StubLocalization
@@ -86,7 +91,8 @@ namespace Tests
                         tracking: new StubTrackingModel(),
                         //Only the npcGenerator is real.
                         npcGenerator: new NpcGeneratorModel(
-                            testUserSettings, 
+                            testUserSettings,
+                            testAppSettings,
                             testMessager, 
                             fileIO, 
                             configurationParser, 

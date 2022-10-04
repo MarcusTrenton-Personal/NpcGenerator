@@ -41,6 +41,8 @@ namespace NpcGenerator
 
         public string DonationWebsite { get; set; }
 
+        public string SupportEmail { get; set; }
+
         public static AppSettings Load(string path)
         {
             string text = File.ReadAllText(path);

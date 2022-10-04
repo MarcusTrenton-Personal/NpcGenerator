@@ -1283,7 +1283,7 @@ namespace Tests
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
                 violation => violation.Category == CATEGORY &&
                 violation.Trait == TRAIT &&
-                violation.Violation == NpcSchemaViolation.Reason.TraitIsHiddenMismatch);
+                violation.Violation == NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden);
             Assert.IsNotNull(categoryNotFoundViolation, "TraitIsHiddenMismatch violation not detected");
         }
 
@@ -1315,7 +1315,7 @@ namespace Tests
             NpcSchemaViolation categoryNotFoundViolation = violations.Find(
                 violation => violation.Category == CATEGORY &&
                 violation.Trait == TRAIT &&
-                violation.Violation == NpcSchemaViolation.Reason.TraitIsHiddenMismatch);
+                violation.Violation == NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden);
             Assert.IsNotNull(categoryNotFoundViolation, "TraitIsHiddenMismatch violation not detected");
         }
 
@@ -1539,8 +1539,8 @@ namespace Tests
             List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(1, violations.Count, "Wrong number of violations");
 
-            NpcSchemaViolation categoryNotFoundViolation = violations.Find(
-                violation => violation.Category == CATEGORY &&
+            NpcSchemaViolation categoryNotFoundViolation = violations.Find(violation => 
+                violation.Category == CATEGORY &&
                 violation.Trait == TRAIT_ORIGINAL_NAME &&
                 violation.Violation == NpcSchemaViolation.Reason.UnusedReplacement);
             Assert.IsNotNull(categoryNotFoundViolation, "UnusedReplacement violation not detected");
