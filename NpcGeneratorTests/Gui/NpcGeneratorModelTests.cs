@@ -45,7 +45,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(), 
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
             
             Assert.AreEqual(FILE_PATH1, npcGeneratorModel.ConfigurationPath, 
                 "Configuration path is not the one in UserSettings");
@@ -71,7 +72,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
 
             userSettings.NpcQuantity = QUANTITY1;
             Assert.AreEqual(QUANTITY1, npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
@@ -94,7 +96,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false)
+                showErrorMessages: false,
+                forceFailNpcGeneration: false)
             {
                 NpcQuantity = 0
             };
@@ -115,7 +118,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
 
             userSettings.ConfigurationPath = "Bad file";
             bool canGenerateNpcs = npcGeneratorModel.GenerateNpcs.CanExecute(null);
@@ -152,7 +156,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false); 
+                showErrorMessages: false,
+                forceFailNpcGeneration: false); 
 
             const int QUANTITY = 5;
             npcGeneratorModel.NpcQuantity = 5;
@@ -190,7 +195,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
 
             bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsFalse(canSave, "Can save even though there are no npcs");
@@ -208,7 +214,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -245,7 +252,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -291,7 +299,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false);
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -521,7 +530,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false)
+                showErrorMessages: false,
+                forceFailNpcGeneration: false)
             {
                 NpcQuantity = 1
             };
@@ -564,7 +574,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false)
+                showErrorMessages: false,
+                forceFailNpcGeneration: false)
             {
                 NpcQuantity = 1
             };
@@ -612,7 +623,8 @@ namespace Tests
                 new Dictionary<string, INpcExport>(),
                 new StubLocalization(),
                 new MockRandom(),
-                showErrorMessages: false)
+                showErrorMessages: false,
+                forceFailNpcGeneration: false)
             {
                 NpcQuantity = 1
             };

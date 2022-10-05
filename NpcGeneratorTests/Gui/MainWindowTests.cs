@@ -99,7 +99,8 @@ namespace Tests
                             npcExporters, 
                             new StubLocalization(), 
                             random, 
-                            showErrorMessages: false));
+                            showErrorMessages: false,
+                            forceFailNpcGeneration: false));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),

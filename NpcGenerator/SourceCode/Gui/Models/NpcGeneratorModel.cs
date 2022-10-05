@@ -38,7 +38,8 @@ namespace NpcGenerator
             Dictionary<string, INpcExport> npcExporters,
             ILocalization localization,
             IRandom random,
-            bool showErrorMessages)
+            bool showErrorMessages,
+            bool forceFailNpcGeneration)
         {
             m_userSettings = userSettings;
             m_appSettings = appSettings;
@@ -49,6 +50,7 @@ namespace NpcGenerator
             m_localization = localization;
             m_random = random;
             m_showErrorMessages = showErrorMessages;
+            m_forceFailNpcGeneration = forceFailNpcGeneration;
             m_configurationHasError = false;
 
             CreateFileWatcher();
@@ -216,66 +218,82 @@ namespace NpcGenerator
             {
                 m_npcGroup = NpcFactory.Create(m_traitSchema, m_userSettings.NpcQuantity, replacements, m_random);
 
-                bool areValid = NpcFactory.AreNpcsValid(
-                    m_npcGroup, m_traitSchema, replacements, out Dictionary<Npc, List<NpcSchemaViolation>> violations);
-                if (!areValid)
-                {
-                    StringBuilder message = new StringBuilder();
-                    string title = m_localization.GetText("npcs_generated_incorrectly", m_appSettings.SupportEmail);
-                    message.Append(title + "\n");
-                    foreach (List<NpcSchemaViolation> violationList in violations.Values)
-                    {
-                        foreach (NpcSchemaViolation violation in violationList)
-                        {
-                            string errorMessage = violation.Violation switch
-                            {
-                                NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
-                                    m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
-                                NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
-                                    m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
-                                NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
-                                    m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
-                                NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
-                                    m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
-                                NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
-                                    m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
-                                NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
-                                    m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
-                                NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
-                                    m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
-                                NpcSchemaViolation.Reason.UnusedReplacement =>
-                                    m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
-                                _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
-                            };
-                            message.Append("\n" + errorMessage);
-                        }
-                    }
-
-                    if (m_showErrorMessages)
-                    {
-                        MessageBox.Show(message.ToString());
-                    }
-                }
-
-                DataTable table = new DataTable("Npc Table");
-                for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
-                {
-                    table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
-                }
-                for (int i = 0; i < m_npcGroup.NpcCount; ++i)
-                {
-                    string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.CategoryOrder);
-                    table.Rows.Add(text);
-                }
-                m_table = table;
-                NotifyPropertyChanged("ResultNpcs");
+                UpdateNpcTable();
 
                 m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
+
+                ValidateNpcs(replacements);
             }
             catch(TooFewTraitsInCategoryException exception)
             {
                 ShowLocalizedErrorMessageIfAllowed(
                     "too_few_traits_in_category", exception.Requested, exception.Category, exception.Available);
+            }
+        }
+
+        private void UpdateNpcTable()
+        {
+            DataTable table = new DataTable("Npc Table");
+            for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
+            {
+                table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
+            }
+            for (int i = 0; i < m_npcGroup.NpcCount; ++i)
+            {
+                string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.CategoryOrder);
+                table.Rows.Add(text);
+            }
+            m_table = table;
+            NotifyPropertyChanged("ResultNpcs");
+        }
+
+        private void ValidateNpcs(List<Replacement> replacements)
+        {
+            bool areValid = NpcFactory.AreNpcsValid(
+                    m_npcGroup, m_traitSchema, replacements, out Dictionary<Npc, List<NpcSchemaViolation>> violations);
+            if (m_forceFailNpcGeneration)
+            {
+                NpcSchemaViolation fakeViolation = new NpcSchemaViolation("Fake Failure Test", NpcSchemaViolation.Reason.CategoryNotFoundInSchema);
+                violations[new Npc()] = new List<NpcSchemaViolation>() { fakeViolation };
+                areValid = false;
+            }
+            if (!areValid)
+            {
+                StringBuilder message = new StringBuilder();
+                string title = m_localization.GetText("npcs_generated_incorrectly", m_appSettings.SupportEmail);
+                message.Append(title + "\n");
+                foreach (List<NpcSchemaViolation> violationList in violations.Values)
+                {
+                    foreach (NpcSchemaViolation violation in violationList)
+                    {
+                        string errorMessage = violation.Violation switch
+                        {
+                            NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
+                                m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
+                            NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
+                                m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
+                            NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
+                                m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
+                            NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
+                                m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
+                            NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
+                                m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
+                            NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
+                                m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
+                            NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
+                                m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
+                            NpcSchemaViolation.Reason.UnusedReplacement =>
+                                m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
+                            _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
+                        };
+                        message.Append("\n" + errorMessage);
+                    }
+                }
+
+                if (m_showErrorMessages)
+                {
+                    MessageBox.Show(message.ToString());
+                }
             }
         }
 
@@ -535,6 +553,7 @@ namespace NpcGenerator
         private readonly IRandom m_random;
         private readonly Dictionary<string, INpcExport> m_npcExporters = new Dictionary<string, INpcExport>();
         private readonly bool m_showErrorMessages;
+        private readonly bool m_forceFailNpcGeneration = false;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;

@@ -35,12 +35,13 @@ namespace NpcGenerator
         {
             public bool analyticsDryRun;
             public string forcedLanguageCode;
+            public bool forceFailNpcGeneration;
         }
 
         public App()
         {
-            m_serviceCentre = CreateServices();
             AppParameters parameters = ReadAppParameters();
+            m_serviceCentre = CreateServices(parameters);
 
             m_googleAnalytics = new GoogleAnalytics(
                  appSettings: m_serviceCentre.AppSettings,
@@ -62,7 +63,7 @@ namespace NpcGenerator
             Current.MainWindow.Show();
         }
 
-        private static ServiceCentre CreateServices()
+        private static ServiceCentre CreateServices(AppParameters parameters)
         {
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
@@ -100,7 +101,16 @@ namespace NpcGenerator
             CryptoRandom random = new CryptoRandom();
 
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
-                userSettings, appSettings, messager, fileIo, configurationParser, npcExporters, localization, random, showErrorMessages: true);
+                userSettings, 
+                appSettings, 
+                messager, 
+                fileIo, 
+                configurationParser, 
+                npcExporters, 
+                localization, 
+                random, 
+                showErrorMessages: true,
+                forceFailNpcGeneration: parameters.forceFailNpcGeneration);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
@@ -134,7 +144,8 @@ namespace NpcGenerator
             AppParameters parameters = new AppParameters
             {
                 analyticsDryRun = false,
-                forcedLanguageCode = null
+                forcedLanguageCode = null,
+                forceFailNpcGeneration = false,
             };
 
             string[] commandLineArgs = Environment.GetCommandLineArgs();
@@ -157,6 +168,12 @@ namespace NpcGenerator
                         }
                         parameters.forcedLanguageCode = commandLineArgs[i + 1];
                         ++i;
+                    }
+                    break;
+
+                    case "-forceFailNpc":
+                    {
+                        parameters.forceFailNpcGeneration = true;
                     }
                     break;
 
