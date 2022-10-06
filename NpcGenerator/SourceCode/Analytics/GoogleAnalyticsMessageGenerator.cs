@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Newtonsoft.Json;
 using Services.Message;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -43,6 +44,7 @@ namespace NpcGenerator
             m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
             m_messager.Subscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
             m_messager.Subscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
+            m_messager.Subscribe<Message.InvalidNpcs>(OnInvalidNpcs);
         }
 
         ~GoogleAnalyticsMessageGenerator()
@@ -54,6 +56,7 @@ namespace NpcGenerator
             m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
             m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
             m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
+            m_messager.Unsubscribe<Message.InvalidNpcs>(OnInvalidNpcs);
         }
 
         private void WriteMessageBody(WriteGoogleEvent googleEvent)
@@ -306,6 +309,54 @@ namespace NpcGenerator
 
             writer.WritePropertyName("language_code");
             writer.WriteValue(languageCode);
+
+            writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
+        }
+
+        private void OnInvalidNpcs(object sender, Message.InvalidNpcs invalidNpcs)
+        {
+            if (m_userSettings.AnalyticsConsent)
+            {
+                WriteMessageBody(Callback);
+            }
+
+            void Callback(JsonWriter writer)
+            {
+                HashSet<NpcSchemaViolation.Reason> violationTypes = GetTypesOfNpcSchemaViolation(invalidNpcs.Violations);
+                WriteOnInvalidEvent(writer, violationTypes);
+            }
+        }
+
+        private static HashSet<NpcSchemaViolation.Reason> GetTypesOfNpcSchemaViolation(Dictionary<Npc, List<NpcSchemaViolation>> violations)
+        {
+            HashSet<NpcSchemaViolation.Reason> result = new HashSet<NpcSchemaViolation.Reason>();
+            foreach (List<NpcSchemaViolation> violationList in violations.Values)
+            {
+                foreach (NpcSchemaViolation violation in violationList)
+                {
+                    result.Add(violation.Violation);
+                }
+            }
+            return result;
+        }
+
+        private static void WriteOnInvalidEvent(JsonWriter writer, HashSet<NpcSchemaViolation.Reason> violationTypes)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("invalid_npcs");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            foreach (NpcSchemaViolation.Reason reason in violationTypes)
+            {
+                writer.WritePropertyName(reason.ToString());
+                writer.WriteValue(true);
+            }
 
             writer.WriteEnd(); //End of params object
 

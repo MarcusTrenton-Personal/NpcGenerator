@@ -290,6 +290,8 @@ namespace NpcGenerator
                     }
                 }
 
+                m_messager.Send(sender: this, message: new Message.InvalidNpcs(violations));
+
                 if (m_showErrorMessages)
                 {
                     MessageBox.Show(message.ToString());
