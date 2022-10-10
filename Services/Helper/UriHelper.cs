@@ -39,5 +39,24 @@ namespace Services
             }
             return isValid;
         }
+
+        public static bool StartEmail(Uri uri)
+        {
+            if (uri is null)
+            {
+                throw new ArgumentNullException(nameof(uri));
+            }
+
+            bool isValid = uri.Scheme == Uri.UriSchemeMailto;
+            if (isValid)
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = uri.ToString(),
+                    UseShellExecute = true
+                });
+            }
+            return isValid;
+        }
     }
 }

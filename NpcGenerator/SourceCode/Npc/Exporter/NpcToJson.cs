@@ -35,7 +35,8 @@ namespace NpcGenerator
             }
         }
 
-        public string FileExtensionWithoutDot { get; } = "json";
+        public const string FileExtensionWithoutDotStatic = "json";
+        public string FileExtensionWithoutDot { get; } = FileExtensionWithoutDotStatic;
 
         public string Export(NpcGroup group)
         {

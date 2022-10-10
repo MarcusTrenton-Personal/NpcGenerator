@@ -21,7 +21,8 @@ namespace NpcGenerator
 {
     public class NpcToCsv : INpcExport
     {
-        public string FileExtensionWithoutDot { get; } = "csv";
+        public const string FileExtensionWithoutDotStatic = "csv";
+        public string FileExtensionWithoutDot { get; } = FileExtensionWithoutDotStatic;
 
         public const char SEPARATOR = ',';
         public const string MULTI_TRAIT_SEPARATOR = ExportUtil.MULTI_TRAIT_SEPARATOR;

@@ -260,43 +260,100 @@ namespace NpcGenerator
             if (!areValid)
             {
                 StringBuilder message = new StringBuilder();
-                string title = m_localization.GetText("npcs_generated_incorrectly", m_appSettings.SupportEmail);
-                message.Append(title + "\n");
-                foreach (List<NpcSchemaViolation> violationList in violations.Values)
-                {
-                    foreach (NpcSchemaViolation violation in violationList)
-                    {
-                        string errorMessage = violation.Violation switch
-                        {
-                            NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
-                                m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
-                            NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
-                                m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
-                            NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
-                                m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
-                            NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
-                                m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
-                            NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
-                                m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
-                            NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
-                                m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
-                            NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
-                                m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
-                            NpcSchemaViolation.Reason.UnusedReplacement =>
-                                m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
-                            _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
-                        };
-                        message.Append("\n" + errorMessage);
-                    }
-                }
+                
+                message.AppendLine(m_localization.GetText("npcs_generated_incorrectly") + "\n");
+                string errorBody = NpcErrorBody(violations);
+                message.Append(errorBody);
+                message.AppendLine();
+                message.Append(m_localization.GetText("support_email_call_to_action", m_appSettings.SupportEmail));
 
                 m_messager.Send(sender: this, message: new Message.InvalidNpcs(violations));
 
                 if (m_showErrorMessages)
                 {
-                    MessageBox.Show(message.ToString());
+                    string errorTitle = m_localization.GetText("error", m_appSettings.SupportEmail);
+                    MessageBoxResult result = MessageBox.Show(message.ToString(), errorTitle, MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SendErrorEmail(errorTitle, errorBody, replacements);
+                    }                    
                 }
             }
+        }
+
+        private string NpcErrorBody(Dictionary<Npc, List<NpcSchemaViolation>> violations)
+        {
+            StringBuilder errorBody = new StringBuilder();
+            foreach (List<NpcSchemaViolation> violationList in violations.Values)
+            {
+                foreach (NpcSchemaViolation violation in violationList)
+                {
+                    string errorMessage = violation.Violation switch
+                    {
+                        NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
+                            m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
+                        NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
+                            m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
+                        NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
+                            m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
+                        NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
+                            m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
+                        NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
+                            m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
+                        NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
+                            m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
+                        NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
+                            m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
+                        NpcSchemaViolation.Reason.UnusedReplacement =>
+                            m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
+                        _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
+                    };
+                    errorBody.AppendLine(errorMessage);
+                }
+            }
+            return errorBody.ToString();
+        }
+
+        private void SendErrorEmail(string errorTitle, string errorBody, List<Replacement> replacements)
+        {
+            StringBuilder actionBuilder = new StringBuilder();
+            actionBuilder.Append("mailto:" + m_appSettings.SupportEmail);
+            actionBuilder.Append("?subject=" + m_localization.GetText("error_email_subject"));
+            actionBuilder.Append("&body=" + m_localization.GetText("error_email_body_start"));
+
+            actionBuilder.AppendLine("----------" + errorTitle + "----------");
+            actionBuilder.AppendLine("----------" + errorBody + "----------");
+            actionBuilder.AppendLine();
+
+            string npcsTitle = m_localization.GetText("npcs");
+            actionBuilder.AppendLine("----------" + npcsTitle + "----------");
+            string npcsText = m_npcExporters[NpcToJson.FileExtensionWithoutDotStatic].Export(m_npcGroup);
+            actionBuilder.AppendLine(npcsText);
+            actionBuilder.AppendLine();
+
+            string configurationTitle = m_localization.GetText("choose_configuration_file_label");
+            actionBuilder.AppendLine("----------" + configurationTitle + "----------");
+            string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath);
+            actionBuilder.AppendLine(configurationText);
+            actionBuilder.AppendLine();
+
+            string replacementTitle = m_localization.GetText("trait_replacement");
+            actionBuilder.AppendLine("----------" + replacementTitle + "----------");
+            foreach (Replacement replacement in replacements)
+            {
+                string replacementText = m_localization.GetText(
+                    "trait_replacement_description",
+                    replacement.OriginalTrait.Name,
+                    replacement.ReplacementTraitName,
+                    replacement.Category.Name);
+                actionBuilder.AppendLine(replacementText);
+            }
+            actionBuilder.AppendLine();
+
+            string npcNumberLabelText = m_localization.GetText("npc_quantity_label");
+            actionBuilder.AppendLine("----------" + npcNumberLabelText + "---------- " + NpcQuantity);
+
+            UriHelper.StartEmail(new Uri(actionBuilder.ToString()));
         }
 
         private static List<Replacement> GetReplacements(List<ReplacementSubModel> replacementSubModels, TraitSchema schema)
