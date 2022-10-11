@@ -21,7 +21,7 @@ using System.Text;
 namespace Tests
 {
     [TestClass]
-    public class LocalizationTests : FileCreatingTests
+    public class LocalizationTests
     {
         [TestMethod]
         public void ReadSingleLanguage()
@@ -32,14 +32,10 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t"+ languageCode + "\n" +
                 textId + "\t\t" + text;
-            
-            File.WriteAllText(path, sourceText);
 
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
             Assert.AreEqual(languageCodeLowerCase, localization.CurrentLanguageCode, "Current language is wrong");
             Assert.AreEqual(1, localization.SupportedLanguageCodes.Length, "Incorrect number of parsed languages");
@@ -47,8 +43,6 @@ namespace Tests
             Assert.IsTrue(localization.IsLanguageCodeSupported(languageCode), "Falsely claims default language is not supported");
             Assert.IsFalse(localization.IsLanguageCodeSupported("MissingLanguage"), "Falsely claims missing language is supported");
             Assert.AreEqual(text, localization.GetText(textId), "Fetched the wrong text");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -63,14 +57,10 @@ namespace Tests
             string martianText = "Test Window";
             string dwarvishText = "Mock Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + defaultLanguageCode + "\t"+ languageCode2 + "\n" +
                 textId + "\t\t" + martianText + "\t" + dwarvishText;
-            
-            File.WriteAllText(path, sourceText);
 
-            Services.Localization localization = new Services.Localization(path, defaultLanguageCode);
+            Services.Localization localization = new Services.Localization(sourceText, defaultLanguageCode);
 
             Assert.AreEqual(defaultLanguageCodeLowerCase, localization.CurrentLanguageCode, "Current language is wrong");
             Assert.AreEqual(2, localization.SupportedLanguageCodes.Length, "Incorrect number of parsed languages");
@@ -85,8 +75,6 @@ namespace Tests
 
             Assert.AreEqual(languageCode2LowerCase, localization.CurrentLanguageCode, "Current language is wrong");
             Assert.AreEqual(dwarvishText, localization.GetText(textId), "Fetched the wrong text");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -115,19 +103,13 @@ namespace Tests
             string text2 = "Goodbye";
             stringBuilder.Append(textId2 + "\t\t" + text2);
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
-            File.WriteAllText(path, stringBuilder.ToString());
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(stringBuilder.ToString(), languageCode);
 
             Assert.AreEqual(languageCodeLowerCase, localization.CurrentLanguageCode, "Current language is wrong");
             Assert.AreEqual(1, localization.SupportedLanguageCodes.Length, "Incorrect number of parsed languages");
             Assert.IsTrue(Array.IndexOf(localization.SupportedLanguageCodes, languageCodeLowerCase) >= 0, "Parsed wrong language code");
             Assert.AreEqual(text1, localization.GetText(textId1), "Fetched the wrong text");
             Assert.AreEqual(text2, localization.GetText(textId2), "Fetched the wrong text");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -137,14 +119,10 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
             bool causedException = false;
             try
             {
@@ -156,8 +134,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Setting invalid language doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -167,17 +143,13 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
-
-            File.WriteAllText(path, sourceText);
 
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, "NotFoundLanguage");
+                Services.Localization localization = new Services.Localization(sourceText, "NotFoundLanguage");
             }
             catch (Exception)
             {
@@ -185,37 +157,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Setting invalid default language doesn't cause an exception");
-
-            File.Delete(path);
-        }
-
-        [TestMethod]
-        public void InvalidFilePath()
-        {
-            string languageCode = "Martian";
-            string textId = "window_title";
-            string text = "Test Window";
-
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
-            string sourceText = "ID\tContext\t" + languageCode + "\n" +
-                textId + "\t\t" + text;
-
-            File.WriteAllText(path, sourceText);
-
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization("InvalidFile.txt", languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Passing invalid localization file doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -225,17 +166,13 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID,Context," + languageCode + "\n" +
                 textId + ",," + text;
-
-            File.WriteAllText(path, sourceText);
 
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -243,8 +180,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Not tab separator in localization file doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -254,18 +189,14 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text +"\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -273,8 +204,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Duplicate text ids doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -284,16 +213,12 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = textId + "\t\t" + text;
-
-            File.WriteAllText(path, sourceText);
 
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -301,8 +226,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Missing title row doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -312,17 +235,13 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\t" + languageCode + "\n" +
                 textId + "\t" + text;
-
-            File.WriteAllText(path, sourceText);
 
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -330,8 +249,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Missing context column doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -341,18 +258,14 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\tExtra\t" + languageCode + "\n" +
                 textId + "\t\t\t" + text + "\n" +
                 textId + "\t\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -360,8 +273,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Extra column doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -370,17 +281,13 @@ namespace Tests
             string languageCode = "Martian";
             string textId = "window_title";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t";
-
-            File.WriteAllText(path, sourceText);
 
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -388,8 +295,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Missing translation doesn't cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -398,17 +303,13 @@ namespace Tests
             string languageCode = "Martian";
             string textId = "window_title";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t\n" +
                 textId + "\t";
-
-            File.WriteAllText(path, sourceText);
 
             bool causedException = false;
             try
             {
-                Services.Localization localization = new Services.Localization(path, languageCode);
+                Services.Localization localization = new Services.Localization(sourceText, languageCode);
             }
             catch (Exception)
             {
@@ -416,38 +317,21 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "No languages doesn't cause an exception");
-
-            File.Delete(path);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void IncorrectTextId()
         {
             string languageCode = "Martian";
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
-            Services.Localization localization = new Services.Localization(path, languageCode);
-
-            bool causedException = false;
-            try
-            {
-                string translatedText = localization.GetText("MissingStringId");
-            }
-            catch(Exception)
-            {
-                causedException = true;
-            }
-            Assert.IsTrue(causedException, "Asking for missing text doesn't cause exception");
-
-            File.Delete(path);
+            localization.GetText("MissingStringId");
         }
 
         [TestMethod]
@@ -457,21 +341,15 @@ namespace Tests
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
             int ufosSpotted = 3;
             string correctlyFormattedText = string.Format(text, ufosSpotted);
             string candidateText = localization.GetText(textId, ufosSpotted);
             Assert.AreEqual(correctlyFormattedText, candidateText, "String formatted incorrectly");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -481,53 +359,31 @@ namespace Tests
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
             int visitedStars = 3;
             int reachableStars = 10;
             string correctlyFormattedText = string.Format(text, visitedStars, reachableStars);
             string candidateText = localization.GetText(textId, visitedStars, reachableStars);
             Assert.AreEqual(correctlyFormattedText, candidateText, "String formatted incorrectly");
-
-            File.Delete(path);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(FormatException))]
         public void Format0InsteadOf1Params()
         {
             string languageCode = "Martian";
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
-            Services.Localization localization = new Services.Localization(path, languageCode);
-
-            bool causedException = false;
-            try
-            {
-                string candidateText = localization.GetText(textId);
-            }
-            catch(Exception)
-            {
-                causedException = true;
-            }
-            
-            Assert.IsTrue(causedException, "Formatting with too few parameters did not cause an exception");
-
-            File.Delete(path);
+            localization.GetText(textId);
         }
 
         [TestMethod]
@@ -537,14 +393,10 @@ namespace Tests
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
             bool causedException = false;
             try
@@ -558,8 +410,6 @@ namespace Tests
             }
 
             Assert.IsTrue(causedException, "Formatting with too few parameters did not cause an exception");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -569,18 +419,12 @@ namespace Tests
             string textId = "window_title";
             string text = "Test Window";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
             Assert.AreEqual(text, localization.GetText(textId, 3), "Fetched the wrong text");
-
-            File.Delete(path);
         }
 
         [TestMethod]
@@ -590,21 +434,27 @@ namespace Tests
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
-            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            string path = Path.Combine(TestDirectory, method + ".csv");
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            File.WriteAllText(path, sourceText);
-
-            Services.Localization localization = new Services.Localization(path, languageCode);
+            Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
             int ufosSpotted = 3;
             string correctlyFormattedText = string.Format(text, ufosSpotted);
             string candidateText = localization.GetText(textId, ufosSpotted, 19);
             Assert.AreEqual(correctlyFormattedText, candidateText, "String formatted incorrectly");
+        }
 
-            File.Delete(path);
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullText()
+        {
+            new Services.Localization(localizationText: null, "martian");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptyText()
+        {
+            new Services.Localization(localizationText: String.Empty, "martian");
         }
     }
 }

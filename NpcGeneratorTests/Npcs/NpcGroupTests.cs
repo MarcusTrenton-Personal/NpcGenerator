@@ -76,23 +76,13 @@ namespace Tests
             Assert.AreEqual(npc1, group.GetNpcAtIndex(1), "Different Npc returned than was stored");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void GetWithoutAdd()
         {
             List<string> categoryNames = new List<string>() { "Colour" };
             NpcGroup group = new NpcGroup(categoryNames);
 
-            bool threwException = false;
-            try
-            {
-                Npc npc = group.GetNpcAtIndex(0);
-            }
-            catch(Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Did not throw an exception for fetch an out of bounds index");
+            group.GetNpcAtIndex(0);
         }
 
         [TestMethod]
@@ -144,20 +134,11 @@ namespace Tests
             Assert.IsTrue(threwException, "A null category list in an NpcGroup did not throw an exception when it should have.");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void NullCategoryInList()
         {
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = new NpcGroup(new List<string> { null });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
+            new NpcGroup(new List<string> { null });
 
-            Assert.IsTrue(threwException, "A null ordering category in an NpcGroup did not throw an exception when it should have.");
         }
 
         [TestMethod]

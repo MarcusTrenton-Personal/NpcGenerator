@@ -25,19 +25,19 @@ namespace Services
         //ID        Context LanguageCode1   LanguageCode2   ...
         //text_id   context text            text
         //...
-        public Localization(string filePath, string defaultLanguageCode)
+        public Localization(string localizationText, string defaultLanguageCode)
         {
-            ParseCsv(filePath, out m_localizedText, out string[] supportedLanguages);
+            ParseCsv(localizationText, out m_localizedText, out string[] supportedLanguages);
             SupportedLanguageCodes = supportedLanguages;
 
-            bool foundDefaultLanguage = Array.Exists<string>(SupportedLanguageCodes, element => element == defaultLanguageCode.ToLower());
+            bool foundDefaultLanguage = Array.Exists(SupportedLanguageCodes, element => element == defaultLanguageCode.ToLower());
             if (foundDefaultLanguage)
             {
                 CurrentLanguageCode = defaultLanguageCode;
             }
             else
             {
-                throw new ArgumentException(defaultLanguageCode + " language is not found in " + filePath);
+                throw new ArgumentException(defaultLanguageCode + " language is not found");
             }
         }
 
@@ -74,29 +74,44 @@ namespace Services
 
         public string GetText(string textId, params object[] formatParameters)
         {
+            if (textId is null)
+            {
+                throw new ArgumentNullException(nameof(textId));
+            }
+            if (string.Empty == textId)
+            {
+                throw new ArgumentException(nameof(textId) + " is empty");
+            }
+
             int textIdHash = textId.GetHashCode();
             int hashKey = Hash(textIdHash: textIdHash, languageCodeHash: m_currentLanguageCodeHash);
-            string unformattedText = m_localizedText[hashKey];
+            bool found = m_localizedText.TryGetValue(hashKey, out string unformattedText);
+            if (!found)
+            {
+                throw new ArgumentException(textId + " is not found");
+            }
             return string.Format(unformattedText, formatParameters);
         }
 
-        private static void ParseCsv(string filePath, out Dictionary<int, string> localization, out string[] languageCodes)
+        private static void ParseCsv(string localizationText, out Dictionary<int, string> localization, out string[] languageCodes)
         {
-            IEnumerable<string> lines = File.ReadAllLines(filePath);
-            IEnumerator<string> enumerator = lines.GetEnumerator();
-            bool hasTitleRow = enumerator.MoveNext();
-            if (!hasTitleRow)
+            if (localizationText is null)
             {
-                throw new IOException("The file is empty: " + filePath);
+                throw new ArgumentNullException(nameof(localizationText));
+            }
+            if (localizationText == string.Empty)
+            {
+                throw new ArgumentException(nameof(localizationText) + " is empty");
             }
 
-            string[] elements = enumerator.Current.Split('\t');
+            string[] lines = localizationText.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] elements = lines[0].Split('\t');
             int expectedColumns = elements.Length;
             int startingNonLanguageColumns = 2; //Columns are id, comment, language1, language2, etc...
             int languageCount = expectedColumns - startingNonLanguageColumns; 
             if (languageCount < 1)
             {
-                throw new IOException("No lanuages found. Needs at least 3 columns: " + filePath);
+                throw new ArgumentException("No lanuages found. Needs at least 3 columns");
             }
             languageCodes = new string[languageCount];
             for (int i = 0; i < languageCount; ++i)
@@ -106,17 +121,17 @@ namespace Services
 
             List<string[]> translations = new List<string[]>();
             List<string> textIdentifiers = new List<string>();
-            while (enumerator.MoveNext())
+            for (int i = 1; i < lines.Length; ++i)
             {
-                elements = enumerator.Current.Split('\t');
+                elements = lines[i].Split('\t');
                 if(expectedColumns != elements.Length)
                 {
                     throw new IOException("Each row must have the same number of columns: " + expectedColumns);
                 }
                 string[] lineTranslations = new string[languageCount];
-                for(int i = 0; i < languageCount; ++i)
+                for(int j = 0; j < languageCount; ++j)
                 {
-                    lineTranslations[i] = elements[i + startingNonLanguageColumns];
+                    lineTranslations[j] = elements[j + startingNonLanguageColumns];
                 }
                 translations.Add(lineTranslations);
 

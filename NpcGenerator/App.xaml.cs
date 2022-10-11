@@ -18,6 +18,7 @@ using Services;
 using Services.Message;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using WpfServices;
@@ -68,8 +69,8 @@ namespace NpcGenerator
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
             AppSettings appSettings = AppSettings.Load(filePathProvider.AppSettingsFilePath);
-            Services.Localization localization = new Services.Localization(
-                filePathProvider.LocalizationPath, appSettings.DefaultLanguageCode);
+            string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath);
+            Services.Localization localization = new Services.Localization(LocalizationText, appSettings.DefaultLanguageCode);
             Messager messager = new Messager();
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
