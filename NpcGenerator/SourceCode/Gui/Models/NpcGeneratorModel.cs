@@ -321,24 +321,24 @@ namespace NpcGenerator
             actionBuilder.Append("?subject=" + m_localization.GetText("error_email_subject"));
             actionBuilder.Append("&body=" + m_localization.GetText("error_email_body_start"));
 
-            actionBuilder.AppendLine("----------" + errorTitle + "----------");
-            actionBuilder.AppendLine("----------" + errorBody + "----------");
+            actionBuilder.AppendLine(ErrorSectionTitle(errorTitle));
+            actionBuilder.AppendLine(errorBody);
             actionBuilder.AppendLine();
 
             string npcsTitle = m_localization.GetText("npcs");
-            actionBuilder.AppendLine("----------" + npcsTitle + "----------");
+            actionBuilder.AppendLine(ErrorSectionTitle(npcsTitle));
             string npcsText = m_npcExporters[NpcToJson.FileExtensionWithoutDotStatic].Export(m_npcGroup);
             actionBuilder.AppendLine(npcsText);
             actionBuilder.AppendLine();
 
             string configurationTitle = m_localization.GetText("choose_configuration_file_label");
-            actionBuilder.AppendLine("----------" + configurationTitle + "----------");
+            actionBuilder.AppendLine(ErrorSectionTitle(configurationTitle));
             string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath);
             actionBuilder.AppendLine(configurationText);
             actionBuilder.AppendLine();
 
             string replacementTitle = m_localization.GetText("trait_replacement");
-            actionBuilder.AppendLine("----------" + replacementTitle + "----------");
+            actionBuilder.AppendLine(ErrorSectionTitle(replacementTitle));
             foreach (Replacement replacement in replacements)
             {
                 string replacementText = m_localization.GetText(
@@ -351,9 +351,16 @@ namespace NpcGenerator
             actionBuilder.AppendLine();
 
             string npcNumberLabelText = m_localization.GetText("npc_quantity_label");
-            actionBuilder.AppendLine("----------" + npcNumberLabelText + "---------- " + NpcQuantity);
+            actionBuilder.AppendLine(ErrorSectionTitle(npcNumberLabelText) + " " + NpcQuantity);
 
             UriHelper.StartEmail(new Uri(actionBuilder.ToString()));
+        }
+
+        private static string ErrorSectionTitle(string titleName)
+        {
+            const string SEPERATOR = "----------";
+            string title = SEPERATOR + titleName + SEPERATOR;
+            return title;
         }
 
         private static List<Replacement> GetReplacements(List<ReplacementSubModel> replacementSubModels, TraitSchema schema)
