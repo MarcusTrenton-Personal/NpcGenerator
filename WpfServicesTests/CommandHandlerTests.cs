@@ -98,19 +98,10 @@ namespace Tests
             Assert.IsFalse(callBackCalled, "Callback was called despite the condition failing");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullAction()
         {
-            Exception exception = null;
-            try
-            {
-                CommandHandler command = new CommandHandler(null, null);
-            }
-            catch(Exception e)
-            {
-                exception = e;
-            }
-            Assert.IsNotNull(exception, "Creating a CommandHandler with a null action doesn't throw an exception");
+            new CommandHandler(null, null);
         }
     }
 }

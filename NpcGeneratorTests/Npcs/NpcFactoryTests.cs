@@ -191,23 +191,13 @@ namespace Tests
             Assert.IsFalse(traits1[0].IsHidden, "Npc created with incorrect trait in category");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullSchema()
         {
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = NpcFactory.Create(null, 1, new List<Replacement>(), m_random);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Null schema did not throw exception.");
+            NpcFactory.Create(null, 1, new List<Replacement>(), m_random);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void NegativeNpcCount()
         {
             const string CATEGORY = "Colour";
@@ -218,20 +208,10 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = NpcFactory.Create(schema, -1, new List<Replacement>(), m_random);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Null schema did not throw exception.");
+            NpcFactory.Create(schema, -1, new List<Replacement>(), m_random);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullReplacements()
         {
             const string CATEGORY = "Colour";
@@ -242,17 +222,7 @@ namespace Tests
             TraitSchema schema = new TraitSchema();
             schema.Add(colourCategory);
 
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = NpcFactory.Create(schema, 1, null, m_random);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Null schema did not throw exception.");
+            NpcFactory.Create(schema, 1, null, m_random);
         }
 
         [TestMethod]
@@ -295,10 +265,11 @@ namespace Tests
         [TestMethod]
         public void BonusSelectionForMissingCategory()
         {
+            const string MISSING_CATEGORY = "NotInSchema";
             TraitCategory colourCategory = new TraitCategory("Colour");
             Trait trait = new Trait("Blue")
             {
-                BonusSelection = new BonusSelection("NotInSchema", selectionCount: 1)
+                BonusSelection = new BonusSelection(MISSING_CATEGORY, selectionCount: 1)
             };
             colourCategory.Add(trait);
 
@@ -310,8 +281,9 @@ namespace Tests
             {
                 NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
             }
-            catch (Exception)
+            catch (MissingBonusSelectionCategory exception)
             {
+                Assert.AreEqual(MISSING_CATEGORY, exception.Category, "Incorrect missing category for bonus selection");
                 threwException = true;
             }
 
@@ -321,7 +293,8 @@ namespace Tests
         [TestMethod]
         public void BonusSelectionExceedsTraits()
         {
-            TraitCategory colourCategory = new TraitCategory("Colour", 1);
+            const string CATEGORY = "Colour";
+            TraitCategory colourCategory = new TraitCategory(CATEGORY, 1);
             Trait trait = new Trait("Blue")
             {
                 BonusSelection = new BonusSelection(colourCategory.Name, 1)
@@ -336,8 +309,11 @@ namespace Tests
             {
                 NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>(), m_random);
             }
-            catch (Exception)
+            catch (TooFewTraitsInCategoryException exception)
             {
+                Assert.AreEqual(CATEGORY, exception.Category, "Incorrect category");
+                Assert.AreEqual(1, exception.Requested, "Wrong number of requested traits");
+                Assert.AreEqual(0, exception.Available, "Wrong number of available traits");
                 threwException = true;
             }
 

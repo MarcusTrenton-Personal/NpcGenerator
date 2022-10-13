@@ -126,7 +126,7 @@ namespace Services
                 elements = lines[i].Split('\t');
                 if(expectedColumns != elements.Length)
                 {
-                    throw new IOException("Each row must have the same number of columns: " + expectedColumns);
+                    throw new ArgumentException("Each row must have the same number of columns: " + expectedColumns);
                 }
                 string[] lineTranslations = new string[languageCount];
                 for(int j = 0; j < languageCount; ++j)

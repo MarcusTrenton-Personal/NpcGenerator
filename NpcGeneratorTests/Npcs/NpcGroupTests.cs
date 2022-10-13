@@ -118,60 +118,29 @@ namespace Tests
             Assert.AreEqual(CATEGORY_NAME1, group.CategoryOrder[1], "Wrong Category name");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullCategoryList()
         {
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = new NpcGroup(null);
-            }
-            catch(Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "A null category list in an NpcGroup did not throw an exception when it should have.");
+            new NpcGroup(null);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void NullCategoryInList()
         {
             new NpcGroup(new List<string> { null });
-
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void EmptyCategoryInList()
         {
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = new NpcGroup(new List<string> { String.Empty });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "An empty ordering category in an NpcGroup did not throw an exception when it should have.");
+            new NpcGroup(new List<string> { string.Empty });
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void DuplicateCategoryInList()
         {
             const string CATEGORY = "Animal";
-            bool threwException = false;
-            try
-            {
-                NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY, CATEGORY });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "A duplicate ordering category in an NpcGroup did not throw an exception when it should have.");
+            new NpcGroup(new List<string> { CATEGORY, CATEGORY });
         }
     }
 }

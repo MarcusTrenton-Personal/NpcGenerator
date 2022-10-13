@@ -110,124 +110,53 @@ namespace Tests
             Assert.AreEqual(0, traits.Length, "Wrong number of traits found.");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AddNullCategory()
         {
-            const string TRAIT = "Blue";
-
             Npc npc = new Npc();
-
-            bool threwException = false;
-            try
-            {
-                npc.Add(null, new Npc.Trait[] { new Npc.Trait(TRAIT) });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException);
+            npc.Add(null, new Npc.Trait[] { new Npc.Trait("Blue") });
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void AddEmptyCategory()
         {
-            const string TRAIT = "Blue";
-
             Npc npc = new Npc();
 
-            bool threwException = false;
-            try
-            {
-                npc.Add(string.Empty, new Npc.Trait[] { new Npc.Trait(TRAIT) });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException);
+            npc.Add(string.Empty, new Npc.Trait[] { new Npc.Trait("Blue") });
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AddNullTraitArray()
         {
-            const string CATEGORY = "Colour";
-
             Npc npc = new Npc();
 
-            bool threwException = false;
-            try
-            {
-                npc.Add(CATEGORY, null);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException);
+            npc.Add("Colour", null);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void AddNullTrait()
         {
-            const string CATEGORY = "Colour";
-
             Npc npc = new Npc();
 
-            bool threwException = false;
-            try
-            {
-                npc.Add(CATEGORY, new Npc.Trait[] { null });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException);
+            npc.Add("Colour", new Npc.Trait[] { null });
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void AddNullTraitName()
         {
-            const string CATEGORY = "Colour";
-
             Npc npc = new Npc();
 
-            bool threwException = false;
-            try
-            {
-                npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(null) });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException);
+            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait(null) });
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void AddEmptyTrait()
         {
             const string CATEGORY = "Colour";
 
             Npc npc = new Npc();
 
-            bool threwException = false;
-            try
-            {
-                npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(string.Empty) });
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(string.Empty) });
         }
 
         [TestMethod]

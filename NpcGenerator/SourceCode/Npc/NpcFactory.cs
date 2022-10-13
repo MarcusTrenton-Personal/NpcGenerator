@@ -143,7 +143,16 @@ namespace NpcGenerator
             string outputCategoryName, 
             out IReadOnlyList<BonusSelection> bonusSelections)
         {
-            Npc.Trait[] traits = chooser.Choose(selectionCount, out bonusSelections);
+            Npc.Trait[] traits;
+            try
+            {
+                traits = chooser.Choose(selectionCount, out bonusSelections);
+            }
+            catch(TooFewTraitsException exception)
+            {
+                throw new TooFewTraitsInCategoryException(outputCategoryName, requested: exception.Requested, available: exception.Available);
+            }
+
             npc.Add(category: outputCategoryName, traits: traits);
             bool wasTraitAdded = traits.Length > 0;
             return wasTraitAdded;
@@ -157,6 +166,10 @@ namespace NpcGenerator
             foreach (BonusSelection bonusSelection in bonusSelections)
             {
                 TraitCategory cat = ListUtil.Find(categories, category => category.Name == bonusSelection.CategoryName);
+                if (cat is null)
+                {
+                    throw new MissingBonusSelectionCategory(bonusSelection.CategoryName);
+                }
                 selectionsPerCategory[cat] = bonusSelection.SelectionCount;
             }
         }
@@ -392,5 +405,15 @@ namespace NpcGenerator
             TraitIsIncorrectlyNotHidden,
             UnusedReplacement
         }
+    }
+
+    public class MissingBonusSelectionCategory : InvalidOperationException
+    {
+        public MissingBonusSelectionCategory(string category)
+        {
+            Category = category;
+        }
+
+        public string Category { get; private set;}
     }
 }

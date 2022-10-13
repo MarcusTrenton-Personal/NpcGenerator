@@ -112,7 +112,7 @@ namespace Tests
             Assert.AreEqual(text2, localization.GetText(textId2), "Fetched the wrong text");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void UseUnsupportedLanguage()
         {
             string languageCode = "Martian";
@@ -121,22 +121,13 @@ namespace Tests
 
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
-
-            Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            bool causedException = false;
-            try
+            _ = new Services.Localization(sourceText, languageCode)
             {
-                localization.CurrentLanguageCode = "NotFoundLanguage";
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Setting invalid language doesn't cause an exception");
+                CurrentLanguageCode = "NotFoundLanguage"
+            };
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void InvalidDefaultLanguage()
         {
             string languageCode = "Martian";
@@ -146,20 +137,10 @@ namespace Tests
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, "NotFoundLanguage");
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Setting invalid default language doesn't cause an exception");
+            new Services.Localization(sourceText, "NotFoundLanguage");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void InvalidTextSeparator()
         {
             string languageCode = "Martian";
@@ -169,20 +150,10 @@ namespace Tests
             string sourceText = "ID,Context," + languageCode + "\n" +
                 textId + ",," + text;
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Not tab separator in localization file doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void DuplicateTextId()
         {
             string languageCode = "Martian";
@@ -193,20 +164,10 @@ namespace Tests
                 textId + "\t\t" + text +"\n" +
                 textId + "\t\t" + text;
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Duplicate text ids doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void MissingTitleRow()
         {
             string languageCode = "Martian";
@@ -215,20 +176,10 @@ namespace Tests
 
             string sourceText = textId + "\t\t" + text;
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Missing title row doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void MissingInputColumns()
         {
             string languageCode = "Martian";
@@ -238,20 +189,10 @@ namespace Tests
             string sourceText = "ID\t" + languageCode + "\n" +
                 textId + "\t" + text;
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Missing context column doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void ExtraInputColumns()
         {
             string languageCode = "Martian";
@@ -262,20 +203,10 @@ namespace Tests
                 textId + "\t\t\t" + text + "\n" +
                 textId + "\t\t\t" + text;
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Extra column doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void OneLanguageNotFullyTranslated()
         {
             string languageCode = "Martian";
@@ -284,20 +215,10 @@ namespace Tests
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t";
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Missing translation doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void NoLanguages()
         {
             string languageCode = "Martian";
@@ -306,17 +227,7 @@ namespace Tests
             string sourceText = "ID\tContext\t\n" +
                 textId + "\t";
 
-            bool causedException = false;
-            try
-            {
-                Services.Localization localization = new Services.Localization(sourceText, languageCode);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "No languages doesn't cause an exception");
+            new Services.Localization(sourceText, languageCode);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
@@ -386,7 +297,7 @@ namespace Tests
             localization.GetText(textId);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(FormatException))]
         public void Format1InsteadOf2Params()
         {
             string languageCode = "Martian";
@@ -398,18 +309,8 @@ namespace Tests
 
             Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
-            bool causedException = false;
-            try
-            {
-                int visitedStars = 3;
-                string candidateText = localization.GetText(textId, visitedStars);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Formatting with too few parameters did not cause an exception");
+            int visitedStars = 3;
+            localization.GetText(textId, visitedStars);
         }
 
         [TestMethod]

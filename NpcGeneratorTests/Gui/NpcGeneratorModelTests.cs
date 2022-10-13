@@ -541,7 +541,7 @@ namespace Tests
             {
                 npcGeneratorModel.GenerateNpcs.Execute(null);
             }
-            catch (Exception)
+            catch (T)
             {
                 modelCaughtException = false;
             }

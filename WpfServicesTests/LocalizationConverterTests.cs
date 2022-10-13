@@ -103,67 +103,37 @@ namespace Tests
             Assert.AreEqual(expectedText, text, "Incorrect text returned");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullTextId()
         {
-            bool causedException = false;
-            try 
-            {
-                object[] values = { m_localization };
-                string text = (string)m_converter.Convert(
-                    values: values,
-                    targetType: values.GetType(),
-                    parameter: null,
-                    culture: CultureInfo.InvariantCulture);
-            }
-            catch(Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Missing text id didn't cause an exception");
+            object[] values = { m_localization };
+            m_converter.Convert(
+                values: values,
+                targetType: values.GetType(),
+                parameter: null,
+                culture: CultureInfo.InvariantCulture);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void TextIdNotFound()
         {
-            bool causedException = false;
-            try
-            {
-                object[] values = { m_localization };
-                string text = (string)m_converter.Convert(
-                    values: values,
-                    targetType: values.GetType(),
-                    parameter: "missing_text_id",
-                    culture: CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Not found text id didn't cause an exception");
+            object[] values = { m_localization };
+            m_converter.Convert(
+                values: values,
+                targetType: values.GetType(),
+                parameter: "missing_text_id",
+                culture: CultureInfo.InvariantCulture);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(FormatException))]
         public void MissingParameter()
         {
-            bool causedException = false;
-            try
-            {
-                object[] values = { m_localization };
-                string text = (string)m_converter.Convert(
-                    values: values,
-                    targetType: values.GetType(),
-                    parameter: oneParameterTextId,
-                    culture: CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Converting text without enough parameters didn't cause an exception");
+            object[] values = { m_localization };
+            m_converter.Convert(
+                values: values,
+                targetType: values.GetType(),
+                parameter: oneParameterTextId,
+                culture: CultureInfo.InvariantCulture);
         }
 
         [TestMethod]

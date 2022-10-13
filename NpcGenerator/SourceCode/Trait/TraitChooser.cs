@@ -50,6 +50,11 @@ namespace NpcGenerator
             List<Npc.Trait> selected = new List<Npc.Trait>();
             for (int i = 0; i < count; i++)
             {
+                if (m_remainingWeight == 0)
+                {
+                    throw new NoRemainingWeightException();
+                }
+
                 int randomSelection = m_random.Int(0, m_remainingWeight);
                 int selectedIndex = -1;
                 int weightCount = 0;
@@ -62,7 +67,12 @@ namespace NpcGenerator
                         break;
                     }
                 }
-                Trace.Assert(selectedIndex >= 0, "Failed to choose a trait.");
+
+                if (selectedIndex < 0)
+                {
+                    throw new FailedToChooseTrait();
+                }
+
                 Trait trait = m_remainingTraits[selectedIndex];
                 selected.Add(new Npc.Trait(trait.Name, trait.IsHidden, trait.OriginalName));
                 if (trait.BonusSelection != null)
@@ -92,5 +102,19 @@ namespace NpcGenerator
 
         public int Requested { get; private set; }
         public int Available { get; private set; }
+    }
+
+    public class NoRemainingWeightException : InvalidOperationException
+    {
+        public NoRemainingWeightException()
+        {
+        }
+    }
+
+    public class FailedToChooseTrait : InvalidOperationException
+    {
+        public FailedToChooseTrait()
+        {
+        }
     }
 }

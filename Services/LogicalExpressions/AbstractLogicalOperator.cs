@@ -28,7 +28,7 @@ namespace Services
             }
             if (expression == this)
             {
-                throw new ArgumentNullException(GetType().Name + " cannot add self as it causes an infinite loop during evaluation", 
+                throw new ArgumentException(GetType().Name + " cannot add self as it causes an infinite loop during evaluation", 
                     nameof(expression));
             }
 

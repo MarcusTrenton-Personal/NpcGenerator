@@ -38,6 +38,11 @@ namespace WpfServices
                 return parameter;
             }
 
+            if (parameter is null)
+            {
+                throw new ArgumentNullException(nameof(parameter));
+            }
+
             string textId = parameter.ToString();
             if(values.Length == 1)
             {

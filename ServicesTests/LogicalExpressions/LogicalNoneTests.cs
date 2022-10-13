@@ -23,40 +23,20 @@ namespace Tests
     [TestClass]
     public class LogicalNoneTests
     {
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
         public void EmptyExpression()
         {
             LogicalNone expression = new LogicalNone();
 
-            bool threwException = false;
-            try
-            {
-                bool result = expression.Evaluate();
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Empty None expression evaluated when it should have thrown an exception");
+            expression.Evaluate();
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullAddition()
         {
             LogicalNone expression = new LogicalNone();
 
-            bool threwException = false;
-            try
-            {
-                expression.Add(null);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Null addition to expression should have thrown an exception");
+            expression.Add(null);
         }
 
         [TestMethod]
@@ -142,25 +122,15 @@ namespace Tests
             Assert.IsFalse(result, "Having a single true operand in None expression should evaluate to false");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void DirectRecursion()
         {
             LogicalNone expression = new LogicalNone();
 
-            bool threwException = false;
-            try
-            {
-                expression.Add(expression);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Adding expression to itself should not be allowed due to infinite loop during evaluation.");
+            expression.Add(expression);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(InfiniteEvaluationLoopException))]
         public void IndirectRecursion()
         {
             LogicalNone expression0 = new LogicalNone();
@@ -169,18 +139,7 @@ namespace Tests
             expression0.Add(expression1);
             expression1.Add(expression0);
 
-            bool threwException = false;
-            try
-            {
-                bool result = expression0.Evaluate();
-            }
-            catch (InfiniteEvaluationLoopException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException,
-                "InfiniteLoopException should be throw during looping recusion rather than a slower StackOverflowException");
+            expression0.Evaluate();
         }
 
         [TestMethod]

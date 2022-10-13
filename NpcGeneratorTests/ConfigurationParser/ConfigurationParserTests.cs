@@ -108,7 +108,7 @@ namespace Tests
                 ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) }); ;
                 TraitSchema schema = parser.Parse(path);
             }
-            catch (Exception e)
+            catch (ArgumentException e)
             {
                 threwException = true;
                 Assert.IsTrue(e.Message.Contains("csv"), "Exception doesn't contain a list of supported file types");

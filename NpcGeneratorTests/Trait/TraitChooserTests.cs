@@ -120,7 +120,7 @@ namespace Tests
             Assert.AreNotEqual(selections[0].Name, selections[1].Name, "Did not select two different traits");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(NoRemainingWeightException))]
         public void NoWeightSingleSelection()
         {
             List<Trait> traits = new List<Trait>
@@ -129,20 +129,10 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            bool threwException = false;
-            try
-            {
-                Npc.Trait[] selections = chooser.Choose(1, out _);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+            chooser.Choose(1, out _);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(NoRemainingWeightException))]
         public void NoWeightMultipleSelection()
         {
             List<Trait> traits = new List<Trait>
@@ -152,20 +142,10 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            bool threwException = false;
-            try
-            {
-                Npc.Trait[] selections = chooser.Choose(2, out _);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+            chooser.Choose(2, out _);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(TooFewTraitsException))]
         public void MoreSelectionsThanOptions()
         {
             List<Trait> traits = new List<Trait>
@@ -174,17 +154,7 @@ namespace Tests
             };
             TraitChooser chooser = new TraitChooser(traits, m_random);
 
-            bool threwException = false;
-            try
-            {
-                Npc.Trait[] selections = chooser.Choose(2, out _);
-            }
-            catch (Exception)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Impossible selection of 0 weight options did not throw exception");
+            chooser.Choose(2, out _);
         }
 
         [TestMethod]
