@@ -47,3 +47,4 @@ trait_replacement_description	User operation to replace one trait name with anot
 trait_replacement	User operation to replace one trait name with another name.	AUAUAU	Replacement	Replacement	
 npcs	Non player characters	AVAVAVA	Npcs	Npcs	
 support_email_call_to_action	When an application error happens, ask if user wants to send a support email	AWAWAW	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
+localized_text_not_found	When the GUI needs text that does not exist for the selected language	AXAXAX	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	

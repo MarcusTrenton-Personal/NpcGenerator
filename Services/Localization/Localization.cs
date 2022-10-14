@@ -61,7 +61,7 @@ namespace Services
                 }
                 else 
                 {
-                    throw new ArgumentException(value + " is not supported.");
+                    throw new LanguageNotFoundException(value);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace Services
             bool found = m_localizedText.TryGetValue(hashKey, out string unformattedText);
             if (!found)
             {
-                throw new ArgumentException(textId + " is not found");
+                throw new LocalizedTextNotFoundException(textId);
             }
             return string.Format(unformattedText, formatParameters);
         }
@@ -169,5 +169,25 @@ namespace Services
 
         //The key is a combined hash of textId and languageCode
         private readonly Dictionary<int, string> m_localizedText = new Dictionary<int, string>();
+    }
+
+    public class LocalizedTextNotFoundException : Exception
+    {
+        public LocalizedTextNotFoundException(string textId)
+        {
+            TextId = textId;
+        }
+
+        public string TextId { get; private set; }
+    }
+
+    public class LanguageNotFoundException : Exception
+    {
+        public LanguageNotFoundException(string language)
+        {
+            Language = language;
+        }
+
+        public string Language { get; private set; }
     }
 }

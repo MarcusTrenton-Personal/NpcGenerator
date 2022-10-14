@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 using WpfServices;
 
 [assembly: CLSCompliant(true)]
@@ -52,6 +53,9 @@ namespace NpcGenerator
                  dryRunValidation: parameters.analyticsDryRun);
 
             m_serviceCentre.Messager.Send(sender: this, message: new Services.Message.Login());
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
 
             PickLanguage(m_serviceCentre, parameters);
         }
@@ -241,7 +245,32 @@ namespace NpcGenerator
             return userSettings;
         }
 
-        
+        public void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is LocalizedTextNotFoundException)
+            {
+                LocalizedTextNotFoundException localizationException = e.ExceptionObject as LocalizedTextNotFoundException;
+                ShowMissingLocalizaedTextError(localizationException);
+            }
+        }
+
+        private void ShowMissingLocalizaedTextError(LocalizedTextNotFoundException localizationException)
+        {
+            string language = m_serviceCentre.Localization.CurrentLanguageCode;
+            string localizationFile = AppDomain.CurrentDomain.BaseDirectory + m_serviceCentre.FilePathProvider.LocalizationPath;
+
+            try
+            {
+                string errorMessage = m_serviceCentre.Localization.GetText(
+                    "localized_text_not_found", localizationException.TextId, language, localizationFile);
+                MessageBox.Show(errorMessage);
+            }
+            catch (LocalizedTextNotFoundException)
+            {
+                MessageBox.Show("Multiple text entries missing for language " + language + " in localization file " + localizationFile + ".");
+            }
+        }
+
         private readonly ServiceCentre m_serviceCentre;
 #pragma warning disable IDE0052 // Remove unread private members. 
         //This warning is stupid. The subscriber object only need to be created to be useful. It does not need to be read.

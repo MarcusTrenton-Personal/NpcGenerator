@@ -112,19 +112,32 @@ namespace Tests
             Assert.AreEqual(text2, localization.GetText(textId2), "Fetched the wrong text");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void UseUnsupportedLanguage()
         {
+            const string LANGUAGE_NOT_FOUND = "NotFoundLanguage";
             string languageCode = "Martian";
             string textId = "window_title";
             string text = "Test Window";
 
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
-            _ = new Services.Localization(sourceText, languageCode)
+
+            bool threwException = false;
+            try
             {
-                CurrentLanguageCode = "NotFoundLanguage"
-            };
+                _ = new Services.Localization(sourceText, languageCode)
+                {
+                    CurrentLanguageCode = LANGUAGE_NOT_FOUND
+                };
+            }
+            catch (Services.LanguageNotFoundException exception)
+            {
+                threwException = true;
+                Assert.AreEqual(LANGUAGE_NOT_FOUND, exception.Language, "Wrong language stored");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a LanguageNotFoundException");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
@@ -230,9 +243,11 @@ namespace Tests
             new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void IncorrectTextId()
         {
+            const string MISSING_TEXT_ID = "MissingStringId";
+
             string languageCode = "Martian";
             string textId = "window_title";
             string text = "Test Window";
@@ -242,7 +257,18 @@ namespace Tests
 
             Services.Localization localization = new Services.Localization(sourceText, languageCode);
 
-            localization.GetText("MissingStringId");
+            bool threwException = false;
+            try
+            {
+                localization.GetText(MISSING_TEXT_ID);
+            }
+            catch (Services.LocalizedTextNotFoundException exception)
+            {
+                threwException = true;
+                Assert.AreEqual(MISSING_TEXT_ID, exception.TextId, "Wrong textId stored");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw LocalizedTextNotFoundException");
         }
 
         [TestMethod]
