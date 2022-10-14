@@ -29,9 +29,9 @@ namespace Tests
         {
             TraitId traitId = new TraitId("Colour", "Blue");
 
-            Assert.IsFalse(traitId.Equals(null));
-            Assert.IsFalse(traitId == null);
-            Assert.IsTrue(traitId != null);
+            Assert.IsFalse(traitId.Equals(null), "Equals() incorrect");
+            Assert.IsFalse(traitId == null, "== incorrect");
+            Assert.IsTrue(traitId != null, "!= incorrect");
         }
 
         [TestMethod]
@@ -40,9 +40,9 @@ namespace Tests
             TraitId traitId = new TraitId("Colour", "Blue");
             object empty = new object();
 
-            Assert.IsFalse(traitId.Equals(empty));
-            Assert.IsFalse(traitId == empty);
-            Assert.IsTrue(traitId != empty);
+            Assert.IsFalse(traitId.Equals(empty), "Equals() incorrect");
+            Assert.IsFalse(traitId == empty, "== incorrect");
+            Assert.IsTrue(traitId != empty, "!= incorrect");
         }
 
         [TestMethod]
@@ -51,9 +51,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("Colour", "Red");
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -62,9 +62,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("Hair", "Blue");
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -73,9 +73,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("Hair", "Red");
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -84,9 +84,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("Colour", "blue");
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -95,9 +95,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("colour", "Blue");
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -106,9 +106,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", null);
             TraitId b = new TraitId("Colour", null);
 
-            Assert.IsTrue(a.Equals(b));
-            Assert.IsTrue(a == b);
-            Assert.IsFalse(a != b);
+            Assert.IsTrue(a.Equals(b), "Equals() incorrect");
+            Assert.IsTrue(a == b, "== incorrect");
+            Assert.IsFalse(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -117,9 +117,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("Colour", null);
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -128,9 +128,9 @@ namespace Tests
             TraitId a = new TraitId(null, "Blue");
             TraitId b = new TraitId(null, "Blue");
 
-            Assert.IsTrue(a.Equals(b));
-            Assert.IsTrue(a == b);
-            Assert.IsFalse(a != b);
+            Assert.IsTrue(a.Equals(b), "Equals() incorrect");
+            Assert.IsTrue(a == b, "== incorrect");
+            Assert.IsFalse(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -139,9 +139,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId(null, "Blue");
 
-            Assert.IsFalse(a.Equals(b));
-            Assert.IsFalse(a == b);
-            Assert.IsTrue(a != b);
+            Assert.IsFalse(a.Equals(b), "Equals() incorrect");
+            Assert.IsFalse(a == b, "== incorrect");
+            Assert.IsTrue(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -150,9 +150,9 @@ namespace Tests
             TraitId a = new TraitId("Colour", "Blue");
             TraitId b = new TraitId("Colour", "Blue");
 
-            Assert.IsTrue(a.Equals(b));
-            Assert.IsTrue(a == b);
-            Assert.IsFalse(a != b);
+            Assert.IsTrue(a.Equals(b), "Equals() incorrect");
+            Assert.IsTrue(a == b, "== incorrect");
+            Assert.IsFalse(a != b, "!= incorrect");
         }
 
         [TestMethod]
@@ -160,9 +160,9 @@ namespace Tests
         {
             TraitId a = new TraitId("Colour", "Blue");
 
-            Assert.IsTrue(a.Equals(a));
-            Assert.IsTrue(a == a);
-            Assert.IsFalse(a != a);
+            Assert.IsTrue(a.Equals(a), "Equals() incorrect");
+            Assert.IsTrue(a == a, "== incorrect");
+            Assert.IsFalse(a != a, "!= incorrect");
         }
 
         [TestMethod]
@@ -172,7 +172,7 @@ namespace Tests
             int hashCode0 = traitId.GetHashCode();
             int hashCode1 = traitId.GetHashCode();
 
-            Assert.AreEqual(hashCode0, hashCode1);
+            Assert.AreEqual(hashCode0, hashCode1, "Hashcode calculation is not stable");
         }
 
         [TestMethod]
@@ -184,7 +184,7 @@ namespace Tests
             int hashCode0 = traitId0.GetHashCode();
             int hashCode1 = traitId1.GetHashCode();
 
-            Assert.AreNotEqual(hashCode0, hashCode1);
+            Assert.AreNotEqual(hashCode0, hashCode1, "Hashcode ignores category");
         }
 
         [TestMethod]
@@ -196,7 +196,7 @@ namespace Tests
             int hashCode0 = traitId0.GetHashCode();
             int hashCode1 = traitId1.GetHashCode();
 
-            Assert.AreNotEqual(hashCode0, hashCode1);
+            Assert.AreNotEqual(hashCode0, hashCode1, "Hashcode ignores trait");
         }
 
         [TestMethod]
@@ -208,21 +208,21 @@ namespace Tests
             int hashCode0 = traitId0.GetHashCode();
             int hashCode1 = traitId1.GetHashCode();
 
-            Assert.AreNotEqual(hashCode0, hashCode1);
+            Assert.AreNotEqual(hashCode0, hashCode1, "Hashcode is identical for mirrored tuple. It must be asymetrical.");
         }
 
         [TestMethod]
         public void CategoryNameGet()
         {
             TraitId traitId = new TraitId("Colour", "Blue");
-            Assert.AreEqual("Colour", traitId.CategoryName);
+            Assert.AreEqual("Colour", traitId.CategoryName, "Wrong category name stored");
         }
 
         [TestMethod]
         public void TraitNameGet()
         {
             TraitId traitId = new TraitId("Colour", "Blue");
-            Assert.AreEqual("Blue", traitId.TraitName);
+            Assert.AreEqual("Blue", traitId.TraitName, "Wrong trait name stored");
         }
     }
 

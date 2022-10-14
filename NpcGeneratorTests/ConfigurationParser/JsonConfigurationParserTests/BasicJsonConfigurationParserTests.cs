@@ -624,7 +624,7 @@ namespace Tests.JsonConfigurationParserTests
             TraitSchema schema = parser.Parse(text);
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
 
-            Assert.AreEqual(2, categories.Count);
+            Assert.AreEqual(2, categories.Count, "Wrong number of categories");
             Assert.IsNotNull(categories[0].GetTrait(TRAIT_NAME), "Missing expected trait in category");
             Assert.IsNotNull(categories[1].GetTrait(TRAIT_NAME), "Missing expected trait in category");
         }

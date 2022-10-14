@@ -253,7 +253,7 @@ namespace Tests
 
             string[] names = category.GetTraitNames();
 
-            Assert.IsNotNull(names);
+            Assert.IsNotNull(names, "Incorrectly found trait names in an empty categories");
         }
 
         [TestMethod]

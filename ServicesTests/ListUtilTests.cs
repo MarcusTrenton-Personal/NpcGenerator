@@ -136,7 +136,7 @@ namespace Tests
             List<TestClass> list = new List<TestClass>();
             TestClass result = ListUtil.Find(list, i => i.x > 0);
 
-            Assert.AreEqual(defaultObject, result, "");
+            Assert.AreEqual(defaultObject, result, "Failed find did not return default value");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
