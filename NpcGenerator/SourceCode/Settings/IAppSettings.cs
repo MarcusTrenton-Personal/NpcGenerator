@@ -23,6 +23,7 @@ namespace NpcGenerator
         public string MeasurementIdProd { get; }
         public string AdditionalIdDev { get; }
         public string AdditionalIdProd { get; }
+        public void Validate();
     }
 
     public interface IAppSettings
@@ -40,5 +41,7 @@ namespace NpcGenerator
         public string DonationWebsite { get; }
 
         public string SupportEmail { get; }
+
+        public void Validate();
     }
 }

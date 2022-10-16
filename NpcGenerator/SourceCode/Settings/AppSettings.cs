@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -25,6 +26,29 @@ namespace NpcGenerator
         public string MeasurementIdProd { get; set; }
         public string AdditionalIdDev { get; set; }
         public string AdditionalIdProd { get; set; }
+        
+        public void Validate()
+        {
+            if (string.IsNullOrEmpty(MeasurementIdDev))
+            {
+                throw new InvalidProductKeyException(nameof(MeasurementIdDev), MeasurementIdDev);
+            }
+
+            if (string.IsNullOrEmpty(MeasurementIdProd))
+            {
+                throw new InvalidProductKeyException(nameof(MeasurementIdProd), MeasurementIdProd);
+            }
+
+            if (string.IsNullOrEmpty(AdditionalIdDev))
+            {
+                throw new InvalidProductKeyException(nameof(AdditionalIdDev), AdditionalIdDev);
+            }
+
+            if (string.IsNullOrEmpty(AdditionalIdProd))
+            {
+                throw new InvalidProductKeyException(nameof(AdditionalIdProd), AdditionalIdProd);
+            }
+        }
     }
 
     public class AppSettings : IAppSettings
@@ -49,5 +73,129 @@ namespace NpcGenerator
             AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
             return settings;
         }
+
+        public void Validate()
+        {
+            GoogleAnalytics.Validate();
+            ValidateEncryptionKey();
+            ValidateDefaultLanguageCode();
+            ValidateHiddenLanguageCodes();
+            ValidateWebsite(HomeWebsite);
+            ValidateWebsite(DonationWebsite);
+            ValidateEmail(SupportEmail);
+        }
+
+        private static void ValidateEncryptionKey()
+        {
+            //Any value is acceptable.
+        }
+
+        private void ValidateDefaultLanguageCode()
+        {
+            if (string.IsNullOrEmpty(DefaultLanguageCode))
+            {
+                throw new NullOrEmptyDefaultLanguageCodeException();
+            }
+        }
+
+        private void ValidateHiddenLanguageCodes()
+        {
+            //The list can be null or empty, but contents cannot
+            if (HiddenLanguageCodes != null)
+            {
+                foreach (string language in HiddenLanguageCodes)
+                {
+                    if (string.IsNullOrEmpty(language))
+                    {
+                        throw new NullOrEmptyHiddenLanguageCode();
+                    }
+                }
+            }
+        }
+
+        private static void ValidateWebsite(string website)
+        {
+            Uri uri = new Uri(website);
+            bool isValid = uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+            if (!isValid)
+            {
+                throw new MalformedWebsiteException(uri);
+            }
+        }
+
+        private static void ValidateEmail(string email)
+        {
+            bool isValid = IsValidEmail(email);
+            if (isValid)
+            {
+                throw new MalformedEmailException(email);
+            }
+        }
+
+        //Taken from https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
+        private static bool IsValidEmail(string email)
+        {
+            string trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false;
+            }
+            try
+            {
+                System.Net.Mail.MailAddress addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+    }
+
+    public class NullOrEmptyDefaultLanguageCodeException : Exception
+    {
+        public NullOrEmptyDefaultLanguageCodeException()
+        {
+        }
+    }
+
+    public class NullOrEmptyHiddenLanguageCode : Exception
+    {
+        public NullOrEmptyHiddenLanguageCode()
+        {
+        }
+    }
+
+    public class MalformedWebsiteException : FormatException
+    {
+        public MalformedWebsiteException(Uri uri)
+        {
+            Uri = uri;
+        }
+
+        public Uri Uri { get; private set; }
+    }
+
+    public class MalformedEmailException : FormatException
+    {
+        public MalformedEmailException(string email)
+        {
+            Email = email;
+        }
+
+        public string Email { get; private set; }
+    }
+
+    public class InvalidProductKeyException : Exception
+    {
+        public InvalidProductKeyException(string name, string value)
+        {
+            ProductKeyName = name;
+            ProductKeyValue = value;
+        }
+
+        public string ProductKeyName { get; private set; }
+        public string ProductKeyValue { get; private set; }
     }
 }

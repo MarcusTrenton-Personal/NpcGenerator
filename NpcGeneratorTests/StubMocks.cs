@@ -42,6 +42,7 @@ namespace Tests
         public string MeasurementIdProd { get; set; } = null;
         public string AdditionalIdDev { get; set; } = null;
         public string AdditionalIdProd { get; set; } = null;
+        public void Validate() { }
     }
 
     internal class StubAppSettings : IAppSettings
@@ -53,6 +54,7 @@ namespace Tests
         public string HomeWebsite { get; set; } = null;
         public string DonationWebsite { get; set; } = null;
         public string SupportEmail { get; set; } = null;
+        public void Validate() {}
     }
 
     internal class StubMessager : IMessager
