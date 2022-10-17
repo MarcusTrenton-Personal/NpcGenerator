@@ -72,7 +72,10 @@ namespace NpcGenerator
         {
             FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
-            AppSettings appSettings = AppSettings.Load(filePathProvider.AppSettingsFilePath);
+
+            string text = File.ReadAllText(filePathProvider.AppSettingsFilePath);
+            AppSettings appSettings = AppSettings.Create(text);
+
             string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath);
             Services.Localization localization = new Services.Localization(LocalizationText, appSettings.DefaultLanguageCode);
             Messager messager = new Messager();

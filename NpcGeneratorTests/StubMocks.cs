@@ -54,7 +54,6 @@ namespace Tests
         public string HomeWebsite { get; set; } = null;
         public string DonationWebsite { get; set; } = null;
         public string SupportEmail { get; set; } = null;
-        public void Validate() {}
     }
 
     internal class StubMessager : IMessager

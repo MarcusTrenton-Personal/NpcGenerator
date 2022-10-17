@@ -41,7 +41,5 @@ namespace NpcGenerator
         public string DonationWebsite { get; }
 
         public string SupportEmail { get; }
-
-        public void Validate();
     }
 }

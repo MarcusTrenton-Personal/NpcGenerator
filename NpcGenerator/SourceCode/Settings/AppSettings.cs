@@ -67,14 +67,14 @@ namespace NpcGenerator
 
         public string SupportEmail { get; set; }
 
-        public static AppSettings Load(string path)
+        public static AppSettings Create(string text)
         {
-            string text = File.ReadAllText(path);
             AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
+            settings.Validate();
             return settings;
         }
 
-        public void Validate()
+        private void Validate()
         {
             GoogleAnalytics.Validate();
             ValidateEncryptionKey();
@@ -115,18 +115,30 @@ namespace NpcGenerator
 
         private static void ValidateWebsite(string website)
         {
-            Uri uri = new Uri(website);
-            bool isValid = uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
-            if (!isValid)
+            if (string.IsNullOrEmpty(website))
             {
-                throw new MalformedWebsiteException(uri);
+                throw new MalformedWebsiteException(website);
+            }
+
+            try
+            {
+                Uri uri = new Uri(website);
+                bool isValid = uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+                if (!isValid)
+                {
+                    throw new MalformedWebsiteException(website);
+                }
+            }
+            catch (UriFormatException)
+            {
+                throw new MalformedWebsiteException(website);
             }
         }
 
         private static void ValidateEmail(string email)
         {
             bool isValid = IsValidEmail(email);
-            if (isValid)
+            if (!isValid)
             {
                 throw new MalformedEmailException(email);
             }
@@ -135,6 +147,11 @@ namespace NpcGenerator
         //Taken from https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
         private static bool IsValidEmail(string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                return false;
+            }
+
             string trimmedEmail = email.Trim();
 
             if (trimmedEmail.EndsWith("."))
@@ -169,12 +186,12 @@ namespace NpcGenerator
 
     public class MalformedWebsiteException : FormatException
     {
-        public MalformedWebsiteException(Uri uri)
+        public MalformedWebsiteException(string uri)
         {
             Uri = uri;
         }
 
-        public Uri Uri { get; private set; }
+        public string Uri { get; private set; }
     }
 
     public class MalformedEmailException : FormatException
