@@ -196,5 +196,44 @@ namespace Tests
             Assert.AreNotEqual(NpcToCsv.MULTI_TRAIT_SEPARATOR, NpcToCsv.SEPARATOR, 
                 "Trait lists in a category are not distinguishable from a trait in another category because separators are the same.");
         }
+
+        [TestMethod]
+        public void HiddenTrait()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            npcGroup.Add(npc);
+
+            NpcToCsv npcToCsv = new NpcToCsv();
+            string csv = npcToCsv.Export(npcGroup);
+
+            string expectedCsv = CATEGORY + "\n";
+
+            Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
+        }
+
+        [TestMethod]
+        public void VisibleTraitThenHiddenTrait()
+        {
+            const string CATEGORY = "Colour";
+            const string VISIBLE_TRAIT = "Blue";
+            const string HIDDEN_TRAIT = "Red";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT), new Npc.Trait(HIDDEN_TRAIT, isHidden: true) });
+            npcGroup.Add(npc);
+
+            NpcToCsv npcToCsv = new NpcToCsv();
+            string csv = npcToCsv.Export(npcGroup);
+
+            string expectedCsv = CATEGORY + "\n" + VISIBLE_TRAIT;
+
+            Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
+        }
     }
 }

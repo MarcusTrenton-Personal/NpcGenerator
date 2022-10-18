@@ -219,5 +219,49 @@ namespace Tests
             Assert.AreEqual(1, result.npc_group[0][CATEGORY].Count, "Npc did not serialize category correctly");
             Assert.AreEqual(TRAIT, result.npc_group[0][CATEGORY][0], "Npc did not serialize category correctly");
         }
+
+        [TestMethod]
+        public void HiddenTrait()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            npcGroup.Add(npc);
+
+            NpcToJson npcToJson = new NpcToJson(null);
+            string jsonText = npcToJson.Export(npcGroup);
+
+            DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
+
+            Assert.IsNotNull(result, "Serialized using an unknown format");
+            Assert.AreEqual(1, result.npc_group.Count, "Wrong number of npcs");
+            Assert.AreEqual(0, result.npc_group[0][CATEGORY].Count, "Npc did not serialize category correctly");
+        }
+
+        [TestMethod]
+        public void VisibleTraitThenHiddenTrait()
+        {
+            const string CATEGORY = "Colour";
+            const string VISIBLE_TRAIT = "Blue";
+            const string HIDDEN_TRAIT = "Red";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT), new Npc.Trait(HIDDEN_TRAIT, isHidden: true) });
+            npcGroup.Add(npc);
+
+            NpcToJson npcToJson = new NpcToJson(null);
+            string jsonText = npcToJson.Export(npcGroup);
+
+            DeserializedNpcGroup result = JsonConvert.DeserializeObject<DeserializedNpcGroup>(jsonText);
+
+            Assert.IsNotNull(result, "Serialized using an unknown format");
+            Assert.AreEqual(1, result.npc_group.Count, "Wrong number of npcs");
+            Assert.AreEqual(1, result.npc_group[0][CATEGORY].Count, "Npc did not serialize category correctly");
+            Assert.AreEqual(VISIBLE_TRAIT, result.npc_group[0][CATEGORY][0], "Npc did not serialize category correctly");
+        }
     }
 }

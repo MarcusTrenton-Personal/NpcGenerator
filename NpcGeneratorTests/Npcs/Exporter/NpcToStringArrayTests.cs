@@ -156,6 +156,41 @@ namespace Tests
             Assert.AreEqual(2, categories.Length, "Wrong number of categories");
         }
 
+        [TestMethod]
+        public void HiddenTrait()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
+
+            Assert.AreEqual(1, categories.Length, "Wrong number of categories");
+            Assert.AreEqual(0, categories[0].Length, "Hidden incorrectly trait appears");
+        }
+
+        [TestMethod]
+        public void VisibleTraitThenHiddenTrait()
+        {
+            const string CATEGORY = "Colour";
+            const string VISIBLE_TRAIT = "Blue";
+            const string HIDDEN_TRAIT = "Red";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT), new Npc.Trait(HIDDEN_TRAIT, isHidden: true) });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
+
+            Assert.AreEqual(1, categories.Length, "Wrong number of categories");
+            Assert.AreEqual(VISIBLE_TRAIT, categories[0], "Output is not just visible trait with no extra punctuation");
+        }
+
         MockRandom m_random = new MockRandom();
     }
 }

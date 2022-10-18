@@ -23,15 +23,15 @@ namespace NpcGenerator
 
         public static void CombineTraits(Npc.Trait[] traits, StringBuilder stringBuilder)
         {
+            bool isFirstVisibleTrait = true;
             for (int i = 0; i < traits.Length; ++i)
             {
                 if (!traits[i].IsHidden)
                 {
+                    string separator = isFirstVisibleTrait ? string.Empty : MULTI_TRAIT_SEPARATOR;
+                    stringBuilder.Append(separator);
                     stringBuilder.Append(traits[i].Name);
-                    if (i + 1 < traits.Length)
-                    {
-                        stringBuilder.Append(MULTI_TRAIT_SEPARATOR);
-                    }
+                    isFirstVisibleTrait = false;
                 }
             }
         }
