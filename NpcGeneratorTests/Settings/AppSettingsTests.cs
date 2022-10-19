@@ -116,7 +116,7 @@ namespace Tests
             AppSettings.Create(json);
         }
 
-        [DataTestMethod, ExpectedException(typeof(NullOrEmptyHiddenLanguageCode))]
+        [DataTestMethod, ExpectedException(typeof(NullOrEmptyHiddenLanguageCodeException))]
         [DataRow(null, DisplayName = "Null")]
         [DataRow("", DisplayName = "Empty")]
         public void IncorrectEntryHiddenLanguageCode(string hiddenLanguage)

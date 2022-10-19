@@ -107,7 +107,7 @@ namespace NpcGenerator
                 {
                     if (string.IsNullOrEmpty(language))
                     {
-                        throw new NullOrEmptyHiddenLanguageCode();
+                        throw new NullOrEmptyHiddenLanguageCodeException();
                     }
                 }
             }
@@ -177,9 +177,9 @@ namespace NpcGenerator
         }
     }
 
-    public class NullOrEmptyHiddenLanguageCode : Exception
+    public class NullOrEmptyHiddenLanguageCodeException : Exception
     {
-        public NullOrEmptyHiddenLanguageCode()
+        public NullOrEmptyHiddenLanguageCodeException()
         {
         }
     }

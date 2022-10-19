@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 using WpfServices;
 
 [assembly: CLSCompliant(true)]
@@ -42,8 +41,15 @@ namespace NpcGenerator
 
         public App()
         {
+            FilePathProvider filePathProvider = new FilePathProvider();
+            AppSettings appSettings = LoadAppSettings(filePathProvider);
+            if (appSettings is null) //App broken. Abort. Abort.
+            {
+                return;
+            }
+
             AppParameters parameters = ReadAppParameters();
-            m_serviceCentre = CreateServices(parameters);
+            m_serviceCentre = CreateServices(parameters, appSettings, filePathProvider);
 
             m_googleAnalytics = new GoogleAnalytics(
                  appSettings: m_serviceCentre.AppSettings,
@@ -64,20 +70,22 @@ namespace NpcGenerator
         {
             base.OnStartup(e);
 
+            if (m_serviceCentre == null) //App broken. Abort. Abort.
+            {
+                return;
+            }
+
             Current.MainWindow = new MainWindow(m_serviceCentre);       
             Current.MainWindow.Show();
         }
 
-        private static ServiceCentre CreateServices(AppParameters parameters)
+        private static ServiceCentre CreateServices(AppParameters parameters, AppSettings appSettings, FilePathProvider filePathProvider)
         {
-            FilePathProvider filePathProvider = new FilePathProvider();
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
-
-            string text = File.ReadAllText(filePathProvider.AppSettingsFilePath);
-            AppSettings appSettings = AppSettings.Create(text);
 
             string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath);
             Services.Localization localization = new Services.Localization(LocalizationText, appSettings.DefaultLanguageCode);
+
             Messager messager = new Messager();
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
@@ -272,6 +280,64 @@ namespace NpcGenerator
             {
                 MessageBox.Show("Multiple text entries missing for language " + language + " in localization file " + localizationFile + ".");
             }
+        }
+
+        private static AppSettings LoadAppSettings(IFilePathProvider filePathProvider)
+        {
+            //Don't try to localize any exceptions. Localization requires AppSettings for default language, so circular reference.
+            const string REPAIR_ACTION = "Redownload the application to repair.";
+            try
+            {
+                string text = File.ReadAllText(filePathProvider.AppSettingsFilePath);
+                AppSettings appSettings = AppSettings.Create(text);
+                return appSettings;
+            }
+            catch (FileNotFoundException exception)
+            {
+                ExitAppAfterPopupClosed("Required file " + exception.FileName + " not found. " + REPAIR_ACTION);
+            }
+            catch (DirectoryNotFoundException exception)
+            {
+                ExitAppAfterPopupClosed("Folder " + exception.Message + " with required files is not found. " + REPAIR_ACTION);
+            }
+            catch (PathTooLongException exception)
+            {
+                ExitAppAfterPopupClosed(exception.Message + " Reinstall the application in a shorter directory.");
+            }
+            catch (IOException exception)
+            {
+                ExitAppAfterPopupClosed(exception.Message);
+            }
+            catch (NullOrEmptyDefaultLanguageCodeException)
+            {
+                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has missing or empty DefaultLanguageCode field. " + REPAIR_ACTION);
+            }
+            catch (NullOrEmptyHiddenLanguageCodeException)
+            {
+                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has empty language code in HiddenLanguageCode field. " + REPAIR_ACTION);
+            }
+            catch (MalformedWebsiteException exception)
+            {
+                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has malformed website " + exception.Uri + ". " + REPAIR_ACTION);
+            }
+            catch (MalformedEmailException exception)
+            {
+                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has malformed email " + exception.Email + ". " + REPAIR_ACTION);
+            }
+            catch (InvalidProductKeyException exception)
+            {
+                string message = filePathProvider.AppSettingsFilePath + " has product key " + exception.ProductKeyName + 
+                    " with invalid value " + exception.ProductKeyValue + ". " + REPAIR_ACTION;
+                ExitAppAfterPopupClosed(message);
+            }
+
+            return null;
+        }
+
+        private static void ExitAppAfterPopupClosed(string message)
+        {
+            MessageBox.Show(message);
+            Current.Shutdown();
         }
 
         private readonly ServiceCentre m_serviceCentre;
