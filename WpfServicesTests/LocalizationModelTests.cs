@@ -128,6 +128,20 @@ namespace Tests
         }
 
         [TestMethod]
+        public void InitialLanguageCodeChangesUserSettings()
+        {
+            MockILanguageCode languageCode = new MockILanguageCode() { LanguageCode = AtlanteanLanguageCode };
+            LocalizationModel model = new LocalizationModel(
+                new MockLocalization(),
+                hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
+                languageCode,
+                new MockMessager());
+
+            Assert.AreEqual(AtlanteanLanguageCode, model.CurrentLanguage, "Cannot set hidden language but should be able");
+            Assert.AreEqual(AtlanteanLanguageCode, languageCode.LanguageCode, "Language code not saved to underlying object");
+        }
+
+        [TestMethod]
         public void SetLanguageCodeChangesUserSettings()
         {
             m_localizationModel.CurrentLanguage = AtlanteanLanguageCode;
