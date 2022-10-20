@@ -37,7 +37,8 @@ namespace Tests
 
             public bool IsLanguageCodeSupported(string languageCode)
             {
-                return languageCode == MartianLanguageCode || languageCode == AtlanteanLanguageCode;
+                return languageCode.Equals(MartianLanguageCode, StringComparison.InvariantCultureIgnoreCase) ||
+                    languageCode.Equals(AtlanteanLanguageCode, StringComparison.InvariantCultureIgnoreCase);
             }
 
             public string GetText(string textId, params object[] formatParameters)
@@ -48,7 +49,7 @@ namespace Tests
 
         private class MockILanguageCode : ILanguageCode
         {
-            public string LanguageCode { get; set; }
+            public string LanguageCode { get; set; } = MartianLanguageCode;
         }
 
         private class MockMessager : IMessager
@@ -132,6 +133,125 @@ namespace Tests
             m_localizationModel.CurrentLanguage = AtlanteanLanguageCode;
             Assert.AreEqual(AtlanteanLanguageCode, m_localizationModel.CurrentLanguage, "Cannot set hidden language but should be able");
             Assert.AreEqual(AtlanteanLanguageCode, m_languageCode.LanguageCode, "Language code not saved to underlying object");
+        }
+
+        [TestMethod]
+        public void HiddenLanguageNotFound()
+        {
+            const string LANGUAGE_NOT_FOUND = "languageNotFound";
+
+            bool threwException = false;
+            try
+            {
+                new LocalizationModel(
+                    new MockLocalization(),
+                    hiddenLanguageCodes: Array.AsReadOnly(new string[1] { LANGUAGE_NOT_FOUND }),
+                    new MockILanguageCode(),
+                    new MockMessager());
+            }
+            catch (HiddenLanguageNotFound exception)
+            {
+                threwException = true;
+                Assert.AreEqual(LANGUAGE_NOT_FOUND.ToLower(), exception.Language, "Wrong language");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw HiddenLanguageNotFound");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void LocalizationIsNull()
+        {
+            new LocalizationModel(
+                null,
+                hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
+                new MockILanguageCode(),
+                new MockMessager());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void HiddenLanguageCodesAreNull()
+        {
+            new LocalizationModel(
+                new MockLocalization(),
+                hiddenLanguageCodes: null,
+                new MockILanguageCode(),
+                new MockMessager());
+        }
+
+        [TestMethod]
+        public void HiddenLanguageCodesHasNull()
+        {
+            const string LANGUAGE_NOT_FOUND = null;
+
+            bool threwException = false;
+            try
+            {
+                new LocalizationModel(
+                    new MockLocalization(),
+                    hiddenLanguageCodes: Array.AsReadOnly(new string[1] { LANGUAGE_NOT_FOUND }),
+                    new MockILanguageCode(),
+                    new MockMessager());
+            }
+            catch (HiddenLanguageNotFound exception)
+            {
+                threwException = true;
+                Assert.AreEqual(LANGUAGE_NOT_FOUND, exception.Language, "Wrong language");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw HiddenLanguageNotFound");
+        }
+
+        [TestMethod]
+        public void HiddenLanguageCodesHasEmpty()
+        {
+            const string LANGUAGE_NOT_FOUND = "";
+
+            bool threwException = false;
+            try
+            {
+                new LocalizationModel(
+                    new MockLocalization(),
+                    hiddenLanguageCodes: Array.AsReadOnly(new string[1] { LANGUAGE_NOT_FOUND }),
+                    new MockILanguageCode(),
+                    new MockMessager());
+            }
+            catch (HiddenLanguageNotFound exception)
+            {
+                threwException = true;
+                Assert.AreEqual(LANGUAGE_NOT_FOUND, exception.Language, "Wrong language");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw HiddenLanguageNotFound");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void LanguageCodeIsNull()
+        {
+            new LocalizationModel(
+                new MockLocalization(),
+                hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
+                null,
+                new MockMessager());
+        }
+
+        [TestMethod]
+        public void LanguageCodeIsEmpty()
+        {
+            new LocalizationModel(
+                new MockLocalization(),
+                hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
+                new MockILanguageCode() { LanguageCode = string.Empty },
+                new MockMessager());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void MessagerIsNull()
+        {
+            new LocalizationModel(
+                new MockLocalization(),
+                hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
+                new MockILanguageCode(),
+                null);
         }
 
         private readonly ILocalization m_localization;

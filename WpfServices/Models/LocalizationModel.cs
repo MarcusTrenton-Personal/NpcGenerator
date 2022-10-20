@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Services;
 using Services.Message;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -28,16 +29,56 @@ namespace WpfServices
             ILanguageCode currentLanguage, 
             IMessager messager)
         {
+            if (localization is null)
+            {
+                throw new ArgumentNullException(nameof(localization));
+            }
+            if (hiddenLanguageCodes is null)
+            {
+                throw new ArgumentNullException(nameof(hiddenLanguageCodes));
+            }
+            if (currentLanguage is null)
+            {
+                throw new ArgumentNullException(nameof(currentLanguage));
+            }
+            if (messager is null)
+            {
+                throw new ArgumentNullException(nameof(messager));
+            }
+
             m_localization = localization;
+            if (currentLanguage != null && !string.IsNullOrEmpty(currentLanguage.LanguageCode))
+            {
+                m_localization.CurrentLanguageCode = currentLanguage.LanguageCode;
+            }
             m_currentLanguage = currentLanguage;
+            m_currentLanguage.LanguageCode = m_localization.CurrentLanguageCode;
             m_messager = messager;
 
             List<string> lowerCaseHiddenLanguageCodes = new List<string>(hiddenLanguageCodes);
             for(int i = 0; i < lowerCaseHiddenLanguageCodes.Count; i++)
             {
+                if (lowerCaseHiddenLanguageCodes[i] is null)
+                {
+                    throw new HiddenLanguageNotFound(null);
+                }
                 lowerCaseHiddenLanguageCodes[i] = lowerCaseHiddenLanguageCodes[i].ToLower();
             }
             m_hiddenLanguageCodes = new ReadOnlyCollection<string>(lowerCaseHiddenLanguageCodes);
+
+            ValidateHiddenLanguages();
+        }
+
+        private void ValidateHiddenLanguages()
+        {
+            foreach (string languageCode in m_hiddenLanguageCodes)
+            {
+                bool isLanguageFound = m_localization.IsLanguageCodeSupported(languageCode);
+                if (!isLanguageFound)
+                {
+                    throw new HiddenLanguageNotFound(languageCode);
+                }
+            }
         }
 
         public ILocalization Localization
@@ -93,5 +134,15 @@ namespace WpfServices
         private readonly ReadOnlyCollection<string> m_hiddenLanguageCodes;
         private readonly ILanguageCode m_currentLanguage;
         private readonly IMessager m_messager;
+    }
+
+    public class HiddenLanguageNotFound : Exception
+    {
+        public HiddenLanguageNotFound(string language)
+        {
+            Language = language;
+        }
+
+        public string Language { get; private set; }
     }
 }

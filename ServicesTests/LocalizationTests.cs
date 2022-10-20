@@ -134,15 +134,16 @@ namespace Tests
             catch (Services.LanguageNotFoundException exception)
             {
                 threwException = true;
-                Assert.AreEqual(LANGUAGE_NOT_FOUND, exception.Language, "Wrong language stored");
+                Assert.AreEqual(LANGUAGE_NOT_FOUND, exception.Language, "Wrong language");
             }
 
             Assert.IsTrue(threwException, "Failed to throw a LanguageNotFoundException");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void InvalidDefaultLanguage()
         {
+            const string LANGUAGE_NOT_FOUND = "NotFoundLanguage";
             string languageCode = "Martian";
             string textId = "window_title";
             string text = "Test Window";
@@ -150,7 +151,18 @@ namespace Tests
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
                 textId + "\t\t" + text;
 
-            new Services.Localization(sourceText, "NotFoundLanguage");
+            bool threwException = false;
+            try
+            {
+                new Services.Localization(sourceText, LANGUAGE_NOT_FOUND);
+            }
+            catch (Services.LanguageNotFoundException exception)
+            {
+                threwException = true;
+                Assert.AreEqual(LANGUAGE_NOT_FOUND, exception.Language, "Wrong language");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a LanguageNotFoundException");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
@@ -180,16 +192,27 @@ namespace Tests
             new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void MissingTitleRow()
         {
-            string languageCode = "Martian";
+            const string LANGUAGE_CODE = "Martian";
             string textId = "window_title";
             string text = "Test Window";
 
             string sourceText = textId + "\t\t" + text;
 
-            new Services.Localization(sourceText, languageCode);
+            bool threwException = false;
+            try
+            {
+                new Services.Localization(sourceText, LANGUAGE_CODE);
+            }
+            catch (Services.LanguageNotFoundException exception)
+            {
+                threwException = true;
+                Assert.AreEqual(LANGUAGE_CODE, exception.Language, "Wrong language");
+            }
+            
+            Assert.IsTrue(threwException, "Failed to throw a LanguageNotFoundException");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]

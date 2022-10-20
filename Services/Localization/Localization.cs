@@ -37,7 +37,7 @@ namespace Services
             }
             else
             {
-                throw new ArgumentException(defaultLanguageCode + " language is not found");
+                throw new LanguageNotFoundException(defaultLanguageCode);
             }
         }
 

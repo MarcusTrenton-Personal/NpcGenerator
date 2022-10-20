@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using CoupledServices;
+using Newtonsoft.Json;
 using Services;
 using Services.Message;
 using System;
@@ -39,6 +40,8 @@ namespace NpcGenerator
             public bool forceFailNpcGeneration;
         }
 
+        const string REPAIR_ACTION = "Redownload the application to repair.";
+
         public App()
         {
             FilePathProvider filePathProvider = new FilePathProvider();
@@ -48,8 +51,27 @@ namespace NpcGenerator
                 return;
             }
 
+            LocalFileIO fileIo = new LocalFileIO(filePathProvider);
+            string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath);
+            Services.Localization localization;
+            try
+            {
+                localization = new Services.Localization(LocalizationText, appSettings.DefaultLanguageCode);
+            }
+            catch (LanguageNotFoundException exception) //App broken. Abort. Abort.
+            {
+                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " DefaultLanguageCode " + exception.Language +
+                    " is not found in localization file " + FullPathOf(filePathProvider.LocalizationPath) + ". " + REPAIR_ACTION;
+                ExitAppAfterPopupClosed(message);
+                return;
+            }
+
             AppParameters parameters = ReadAppParameters();
-            m_serviceCentre = CreateServices(parameters, appSettings, filePathProvider);
+            m_serviceCentre = CreateServices(parameters, appSettings, filePathProvider, fileIo, localization);
+            if (m_serviceCentre is null) //App broken. Abort. Abort.
+            {
+                return;
+            }
 
             m_googleAnalytics = new GoogleAnalytics(
                  appSettings: m_serviceCentre.AppSettings,
@@ -79,22 +101,33 @@ namespace NpcGenerator
             Current.MainWindow.Show();
         }
 
-        private static ServiceCentre CreateServices(AppParameters parameters, AppSettings appSettings, FilePathProvider filePathProvider)
+        private static ServiceCentre CreateServices(
+            AppParameters parameters, 
+            AppSettings appSettings, 
+            FilePathProvider filePathProvider, 
+            LocalFileIO fileIo,
+            Services.Localization localization)
         {
-            LocalFileIO fileIo = new LocalFileIO(filePathProvider);
-
-            string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath);
-            Services.Localization localization = new Services.Localization(LocalizationText, appSettings.DefaultLanguageCode);
-
             Messager messager = new Messager();
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
             UserSettings userSettings = ReadUserSettings(filePathProvider);
 
-            LocalizationModel localizationModel = new LocalizationModel(
-                localization: localization,
-                hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
-                currentLanguage: userSettings,
-                messager: messager);
+            LocalizationModel localizationModel;
+            try
+            {
+                localizationModel = new LocalizationModel(
+                    localization: localization,
+                    hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
+                    currentLanguage: userSettings,
+                    messager: messager);
+            }
+            catch (HiddenLanguageNotFound exception)
+            {
+                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " HiddenLanguageCodes has language " + exception.Language +
+                    " that is not found in localization file " + FullPathOf(filePathProvider.LocalizationPath) + ". " + REPAIR_ACTION;
+                ExitAppAfterPopupClosed(message);
+                return null;
+            }
 
             TrackingModel trackingModel = new TrackingModel(userSettings);
 
@@ -285,7 +318,6 @@ namespace NpcGenerator
         private static AppSettings LoadAppSettings(IFilePathProvider filePathProvider)
         {
             //Don't try to localize any exceptions. Localization requires AppSettings for default language, so circular reference.
-            const string REPAIR_ACTION = "Redownload the application to repair.";
             try
             {
                 string text = File.ReadAllText(filePathProvider.AppSettingsFilePath);
@@ -294,7 +326,7 @@ namespace NpcGenerator
             }
             catch (FileNotFoundException exception)
             {
-                ExitAppAfterPopupClosed("Required file " + exception.FileName + " not found. " + REPAIR_ACTION);
+                ExitAppAfterPopupClosed("Required file " + FullPathOf(exception.FileName) + " not found. " + REPAIR_ACTION);
             }
             catch (DirectoryNotFoundException exception)
             {
@@ -310,24 +342,33 @@ namespace NpcGenerator
             }
             catch (NullOrEmptyDefaultLanguageCodeException)
             {
-                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has missing or empty DefaultLanguageCode field. " + REPAIR_ACTION);
+                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) 
+                    + " has missing or empty DefaultLanguageCode field. " + REPAIR_ACTION);
             }
             catch (NullOrEmptyHiddenLanguageCodeException)
             {
-                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has empty language code in HiddenLanguageCode field. " + REPAIR_ACTION);
+                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + 
+                    " has empty language code in HiddenLanguageCode field. " + REPAIR_ACTION);
             }
             catch (MalformedWebsiteException exception)
             {
-                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has malformed website " + exception.Uri + ". " + REPAIR_ACTION);
+                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + 
+                    " has malformed website " + exception.Uri + ". " + REPAIR_ACTION);
             }
             catch (MalformedEmailException exception)
             {
-                ExitAppAfterPopupClosed(filePathProvider.AppSettingsFilePath + " has malformed email " + exception.Email + ". " + REPAIR_ACTION);
+                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + " has malformed email " + 
+                    exception.Email + ". " + REPAIR_ACTION);
             }
             catch (InvalidProductKeyException exception)
             {
-                string message = filePathProvider.AppSettingsFilePath + " has product key " + exception.ProductKeyName + 
+                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " has product key " + exception.ProductKeyName + 
                     " with invalid value " + exception.ProductKeyValue + ". " + REPAIR_ACTION;
+                ExitAppAfterPopupClosed(message);
+            }
+            catch (JsonReaderException exception)
+            {
+                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " has error: " + exception.Message + " " + REPAIR_ACTION;
                 ExitAppAfterPopupClosed(message);
             }
 
@@ -338,6 +379,11 @@ namespace NpcGenerator
         {
             MessageBox.Show(message);
             Current.Shutdown();
+        }
+
+        private static string FullPathOf(string relativePath)
+        {
+            return Path.Combine(AppContext.BaseDirectory, relativePath);
         }
 
         private readonly ServiceCentre m_serviceCentre;
