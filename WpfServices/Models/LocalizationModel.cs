@@ -26,7 +26,7 @@ namespace WpfServices
         public LocalizationModel(
             ILocalization localization, 
             ReadOnlyCollection<string> hiddenLanguageCodes, 
-            ILanguageCode currentLanguage, 
+            ILanguageCodeProvider currentLanguageProvider, 
             IMessager messager)
         {
             if (localization is null)
@@ -37,9 +37,9 @@ namespace WpfServices
             {
                 throw new ArgumentNullException(nameof(hiddenLanguageCodes));
             }
-            if (currentLanguage is null)
+            if (currentLanguageProvider is null)
             {
-                throw new ArgumentNullException(nameof(currentLanguage));
+                throw new ArgumentNullException(nameof(currentLanguageProvider));
             }
             if (messager is null)
             {
@@ -47,12 +47,12 @@ namespace WpfServices
             }
 
             m_localization = localization;
-            if (currentLanguage != null && !string.IsNullOrEmpty(currentLanguage.LanguageCode))
+            if (currentLanguageProvider != null && !string.IsNullOrEmpty(currentLanguageProvider.LanguageCode))
             {
-                m_localization.CurrentLanguageCode = currentLanguage.LanguageCode;
+                m_localization.CurrentLanguageCode = currentLanguageProvider.LanguageCode;
             }
-            m_currentLanguage = currentLanguage;
-            m_currentLanguage.LanguageCode = m_localization.CurrentLanguageCode;
+            m_currentLanguageProvider = currentLanguageProvider;
+            m_currentLanguageProvider.LanguageCode = m_localization.CurrentLanguageCode;
             m_messager = messager;
 
             List<string> lowerCaseHiddenLanguageCodes = new List<string>(hiddenLanguageCodes);
@@ -123,7 +123,7 @@ namespace WpfServices
             set
             {
                 m_localization.CurrentLanguageCode = value;
-                m_currentLanguage.LanguageCode = value;
+                m_currentLanguageProvider.LanguageCode = value;
 
                 m_messager.Send(sender: this, new Services.Message.LanguageSelected(value));
                 NotifyPropertyChanged("Localization");
@@ -132,7 +132,7 @@ namespace WpfServices
 
         private readonly ILocalization m_localization;
         private readonly ReadOnlyCollection<string> m_hiddenLanguageCodes;
-        private readonly ILanguageCode m_currentLanguage;
+        private readonly ILanguageCodeProvider m_currentLanguageProvider;
         private readonly IMessager m_messager;
     }
 

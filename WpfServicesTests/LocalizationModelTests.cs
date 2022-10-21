@@ -47,7 +47,7 @@ namespace Tests
             }
         }
 
-        private class MockILanguageCode : ILanguageCode
+        private class MockILanguageCode : ILanguageCodeProvider
         {
             public string LanguageCode { get; set; } = MartianLanguageCode;
         }
@@ -270,7 +270,7 @@ namespace Tests
 
         private readonly ILocalization m_localization;
         private readonly LocalizationModel m_localizationModel;
-        private readonly ILanguageCode m_languageCode;
+        private readonly ILanguageCodeProvider m_languageCode;
         private readonly MockMessager m_messager;
     }
 }

@@ -15,8 +15,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 namespace Services
 {
-    public interface IAnalyticsConsent
+    public interface ILanguageCodeProvider
     {
-        bool AnalyticsConsent { get; set; }
+        string LanguageCode { get; set; }
     }
 }

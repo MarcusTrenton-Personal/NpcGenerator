@@ -19,24 +19,24 @@ namespace WpfServices
 {
     public class TrackingModel : BaseModel, ITrackingModel
     {
-        public TrackingModel(IAnalyticsConsent consent)
+        public TrackingModel(IAnalyticsConsentProvider consentProvider)
         {
-            m_consent = consent;
+            m_consentProvider = consentProvider;
         }
 
         public bool TrackingConsent 
         { 
             get
             {
-                return m_consent.AnalyticsConsent;
+                return m_consentProvider.AnalyticsConsent;
             }
 
             set
             {
-                m_consent.AnalyticsConsent = value;
+                m_consentProvider.AnalyticsConsent = value;
             }
         }
 
-        private readonly IAnalyticsConsent m_consent;
+        private readonly IAnalyticsConsentProvider m_consentProvider;
     }
 }

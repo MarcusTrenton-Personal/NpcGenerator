@@ -18,7 +18,7 @@ using Services;
 namespace NpcGenerator
 {
     //User settings are everything that the user explicitly chooses that are persistent session-to-session.
-    public interface IUserSettings : ILanguageCode, IAnalyticsConsent
+    public interface IUserSettings : ILanguageCodeProvider, IAnalyticsConsentProvider
     {
         public string ConfigurationPath { get; set; }
         public int NpcQuantity { get; set; }

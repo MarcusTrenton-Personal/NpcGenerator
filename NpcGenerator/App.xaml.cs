@@ -118,7 +118,7 @@ namespace NpcGenerator
                 localizationModel = new LocalizationModel(
                     localization: localization,
                     hiddenLanguageCodes: appSettings.HiddenLanguageCodes,
-                    currentLanguage: userSettings,
+                    currentLanguageProvider: userSettings,
                     messager: messager);
             }
             catch (HiddenLanguageNotFound exception)

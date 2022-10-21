@@ -22,7 +22,7 @@ namespace Tests
     [TestClass]
     public class TrackingModelTests
     {
-        private class MockAnalyticsConsent : IAnalyticsConsent
+        private class MockAnalyticsConsent : IAnalyticsConsentProvider
         {
             public bool AnalyticsConsent { get; set; }
         }
@@ -30,7 +30,7 @@ namespace Tests
         [TestMethod]
         public void UserSettingsReflectChanges()
         {
-            IAnalyticsConsent userSettings = new MockAnalyticsConsent
+            IAnalyticsConsentProvider userSettings = new MockAnalyticsConsent
             {
                 AnalyticsConsent = false
             };
