@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Text;
 
@@ -62,17 +63,15 @@ namespace NpcGenerator
             }
         }
 
-        public string SavePath { get; set; } = null;
-
         private void Save()
         {
-            if (!string.IsNullOrEmpty(SavePath))
+            if (!string.IsNullOrEmpty(m_savePath)) //If not set yet, ignore Save call.
             {
-                string directory = Path.GetDirectoryName(SavePath);
+                string directory = Path.GetDirectoryName(m_savePath);
                 Directory.CreateDirectory(directory);
 
                 string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-                using FileStream fs = File.Create(SavePath);
+                using FileStream fs = File.Create(m_savePath);
                 byte[] info = new UTF8Encoding(true).GetBytes(json);
                 fs.Write(info, 0, info.Length);
             }
@@ -80,19 +79,88 @@ namespace NpcGenerator
 
         public static UserSettings Load(string path)
         {
-            bool fileExists = File.Exists(path);
-            if(fileExists)
+            try
             {
                 string text = File.ReadAllText(path);
                 UserSettings settings = JsonConvert.DeserializeObject<UserSettings>(text);
+                settings.Validate();
+                settings.m_savePath = path;
                 return settings;
             }
-            return null;
+            catch (IOException)
+            {
+                return Default(path);
+            }
+            catch (JsonSerializationException)
+            {
+                return Default(path);
+            }
+            catch (JsonReaderException)
+            {
+                return Default(path);
+            }
         }
 
-        private string m_configurationPath = "...";
-        private int m_npcQuantity = 1;
-        private bool m_analyticsConsent = true;
-        private string m_languageCode = null;
+        private static UserSettings Default(string savePath)
+        {
+            UserSettings settings = new UserSettings();
+            settings.ConfigurationPath = DEFAULT_CONFIGURATION_PATH;
+            settings.NpcQuantity = DEFAULT_NPC_QUANTITY;
+            settings.AnalyticsConsent = DEFAULT_ANALYTICS_CONSENT;
+            settings.LanguageCode = DEFAULT_LANGUAGE_CODE;
+            settings.m_savePath = savePath;
+            return settings;
+        }
+
+        private void Validate()
+        {
+            ValidateConfigurationPath();
+            ValidateNpcQuantity();
+            ValidateAnalyticsConsent();
+            ValidateLanguageCode();
+        }
+
+        private static void ValidateConfigurationPath()
+        {
+            //Invalid paths will be dealt with at the Model layer. 
+            //Since paths can be invalidated by simple OS actions.
+            //There is no reason an invalid path should cause all UserSettings to be deleted.
+        }
+
+        private void ValidateNpcQuantity()
+        {
+            if (NpcQuantity < 1)
+            {
+                NpcQuantity = DEFAULT_NPC_QUANTITY;
+            }
+        }
+
+        private static void ValidateAnalyticsConsent()
+        {
+            //Both true and false are value
+        }
+
+        private void ValidateLanguageCode()
+        {
+            if (string.IsNullOrWhiteSpace(LanguageCode))
+            {
+                LanguageCode = DEFAULT_LANGUAGE_CODE;
+            }
+        }
+
+        private const string DEFAULT_CONFIGURATION_PATH = "...";
+        private string m_configurationPath = DEFAULT_CONFIGURATION_PATH;
+
+        private const int DEFAULT_NPC_QUANTITY = 1;
+        private int m_npcQuantity = DEFAULT_NPC_QUANTITY;
+
+        private const bool DEFAULT_ANALYTICS_CONSENT = true;
+        private bool m_analyticsConsent = DEFAULT_ANALYTICS_CONSENT;
+
+        private const string DEFAULT_LANGUAGE_CODE = null;
+        private string m_languageCode = DEFAULT_LANGUAGE_CODE;
+
+        private string m_savePath = null;
     }
+
 }

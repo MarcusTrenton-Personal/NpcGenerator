@@ -110,7 +110,7 @@ namespace NpcGenerator
         {
             Messager messager = new Messager();
             TrackingProfile trackingProfile = ReadTrackingProfile(filePathProvider);
-            UserSettings userSettings = ReadUserSettings(filePathProvider);
+            UserSettings userSettings = UserSettings.Load(filePathProvider.UserSettingsFilePath);
 
             LocalizationModel localizationModel;
             try
@@ -277,18 +277,6 @@ namespace NpcGenerator
             return trackingProfile;
         }
 
-        private static UserSettings ReadUserSettings(FilePathProvider filePathProvider)
-        {
-            string userSettingsPath = filePathProvider.UserSettingsFilePath;
-            UserSettings userSettings = UserSettings.Load(userSettingsPath);
-            if (userSettings is null)
-            {
-                userSettings = new UserSettings();
-            }
-            userSettings.SavePath = userSettingsPath;
-            return userSettings;
-        }
-
         public void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             if (e.ExceptionObject is LocalizedTextNotFoundException)
@@ -340,12 +328,12 @@ namespace NpcGenerator
             {
                 ExitAppAfterPopupClosed(exception.Message);
             }
-            catch (NullOrEmptyDefaultLanguageCodeException)
+            catch (InvalidDefaultLanguageCodeException)
             {
                 ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) 
                     + " has missing or empty DefaultLanguageCode field. " + REPAIR_ACTION);
             }
-            catch (NullOrEmptyHiddenLanguageCodeException)
+            catch (InvalidHiddenLanguageCodeException)
             {
                 ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + 
                     " has empty language code in HiddenLanguageCode field. " + REPAIR_ACTION);

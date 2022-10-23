@@ -103,7 +103,7 @@ namespace Tests
             Assert.AreEqual(VALID_MEASUREMENT_ID_PROD, readSettings.GoogleAnalytics.MeasurementIdProd, "Read incorrect MeasurementIdProd");
         }
 
-        [DataTestMethod, ExpectedException(typeof(NullOrEmptyDefaultLanguageCodeException))]
+        [DataTestMethod, ExpectedException(typeof(InvalidDefaultLanguageCodeException))]
         [DataRow(null, DisplayName = "Null")]
         [DataRow("", DisplayName = "Empty")]
         public void IncorrectDefaultLanguageCode(string defaultLanguageCode)
@@ -116,7 +116,7 @@ namespace Tests
             AppSettings.Create(json);
         }
 
-        [DataTestMethod, ExpectedException(typeof(NullOrEmptyHiddenLanguageCodeException))]
+        [DataTestMethod, ExpectedException(typeof(InvalidHiddenLanguageCodeException))]
         [DataRow(null, DisplayName = "Null")]
         [DataRow("", DisplayName = "Empty")]
         public void IncorrectEntryHiddenLanguageCode(string hiddenLanguage)
@@ -228,6 +228,48 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a MalformedEmailException");
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonSerializationException))]
+        public void MalformedJson()
+        {
+            string json = "{";
+            AppSettings.Create(json);
+        }
+
+        [TestMethod]
+        public void EmptyJson()
+        {
+            string json = "{}";
+
+            bool threwException = false;
+            try
+            {
+                AppSettings.Create(json);
+            }
+            //Do not assume which property will be deserialized and error out first, so check for all of them.
+            catch (InvalidProductKeyException)
+            {
+                threwException = true;
+            }
+            catch (MalformedEmailException)
+            {
+                threwException = true;
+            }
+            catch (MalformedWebsiteException)
+            {
+                threwException = true;
+            }
+            catch (InvalidHiddenLanguageCodeException)
+            {
+                threwException = true;
+            }
+            catch (InvalidDefaultLanguageCodeException)
+            {
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw an exception for empty json");
         }
 
         [DataTestMethod]

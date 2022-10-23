@@ -67,9 +67,9 @@ namespace NpcGenerator
 
         public string SupportEmail { get; set; }
 
-        public static AppSettings Create(string text)
+        public static AppSettings Create(string json)
         {
-            AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(text);
+            AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(json);
             settings.Validate();
             return settings;
         }
@@ -92,9 +92,9 @@ namespace NpcGenerator
 
         private void ValidateDefaultLanguageCode()
         {
-            if (string.IsNullOrEmpty(DefaultLanguageCode))
+            if (string.IsNullOrWhiteSpace(DefaultLanguageCode))
             {
-                throw new NullOrEmptyDefaultLanguageCodeException();
+                throw new InvalidDefaultLanguageCodeException();
             }
         }
 
@@ -105,9 +105,9 @@ namespace NpcGenerator
             {
                 foreach (string language in HiddenLanguageCodes)
                 {
-                    if (string.IsNullOrEmpty(language))
+                    if (string.IsNullOrWhiteSpace(language))
                     {
-                        throw new NullOrEmptyHiddenLanguageCodeException();
+                        throw new InvalidHiddenLanguageCodeException();
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace NpcGenerator
 
         private static void ValidateWebsite(string website)
         {
-            if (string.IsNullOrEmpty(website))
+            if (string.IsNullOrWhiteSpace(website))
             {
                 throw new MalformedWebsiteException(website);
             }
@@ -147,7 +147,7 @@ namespace NpcGenerator
         //Taken from https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
         private static bool IsValidEmail(string email)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
                 return false;
             }
@@ -170,16 +170,16 @@ namespace NpcGenerator
         }
     }
 
-    public class NullOrEmptyDefaultLanguageCodeException : Exception
+    public class InvalidDefaultLanguageCodeException : Exception
     {
-        public NullOrEmptyDefaultLanguageCodeException()
+        public InvalidDefaultLanguageCodeException()
         {
         }
     }
 
-    public class NullOrEmptyHiddenLanguageCodeException : Exception
+    public class InvalidHiddenLanguageCodeException : Exception
     {
-        public NullOrEmptyHiddenLanguageCodeException()
+        public InvalidHiddenLanguageCodeException()
         {
         }
     }

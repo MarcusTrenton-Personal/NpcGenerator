@@ -22,12 +22,16 @@ using System.Text;
 namespace Tests
 {
     [TestClass]
-    public class UserSettingsTests
+    public class UserSettingsTests : FileCreatingTests
     {
+        const string FILE_EXTENSION = ".json";
+
         [TestMethod]
         public void ReadSettings()
         {
-            const string fileName = "TestSettings.json";
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
             const string configurationPath = "Config.csv";
             const int npcQuantity = 1;
             const string languageCode = "Atlantean";
@@ -41,18 +45,239 @@ namespace Tests
             };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
-            using (FileStream fs = File.Create(fileName))
-            {
-                byte[] info = new UTF8Encoding(true).GetBytes(json);
-                fs.Write(info, 0, info.Length);
-            }
+            File.WriteAllText(path, json);
 
             //Read the settings.
-            UserSettings readSettings = UserSettings.Load(fileName);
+            UserSettings readSettings = UserSettings.Load(path);
 
             Assert.AreEqual(configurationPath, readSettings.ConfigurationPath, "Read incorrect ConfigurationPath");
             Assert.AreEqual(npcQuantity, readSettings.NpcQuantity, "Read incorrect NpcQuantity");
             Assert.AreEqual(languageCode, readSettings.LanguageCode, "Read incorrect languageCode");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MalformedJson()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = "{";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void EmptyJson()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = "{}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void FileDoeNotExist()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+        }
+
+        [TestMethod]
+        public void WrongNpcQuantityJson()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': 'C:\\ProgramData\\NpcGenerator\\NotARealFile.json',
+                  'NpcQuantity': -1,
+                  'AnalyticsConsent': true,
+                  'LanguageCode': 'en-ca'
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MissingNpcQuantityJson()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': 'C:\\ProgramData\\NpcGenerator\\NotARealFile.json',
+                  'AnalyticsConsent': true,
+                  'LanguageCode': 'en-ca'
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MalformedConfigurationPath()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': false,
+                  'NpcQuantity': 1,
+                  'AnalyticsConsent': true,
+                  'LanguageCode': 'en-ca'
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MissingConfigurationPath()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'NpcQuantity': 1,
+                  'AnalyticsConsent': true,
+                  'LanguageCode': 'en-ca'
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void WrongAnayticsConsent()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': 'C:\\ProgramData\\NpcGenerator\\NotARealFile.json',
+                  'NpcQuantity': 1,
+                  'AnalyticsConsent': 1,
+                  'LanguageCode': 'en-ca'
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MissingAnalyticsConsent()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': 'C:\\ProgramData\\NpcGenerator\\NotARealFile.json',
+                  'NpcQuantity': 1,
+                  'LanguageCode': 'en-ca'
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MalformedLanguageCode()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': 'C:\\ProgramData\\NpcGenerator\\NotARealFile.json',
+                  'NpcQuantity': 1,
+                  'AnalyticsConsent': true,
+                  'LanguageCode': 1.5
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void MissingLanguageCode()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+
+            string json = $@"{{
+                {{
+                  'ConfigurationPath': 'C:\\ProgramData\\NpcGenerator\\NotARealFile.json',
+                  'NpcQuantity': 1,
+                  'AnalyticsConsent': true,
+                }}
+            }}";
+            File.WriteAllText(path, json);
+
+            UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+
+            File.Delete(path);
         }
     }
 }
