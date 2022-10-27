@@ -20,12 +20,13 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NpcGenerator
 {
     public class TrackingProfile : ITrackingProfile
     {
-        public TrackingProfile()
+        private TrackingProfile()
         {
             ClientId = Guid.NewGuid();
 
@@ -33,7 +34,7 @@ namespace NpcGenerator
         }
 
         //Adapted from https://stackoverflow.com/questions/577634/how-to-get-the-friendly-os-version-name
-        private static string GetOSName()
+        private static string GetOsName()
         {
             string productName = OSHelper.HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName");
             string csdVersion = OSHelper.HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CSDVersion");
@@ -45,13 +46,23 @@ namespace NpcGenerator
             return string.Empty;
         }
 
+        private static string GetSystemLanguage()
+        {
+            return CultureInfo.CurrentCulture.Name;
+        }
+
+        private static string GetAppVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
         private void Update()
         {
-            SystemLanguage = CultureInfo.CurrentCulture.Name;
+            SystemLanguage = GetSystemLanguage();
 
-            AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            AppVersion = GetAppVersion();
 
-            OSVersion = GetOSName();
+            OsVersion = GetOsName();
         }
 
         //Excess surveillance and tracking is a problem with modern technology. 
@@ -67,30 +78,96 @@ namespace NpcGenerator
         public string AppVersion { get; set; }
 
         //What OS versions need to be supported?
-        public string OSVersion { get; set; }
+        public string OsVersion { get; set; }
 
-        public void Save(string path)
+        public void Save()
         {
-            string directory = Path.GetDirectoryName(path);
+            string directory = Path.GetDirectoryName(m_savePath);
             Directory.CreateDirectory(directory);
 
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            using FileStream fs = File.Create(path);
+            using FileStream fs = File.Create(m_savePath);
             byte[] info = new UTF8Encoding(true).GetBytes(json);
             fs.Write(info, 0, info.Length);
         }
 
         public static TrackingProfile Load(string path)
         {
-            bool fileExists = File.Exists(path);
-            if (fileExists)
+            try
             {
                 string text = File.ReadAllText(path);
                 TrackingProfile profile = JsonConvert.DeserializeObject<TrackingProfile>(text);
+                profile.Validate();
+                profile.m_savePath = path;
                 profile.Update();
                 return profile;
             }
-            return null;
+            catch (IOException)
+            {
+                return Default(path);
+            }
+            catch (JsonSerializationException)
+            {
+                return Default(path);
+            }
+            catch (JsonReaderException)
+            {
+                return Default(path);
+            }
         }
+
+        private static TrackingProfile Default(string savePath)
+        {
+            TrackingProfile profile = new TrackingProfile
+            {
+                m_savePath = savePath
+            };
+            profile.Update();
+            return profile;
+        }
+
+        private void Validate()
+        {
+            ValidateClientId();
+            ValidateSystemLanguage();
+            ValidateAppVersion();
+            ValidateOsVersion();
+        }
+
+        private static void ValidateClientId()
+        {
+            //Guid automatically validates itself. Nothing to do here.
+        }
+
+        private void ValidateSystemLanguage()
+        {
+            CultureInfo[] allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            CultureInfo culture = ListUtil.Find(allCultures, culture => culture.ToString() == SystemLanguage);
+            if (culture is null)
+            {
+                SystemLanguage = GetSystemLanguage();
+            }
+        }
+
+        private void ValidateAppVersion()
+        {
+            string pattern = @"^(\d+\.)(\d+\.)(\d+\.)(\*|\d+)?$";
+            bool isValid = Regex.Match(AppVersion, pattern).Success;
+            if (!isValid)
+            {
+                AppVersion = GetAppVersion();
+            }
+        }
+
+        private void ValidateOsVersion()
+        {
+            bool isValid = !string.IsNullOrWhiteSpace(OsVersion);
+            if (!isValid)
+            {
+                OsVersion = GetOsName();
+            }
+        }
+
+        private string m_savePath;
     }
 }

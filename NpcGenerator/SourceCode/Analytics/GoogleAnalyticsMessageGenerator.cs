@@ -110,7 +110,7 @@ namespace NpcGenerator
             WriteUserProperty(writer, "system_language", m_trackingProfile.SystemLanguage);
             WriteUserProperty(writer, "app_language", m_userSettings.LanguageCode);
             WriteUserProperty(writer, "app_version", m_trackingProfile.AppVersion);
-            WriteUserProperty(writer, "os_version", m_trackingProfile.OSVersion);
+            WriteUserProperty(writer, "os_version", m_trackingProfile.OsVersion);
 
             writer.WriteEnd(); //End of user_properties object
         }

@@ -62,7 +62,7 @@ namespace Tests
             bool callbackCalled = false;
             Messager messager = new Messager();
             GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new TrackingProfile(),
+                TrackingProfile.Load("fakePath"),
                 messager,
                 new StubUserSettings(),
                 Callback);
@@ -83,7 +83,7 @@ namespace Tests
             bool callbackCalled = false;
             Messager messager = new Messager();
             GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new TrackingProfile(),
+                TrackingProfile.Load("fakePath"),
                 messager,
                 new StubUserSettings() { AnalyticsConsent = false },
                 Callback);
@@ -146,7 +146,7 @@ namespace Tests
             {
                 AppVersion = APP_VERSION,
                 ClientId = clientId,
-                OSVersion = OS_VERSION,
+                OsVersion = OS_VERSION,
                 SystemLanguage = SYSTEM_LANGUAGE
             };
             GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(

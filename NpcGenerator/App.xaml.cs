@@ -267,13 +267,8 @@ namespace NpcGenerator
 
         private static TrackingProfile ReadTrackingProfile(FilePathProvider filePathProvider)
         {
-            string profilePath = filePathProvider.TrackingProfileFilePath;
-            TrackingProfile trackingProfile = TrackingProfile.Load(profilePath);
-            if (trackingProfile is null)
-            {
-                trackingProfile = new TrackingProfile();
-            }
-            trackingProfile.Save(profilePath);
+            TrackingProfile trackingProfile = TrackingProfile.Load(filePathProvider.TrackingProfileFilePath);
+            trackingProfile.Save();
             return trackingProfile;
         }
 

@@ -33,7 +33,7 @@ namespace Tests
         public Guid ClientId { get; set; } = Guid.Empty;
         public string SystemLanguage { get; set; } = null;
         public string AppVersion { get; set; } = null;
-        public string OSVersion { get; set; } = null;
+        public string OsVersion { get; set; } = null;
     }
 
     internal class StubGoogleAnalyticsSettings : IGoogleAnalyticsSettings
