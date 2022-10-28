@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using Services;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -67,6 +68,8 @@ namespace NpcGenerator
 
         public string SupportEmail { get; set; }
 
+        public string DefaultConfigurationRelativePath { get; set; }
+
         public static AppSettings Create(string json)
         {
             AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(json);
@@ -83,6 +86,7 @@ namespace NpcGenerator
             ValidateWebsite(HomeWebsite);
             ValidateWebsite(DonationWebsite);
             ValidateEmail(SupportEmail);
+            ValidateDefaultConfigurationRelativePath();
         }
 
         private static void ValidateEncryptionKey()
@@ -168,6 +172,21 @@ namespace NpcGenerator
                 return false;
             }
         }
+
+        private void ValidateDefaultConfigurationRelativePath()
+        {
+            if (DefaultConfigurationRelativePath is null)
+            {
+                throw new InvalidDefaultConfigurationRelativePath(DefaultConfigurationRelativePath);
+            }
+
+            string absolutePath = PathHelper.FullPathOf(DefaultConfigurationRelativePath);
+            bool doesExists = File.Exists(absolutePath);
+            if (!doesExists)
+            {
+                throw new InvalidDefaultConfigurationRelativePath(DefaultConfigurationRelativePath);
+            }
+        }
     }
 
     public class InvalidDefaultLanguageCodeException : Exception
@@ -214,5 +233,15 @@ namespace NpcGenerator
 
         public string ProductKeyName { get; private set; }
         public string ProductKeyValue { get; private set; }
+    }
+
+    public class InvalidDefaultConfigurationRelativePath : Exception
+    {
+        public InvalidDefaultConfigurationRelativePath(string path)
+        {
+            Path = path;
+        }
+
+        public string Path { get; private set; }
     }
 }

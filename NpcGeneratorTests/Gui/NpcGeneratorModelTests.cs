@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,9 +27,9 @@ namespace Tests
     public class NpcGeneratorModelTests : FileCreatingTests
     {
         [TestMethod]
-        public void ConfigurationPathReflectsUserSettings()
+        public void ConfigurationPathReflectsAppAndUserSettings()
         {
-            const string FILE_PATH1 = "...";
+            const string FILE_PATH1 = UserSettings.DEFAULT_CONFIGURATION_PATH;
             const string FILE_PATH2 = "FakeFile.csv";
 
             StubUserSettings userSettings = new StubUserSettings
@@ -36,9 +37,14 @@ namespace Tests
                 ConfigurationPath = FILE_PATH1
             };
 
+            StubAppSettings appSettings = new StubAppSettings
+            {
+                DefaultConfigurationRelativePath = "anotherFakeFile.csv"
+            };
+
             NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
                 userSettings,
-                new StubAppSettings(),
+                appSettings,
                 new StubMessager(),
                 new StubLocalFileIo(),
                 new MockCsvConfigurationParser(),
@@ -47,9 +53,11 @@ namespace Tests
                 new MockRandom(), 
                 showErrorMessages: false,
                 forceFailNpcGeneration: false);
+
+            string defaultPath = PathHelper.FullPathOf(appSettings.DefaultConfigurationRelativePath);
+            Assert.AreEqual(defaultPath, npcGeneratorModel.ConfigurationPath,
+                "Configuration path is not the DefaultConfigurationRelativePath one in AppSettings");
             
-            Assert.AreEqual(FILE_PATH1, npcGeneratorModel.ConfigurationPath, 
-                "Configuration path is not the one in UserSettings");
             userSettings.ConfigurationPath = FILE_PATH2;
 
             Assert.AreEqual(FILE_PATH2, npcGeneratorModel.ConfigurationPath, 

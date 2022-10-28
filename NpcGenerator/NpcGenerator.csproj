@@ -94,6 +94,11 @@
       <AppSettings Include="SourceAssets\*.json" />
     </ItemGroup>
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(OutDir)\Settings" />
+    <Message Text="Copying Sample Configurations folder $(OutDir)Sample Configurations" Importance="high" />
+    <ItemGroup>
+      <Sample Include="..\Sample Configurations\*.csv;..\Sample Configurations\*.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Sample)" DestinationFolder="$(OutDir)Sample Configurations" />
   </Target>
 
   <!-- ######## Publish Events ######## -->  
@@ -109,11 +114,11 @@
       <Symbols Include="$(PublishDir)\*.pdb" />
     </ItemGroup>
     <Delete Files="@(Symbols)" />
-    <Message Text="Copying Sample Configurations folder to Dropbox" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
+    <Message Text="Copying Sample Configurations folder" Importance="high" />
     <ItemGroup>
       <Sample Include="..\Sample Configurations\*.csv;..\Sample Configurations\*.json" />
     </ItemGroup>
-    <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
+    <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" />
     
     <Message Text="Copying app data" Importance="high" />
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(PublishDir)" />

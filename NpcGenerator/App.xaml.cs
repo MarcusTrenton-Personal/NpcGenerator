@@ -60,8 +60,8 @@ namespace NpcGenerator
             }
             catch (LanguageNotFoundException exception) //App broken. Abort. Abort.
             {
-                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " DefaultLanguageCode " + exception.Language +
-                    " is not found in localization file " + FullPathOf(filePathProvider.LocalizationPath) + ". " + REPAIR_ACTION;
+                string message = PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " DefaultLanguageCode " + exception.Language +
+                    " is not found in localization file " + PathHelper.FullPathOf(filePathProvider.LocalizationPath) + ". " + REPAIR_ACTION;
                 ExitAppAfterPopupClosed(message);
                 return;
             }
@@ -123,8 +123,9 @@ namespace NpcGenerator
             }
             catch (HiddenLanguageNotFound exception)
             {
-                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " HiddenLanguageCodes has language " + exception.Language +
-                    " that is not found in localization file " + FullPathOf(filePathProvider.LocalizationPath) + ". " + REPAIR_ACTION;
+                string message = PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " HiddenLanguageCodes has language " + 
+                    exception.Language + " that is not found in localization file " + 
+                    PathHelper.FullPathOf(filePathProvider.LocalizationPath) + ". " + REPAIR_ACTION;
                 ExitAppAfterPopupClosed(message);
                 return null;
             }
@@ -284,7 +285,7 @@ namespace NpcGenerator
         private void ShowMissingLocalizaedTextError(LocalizedTextNotFoundException localizationException)
         {
             string language = m_serviceCentre.Localization.CurrentLanguageCode;
-            string localizationFile = AppDomain.CurrentDomain.BaseDirectory + m_serviceCentre.FilePathProvider.LocalizationPath;
+            string localizationFile = PathHelper.FullPathOf(m_serviceCentre.FilePathProvider.LocalizationPath);
 
             try
             {
@@ -309,7 +310,7 @@ namespace NpcGenerator
             }
             catch (FileNotFoundException exception)
             {
-                ExitAppAfterPopupClosed("Required file " + FullPathOf(exception.FileName) + " not found. " + REPAIR_ACTION);
+                ExitAppAfterPopupClosed("Required file " + PathHelper.FullPathOf(exception.FileName) + " not found. " + REPAIR_ACTION);
             }
             catch (DirectoryNotFoundException exception)
             {
@@ -325,33 +326,33 @@ namespace NpcGenerator
             }
             catch (InvalidDefaultLanguageCodeException)
             {
-                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) 
+                ExitAppAfterPopupClosed(PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) 
                     + " has missing or empty DefaultLanguageCode field. " + REPAIR_ACTION);
             }
             catch (InvalidHiddenLanguageCodeException)
             {
-                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + 
+                ExitAppAfterPopupClosed(PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + 
                     " has empty language code in HiddenLanguageCode field. " + REPAIR_ACTION);
             }
             catch (MalformedWebsiteException exception)
             {
-                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + 
+                ExitAppAfterPopupClosed(PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + 
                     " has malformed website " + exception.Uri + ". " + REPAIR_ACTION);
             }
             catch (MalformedEmailException exception)
             {
-                ExitAppAfterPopupClosed(FullPathOf(filePathProvider.AppSettingsFilePath) + " has malformed email " + 
+                ExitAppAfterPopupClosed(PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " has malformed email " + 
                     exception.Email + ". " + REPAIR_ACTION);
             }
             catch (InvalidProductKeyException exception)
             {
-                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " has product key " + exception.ProductKeyName + 
+                string message = PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " has product key " + exception.ProductKeyName + 
                     " with invalid value " + exception.ProductKeyValue + ". " + REPAIR_ACTION;
                 ExitAppAfterPopupClosed(message);
             }
             catch (JsonReaderException exception)
             {
-                string message = FullPathOf(filePathProvider.AppSettingsFilePath) + " has error: " + exception.Message + " " + REPAIR_ACTION;
+                string message = PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " has error: " + exception.Message + " " + REPAIR_ACTION;
                 ExitAppAfterPopupClosed(message);
             }
 
@@ -362,11 +363,6 @@ namespace NpcGenerator
         {
             MessageBox.Show(message);
             Current.Shutdown();
-        }
-
-        private static string FullPathOf(string relativePath)
-        {
-            return Path.Combine(AppContext.BaseDirectory, relativePath);
         }
 
         private readonly ServiceCentre m_serviceCentre;

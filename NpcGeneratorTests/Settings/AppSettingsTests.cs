@@ -17,11 +17,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
 using System;
+using System.IO;
 
 namespace Tests
 {
     [TestClass]
-    public class AppSettingsTests
+    public class AppSettingsTests : FileCreatingTests
     {
         const int VALID_ENCRYPTION_KEY = 1;
         const string VALID_ADDITIONAL_ID_DEV = "Add Dev";
@@ -33,6 +34,8 @@ namespace Tests
         const string VALID_HOME_WEBSITE = "http://www.fake.com";
         const string VALID_DONATION_WEBSITE = "https://www.mock.com";
         const string VALID_SUPPORT_EMAIL = "fake@test.com";
+
+        const string FILE_EXTENSION = ".csv";
 
         private GoogleAnalyticsSettings ValidGoogleAnalyticsSettings()
         {
@@ -86,6 +89,12 @@ namespace Tests
         {
             AppSettings original = ValidAppSettings();
 
+            string text = "This is text";
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
+            File.WriteAllText(path, text);
+            original.DefaultConfigurationRelativePath = path;
+
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
 
             AppSettings readSettings = AppSettings.Create(json);
@@ -97,10 +106,13 @@ namespace Tests
             Assert.AreEqual(VALID_HOME_WEBSITE, readSettings.HomeWebsite, "Read incorrect HomeWebsite");
             Assert.AreEqual(VALID_DONATION_WEBSITE, readSettings.DonationWebsite, "Read incorrect DonationWebsite");
             Assert.AreEqual(VALID_SUPPORT_EMAIL, readSettings.SupportEmail, "Read incorrect SupportEmail");
+            Assert.AreEqual(path, readSettings.DefaultConfigurationRelativePath, "Read incorrect DefaultConfigurationPath");
             Assert.AreEqual(VALID_ADDITIONAL_ID_DEV, readSettings.GoogleAnalytics.AdditionalIdDev, "Read incorrect AdditionalIdDev");
             Assert.AreEqual(VALID_ADDITIONAL_ID_PROD, readSettings.GoogleAnalytics.AdditionalIdProd, "Read incorrect AdditionalIdProd");
             Assert.AreEqual(VALID_MEASUREMENT_ID_DEV, readSettings.GoogleAnalytics.MeasurementIdDev, "Read incorrect MeasurementIdDev");
             Assert.AreEqual(VALID_MEASUREMENT_ID_PROD, readSettings.GoogleAnalytics.MeasurementIdProd, "Read incorrect MeasurementIdProd");
+
+            File.Delete(path);
         }
 
         [DataTestMethod, ExpectedException(typeof(InvalidDefaultLanguageCodeException))]
@@ -270,6 +282,31 @@ namespace Tests
             }
 
             Assert.IsTrue(threwException, "Failed to throw an exception for empty json");
+        }
+
+        [DataTestMethod]
+        [DataRow(null, DisplayName = "Null")]
+        [DataRow("", DisplayName = "Empty")]
+        [DataRow("InvalidPath", DisplayName = "Empty")]
+        public void IncorrectDefaultConfigurationRelativePath(string path)
+        {
+            AppSettings original = ValidAppSettings();
+            original.DefaultConfigurationRelativePath = path;
+
+            string json = JsonConvert.SerializeObject(original, Formatting.Indented);
+
+            bool threwException = true;
+            try
+            {
+                AppSettings.Create(json);
+            }
+            catch (InvalidDefaultConfigurationRelativePath exception)
+            {
+                threwException = true;
+                Assert.AreEqual(path, exception.Path, "Returned incorrect invalid path.");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw a MalformedEmailException");
         }
 
         [DataTestMethod]

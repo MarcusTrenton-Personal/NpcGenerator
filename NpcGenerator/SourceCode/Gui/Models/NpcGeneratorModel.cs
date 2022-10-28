@@ -53,6 +53,8 @@ namespace NpcGenerator
             m_forceFailNpcGeneration = forceFailNpcGeneration;
             m_configurationHasError = false;
 
+            UpdateUserSettingsWithDefaults();
+
             CreateFileWatcher();
 
             //Deliberately do parse the initial schema, as there is no way to show an error message during boot-up.
@@ -62,6 +64,15 @@ namespace NpcGenerator
         ~NpcGeneratorModel()
         {
             TearDownFileWatcher();
+        }
+
+        private void UpdateUserSettingsWithDefaults()
+        {
+            if (m_userSettings.ConfigurationPath == UserSettings.DEFAULT_CONFIGURATION_PATH && 
+                m_appSettings.DefaultConfigurationRelativePath != null)
+            {
+                m_userSettings.ConfigurationPath = PathHelper.FullPathOf(m_appSettings.DefaultConfigurationRelativePath);
+            }
         }
 
         private void CreateFileWatcher()

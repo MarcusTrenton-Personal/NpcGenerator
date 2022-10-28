@@ -41,5 +41,7 @@ namespace NpcGenerator
         public string DonationWebsite { get; }
 
         public string SupportEmail { get; }
+
+        public string DefaultConfigurationRelativePath { get; }
     }
 }

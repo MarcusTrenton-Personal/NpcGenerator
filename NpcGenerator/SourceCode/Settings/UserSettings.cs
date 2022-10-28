@@ -148,10 +148,10 @@ namespace NpcGenerator
             }
         }
 
-        private const string DEFAULT_CONFIGURATION_PATH = "...";
+        public const string DEFAULT_CONFIGURATION_PATH = "...";
         private string m_configurationPath = DEFAULT_CONFIGURATION_PATH;
 
-        private const int DEFAULT_NPC_QUANTITY = 1;
+        private const int DEFAULT_NPC_QUANTITY = 5;
         private int m_npcQuantity = DEFAULT_NPC_QUANTITY;
 
         private const bool DEFAULT_ANALYTICS_CONSENT = true;
