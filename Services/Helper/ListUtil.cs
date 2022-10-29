@@ -68,7 +68,7 @@ namespace Services
             return result.AsReadOnly();
         }
 
-        public const int NOT_FOUND = -1;
+        public const int INDEX_NOT_FOUND = -1;
         public static int IndexOf<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
         {
             if (list is null)
@@ -88,7 +88,39 @@ namespace Services
                     return i;
                 }
             }
-            return NOT_FOUND;
+            return INDEX_NOT_FOUND;
+        }
+
+        public static List<T> DistinctPreserveOrder<T>(IReadOnlyList<T> list) where T : notnull
+        {
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            List<T> result = new List<T>();
+            bool[] processed = new bool[list.Count];
+            for (int i = 0; i < processed.Length; ++i)
+            {
+                processed[i] = false;
+            }
+
+            for (int i = 0; i < list.Count; ++i)
+            {
+                if (!processed[i])
+                {
+                    result.Add(list[i]);
+                    processed[i] = true;
+                    for (int j = i + 1; j < list.Count; ++j)
+                    {
+                        if (!processed[j])
+                        {
+                            processed[j] = list[i].Equals(list[j]);
+                        }
+                    }
+                }
+            }
+            return result;
         }
     }
 }

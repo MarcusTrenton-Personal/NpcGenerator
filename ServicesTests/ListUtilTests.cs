@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Tests
 {
@@ -206,7 +207,7 @@ namespace Tests
             IReadOnlyList<object> list = new List<object>().AsReadOnly();
             int result = ListUtil.IndexOf(list: list, test: x => x.Equals(null));
 
-            Assert.AreEqual(ListUtil.NOT_FOUND, result, "Should not find an element in an empty list");
+            Assert.AreEqual(ListUtil.INDEX_NOT_FOUND, result, "Should not find an element in an empty list");
         }
 
         [TestMethod]
@@ -215,7 +216,7 @@ namespace Tests
             IReadOnlyList<int> list = new List<int>() { 1, 1, 2 }.AsReadOnly();
             int result = ListUtil.IndexOf(list: list, test: x => x < 0);
 
-            Assert.AreEqual(ListUtil.NOT_FOUND, result, "Incorrectly found an element despite the test");
+            Assert.AreEqual(ListUtil.INDEX_NOT_FOUND, result, "Incorrectly found an element despite the test");
         }
 
         [TestMethod]
@@ -243,6 +244,113 @@ namespace Tests
             int result = ListUtil.IndexOf(list: list, test: x => x.StartsWith('A'));
 
             Assert.AreEqual(0, result, "Found element at wrong index");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void DistinctPreserveOrderNullList()
+        {
+            ListUtil.DistinctPreserveOrder<int>(null);
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderEmptyList()
+        {
+            ListUtil.DistinctPreserveOrder(new List<int>());
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderOneElement()
+        {
+            const int E0 = 3;
+
+            IReadOnlyList<int> result = ListUtil.DistinctPreserveOrder(new List<int>() { E0 });
+
+            Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(E0, result[0], "Wrong element in list");
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderTwoElementsNoDupes()
+        {
+            const int E0 = 3;
+            const int E1 = 1;
+
+            IReadOnlyList<int> result = ListUtil.DistinctPreserveOrder(new List<int>() { E0, E1 });
+
+            Assert.AreEqual(2, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(E0, result[0], "Wrong element in list");
+            Assert.AreEqual(E1, result[1], "Wrong element in list");
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderTwoDupeElementsInt()
+        {
+            const int E0 = 3;
+            const int E1 = E0;
+
+            IReadOnlyList<int> result = ListUtil.DistinctPreserveOrder(new List<int>() { E0, E1 });
+
+            Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(E0, result[0], "Wrong element in list");
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderTwoDupeElementsString()
+        {
+            const string E0 = "Blue";
+            const string E1 = E0;
+
+            IReadOnlyList<string> result = ListUtil.DistinctPreserveOrder(new List<string>() { E0, E1 });
+
+            Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(E0, result[0], "Wrong element in list");
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderTwoDupeElementsObjectRef()
+        {
+            TestClass e0 = new TestClass(3, new object());
+            TestClass e1 = e0;
+
+            IReadOnlyList<TestClass> result = ListUtil.DistinctPreserveOrder(new List<TestClass>() { e0, e1 });
+
+            Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(e0, result[0], "Wrong element in list");
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderTwoDupeElementsObjectValue()
+        {
+            Point e0 = new Point(3, 2);
+            Point e1 = new Point(3, 2);
+
+            IReadOnlyList<Point> result = ListUtil.DistinctPreserveOrder(new List<Point>() { e0, e1 });
+
+            Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(e0, result[0], "Wrong element in list");
+        }
+
+        [TestMethod]
+        public void DistinctPreserveOrderLostListOfElementsWithDupes()
+        {
+            const string E0 = "Blue";
+            const string E1 = "Red";
+            const string E2 = "Red";
+            const string E3 = "Blue";
+            const string E4 = "Green";
+            const string E5 = "Blue";
+            const string E6 = "Black";
+            const string E7 = "White";
+            const string E8 = "Red";
+
+            IReadOnlyList<string> result = ListUtil.DistinctPreserveOrder(new List<string>() { E0, E1, E2, E3, E4, E5, E6, E7, E8 });
+
+            Assert.AreEqual(5, result.Count, "Wrong number of elements in list");
+            Assert.AreEqual(E0, result[0], "Wrong element in list");
+            Assert.AreEqual(E1, result[1], "Wrong element in list");
+            Assert.AreEqual(E4, result[2], "Wrong element in list");
+            Assert.AreEqual(E6, result[3], "Wrong element in list");
+            Assert.AreEqual(E7, result[4], "Wrong element in list");
         }
     }
 }
