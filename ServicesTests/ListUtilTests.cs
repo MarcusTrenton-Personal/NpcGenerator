@@ -49,7 +49,7 @@ namespace Tests
         [TestMethod]
         public void FindOneElementFound()
         {
-            List<int> list = new List<int>() { -1, -2, 9, -3, -4};
+            List<int> list = new List<int>() { -1, -2, 9, -3, -4 };
             int result = ListUtil.Find(list, x => x > 0);
 
             Assert.AreEqual(9, result, "Wrong result returned from the search.");
@@ -117,9 +117,9 @@ namespace Tests
             Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
         }
 
-        private struct TestClass
+        private struct TestStruct
         {
-            public TestClass(int x, object y)
+            public TestStruct(int x, object y)
             {
                 this.x = x;
                 this.y = y;
@@ -132,10 +132,10 @@ namespace Tests
         [TestMethod]
         public void FindFailElementWithParameterizedConstructor()
         {
-            TestClass defaultObject = default;
+            TestStruct defaultObject = default;
 
-            List<TestClass> list = new List<TestClass>();
-            TestClass result = ListUtil.Find(list, i => i.x > 0);
+            List<TestStruct> list = new List<TestStruct>();
+            TestStruct result = ListUtil.Find(list, i => i.x > 0);
 
             Assert.AreEqual(defaultObject, result, "Failed find did not return default value");
         }
@@ -309,10 +309,10 @@ namespace Tests
         [TestMethod]
         public void DistinctPreserveOrderTwoDupeElementsObjectRef()
         {
-            TestClass e0 = new TestClass(3, new object());
-            TestClass e1 = e0;
+            TestStruct e0 = new TestStruct(3, new object());
+            TestStruct e1 = e0;
 
-            IReadOnlyList<TestClass> result = ListUtil.DistinctPreserveOrder(new List<TestClass>() { e0, e1 });
+            IReadOnlyList<TestStruct> result = ListUtil.DistinctPreserveOrder(new List<TestStruct>() { e0, e1 });
 
             Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
             Assert.AreEqual(e0, result[0], "Wrong element in list");
@@ -351,6 +351,15 @@ namespace Tests
             Assert.AreEqual(E4, result[2], "Wrong element in list");
             Assert.AreEqual(E6, result[3], "Wrong element in list");
             Assert.AreEqual(E7, result[4], "Wrong element in list");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void DistinctPreserveOrderNullElement()
+        {
+            object e0 = new object();
+            object e1 = null;
+
+            ListUtil.DistinctPreserveOrder(new List<object>() { e0, e1 });
         }
     }
 }

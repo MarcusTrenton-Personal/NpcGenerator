@@ -97,6 +97,13 @@ namespace Services
             {
                 throw new ArgumentNullException(nameof(list));
             }
+            foreach (T element in list)
+            {
+                if (element is null)
+                {
+                    throw new ArgumentException("Null element in " + nameof(list));
+                }
+            }
 
             List<T> result = new List<T>();
             bool[] processed = new bool[list.Count];
