@@ -350,6 +350,12 @@ namespace NpcGenerator
                     " with invalid value " + exception.ProductKeyValue + ". " + REPAIR_ACTION;
                 ExitAppAfterPopupClosed(message);
             }
+            catch (InvalidDefaultConfigurationRelativePath exception)
+            {
+                string message = PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " has an invalid configuration path " +
+                    exception.Path + ". " + REPAIR_ACTION;
+                ExitAppAfterPopupClosed(message);
+            }
             catch (JsonReaderException exception)
             {
                 string message = PathHelper.FullPathOf(filePathProvider.AppSettingsFilePath) + " has error: " + exception.Message + " " + REPAIR_ACTION;
