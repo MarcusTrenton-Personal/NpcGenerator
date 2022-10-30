@@ -594,5 +594,17 @@ namespace Tests
             Assert.AreEqual(DEPENDENT_CATEGORY0, alphabeticalCategoryDependencies.Values[0], "Wrong dependency");
             Assert.AreEqual(DEPENDENT_CATEGORY1, alphabeticalCategoryDependencies.Values[1], "Wrong dependency");
         }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullName()
+        {
+            new TraitCategory(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullOutputName()
+        {
+            new TraitCategory("Colour", outputName: null, selectionCount: 1);
+        }
     }
 }

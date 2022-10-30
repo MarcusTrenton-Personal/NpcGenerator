@@ -31,6 +31,10 @@
 					"description": "The user-facing name for the trait category",
 					"type": "string"
 				},
+				"output_name": {
+					"description": "Optional name of the output category in the resulting npcs. By default the trait_category's name is used. The output_name does not need to match any of the trait_category names. An example use of this field is to combine the results of multiple trait categories together. The selected traits from the categories Physical Disabilities and Mental Disabilities can be combined into the Disability category for the resulting NPC.",
+					"type": "string"
+				},
 				"selections": { "$ref": "#/$defs/selections"},
 				"requirements": {
 					"description": "Optional object for required traits needed for any selections in this category.",

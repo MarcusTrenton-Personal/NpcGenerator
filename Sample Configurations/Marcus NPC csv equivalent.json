@@ -75,7 +75,7 @@
 			"traits" :
 			[
 				{"name" : "Teenager", "weight" : 15},
-				{"name" : "Adult", "weight" : 40},
+				{"name" : "Young Adult", "weight" : 40},
 				{"name" : "Middle Age", "weight" : 30},
 				{"name" : "Elderly", "weight" : 15}
 			]
@@ -146,7 +146,8 @@
 				{"name" : "Short temper", "weight" : 1},
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},
-				{"name" : "Dancer", "weight" : 1}
+				{"name" : "Dancer", "weight" : 1},
+				{"name" : "Famous", "weight" : 1}
 			]
 		}
 	]

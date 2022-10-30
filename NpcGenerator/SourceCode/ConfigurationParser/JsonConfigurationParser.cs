@@ -140,7 +140,8 @@ namespace NpcGenerator
             TraitSchema traitSchema = new TraitSchema();
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
-                TraitCategory category = new TraitCategory(protoCategory.Name, protoCategory.Selections);
+                string outputName = protoCategory.output_name ?? protoCategory.Name;
+                TraitCategory category = new TraitCategory(protoCategory.Name, outputName, protoCategory.Selections);
                 foreach (ProtoTrait protoTrait in protoCategory.traits)
                 {
                     Trait trait = new Trait(protoTrait.Name, protoTrait.Weight, protoTrait.Hidden);
@@ -350,6 +351,7 @@ namespace NpcGenerator
         private class ProtoTraitCategory
         {
             public string Name { get; set; }
+            public string output_name { get; set; }
             public int Selections { get; set; }
             public ProtoLogicalExpression requirements;
             public List<ProtoTrait> traits;

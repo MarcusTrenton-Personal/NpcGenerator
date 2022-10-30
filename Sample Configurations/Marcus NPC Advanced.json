@@ -81,7 +81,7 @@
 			"traits" :
 			[
 				{"name" : "Teenager", "weight" : 15},
-				{"name" : "Adult", "weight" : 40},
+				{"name" : "Young Adult", "weight" : 40},
 				{"name" : "Middle Age", "weight" : 30},
 				{"name" : "Elderly", "weight" : 15}
 			]
@@ -147,7 +147,8 @@
 				{"name" : "Short temper", "weight" : 1},
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},
-				{"name" : "Dancer", "weight" : 1}
+				{"name" : "Dancer", "weight" : 1},
+				{"name" : "Famous", "weight" : 1}
 			]
 		},
 		{
@@ -190,7 +191,7 @@
 				"operator" : "Any",
 				"operands" : [
 					{"category_name" : "Quirk", "trait_name" : "Stylish"},
-					{"category_name" : "Age", "trait_name" : "Teenager"},
+					{"category_name" : "Age", "trait_name" : "Teenager"}
 				]
 			},
 			"traits" :
@@ -205,6 +206,79 @@
 				{"name" : "Green", "weight" : 1},
 				{"name" : "Purple", "weight" : 1},
 				{"name" : "Pink", "weight" : 1}
+			]
+		},
+		{
+			"name": "Young Celebrity",
+			"output_name": "Celebrity",
+			"selections": 1,
+			"requirements" : {
+				"operator" : "All",
+				"operands" : [
+					{
+						"operator" : "Any",
+						"operands" : [
+							{"category_name" : "Age", "trait_name" : "Teenager"},
+							{"category_name" : "Age", "trait_name" : "Young Adult"}
+						]
+					},
+					{
+						"operator" : "Any",
+						"operands" : [
+							{"category_name" : "Quirk", "trait_name" : "Famous"},
+							{"category_name" : "Motivation", "trait_name" : "Fame"},
+						]
+					}
+				]
+			},
+			"traits" :
+			[
+				{"name" : "Social Media", "weight" : 1},
+				{"name" : "Pro Gamer", "weight" : 1},
+				{"name" : "Activist", "weight" : 1},
+				{"name" : "War Hero", "weight" : 1},
+				{"name" : "Reality TV", "weight" : 1},
+				{"name" : "Hacker", "weight" : 1},
+				{"name" : "Survivor", "weight" : 1},
+				{"name" : "Immortalized Mistake", "weight" : 1},
+				{"name" : "Fan Fiction", "weight" : 1},
+				{"name" : "Relative of Politician", "weight" : 1}
+			]
+		},
+		{
+			"name": "Old Celebrity",
+			"output_name": "Celebrity",
+			"selections": 1,
+			"requirements" : {
+				"operator" : "All",
+				"operands" : [
+					{
+						"operator" : "Any",
+						"operands" : [
+							{"category_name" : "Age", "trait_name" : "Middle Age"},
+							{"category_name" : "Age", "trait_name" : "Elderly"}
+						]
+					},
+					{
+						"operator" : "Any",
+						"operands" : [
+							{"category_name" : "Quirk", "trait_name" : "Famous"},
+							{"category_name" : "Motivation", "trait_name" : "Fame"},
+						]
+					}
+				]
+			},
+			"traits" :
+			[
+				{"name" : "Movie", "weight" : 1},
+				{"name" : "TV", "weight" : 1},
+				{"name" : "Radio", "weight" : 1},
+				{"name" : "Activist", "weight" : 1},
+				{"name" : "War Hero", "weight" : 1},
+				{"name" : "Sports", "weight" : 1},
+				{"name" : "Author", "weight" : 1},
+				{"name" : "Survivor", "weight" : 1},
+				{"name" : "Relative of Politician", "weight" : 1}
 			]
 		}
 	]

@@ -17,7 +17,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Tests.JsonConfigurationParserTests
 {

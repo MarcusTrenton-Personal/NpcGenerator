@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -50,25 +51,31 @@ namespace NpcGenerator
             }
 
             bool categoryExists = m_traitsByCategory.ContainsKey(category);
-            List<Trait> traitsList;
+            HashSet<Trait> traitSet;
             if (categoryExists)
             {
-                traitsList = m_traitsByCategory[category];
+                traitSet = m_traitsByCategory[category];
             }
             else
             {
-                m_traitsByCategory[category] = new List<Trait>();
-                traitsList = m_traitsByCategory[category];
+                m_traitsByCategory[category] = new HashSet<Trait>();
+                traitSet = m_traitsByCategory[category];
             }
-            traitsList.AddRange(traits);
+
+            foreach (Trait trait in traits)
+            {
+                traitSet.Add(trait);
+            }
         }
 
         public Trait[] GetTraitsOfCategory(string category)
         {
-            bool success = m_traitsByCategory.TryGetValue(category, out List<Trait> traits);
+            bool success = m_traitsByCategory.TryGetValue(category, out HashSet<Trait> traits);
             if (success)
             {
-                return traits.ToArray();
+                Trait[] traitArray = new Trait[traits.Count];
+                traits.CopyTo(traitArray);
+                return traitArray;
             }
             else
             {
@@ -83,13 +90,13 @@ namespace NpcGenerator
                 throw new ArgumentNullException(nameof(traitId));
             }
 
-            bool hasCategoryOfTrait = m_traitsByCategory.TryGetValue(traitId.CategoryName, out List<Trait> traits);
+            bool hasCategoryOfTrait = m_traitsByCategory.TryGetValue(traitId.CategoryName, out HashSet<Trait> traits);
             if (!hasCategoryOfTrait)
             {
                 return false;
             }
 
-            Trait trait = traits.Find(trait => trait.Name == traitId.TraitName);
+            Trait trait = HashSetUtil.Find(traits, trait => trait.Name == traitId.TraitName);
             return trait != null;
         }
 
@@ -98,7 +105,7 @@ namespace NpcGenerator
             return new List<string>(m_traitsByCategory.Keys);
         }
 
-        public class Trait
+        public class Trait : IEquatable<Trait>
         {
             public Trait(string name) : this(name, isHidden: false, name)
             {
@@ -115,11 +122,61 @@ namespace NpcGenerator
                 OriginalName = originalName;
             }
 
+            //Taken from Microsoft example at
+            //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/how-to-define-value-equality-for-a-type
+            public bool Equals(Trait other)
+            {
+                if (other is null)
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, other))
+                {
+                    return true;
+                }
+
+                if (GetType() != other.GetType())
+                {
+                    return false;
+                }
+
+                // Return true if the fields match, other than OriginalName
+                return (Name == other.Name) && (IsHidden == other.IsHidden);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is Trait other)
+                {
+                    return Equals(other);
+                }
+                return false;
+            }
+
+            public override int GetHashCode() => (Name, IsHidden).GetHashCode();
+
+            public static bool operator ==(Trait lhs, Trait rhs)
+            {
+                if (lhs is null)
+                {
+                    if (rhs is null)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                return lhs.Equals(rhs);
+            }
+
+            public static bool operator !=(Trait lhs, Trait rhs) => !(lhs == rhs);
+
             public string Name { get; private set; }
             public bool IsHidden { get; private set; }
             public string OriginalName { get; private set; }
         }
 
-        private readonly Dictionary<string,List<Trait>> m_traitsByCategory = new Dictionary<string, List<Trait>>();
+        private readonly Dictionary<string,HashSet<Trait>> m_traitsByCategory = new Dictionary<string, HashSet<Trait>>();
     }
 }

@@ -21,18 +21,31 @@ namespace NpcGenerator
 {
     public class TraitCategory
     {
-        public TraitCategory(string name) : this(name, selectionCount: 1)
+        public TraitCategory(string name) : this(name, outputName: name, selectionCount: 1)
         {
         }
 
-        public TraitCategory(string name, int selectionCount)
+        public TraitCategory(string name, int selectionCount) : this(name, outputName: name, selectionCount: selectionCount)
         {
+        }
+
+        public TraitCategory(string name, string outputName, int selectionCount)
+        {
+            if (name is null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+            if (outputName is null)
+            {
+                throw new ArgumentNullException(nameof(outputName));
+            }
             if (selectionCount < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(selectionCount), "Must be 0 or greater");
             }
 
             Name = name;
+            OutputName = outputName;
             DefaultSelectionCount = selectionCount;
         }
 
@@ -148,17 +161,11 @@ namespace NpcGenerator
             return categories;
         }
 
-        public string Name
-        {
-            get;
-            private set;
-        }
+        public string Name { get; private set; }
 
-        public int DefaultSelectionCount
-        {
-            get;
-            private set;
-        }
+        public string OutputName { get; private set; }
+
+        public int DefaultSelectionCount { get; private set; }
 
         private Requirement m_requirement;
         private List<Trait> m_traits = new List<Trait>();

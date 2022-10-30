@@ -1,6 +1,6 @@
 Sexuality,Weight,Gender,Weight,Race,Weight,Motivation,Weight,Tactics,Weight,Age,Weight,Height,Weight,Mass,Weight,Quirk,Weight
 Heterosexual,86,Male,47,Region-specific,70,Power,1,Violence,1,Teenager,15,Dwarf,1,Skeletal,3,Transgender,1
-Homosexual,4,Female,48,Caucasian,6,Wealth,1,Competition,1,Adult,40,Short,24,Underweight,15,Autistic,1
+Homosexual,4,Female,48,Caucasian,6,Wealth,1,Competition,1,Young Adult,40,Short,24,Underweight,15,Autistic,1
 Pansexual,9,Nonbinary,5,African,3,Fame,1,Persuasion,1,Middle Age,30,Average,50,Regular,25,Graceful,1
 Asexual,1,,,Hispanic,4,Harmony,1,Authority,1,Elderly,15,Tall,24,Overweight,39,Tourettes,1
 ,,,,East Asian,6,Chaos,1,Logic,1,,,Gigantic,1,Obese,18,OCD,1
@@ -37,3 +37,4 @@ Asexual,1,,,Hispanic,4,Harmony,1,Authority,1,Elderly,15,Tall,24,Overweight,39,To
 ,,,,,,,,,,,,,,,,Fidgeter,1
 ,,,,,,,,,,,,,,,,Mismatched eye colour,1
 ,,,,,,,,,,,,,,,,Dancer,1
+,,,,,,,,,,,,,,,,Famous,1

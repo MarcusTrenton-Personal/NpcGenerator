@@ -230,7 +230,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsTrue(threwException, "Failed to throw MissingReplacementCategoryException");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void ReplacementHasNoCategory()
         {
             string text = $@"{{
@@ -259,20 +259,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void ReplacementHasNoTrait()
         {
             string text = $@"{{
@@ -301,20 +291,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void ReplacementIsEmpty()
         {
             string text = $@"{{
@@ -342,20 +322,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void ReplacementHasMultipleIdenticalObjects()
         {
             const string REPLACEMENT_CATEGORY = "Hair";
@@ -392,17 +362,7 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
     }
 }

@@ -454,6 +454,29 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ReplacementCollidesWithExistingTraitBothSelected()
+        {
+            const string CATEGORY = "Colour";
+            const string ORIGINAL_COLOUR = "Blue";
+            const string REPLACEMENT_COLOUR = "Red";
+            TraitCategory colourCategory = new TraitCategory(CATEGORY, 2);
+            Trait trait0 = new Trait(ORIGINAL_COLOUR);
+            Trait trait1 = new Trait(REPLACEMENT_COLOUR);
+            colourCategory.Add(trait0);
+            colourCategory.Add(trait1);
+
+            TraitSchema traitSchema = new TraitSchema();
+            traitSchema.Add(colourCategory);
+
+            Replacement replacement = new Replacement(trait0, REPLACEMENT_COLOUR, colourCategory);
+            NpcGroup npcGroup = NpcFactory.Create(traitSchema, 1, new List<Replacement>() { replacement }, m_random);
+
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+            Npc.Trait npcTrait = npcGroup.GetNpcAtIndex(0).GetTraitsOfCategory(CATEGORY)[0];
+            Assert.AreEqual(REPLACEMENT_COLOUR, npcTrait.Name, "Replacement was not honoured");
+        }
+
+        [TestMethod]
         public void NpcFailsCategoryRequirement()
         {
             const string DEPENDENCY_CATEGORY = "Animal";
@@ -1103,7 +1126,7 @@ namespace Tests
             bool areValid = NpcFactory.AreNpcsValid(
                 npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
 
-            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+            Assert.IsFalse(areValid, "Npcs are incorrectly valid");
             
             List<NpcSchemaViolation> violations0 = violationsPerNpc[npc0];
             Assert.AreEqual(2, violations0.Count, "Wrong number of violations");
@@ -1728,6 +1751,139 @@ namespace Tests
             Assert.IsTrue(areValid, "Npc is incorrectly invalid");
             List<NpcSchemaViolation> violations = violationsPerNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void IsolatedOutputCategoryName()
+        {
+            const string CATEGORY_NAME = "Young Fame";
+            const string OUTPUT_CATEGORY_NAME = "Fame";
+            const string TRAIT = "Social Media";
+            TraitCategory category = new TraitCategory(CATEGORY_NAME, OUTPUT_CATEGORY_NAME, 1);
+            category.Add(new Trait(TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            Npc.Trait[] traitsOfOriginalName = npc.GetTraitsOfCategory(CATEGORY_NAME);
+            Assert.AreEqual(0, traitsOfOriginalName.Length, "Npc traits were added to the original category name instead of the output name");
+            Npc.Trait[] traitsOfOutputName = npc.GetTraitsOfCategory(OUTPUT_CATEGORY_NAME);
+            Assert.AreEqual(1, traitsOfOutputName.Length, "Npc traits were not added the category output name");
+            Assert.AreEqual(TRAIT, traitsOfOutputName[0].Name, "Wrong trait name added to npc category");
+        }
+
+        [TestMethod]
+        public void SharedOutputCategoryName()
+        {
+            const string CATEGORY0_NAME = "Young Fame";
+            const string CATEGORY1_NAME = "Old Fame";
+            const string SHARED_OUTPUT_CATEGORY_NAME = "Fame";
+            const string C0_TRAIT = "Social Media";
+            const string C1_TRAIT = "Radio";
+            TraitCategory youngFameCategory = new TraitCategory(CATEGORY0_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1);
+            youngFameCategory.Add(new Trait(C0_TRAIT));
+            TraitCategory oldFameCategory = new TraitCategory(CATEGORY1_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1);
+            oldFameCategory.Add(new Trait(C1_TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(youngFameCategory);
+            schema.Add(oldFameCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            Npc.Trait[] traitsOfOriginalYoungFameName = npc.GetTraitsOfCategory(CATEGORY0_NAME);
+            Assert.AreEqual(0, traitsOfOriginalYoungFameName.Length, 
+                "Npc traits were added to the original category name instead of the output name");
+            Npc.Trait[] traitsOfOriginalOldFameName = npc.GetTraitsOfCategory(CATEGORY1_NAME);
+            Assert.AreEqual(0, traitsOfOriginalOldFameName.Length,
+                "Npc traits were added to the original category name instead of the output name");
+            Npc.Trait[] traitsOfOutputName = npc.GetTraitsOfCategory(SHARED_OUTPUT_CATEGORY_NAME);
+            Assert.AreEqual(2, traitsOfOutputName.Length, "Npc traits were not added the category output name");
+
+            Npc.Trait npcTrait0 = Array.Find(traitsOfOutputName, trait => trait.Name == C0_TRAIT);
+            Assert.IsNotNull(npcTrait0, "Trait was not added to the output category");
+
+            Npc.Trait npcTrait1 = Array.Find(traitsOfOutputName, trait => trait.Name == C1_TRAIT);
+            Assert.IsNotNull(npcTrait1, "Trait was not added to the output category");
+        }
+
+        [TestMethod]
+        public void CategoryOutputNameIsAnotherCategoriesName()
+        {
+            const string CATEGORY0_NAME = "Young Fame";
+            const string CATEGORY1_NAME_AND_CATEGORY0_OUTPUT_NAME = "Fame";
+            const string C0_TRAIT = "Social Media";
+            const string C1_TRAIT = "Radio";
+            TraitCategory youngFameCategory = new TraitCategory(CATEGORY0_NAME, CATEGORY1_NAME_AND_CATEGORY0_OUTPUT_NAME, 1);
+            youngFameCategory.Add(new Trait(C0_TRAIT));
+            TraitCategory fameCategory = new TraitCategory(CATEGORY1_NAME_AND_CATEGORY0_OUTPUT_NAME);
+            fameCategory.Add(new Trait(C1_TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(youngFameCategory);
+            schema.Add(fameCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            Npc.Trait[] traitsOfOriginalYoungFameName = npc.GetTraitsOfCategory(CATEGORY0_NAME);
+            Assert.AreEqual(0, traitsOfOriginalYoungFameName.Length,
+                "Npc traits were added to the original category name instead of the output name");
+            Npc.Trait[] traitsOfOutputName = npc.GetTraitsOfCategory(CATEGORY1_NAME_AND_CATEGORY0_OUTPUT_NAME);
+            Assert.AreEqual(2, traitsOfOutputName.Length, "Npc traits were not added the category output name");
+
+            Npc.Trait npcTrait0 = Array.Find(traitsOfOutputName, trait => trait.Name == C0_TRAIT);
+            Assert.IsNotNull(npcTrait0, "Trait was not added to the output category");
+
+            Npc.Trait npcTrait1 = Array.Find(traitsOfOutputName, trait => trait.Name == C1_TRAIT);
+            Assert.IsNotNull(npcTrait1, "Trait was not added to the output category");
+        }
+
+        [TestMethod]
+        public void TwoCategoriesAddSameTraitToOutputCategory()
+        {
+            const string CATEGORY0_NAME = "Young Fame";
+            const string CATEGORY1_NAME = "Old Fame";
+            const string SHARED_OUTPUT_CATEGORY_NAME = "Fame";
+            const string TRAIT = "Social Media";
+            TraitCategory youngFameCategory = new TraitCategory(CATEGORY0_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1);
+            youngFameCategory.Add(new Trait(TRAIT));
+            TraitCategory oldFameCategory = new TraitCategory(CATEGORY1_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1);
+            oldFameCategory.Add(new Trait(TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(youngFameCategory);
+            schema.Add(oldFameCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            Npc.Trait[] traitsOfOriginalYoungFameName = npc.GetTraitsOfCategory(CATEGORY0_NAME);
+            Assert.AreEqual(0, traitsOfOriginalYoungFameName.Length,
+                "Npc traits were added to the original category name instead of the output name");
+            Npc.Trait[] traitsOfOriginalOldFameName = npc.GetTraitsOfCategory(CATEGORY1_NAME);
+            Assert.AreEqual(0, traitsOfOriginalOldFameName.Length,
+                "Npc traits were added to the original category name instead of the output name");
+            Npc.Trait[] traitsOfOutputName = npc.GetTraitsOfCategory(SHARED_OUTPUT_CATEGORY_NAME);
+            Assert.AreEqual(1, traitsOfOutputName.Length, "Npc traits were not added the category output name");
+            Npc.Trait npcTrait0 = Array.Find(traitsOfOutputName, trait => trait.Name == TRAIT);
+            Assert.AreEqual(TRAIT, traitsOfOutputName[0].Name, "Trait was not added to the output category");
         }
 
         private readonly MockRandom m_random = new MockRandom();

@@ -37,8 +37,9 @@ namespace NpcGenerator
             }
             
             List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
-            List<string> traitCategoryNames = categoriesWithReplacements.ConvertAll(category => category.Name);
-            NpcGroup group = new NpcGroup(traitCategoryNames);
+            List<string> outputCategoryNames = categoriesWithReplacements.ConvertAll(category => category.OutputName);
+            List<string> distinctOutputCategoryNames = ListUtil.DistinctPreserveOrder(outputCategoryNames);
+            NpcGroup group = new NpcGroup(distinctOutputCategoryNames);
 
             IReadOnlyList<string> categoryNameOrder = traitSchema.CalculateTraversalOrder();
             IReadOnlyList<TraitCategory> categoryOrder = 
@@ -121,7 +122,7 @@ namespace NpcGenerator
                 try
                 {
                     wasTraitAdded = ChooseTraitsFromCategory(
-                        chooser, selectionCount, npc, category.Name, out IReadOnlyList<BonusSelection> bonusSelections);
+                        chooser, selectionCount, npc, category.OutputName, out IReadOnlyList<BonusSelection> bonusSelections);
 
                     selectionsPerCategory[category] = 0;
 
@@ -144,15 +145,7 @@ namespace NpcGenerator
             out IReadOnlyList<BonusSelection> bonusSelections)
         {
             Npc.Trait[] traits;
-            try
-            {
-                traits = chooser.Choose(selectionCount, out bonusSelections);
-            }
-            catch(TooFewTraitsException exception)
-            {
-                throw new TooFewTraitsInCategoryException(outputCategoryName, requested: exception.Requested, available: exception.Available);
-            }
-
+            traits = chooser.Choose(selectionCount, out bonusSelections);
             npc.Add(category: outputCategoryName, traits: traits);
             bool wasTraitAdded = traits.Length > 0;
             return wasTraitAdded;
@@ -228,8 +221,9 @@ namespace NpcGenerator
             IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
             foreach (string npcCategory in npc.GetCategories())
             {
-                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
-                if (schemaCategory is null)
+                IReadOnlyList<TraitCategory> candidateCategories = 
+                    ListUtil.FindAll(schemaCategories, category => category.OutputName == npcCategory);
+                if (candidateCategories is null || candidateCategories.Count == 0)
                 {
                     violations.Add(new NpcSchemaViolation(npcCategory, NpcSchemaViolation.Reason.CategoryNotFoundInSchema));
                     continue;
@@ -237,24 +231,60 @@ namespace NpcGenerator
 
                 foreach (Npc.Trait npcTrait in npc.GetTraitsOfCategory(npcCategory))
                 {
-                    Trait schemaTrait = schemaCategory.GetTrait(npcTrait.OriginalName) ?? schemaCategory.GetTrait(npcTrait.Name);
-                    if (schemaTrait is null)
+                    bool foundMatch = false;
+                    List<CategoryTraitPair> failedMatches = new List<CategoryTraitPair>();
+                    foreach (TraitCategory candiateCategory in candidateCategories)
                     {
-                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitNotFoundInSchema));
+                        Trait schemaTrait = candiateCategory.GetTrait(npcTrait.OriginalName) ?? candiateCategory.GetTrait(npcTrait.Name);
+                        if (schemaTrait == null)
+                        {
+                            continue;
+                        }
+
+                        if (schemaTrait.IsHidden == npcTrait.IsHidden)
+                        {
+                            foundMatch = true;
+                            break;
+                        }
+                        else
+                        {
+                            CategoryTraitPair failure = new CategoryTraitPair()
+                            {
+                                m_category = candiateCategory,
+                                m_trait = schemaTrait
+                            };
+                            failedMatches.Add(failure);
+                        }
+                    }
+
+                    if (foundMatch)
+                    {
                         continue;
                     }
-                    if (!schemaTrait.IsHidden && npcTrait.IsHidden)
+
+                    if (failedMatches.Count == 0)
                     {
-                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden));
-                        continue;
+                        violations.Add(
+                            new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitNotFoundInSchema));
                     }
-                    if (schemaTrait.IsHidden && !npcTrait.IsHidden)
+                    else if (!failedMatches[0].m_trait.IsHidden && npcTrait.IsHidden)
                     {
-                        violations.Add(new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden));
-                        continue;
+                        violations.Add(
+                            new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden));
+                    }
+                    else if (failedMatches[0].m_trait.IsHidden && !npcTrait.IsHidden)
+                    {
+                        violations.Add(
+                            new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden));
                     }
                 }
             }
+        }
+
+        private struct CategoryTraitPair
+        {
+            public TraitCategory m_category;
+            public Trait m_trait;
         }
 
         private static void AddUnusedReplacementViolations(

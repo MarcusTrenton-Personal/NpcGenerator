@@ -282,5 +282,117 @@ namespace Tests
             string category1 = ListUtil.Find(categories, category => category == CATEGORY1);
             Assert.AreEqual(CATEGORY1, category1, "Wrong category name");
         }
+
+        [TestMethod]
+        public void AddSameTraitTwice()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            Npc npc = new Npc();
+            npc.Add("Animal", new Npc.Trait[] { new Npc.Trait(TRAIT), new Npc.Trait(TRAIT) });
+
+            IReadOnlyList<string> categories = npc.GetCategories();
+
+            Assert.AreEqual(1, categories.Count, "Wrong number of categories");
+            string category = ListUtil.Find(categories, category => category == CATEGORY);
+            Assert.AreEqual(CATEGORY, category, "Wrong category name");
+
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
+            Assert.AreEqual(1, traits.Length, "Duplicate Traits found");
+            Assert.AreEqual(TRAIT, traits[0].Name, "Wrong trait name");
+        }
+
+#pragma warning disable CS0253 // Possible unintended reference comparison. Intentional for testing equality.
+#pragma warning disable CS1718 // Comparison made to the same variable. Intential for testing equality.
+
+        [TestMethod]
+        public void NpcTraitEqualitySameNameSameIsHidden()
+        {
+            const string NAME = "Blue";
+            const bool IS_HIDDEN = false;
+
+            Npc.Trait a = new Npc.Trait(NAME, IS_HIDDEN);
+            Npc.Trait b = new Npc.Trait(NAME, IS_HIDDEN);
+
+            Assert.IsTrue(a.Equals(b), "Incorrectly unequal");
+            Assert.IsTrue(a == b, "Incorrectly unequal");
+            Assert.IsFalse(a != b, "Incorrectly unequal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualitySameNameDifferentIsHidden()
+        {
+            const string NAME = "Blue";
+
+            Npc.Trait a = new Npc.Trait(NAME, isHidden: true);
+            Npc.Trait b = new Npc.Trait(NAME, isHidden: false);
+
+            Assert.IsFalse(a.Equals(b), "Incorrectly equal");
+            Assert.IsFalse(a == b, "Incorrectly equal");
+            Assert.IsTrue(a != b, "Incorrectly equal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualityDifferentNameSameIsHidden()
+        {
+            const bool IS_HIDDEN = false;
+
+            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: IS_HIDDEN);
+            Npc.Trait b = new Npc.Trait(name: "Blue", isHidden: IS_HIDDEN);
+
+            Assert.IsFalse(a.Equals(b), "Incorrectly equal");
+            Assert.IsFalse(a == b, "Incorrectly equal");
+            Assert.IsTrue(a != b, "Incorrectly equal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualityOriginalNameNotMeasured()
+        {
+            const string NAME = "Blue";
+            const bool IS_HIDDEN = false;
+
+            Npc.Trait a = new Npc.Trait(NAME, IS_HIDDEN, originalName: "Black");
+            Npc.Trait b = new Npc.Trait(NAME, IS_HIDDEN, originalName: "White");
+
+            Assert.IsTrue(a.Equals(b), "Incorrectly unequal");
+            Assert.IsTrue(a == b, "Incorrectly unequal");
+            Assert.IsFalse(a != b, "Incorrectly unequal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualityOtherIsNull()
+        {
+            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: false);
+            Npc.Trait b = null;
+
+            Assert.IsFalse(a.Equals(b), "Incorrectly equal");
+            Assert.IsFalse(a == b, "Incorrectly equal");
+            Assert.IsTrue(a != b, "Incorrectly equal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualityAgainstDifferentClass()
+        {
+            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: false);
+            object b = new object();
+
+            Assert.IsFalse(a.Equals(b), "Incorrectly equal");
+            Assert.IsFalse(a == b, "Incorrectly equal");
+            Assert.IsTrue(a != b, "Incorrectly equal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualityVsSelf()
+        {
+            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: false);
+
+            Assert.IsTrue(a.Equals(a), "Incorrectly unequal");
+            Assert.IsTrue(a == a, "Incorrectly unequal");
+            Assert.IsFalse(a != a, "Incorrectly unequal");
+        }
+
+#pragma warning restore CS0253 // Possible unintended reference comparison. Intentional for testing equality.
+#pragma warning restore CS1718 // Comparison made to the same variable. Intential for testing equality.
     }
 }

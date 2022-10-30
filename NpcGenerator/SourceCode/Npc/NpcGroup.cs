@@ -22,11 +22,11 @@ namespace NpcGenerator
     {
         public NpcGroup(IReadOnlyList<string> categoryOrder)
         {
-            VerifyCategoryOrderng(categoryOrder);
+            VerifyCategoryOrdering(categoryOrder);
             m_categoryOrder = categoryOrder;
         }
 
-        private static void VerifyCategoryOrderng(IReadOnlyList<string> categoryOrder)
+        private static void VerifyCategoryOrdering(IReadOnlyList<string> categoryOrder)
         {
             VerifyCategoryNotNullOrEmpty(categoryOrder);
             VerifyCategoryHasNoDuplicates(categoryOrder);
