@@ -129,5 +129,28 @@ namespace Services
             }
             return result;
         }
+
+        public static List<T> FindAll<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
+        {
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+            if (test is null)
+            {
+                throw new ArgumentNullException(nameof(test));
+            }
+
+            List<T> result = new List<T>();
+            foreach (T element in list)
+            {
+                if (test(element))
+                {
+                    result.Add(element);
+                }
+            }
+
+            return result;
+        }
     }
 }

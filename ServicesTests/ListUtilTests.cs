@@ -361,5 +361,61 @@ namespace Tests
 
             ListUtil.DistinctPreserveOrder(new List<object>() { e0, e1 });
         }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void FindAllNullList()
+        {
+            ListUtil.FindAll<object>(null, test: x => x is null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void FindAllNullTest()
+        {
+            ListUtil.FindAll(new List<int>() { 3, 4 }, test: null);
+        }
+
+        [TestMethod]
+        public void FindAllEmptyList()
+        {
+            IReadOnlyList<string> result = ListUtil.FindAll(new List<string>(), test: x => x.Contains('x'));
+
+            Assert.AreEqual(0, result.Count, "Resulting list is the wrong size");
+        }
+
+        [TestMethod]
+        public void FindAllNoElementsFound()
+        {
+            IReadOnlyList<int> result = ListUtil.FindAll(new List<int>() { -1, -2, -3 }, test: x => x > 0);
+
+            Assert.AreEqual(0, result.Count, "Resulting list is the wrong size");
+        }
+
+        [TestMethod]
+        public void FindAll1ElementFound()
+        {
+            const int FOUND_ELEMENT = 2;
+
+            IReadOnlyList<int> result = ListUtil.FindAll(new List<int>() { -1, FOUND_ELEMENT, -3 }, test: x => x > 0);
+
+            Assert.AreEqual(1, result.Count, "Resulting list is the wrong size");
+            Assert.AreEqual(FOUND_ELEMENT, result[0], "Resulting list has the wrong element");
+        }
+
+        [TestMethod]
+        public void FindAllManyElementsFound()
+        {
+            const int FOUND_ELEMENT0 = 2;
+            const int FOUND_ELEMENT1 = 4;
+            const int FOUND_ELEMENT2 = 5;
+            List<int> list = new List<int>() { -1, FOUND_ELEMENT0, -3, FOUND_ELEMENT1, FOUND_ELEMENT2 };
+
+            List<int> result = ListUtil.FindAll(list, test: x => x > 0);
+
+            Assert.AreEqual(3, result.Count, "Resulting list is the wrong size");
+            Assert.IsTrue(result.Contains(FOUND_ELEMENT0), "Resulting list has the wrong elements");
+            Assert.IsTrue(result.Contains(FOUND_ELEMENT1), "Resulting list has the wrong elements");
+            Assert.IsTrue(result.Contains(FOUND_ELEMENT2), "Resulting list has the wrong elements");
+        }
+        //FindAllManyElementsFound
     }
 }
