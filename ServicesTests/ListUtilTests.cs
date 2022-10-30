@@ -416,6 +416,5 @@ namespace Tests
             Assert.IsTrue(result.Contains(FOUND_ELEMENT1), "Resulting list has the wrong elements");
             Assert.IsTrue(result.Contains(FOUND_ELEMENT2), "Resulting list has the wrong elements");
         }
-        //FindAllManyElementsFound
     }
 }
