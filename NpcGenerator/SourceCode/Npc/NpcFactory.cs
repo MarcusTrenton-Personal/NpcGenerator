@@ -221,70 +221,39 @@ namespace NpcGenerator
             IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
             foreach (string npcCategory in npc.GetCategories())
             {
-                IReadOnlyList<TraitCategory> candidateCategories = 
-                    ListUtil.FindAll(schemaCategories, category => category.OutputName == npcCategory);
-                if (candidateCategories is null || candidateCategories.Count == 0)
-                {
-                    violations.Add(new NpcSchemaViolation(npcCategory, NpcSchemaViolation.Reason.CategoryNotFoundInSchema));
-                    continue;
-                }
-
                 foreach (Npc.Trait npcTrait in npc.GetTraitsOfCategory(npcCategory))
                 {
-                    bool foundMatch = false;
-                    List<CategoryTraitPair> failedMatches = new List<CategoryTraitPair>();
-                    foreach (TraitCategory candiateCategory in candidateCategories)
+                    TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcTrait.OriginalCategory);
+                    if (schemaCategory is null)
                     {
-                        Trait schemaTrait = candiateCategory.GetTrait(npcTrait.OriginalName) ?? candiateCategory.GetTrait(npcTrait.Name);
-                        if (schemaTrait == null)
-                        {
-                            continue;
-                        }
-
-                        if (schemaTrait.IsHidden == npcTrait.IsHidden)
-                        {
-                            foundMatch = true;
-                            break;
-                        }
-                        else
-                        {
-                            CategoryTraitPair failure = new CategoryTraitPair()
-                            {
-                                m_category = candiateCategory,
-                                m_trait = schemaTrait
-                            };
-                            failedMatches.Add(failure);
-                        }
-                    }
-
-                    if (foundMatch)
-                    {
+                        violations.Add(new NpcSchemaViolation(npcTrait.OriginalCategory, NpcSchemaViolation.Reason.CategoryNotFoundInSchema));
                         continue;
                     }
-
-                    if (failedMatches.Count == 0)
+                    if (schemaCategory.Name != schemaCategory.OutputName && npcCategory != schemaCategory.OutputName)
+                    {
+                        violations.Add(new NpcSchemaViolation(npcCategory, NpcSchemaViolation.Reason.CategoryNotFoundInSchema));
+                        continue;
+                    }
+                    if (!schemaCategory.HasTrait(npcTrait.OriginalName))
                     {
                         violations.Add(
                             new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitNotFoundInSchema));
+                        continue;
                     }
-                    else if (!failedMatches[0].m_trait.IsHidden && npcTrait.IsHidden)
+
+                    Trait schemaTrait = schemaCategory.GetTrait(npcTrait.OriginalName);
+                    if (!schemaTrait.IsHidden && npcTrait.IsHidden)
                     {
                         violations.Add(
                             new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden));
                     }
-                    else if (failedMatches[0].m_trait.IsHidden && !npcTrait.IsHidden)
+                    else if (schemaTrait.IsHidden && !npcTrait.IsHidden)
                     {
                         violations.Add(
                             new NpcSchemaViolation(npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden));
                     }
                 }
             }
-        }
-
-        private struct CategoryTraitPair
-        {
-            public TraitCategory m_category;
-            public Trait m_trait;
         }
 
         private static void AddUnusedReplacementViolations(

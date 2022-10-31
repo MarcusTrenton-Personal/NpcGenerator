@@ -119,7 +119,7 @@ namespace Tests
             const string TRAIT = "blue";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(CATEGORY, TRAIT), npcHolder);
@@ -136,7 +136,7 @@ namespace Tests
             const string CATEGORY = "colour";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("blue") });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("blue", CATEGORY) });
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(CATEGORY, "red"), npcHolder);
@@ -154,7 +154,7 @@ namespace Tests
             const string TRAIT = "blue";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             NpcHolder npcHolder = new NpcHolder();
             LogicalAny any = new LogicalAny();

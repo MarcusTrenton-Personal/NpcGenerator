@@ -31,7 +31,7 @@ namespace Tests
 
         private readonly INpcProvider m_npcProvider;
         private readonly Npc m_npcWithTrait;
-        public TraitId m_foundTraitId = new TraitId(CategoryFound, TraitFound);
+        private readonly TraitId m_foundTraitId = new TraitId(CategoryFound, TraitFound);
 
         private class StubNpcProvider : INpcProvider
         {
@@ -46,7 +46,7 @@ namespace Tests
         public NpcHasTraitTests()
         {
             m_npcWithTrait = new Npc();
-            m_npcWithTrait.Add(CategoryFound, new Npc.Trait[] { new Npc.Trait(TraitFound) });
+            m_npcWithTrait.Add(CategoryFound, new Npc.Trait[] { new Npc.Trait(TraitFound, CategoryFound) });
 
             m_npcProvider = new StubNpcProvider(m_npcWithTrait);
         }

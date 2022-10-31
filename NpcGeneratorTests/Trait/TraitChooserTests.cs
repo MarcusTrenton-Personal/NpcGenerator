@@ -26,6 +26,7 @@ namespace Tests
     {
         const string HEADS = "Heads";
         const string TAILS = "Tails";
+        const string CATEGORY = "Coin";
 
         [TestMethod]
         public void TraitSelectionReturnsAllValidValues()
@@ -42,7 +43,7 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                TraitChooser chooser = new TraitChooser(traits, new CryptoRandom());
+                TraitChooser chooser = new TraitChooser(traits, CATEGORY, new CryptoRandom());
                 Npc.Trait[] choice = chooser.Choose(1, out _);
                 switch (choice[0].Name)
                 {
@@ -79,7 +80,7 @@ namespace Tests
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
-                TraitChooser chooser = new TraitChooser(traits, new CryptoRandom());
+                TraitChooser chooser = new TraitChooser(traits, CATEGORY, new CryptoRandom());
                 Npc.Trait[] choice = chooser.Choose(1, out _);
                 switch (choice[0].Name)
                 {
@@ -114,7 +115,7 @@ namespace Tests
                 new Trait(TAILS, 1)
             };
 
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
             Npc.Trait[] selections = chooser.Choose(SELECTION_COUNT, out _);
             Assert.AreEqual(SELECTION_COUNT, selections.Length, "Wrong number of selections");
             Assert.AreNotEqual(selections[0].Name, selections[1].Name, "Did not select two different traits");
@@ -127,7 +128,7 @@ namespace Tests
             {
                 new Trait(HEADS, 0)
             };
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             chooser.Choose(1, out _);
         }
@@ -140,7 +141,7 @@ namespace Tests
                 new Trait(HEADS, 0),
                 new Trait(TAILS, 1)
             };
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             chooser.Choose(2, out _);
         }
@@ -152,7 +153,7 @@ namespace Tests
             {
                 new Trait(HEADS, 1)
             };
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             chooser.Choose(2, out _);
         }
@@ -164,7 +165,7 @@ namespace Tests
             {
                 new Trait(HEADS, 1, isHidden: true)
             };
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             Npc.Trait[] selections = chooser.Choose(1, out _);
 
@@ -180,7 +181,7 @@ namespace Tests
                 new Trait(HEADS, 1, isHidden: true),
                 new Trait(TAILS, 1, isHidden: false)
             };
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             Npc.Trait[] selections = chooser.Choose(2, out _);
 
@@ -198,7 +199,7 @@ namespace Tests
             {
                 new Trait(HEADS, 1)
             };
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelection);
 
@@ -216,7 +217,7 @@ namespace Tests
             trait.BonusSelection = new BonusSelection(category.Name, 1);
             traits.Add(trait);
 
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
 
@@ -236,7 +237,7 @@ namespace Tests
             trait.BonusSelection = new BonusSelection(category.Name, 2);
             traits.Add(trait);
 
-            TraitChooser chooser = new TraitChooser(traits, m_random);
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random);
 
             Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
 

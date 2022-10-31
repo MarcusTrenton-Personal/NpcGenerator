@@ -13,30 +13,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
 using Services;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace NpcGenerator
 {
+    //Not just a trait holder, but holds enough data to audit that the npc is a valid product of the schema.
     public class Npc
     {
         public void Add(string category, Trait[] traits)
         {
-            if (category is null)
-            {
-                throw new ArgumentNullException(nameof(category));
-            }
-            if (category.Length == 0)
-            {
-                throw new ArgumentException("Array must not be empty", nameof(category));
-            }
-            if (traits is null)
-            {
-                throw new ArgumentNullException(nameof(traits));
-            }
+            ParamUtil.VerifyStringHasContent(nameof(category), category);
+            ParamUtil.VerifyNotNull(nameof(traits), traits);
             foreach (Trait trait in traits)
             {
                 if (trait is null)
@@ -107,17 +96,22 @@ namespace NpcGenerator
 
         public class Trait : IEquatable<Trait>
         {
-            public Trait(string name) : this(name, isHidden: false, name)
+            public Trait(string name, string originalCategory) : this(name, originalCategory, isHidden: false, name)
             {
             }
 
-            public Trait(string name, bool isHidden) : this(name, isHidden, name)
+            public Trait(string name, string originalCategory, bool isHidden) : this(name, originalCategory, isHidden, name)
             {
             }
 
-            public Trait(string name, bool isHidden, string originalName)
+            public Trait(string name, string originalCategory, bool isHidden, string originalName)
             {
+                ParamUtil.VerifyStringHasContent(nameof(name), name);
+                ParamUtil.VerifyStringHasContent(nameof(originalCategory), originalCategory);
+                ParamUtil.VerifyStringHasContent(nameof(originalName), originalName);
+
                 Name = name;
+                OriginalCategory = originalCategory;
                 IsHidden = isHidden;
                 OriginalName = originalName;
             }
@@ -142,7 +136,8 @@ namespace NpcGenerator
                 }
 
                 // Return true if the fields match, other than OriginalName
-                return (Name == other.Name) && (IsHidden == other.IsHidden);
+                return (Name == other.Name) && (OriginalCategory == other.OriginalCategory) && (IsHidden == other.IsHidden) &&
+                    (OriginalName == other.OriginalName);
             }
 
             public override bool Equals(object obj)
@@ -154,7 +149,7 @@ namespace NpcGenerator
                 return false;
             }
 
-            public override int GetHashCode() => (Name, IsHidden).GetHashCode();
+            public override int GetHashCode() => (Name, OriginalCategory, IsHidden, OriginalName).GetHashCode();
 
             public static bool operator ==(Trait lhs, Trait rhs)
             {
@@ -173,8 +168,9 @@ namespace NpcGenerator
             public static bool operator !=(Trait lhs, Trait rhs) => !(lhs == rhs);
 
             public string Name { get; private set; }
-            public bool IsHidden { get; private set; }
             public string OriginalName { get; private set; }
+            public bool IsHidden { get; private set; }
+            public string OriginalCategory { get; private set; }
         }
 
         private readonly Dictionary<string,HashSet<Trait>> m_traitsByCategory = new Dictionary<string, HashSet<Trait>>();

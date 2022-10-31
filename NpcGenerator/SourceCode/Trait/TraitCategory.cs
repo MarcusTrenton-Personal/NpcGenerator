@@ -117,7 +117,7 @@ namespace NpcGenerator
 
         public TraitChooser CreateTraitChooser(IRandom random)
         {
-            return new TraitChooser(m_traits, random);
+            return new TraitChooser(m_traits, Name, random);
         }
 
         public Trait GetTrait(string name)

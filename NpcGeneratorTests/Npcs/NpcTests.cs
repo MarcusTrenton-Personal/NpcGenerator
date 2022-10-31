@@ -34,7 +34,7 @@ namespace Tests
             const string TRAIT = "Blue";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: false) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY, isHidden: false) });
             Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
@@ -63,7 +63,7 @@ namespace Tests
             const string TRAIT1 = "Green";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY) });
             Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
@@ -84,8 +84,8 @@ namespace Tests
             const string TRAIT1 = "Green";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0) });
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT1) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT1, CATEGORY) });
             Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
 
             Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
@@ -96,6 +96,22 @@ namespace Tests
 
             bool foundTrait1 = Array.FindIndex(traits, trait => trait.Name == TRAIT1) > -1;
             Assert.AreEqual(TRAIT1, traits[1].Name, "Wrong trait returned.");
+        }
+
+        [TestMethod]
+        public void RedundantAddTraits()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            Npc.Trait trait = new Npc.Trait(TRAIT, CATEGORY, isHidden: false);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { trait, trait });
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);
+
+            Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
+            Assert.AreEqual(1, traits.Length, "Wrong number of traits found.");
+            Assert.AreEqual(TRAIT, traits[0].Name, "Wrong trait returned.");
         }
 
         [TestMethod]
@@ -114,15 +130,18 @@ namespace Tests
         public void AddNullCategory()
         {
             Npc npc = new Npc();
-            npc.Add(null, new Npc.Trait[] { new Npc.Trait("Blue") });
+            string category = null;
+            npc.Add(category, new Npc.Trait[] { new Npc.Trait("Blue", category) });
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void AddEmptyCategory()
         {
-            Npc npc = new Npc();
+            string CATEGORY = string.Empty;
 
-            npc.Add(string.Empty, new Npc.Trait[] { new Npc.Trait("Blue") });
+            Npc npc = new Npc();
+            
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Blue", CATEGORY) });
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -141,12 +160,14 @@ namespace Tests
             npc.Add("Colour", new Npc.Trait[] { null });
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AddNullTraitName()
         {
+            const string CATEGORY = "Colour";
+
             Npc npc = new Npc();
 
-            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait(null) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(null, CATEGORY) });
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
@@ -156,7 +177,7 @@ namespace Tests
 
             Npc npc = new Npc();
 
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(string.Empty) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(string.Empty, CATEGORY) });
         }
 
         [TestMethod]
@@ -172,8 +193,10 @@ namespace Tests
         [TestMethod]
         public void HasTraitWhereCategoryDoesNotExist()
         {
+            const string CATEGORY = "Colour";
+
             Npc npc = new Npc();
-            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait("Blue") });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Blue", CATEGORY) });
 
             bool hasTrait = npc.HasTrait(new TraitId("Animal", "Bear"));
 
@@ -186,7 +209,7 @@ namespace Tests
             const string CATEGORY = "Colour";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Blue") });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Blue", CATEGORY) });
 
             bool hasTrait = npc.HasTrait(new TraitId(CATEGORY, "Red"));
 
@@ -201,29 +224,19 @@ namespace Tests
             const string TRAIT = "Black";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY0) });
 
             bool hasTrait = npc.HasTrait(new TraitId(CATEGORY1, TRAIT));
 
             Assert.IsFalse(hasTrait, "Incorrectly found trait that is not in Npc");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void HasTraitWithNullParameter()
         {
             Npc npc = new Npc();
 
-            bool threwException = false;
-            try
-            {
-                bool hasTrait = npc.HasTrait(null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw an ArgumentNullException for a null TratId");
+            npc.HasTrait(null);
         }
 
         [TestMethod]
@@ -233,7 +246,7 @@ namespace Tests
             const string TRAIT = "Bear";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             bool hasTrait = npc.HasTrait(new TraitId(CATEGORY, TRAIT));
 
@@ -256,7 +269,7 @@ namespace Tests
             const string CATEGORY = "Animal";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Bear") });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait("Bear", CATEGORY) });
 
             IReadOnlyList<string> categories = npc.GetCategories();
 
@@ -271,8 +284,8 @@ namespace Tests
             const string CATEGORY1 = "Colour";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait("Bear") });
-            npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait("Blue") });
+            npc.Add(CATEGORY0, new Npc.Trait[] { new Npc.Trait("Bear", CATEGORY0) });
+            npc.Add(CATEGORY1, new Npc.Trait[] { new Npc.Trait("Blue", CATEGORY1) });
 
             IReadOnlyList<string> categories = npc.GetCategories();
 
@@ -290,7 +303,7 @@ namespace Tests
             const string TRAIT = "Bear";
 
             Npc npc = new Npc();
-            npc.Add("Animal", new Npc.Trait[] { new Npc.Trait(TRAIT), new Npc.Trait(TRAIT) });
+            npc.Add("Animal", new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY), new Npc.Trait(TRAIT, CATEGORY) });
 
             IReadOnlyList<string> categories = npc.GetCategories();
 
@@ -307,13 +320,14 @@ namespace Tests
 #pragma warning disable CS1718 // Comparison made to the same variable. Intential for testing equality.
 
         [TestMethod]
-        public void NpcTraitEqualitySameNameSameIsHidden()
+        public void NpcTraitEqualitySameValues()
         {
             const string NAME = "Blue";
+            const string CATEGORY = "Colour";
             const bool IS_HIDDEN = false;
 
-            Npc.Trait a = new Npc.Trait(NAME, IS_HIDDEN);
-            Npc.Trait b = new Npc.Trait(NAME, IS_HIDDEN);
+            Npc.Trait a = new Npc.Trait(NAME, CATEGORY, IS_HIDDEN);
+            Npc.Trait b = new Npc.Trait(NAME, CATEGORY, IS_HIDDEN);
 
             Assert.IsTrue(a.Equals(b), "Incorrectly unequal");
             Assert.IsTrue(a == b, "Incorrectly unequal");
@@ -321,12 +335,13 @@ namespace Tests
         }
 
         [TestMethod]
-        public void NpcTraitEqualitySameNameDifferentIsHidden()
+        public void NpcTraitEqualityDifferentIsHidden()
         {
             const string NAME = "Blue";
+            const string CATEGORY = "Colour";
 
-            Npc.Trait a = new Npc.Trait(NAME, isHidden: true);
-            Npc.Trait b = new Npc.Trait(NAME, isHidden: false);
+            Npc.Trait a = new Npc.Trait(NAME, CATEGORY, isHidden: true);
+            Npc.Trait b = new Npc.Trait(NAME, CATEGORY, isHidden: false);
 
             Assert.IsFalse(a.Equals(b), "Incorrectly equal");
             Assert.IsFalse(a == b, "Incorrectly equal");
@@ -334,12 +349,13 @@ namespace Tests
         }
 
         [TestMethod]
-        public void NpcTraitEqualityDifferentNameSameIsHidden()
+        public void NpcTraitEqualityDifferentName()
         {
             const bool IS_HIDDEN = false;
+            const string CATEGORY = "Colour";
 
-            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: IS_HIDDEN);
-            Npc.Trait b = new Npc.Trait(name: "Blue", isHidden: IS_HIDDEN);
+            Npc.Trait a = new Npc.Trait(name: "Red", originalCategory: CATEGORY, isHidden: IS_HIDDEN);
+            Npc.Trait b = new Npc.Trait(name: "Blue", originalCategory: CATEGORY, isHidden: IS_HIDDEN);
 
             Assert.IsFalse(a.Equals(b), "Incorrectly equal");
             Assert.IsFalse(a == b, "Incorrectly equal");
@@ -347,23 +363,39 @@ namespace Tests
         }
 
         [TestMethod]
-        public void NpcTraitEqualityOriginalNameNotMeasured()
+        public void NpcTraitEqualityDifferentOriginalName()
+        {
+            const string NAME = "Blue";
+            const string CATEGORY = "Colour";
+            const bool IS_HIDDEN = false;
+
+            Npc.Trait a = new Npc.Trait(NAME, CATEGORY, IS_HIDDEN, originalName: "Black");
+            Npc.Trait b = new Npc.Trait(NAME, CATEGORY, IS_HIDDEN, originalName: "White");
+
+            Assert.IsFalse(a.Equals(b), "Incorrectly equal");
+            Assert.IsFalse(a == b, "Incorrectly equal");
+            Assert.IsTrue(a != b, "Incorrectly equal");
+        }
+
+        [TestMethod]
+        public void NpcTraitEqualityDifferentOriginalCategory()
         {
             const string NAME = "Blue";
             const bool IS_HIDDEN = false;
+            const string ORIGINAL_NAME = "Red";
 
-            Npc.Trait a = new Npc.Trait(NAME, IS_HIDDEN, originalName: "Black");
-            Npc.Trait b = new Npc.Trait(NAME, IS_HIDDEN, originalName: "White");
+            Npc.Trait a = new Npc.Trait(NAME, originalCategory: "Colour", IS_HIDDEN, originalName: ORIGINAL_NAME);
+            Npc.Trait b = new Npc.Trait(NAME, originalCategory: "Shade", IS_HIDDEN, originalName: ORIGINAL_NAME);
 
-            Assert.IsTrue(a.Equals(b), "Incorrectly unequal");
-            Assert.IsTrue(a == b, "Incorrectly unequal");
-            Assert.IsFalse(a != b, "Incorrectly unequal");
+            Assert.IsFalse(a.Equals(b), "Incorrectly equal");
+            Assert.IsFalse(a == b, "Incorrectly equal");
+            Assert.IsTrue(a != b, "Incorrectly equal");
         }
 
         [TestMethod]
         public void NpcTraitEqualityOtherIsNull()
         {
-            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: false);
+            Npc.Trait a = new Npc.Trait(name: "Red", originalCategory: "Colour", isHidden: false);
             Npc.Trait b = null;
 
             Assert.IsFalse(a.Equals(b), "Incorrectly equal");
@@ -374,7 +406,7 @@ namespace Tests
         [TestMethod]
         public void NpcTraitEqualityAgainstDifferentClass()
         {
-            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: false);
+            Npc.Trait a = new Npc.Trait(name: "Red", originalCategory: "Colour", isHidden: false);
             object b = new object();
 
             Assert.IsFalse(a.Equals(b), "Incorrectly equal");
@@ -385,7 +417,7 @@ namespace Tests
         [TestMethod]
         public void NpcTraitEqualityVsSelf()
         {
-            Npc.Trait a = new Npc.Trait(name: "Red", isHidden: false);
+            Npc.Trait a = new Npc.Trait(name: "Red", originalCategory: "Colour", isHidden: false);
 
             Assert.IsTrue(a.Equals(a), "Incorrectly unequal");
             Assert.IsTrue(a == a, "Incorrectly unequal");

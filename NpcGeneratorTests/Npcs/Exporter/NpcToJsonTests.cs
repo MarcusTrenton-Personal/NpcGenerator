@@ -41,7 +41,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
             NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
@@ -63,11 +63,11 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc0 = new Npc();
-            npc0.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc0.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc0);
 
             Npc npc1 = new Npc();
-            npc1.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc1.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc1);
 
             NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
@@ -124,8 +124,8 @@ namespace Tests
             const string CATEGORY1_TRAIT = "Bear";
 
             Npc npc = new Npc();
-            npc.Add(category: CATEGORY0_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT) });
-            npc.Add(category: CATEGORY1_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT) });
+            npc.Add(category: CATEGORY0_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT, CATEGORY0_NAME) });
+            npc.Add(category: CATEGORY1_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT, CATEGORY0_NAME) });
 
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
             npcGroup.Add(npc);
@@ -146,18 +146,18 @@ namespace Tests
         [TestMethod]
         public void MultipleTraitsInMultipleCategories()
         {
-            const string CATEGORY0_NAME = "Colour";
-            const string CATEGORY0_TRAIT0 = "Blue";
-            const string CATEGORY0_TRAIT1 = "Green";
-            const string CATEGORY1_NAME = "Terrain";
-            const string CATEGORY1_TRAIT0 = "Hills";
-            const string CATEGORY2_TRAIT1 = "River";
+            const string C0_NAME = "Colour";
+            const string C0T0 = "Blue";
+            const string C0T1 = "Green";
+            const string C1_NAME = "Terrain";
+            const string C1T0 = "Hills";
+            const string C1T1 = "River";
 
             Npc npc = new Npc();
-            npc.Add(category: CATEGORY0_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT0), new Npc.Trait(CATEGORY0_TRAIT1) });
-            npc.Add(category: CATEGORY1_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT0), new Npc.Trait(CATEGORY2_TRAIT1) });
+            npc.Add(category: C0_NAME, traits: new Npc.Trait[] { new Npc.Trait(C0T0, C0_NAME), new Npc.Trait(C0T1, C0_NAME) });
+            npc.Add(category: C1_NAME, traits: new Npc.Trait[] { new Npc.Trait(C1T0, C1_NAME), new Npc.Trait(C1T1, C1_NAME) });
 
-            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
+            NpcGroup npcGroup = new NpcGroup(new List<string> { C0_NAME, C1_NAME });
             npcGroup.Add(npc);
 
             NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
@@ -167,12 +167,12 @@ namespace Tests
 
             Assert.IsNotNull(result, "Serialized using an unknown format");
             Assert.AreEqual(1, result.npc_group.Count, "Wrong number of npcs");
-            Assert.AreEqual(2, result.npc_group[0][CATEGORY0_NAME].Count, "Npc did not serialize category correctly");
-            Assert.AreEqual(CATEGORY0_TRAIT0, result.npc_group[0][CATEGORY0_NAME][0], "Npc did not serialize category correctly");
-            Assert.AreEqual(CATEGORY0_TRAIT1, result.npc_group[0][CATEGORY0_NAME][1], "Npc did not serialize category correctly");
-            Assert.AreEqual(2, result.npc_group[0][CATEGORY1_NAME].Count, "Npc did not serialize category correctly");
-            Assert.AreEqual(CATEGORY1_TRAIT0, result.npc_group[0][CATEGORY1_NAME][0], "Npc did not serialize category correctly");
-            Assert.AreEqual(CATEGORY2_TRAIT1, result.npc_group[0][CATEGORY1_NAME][1], "Npc did not serialize category correctly");
+            Assert.AreEqual(2, result.npc_group[0][C0_NAME].Count, "Npc did not serialize category correctly");
+            Assert.AreEqual(C0T0, result.npc_group[0][C0_NAME][0], "Npc did not serialize category correctly");
+            Assert.AreEqual(C0T1, result.npc_group[0][C0_NAME][1], "Npc did not serialize category correctly");
+            Assert.AreEqual(2, result.npc_group[0][C1_NAME].Count, "Npc did not serialize category correctly");
+            Assert.AreEqual(C1T0, result.npc_group[0][C1_NAME][0], "Npc did not serialize category correctly");
+            Assert.AreEqual(C1T1, result.npc_group[0][C1_NAME][1], "Npc did not serialize category correctly");
         }
 
         [TestMethod]
@@ -184,7 +184,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
             NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
@@ -206,7 +206,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
             NpcToJson npcToJson = new NpcToJson(null);
@@ -228,7 +228,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
             NpcToJson npcToJson = new NpcToJson(null);
@@ -250,7 +250,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT), new Npc.Trait(HIDDEN_TRAIT, isHidden: true) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT, CATEGORY), new Npc.Trait(HIDDEN_TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
             NpcToJson npcToJson = new NpcToJson(null);

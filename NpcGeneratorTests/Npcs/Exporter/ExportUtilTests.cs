@@ -31,14 +31,14 @@ namespace Tests
             StringBuilder builder = new StringBuilder();
             ExportUtil.CombineTraits(Array.Empty<Npc.Trait>(), builder);
 
-            Assert.AreEqual(String.Empty, builder.ToString(), "Combining 0 traits should have produced an empty string");
+            Assert.AreEqual(string.Empty, builder.ToString(), "Combining 0 traits should have produced an empty string");
         }
 
         [TestMethod]
         public void CombineOneTrait()
         {
             const string TRAIT = "Blue";
-            Npc.Trait[] traits = new Npc.Trait[] { new Npc.Trait(TRAIT) };
+            Npc.Trait[] traits = new Npc.Trait[] { new Npc.Trait(TRAIT, "Colour") };
 
             StringBuilder builder = new StringBuilder();
             ExportUtil.CombineTraits(traits, builder);
@@ -49,10 +49,12 @@ namespace Tests
         [TestMethod]
         public void CombineMultipleTraits()
         {
+            const string CATEGORY = "Colour";
             const string TRAIT0 = "Blue";
             const string TRAIT1 = "Greed";
             const string TRAIT2 = "Red";
-            Npc.Trait[] traits = new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1), new Npc.Trait(TRAIT2) };
+            Npc.Trait[] traits = 
+                new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY), new Npc.Trait(TRAIT2, CATEGORY) };
 
             StringBuilder builder = new StringBuilder();
             ExportUtil.CombineTraits(traits, builder);

@@ -22,9 +22,14 @@ namespace NpcGenerator
 {
     public class TraitChooser
     {
-        public TraitChooser(List<Trait> traits, IRandom random)
+        public TraitChooser(List<Trait> traits, string originalCategory, IRandom random)
         {
+            ParamUtil.VerifyNotNull(nameof(traits), traits);
+            ParamUtil.VerifyStringHasContent(nameof(originalCategory), originalCategory);
+            ParamUtil.VerifyNotNull(nameof(random), random);
+
             m_remainingTraits = new List<Trait>(traits);
+            m_originalCategory = originalCategory;
             m_random = random;
             foreach (Trait trait in traits)
             {
@@ -74,7 +79,7 @@ namespace NpcGenerator
                 }
 
                 Trait trait = m_remainingTraits[selectedIndex];
-                selected.Add(new Npc.Trait(trait.Name, trait.IsHidden, trait.OriginalName));
+                selected.Add(new Npc.Trait(trait.Name, m_originalCategory, trait.IsHidden, trait.OriginalName));
                 if (trait.BonusSelection != null)
                 {
                     bonusSelections.Add(trait.BonusSelection);
@@ -88,6 +93,7 @@ namespace NpcGenerator
         }
 
         private readonly IRandom m_random;
+        private readonly string m_originalCategory;
         private readonly List<Trait> m_remainingTraits = new List<Trait>();
         private int m_remainingWeight = 0;
     }

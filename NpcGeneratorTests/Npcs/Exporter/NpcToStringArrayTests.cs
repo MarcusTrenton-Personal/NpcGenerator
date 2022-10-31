@@ -25,10 +25,11 @@ namespace Tests
         [TestMethod]
         public void SingleCategory()
         {
+            const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
 
             Npc npc = new Npc();
-            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             string[] categories = NpcToStringArray.Export(npc, new string[] { "Colour" });
 
@@ -39,10 +40,11 @@ namespace Tests
         [TestMethod]
         public void SingleCategoryWithMultipleTraits()
         {
+            const string CATEGORY = "Colour";
             const string TRAIT0 = "Blue";
             const string TRAIT1 = "Green";
             Npc npc = new Npc();
-            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait(TRAIT0), new Npc.Trait(TRAIT1) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY) });
 
             string[] categories = NpcToStringArray.Export(npc, new string[] { "Colour" });
 
@@ -53,12 +55,14 @@ namespace Tests
         [TestMethod]
         public void MultipleCategories()
         {
+            const string COLOUR_CATEGORY = "Colour";
             const string COLOUR_TRAIT = "Blue";
+            const string ANIMAL_CATEGORY = "Animal";
             const string ANIMAL_TRAIT = "Bear";
 
             Npc npc = new Npc();
-            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait(COLOUR_TRAIT) });
-            npc.Add("Animal", new Npc.Trait[] { new Npc.Trait(ANIMAL_TRAIT) });
+            npc.Add(COLOUR_CATEGORY, new Npc.Trait[] { new Npc.Trait(COLOUR_TRAIT, COLOUR_CATEGORY) });
+            npc.Add(ANIMAL_CATEGORY, new Npc.Trait[] { new Npc.Trait(ANIMAL_TRAIT, ANIMAL_CATEGORY) });
 
             string[] categories = NpcToStringArray.Export(npc, new string[] { "Colour", "Animal" });
 
@@ -104,8 +108,8 @@ namespace Tests
             const string AGE_TRAIT = "Young";
 
             Npc npc = new Npc();
-            npc.Add(COLOUR_CATEGORY, new Npc.Trait[] { new Npc.Trait(COLOUR_TRAIT) });
-            npc.Add(AGE_CATEGORY, new Npc.Trait[] { new Npc.Trait(AGE_TRAIT) });
+            npc.Add(COLOUR_CATEGORY, new Npc.Trait[] { new Npc.Trait(COLOUR_TRAIT, COLOUR_CATEGORY) });
+            npc.Add(AGE_CATEGORY, new Npc.Trait[] { new Npc.Trait(AGE_TRAIT, AGE_CATEGORY) });
 
             string[] categories = NpcToStringArray.Export(npc, new List<string>() { COLOUR_CATEGORY, ANIMAL_CATEGORY, AGE_CATEGORY });
 
@@ -118,25 +122,25 @@ namespace Tests
         [TestMethod]
         public void MultipleTraitsInMultipleCategories()
         {
-            const string CATEGORY0_NAME = "Colour";
-            const string CATEGORY0_TRAIT0 = "Blue";
-            const string CATEGORY0_TRAIT1 = "Green";
-            const string CATEGORY1_NAME = "Terrain";
-            const string CATEGORY1_TRAIT0 = "Hills";
-            const string CATEGORY1_TRAIT1 = "River";
+            const string C0_NAME = "Colour";
+            const string C0T0 = "Blue";
+            const string C0T1 = "Green";
+            const string C1_NAME = "Terrain";
+            const string C1T0 = "Hills";
+            const string C1T1 = "River";
 
             Npc npc = new Npc();
-            npc.Add(category: CATEGORY0_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT0), new Npc.Trait(CATEGORY0_TRAIT1) });
-            npc.Add(category: CATEGORY1_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT0), new Npc.Trait(CATEGORY1_TRAIT1) });
+            npc.Add(category: C0_NAME, traits: new Npc.Trait[] { new Npc.Trait(C0T0, C0_NAME), new Npc.Trait(C0T1, C0_NAME) });
+            npc.Add(category: C1_NAME, traits: new Npc.Trait[] { new Npc.Trait(C1T0, C1_NAME), new Npc.Trait(C1T1, C1_NAME) });
 
-            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
+            NpcGroup npcGroup = new NpcGroup(new List<string> { C0_NAME, C1_NAME });
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY0_NAME, CATEGORY1_NAME });
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { C0_NAME, C1_NAME });
 
             Assert.AreEqual(2, categories.Length, "Wrong number of categories");
-            Assert.AreEqual(CATEGORY0_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1, categories[0], "Wrong traits in category");
-            Assert.AreEqual(CATEGORY1_TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1, categories[1], "Wrong traits in category");
+            Assert.AreEqual(C0T0 + ExportUtil.MULTI_TRAIT_SEPARATOR + C0T1, categories[0], "Wrong traits in category");
+            Assert.AreEqual(C1T0 + ExportUtil.MULTI_TRAIT_SEPARATOR + C1T1, categories[1], "Wrong traits in category");
         }
 
         [TestMethod]
@@ -148,7 +152,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
             string[] categories = NpcToStringArray.Export(npc, new List<string>() { NOT_FOUND_CATEGORY, CATEGORY });
@@ -164,7 +168,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
             string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
@@ -182,7 +186,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT), new Npc.Trait(HIDDEN_TRAIT, isHidden: true) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT, CATEGORY), new Npc.Trait(HIDDEN_TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
             string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });

@@ -29,7 +29,7 @@ namespace Tests
             const string TRAIT = "Blue";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
             npcGroup.Add(npc);
@@ -47,10 +47,10 @@ namespace Tests
             const string TRAIT = "Blue";
 
             Npc npc0 = new Npc();
-            npc0.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc0.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             Npc npc1 = new Npc();
-            npc1.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc1.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
 
             NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
             npcGroup.Add(npc0);
@@ -84,8 +84,8 @@ namespace Tests
             const string TRAIT1 = "Bear";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY0, traits: new Npc.Trait[] { new Npc.Trait(TRAIT0) });
-            npc.Add(CATEGORY1, traits: new Npc.Trait[] { new Npc.Trait(TRAIT1) });
+            npc.Add(CATEGORY0, traits: new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY0) });
+            npc.Add(CATEGORY1, traits: new Npc.Trait[] { new Npc.Trait(TRAIT1, CATEGORY1) });
 
             NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
             npcGroup.Add(npc);
@@ -111,8 +111,8 @@ namespace Tests
             const string CATEGORY1_TRAIT1 = "River";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY0, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT0), new Npc.Trait(CATEGORY0_TRAIT1) });
-            npc.Add(CATEGORY1, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT0), new Npc.Trait(CATEGORY1_TRAIT1) });
+            npc.Add(CATEGORY0, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT0, CATEGORY0), new Npc.Trait(CATEGORY0_TRAIT1, CATEGORY0) });
+            npc.Add(CATEGORY1, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT0, CATEGORY1), new Npc.Trait(CATEGORY1_TRAIT1, CATEGORY1) });
 
             NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY0, CATEGORY1 });
             npcGroup.Add(npc);
@@ -146,26 +146,26 @@ namespace Tests
         [TestMethod]
         public void MultipleTraitsInMultipleCategories()
         {
-            const string CATEGORY0_NAME = "Colour";
-            const string CATEGORY0_TRAIT0 = "Blue";
-            const string CATEGORY0_TRAIT1 = "Green";
-            const string CATEGORY1_NAME = "Terrain";
-            const string CATEGORY1_TRAIT0 = "Hills";
-            const string CATEGORY1_TRAIT1 = "River";
+            const string C0_NAME = "Colour";
+            const string C0T0 = "Blue";
+            const string C0T1 = "Green";
+            const string C1_NAME = "Terrain";
+            const string C1T0 = "Hills";
+            const string C1T1 = "River";
 
             Npc npc = new Npc();
-            npc.Add(category: CATEGORY0_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY0_TRAIT0), new Npc.Trait(CATEGORY0_TRAIT1) });
-            npc.Add(category: CATEGORY1_NAME, traits: new Npc.Trait[] { new Npc.Trait(CATEGORY1_TRAIT0), new Npc.Trait(CATEGORY1_TRAIT1) });
+            npc.Add(category: C0_NAME, traits: new Npc.Trait[] { new Npc.Trait(C0T0, C0_NAME), new Npc.Trait(C0T1, C0_NAME) });
+            npc.Add(category: C1_NAME, traits: new Npc.Trait[] { new Npc.Trait(C1T0, C1_NAME), new Npc.Trait(C1T1, C1_NAME) });
 
-            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY0_NAME, CATEGORY1_NAME });
+            NpcGroup npcGroup = new NpcGroup(new List<string> { C0_NAME, C1_NAME });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
             string csv = npcToCsv.Export(npcGroup);
 
-            string expectedCsv = CATEGORY0_NAME + NpcToCsv.SEPARATOR + CATEGORY1_NAME + "\n" +
-                CATEGORY0_TRAIT0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + CATEGORY0_TRAIT1 + NpcToCsv.SEPARATOR + 
-                CATEGORY1_TRAIT0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + CATEGORY1_TRAIT1;
+            string expectedCsv = C0_NAME + NpcToCsv.SEPARATOR + C1_NAME + "\n" +
+                C0T0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + C0T1 + NpcToCsv.SEPARATOR + 
+                C1T0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + C1T1;
 
             Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
         }
@@ -179,7 +179,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
@@ -205,7 +205,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, isHidden: true) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
@@ -225,7 +225,7 @@ namespace Tests
             NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT), new Npc.Trait(HIDDEN_TRAIT, isHidden: true) });
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT, CATEGORY), new Npc.Trait(HIDDEN_TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
             NpcToCsv npcToCsv = new NpcToCsv();
