@@ -65,5 +65,33 @@ namespace ServicesTests
             object value = null;
             ParamUtil.VerifyNotNull(nameof(value), value);
         }
+
+        [TestMethod]
+        public void VerifyArrayElementsNotNullWhenValidNotEmptyArray()
+        {
+            object[] values = new object[1] { new object() };
+            ParamUtil.VerifyArrayElementsNotNull(nameof(values), values);
+        }
+
+        [TestMethod]
+        public void VerifyArrayElementsNotNullWhenEmptyArray()
+        {
+            object[] values = Array.Empty<object>();
+            ParamUtil.VerifyArrayElementsNotNull(nameof(values), values);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyArrayElementsNotNullWhenArrayIsNull()
+        {
+            object[] values = null;
+            ParamUtil.VerifyArrayElementsNotNull("values", values);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VerifyArrayElementsNotNullWhenArrayHasNulls()
+        {
+            object[] values = new object[1] { null };
+            ParamUtil.VerifyArrayElementsNotNull(nameof(values), values);
+        }
     }
 }

@@ -195,6 +195,23 @@ namespace Tests
             Assert.AreEqual(VISIBLE_TRAIT, categories[0], "Output is not just visible trait with no extra punctuation");
         }
 
+        [TestMethod]
+        public void NoDuplicateTraits()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY), new Npc.Trait(TRAIT, CATEGORY) });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
+
+            Assert.AreEqual(1, categories.Length, "Wrong number of categories");
+            Assert.AreEqual(TRAIT, categories[0], "Output is not just visible trait with no extra punctuation");
+        }
+
         MockRandom m_random = new MockRandom();
     }
 }

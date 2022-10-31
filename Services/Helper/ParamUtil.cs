@@ -38,5 +38,20 @@ namespace Services
                 throw new ArgumentNullException(name);
             }
         }
+
+        public static void VerifyArrayElementsNotNull<T>(string name, T[] values) where T: notnull
+        {
+            if (values is null)
+            {
+                throw new ArgumentNullException(name);
+            }
+            foreach(T value in values)
+            {
+                if (value is null)
+                {
+                    throw new ArgumentException(name + " has a null element");
+                }
+            }
+        }
     }
 }

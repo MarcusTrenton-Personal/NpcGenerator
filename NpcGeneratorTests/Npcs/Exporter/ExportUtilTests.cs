@@ -17,7 +17,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace Tests
@@ -51,7 +50,7 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
             const string TRAIT0 = "Blue";
-            const string TRAIT1 = "Greed";
+            const string TRAIT1 = "Green";
             const string TRAIT2 = "Red";
             Npc.Trait[] traits = 
                 new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY), new Npc.Trait(TRAIT2, CATEGORY) };
@@ -61,6 +60,105 @@ namespace Tests
 
             string expected = TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + TRAIT1 + ExportUtil.MULTI_TRAIT_SEPARATOR + TRAIT2;
             Assert.AreEqual(expected, builder.ToString(), "Traits combined incorrectly");
+        }
+
+        [TestMethod]
+        public void VisibleDistinctTraitsEmpty()
+        {
+            Npc.Trait[] traits = new Npc.Trait[] { };
+
+            HashSet<string> values = ExportUtil.VisibleDistinctTraits(traits);
+
+            Assert.AreEqual(0, values.Count, "Wrong number of values");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void VisibleDistinctTraitsNull()
+        {
+            ExportUtil.VisibleDistinctTraits(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VisibleDistinctTraitsNullElement()
+        {
+            Npc.Trait[] traits = new Npc.Trait[] { null };
+
+            ExportUtil.VisibleDistinctTraits(traits);
+        }
+
+        [TestMethod]
+        public void VisibleDistinctTraitsAlreadyVisibleAndDistinct()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT0 = "Blue";
+            const string TRAIT1 = "Green";
+            const string TRAIT2 = "Red";
+            Npc.Trait[] traits =
+                new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY), new Npc.Trait(TRAIT2, CATEGORY) };
+
+            HashSet<string> values = ExportUtil.VisibleDistinctTraits(traits);
+
+            Assert.AreEqual(3, values.Count, "Wrong number of elements");
+            Assert.IsTrue(values.Contains(TRAIT0), "Expected element is not contained");
+            Assert.IsTrue(values.Contains(TRAIT1), "Expected element is not contained");
+            Assert.IsTrue(values.Contains(TRAIT2), "Expected element is not contained");
+        }
+
+        [TestMethod]
+        public void VisibleDistinctTraitsFilterDuplicates()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT0 = "Blue";
+            const string TRAIT1 = "Green";
+            Npc.Trait[] traits =
+                new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY), new Npc.Trait(TRAIT1, CATEGORY) };
+
+            HashSet<string> values = ExportUtil.VisibleDistinctTraits(traits);
+
+            Assert.AreEqual(2, values.Count, "Wrong number of elements");
+            Assert.IsTrue(values.Contains(TRAIT0), "Expected element is not contained");
+            Assert.IsTrue(values.Contains(TRAIT1), "Expected element is not contained");
+        }
+
+        [TestMethod]
+        public void VisibleDistinctTraitsFilterHidden()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT0 = "Blue";
+            const string TRAIT1 = "Green";
+            const string TRAIT2 = "Red";
+            Npc.Trait[] traits = new Npc.Trait[] { 
+                new Npc.Trait(TRAIT0, CATEGORY), 
+                new Npc.Trait(TRAIT1, CATEGORY, isHidden: true), 
+                new Npc.Trait(TRAIT2, CATEGORY) };
+
+            HashSet<string> values = ExportUtil.VisibleDistinctTraits(traits);
+
+            Assert.AreEqual(2, values.Count, "Wrong number of elements");
+            Assert.IsTrue(values.Contains(TRAIT0), "Expected element is not contained");
+            Assert.IsTrue(values.Contains(TRAIT2), "Expected element is not contained");
+        }
+
+        [TestMethod]
+        public void VisibleDistinctTraitsFilterDuplicatesAndHidden()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT0 = "Blue";
+            const string TRAIT1 = "Green";
+            const string TRAIT2 = "Red";
+
+            Npc.Trait[] traits = new Npc.Trait[] {
+                new Npc.Trait(TRAIT0, CATEGORY),
+                new Npc.Trait(TRAIT1, CATEGORY, isHidden: true),
+                new Npc.Trait(TRAIT2, CATEGORY, isHidden: true),
+                new Npc.Trait(TRAIT2, CATEGORY)
+            };
+
+            HashSet<string> values = ExportUtil.VisibleDistinctTraits(traits);
+
+            Assert.AreEqual(2, values.Count, "Wrong number of elements");
+            Assert.IsTrue(values.Contains(TRAIT0), "Expected element is not contained");
+            Assert.IsTrue(values.Contains(TRAIT2), "Expected element is not contained");
         }
     }
 }

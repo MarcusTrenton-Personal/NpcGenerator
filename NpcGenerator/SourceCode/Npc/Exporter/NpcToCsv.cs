@@ -46,7 +46,7 @@ namespace NpcGenerator
             return text.ToString();
         }
 
-        private void TraitCategoryNamesToCsv(StringBuilder text, IReadOnlyList<string> categoryOrder)
+        private static void TraitCategoryNamesToCsv(StringBuilder text, IReadOnlyList<string> categoryOrder)
         {
             for (int i = 0; i < categoryOrder.Count; ++i)
             {
@@ -58,7 +58,7 @@ namespace NpcGenerator
             }
         }
 
-        private void ToCsvRow(Npc npc, StringBuilder stringBuilder, IReadOnlyList<string> categoryOrder)
+        private static void ToCsvRow(Npc npc, StringBuilder stringBuilder, IReadOnlyList<string> categoryOrder)
         {
             for (int i = 0; i < categoryOrder.Count; ++i)
             {

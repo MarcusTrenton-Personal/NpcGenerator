@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
+using System.Collections.Generic;
 using System.Text;
 
 namespace NpcGenerator
@@ -23,17 +25,31 @@ namespace NpcGenerator
 
         public static void CombineTraits(Npc.Trait[] traits, StringBuilder stringBuilder)
         {
+            HashSet<string> visibleDistinctTraits = VisibleDistinctTraits(traits);
+
             bool isFirstVisibleTrait = true;
-            for (int i = 0; i < traits.Length; ++i)
+            foreach (string trait in visibleDistinctTraits)
             {
-                if (!traits[i].IsHidden)
+                string separator = isFirstVisibleTrait ? string.Empty : MULTI_TRAIT_SEPARATOR;
+                stringBuilder.Append(separator);
+                stringBuilder.Append(trait);
+                isFirstVisibleTrait = false;
+            }
+        }
+
+        public static HashSet<string> VisibleDistinctTraits(Npc.Trait[] traits)
+        {
+            ParamUtil.VerifyArrayElementsNotNull(nameof(traits), traits);
+
+            HashSet<string> visibleDistinctTraits = new HashSet<string>();
+            foreach (Npc.Trait trait in traits)
+            {
+                if (!trait.IsHidden)
                 {
-                    string separator = isFirstVisibleTrait ? string.Empty : MULTI_TRAIT_SEPARATOR;
-                    stringBuilder.Append(separator);
-                    stringBuilder.Append(traits[i].Name);
-                    isFirstVisibleTrait = false;
+                    visibleDistinctTraits.Add(trait.Name);
                 }
             }
+            return visibleDistinctTraits;
         }
     }
 }

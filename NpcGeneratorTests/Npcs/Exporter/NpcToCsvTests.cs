@@ -235,5 +235,24 @@ namespace Tests
 
             Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
         }
+
+        [TestMethod]
+        public void NoDuplicateTraits()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY), new Npc.Trait(TRAIT, CATEGORY) });
+            npcGroup.Add(npc);
+
+            NpcToCsv npcToCsv = new NpcToCsv();
+            string csv = npcToCsv.Export(npcGroup);
+
+            string expectedCsv = CATEGORY + "\n" + TRAIT;
+
+            Assert.AreEqual(expectedCsv, csv, "Csv was not exported correctly");
+        }
     }
 }

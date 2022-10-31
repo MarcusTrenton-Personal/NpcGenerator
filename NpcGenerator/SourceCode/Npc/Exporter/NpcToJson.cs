@@ -90,17 +90,15 @@ namespace NpcGenerator
             for (int i = 0; i < categoryOrder.Count; ++i)
             {
                 Npc.Trait[] traits = npc.GetTraitsOfCategory(categoryOrder[i]);
+                HashSet<string> distinctVisibleTraits = ExportUtil.VisibleDistinctTraits(traits);
                 bool found = traits.Length > 0;
                 if (found)
                 {
                     writer.WritePropertyName(categoryOrder[i]);
                     writer.WriteStartArray();
-                    for (int j = 0; j < traits.Length; ++j)
+                    foreach (string trait in distinctVisibleTraits)
                     {
-                        if (!traits[j].IsHidden)
-                        {
-                            writer.WriteValue(traits[j].Name);
-                        }
+                        writer.WriteValue(trait);
                     }
                     writer.WriteEndArray();
                 }
