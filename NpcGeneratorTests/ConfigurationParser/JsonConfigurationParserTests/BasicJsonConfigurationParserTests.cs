@@ -79,7 +79,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MalformedJson()
         {
             //The initial { and final } are missing.
@@ -104,17 +104,7 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonReaderException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Malformed Json failed to throw exception");
+            parser.Parse(text);
         }
 
         [TestMethod]
@@ -195,7 +185,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.AreNotEqual(animals[0].Name, animals[1], "Did not select both animals");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MissingTraitTitleThrowsException()
         {
             string text = @"{
@@ -213,20 +203,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing title failed to throw exception");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MissingTraitsThrowsException()
         {
             string text = @"{
@@ -242,20 +222,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing traits failed to throw exception");
+            parser.Parse(text);
         }
         
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MissingTraitName()
         {
             string text = @"{
@@ -278,20 +248,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing trait name did not throw exception");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void NegativeWeightTrait()
         {
             string text = @"{
@@ -315,20 +275,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Negative trait weight did not throw exception");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MissingWeightTrait()
         {
             string text = @"{
@@ -351,20 +301,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing trait weight did not throw exception");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MissingTraitCategoryName()
         {
             string text = @"{
@@ -389,20 +329,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing trait category name did not throw exception");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void MissingSelections()
         {
             string text = @"{
@@ -425,37 +355,17 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing trait selection number did not throw exception");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void EmptyJsonObject()
         {
             string text = "{}";
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Empty json did not throw exception");
+            parser.Parse(text);
         }
 
         [TestMethod]
@@ -505,7 +415,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsTrue(throwException, "Duplicate categories were not rejected.");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void DuplicateTraitNamesInACategory()
         {
             const string CATEGORY = "Colour";
@@ -532,17 +442,7 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool throwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                throwException = true;
-            }
-
-            Assert.IsTrue(throwException, "Duplicate trait names in the same category were not rejected.");
+            parser.Parse(text);
         }
 
         [TestMethod]

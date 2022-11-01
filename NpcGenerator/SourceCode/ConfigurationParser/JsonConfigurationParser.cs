@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Services;
@@ -36,7 +37,15 @@ namespace NpcGenerator
 
         public TraitSchema Parse(string text)
         {
-            JToken json = JToken.Parse(text);
+            JToken json;
+            try
+            {
+                json = JToken.Parse(text);
+            }
+            catch (JsonReaderException exception)
+            {
+                throw new JsonFormatException(exception.Message);
+            }
             ValidateJson(json, m_schema);
 
             ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();

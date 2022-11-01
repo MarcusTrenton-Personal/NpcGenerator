@@ -498,7 +498,7 @@ namespace NpcGenerator
                 {
                     if (m_showErrorMessages)
                     {
-                        string message = m_localization.GetText("configuration_file_invalid");
+                        string message = m_localization.GetText("configuration_file_invalid", m_userSettings.ConfigurationPath);
                         message += "\n" + exception.Message;
 
                         MessageBox.Show(message);
