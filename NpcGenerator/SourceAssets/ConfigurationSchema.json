@@ -72,6 +72,13 @@
 					"type": "boolean",
 					"default": "false"
 				},
+				"requirements": {
+					"description": "Optional object for required traits needed for this trait to be selected.",
+					"oneOf": [
+						{"$ref": "#/$defs/logical_operation"},
+						{"$ref": "#/$defs/trait_id"}
+					]
+				},
 				"bonus_selection": {
 					"description": "If this trait is selected then additional traits will be selected in the specified category. Example 1: In the category of races, the biracial trait will select 2 more races from the same category. Example 2: In the Quirk category, the disablity trait will select 1 more trait in the disability category. Optional.",
 					"type": "object",

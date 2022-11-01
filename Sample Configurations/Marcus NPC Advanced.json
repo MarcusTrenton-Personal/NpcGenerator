@@ -121,7 +121,14 @@
 				{"name" : "Graceful", "weight" : 1},
 				{"name" : "Disabled", "weight" : 5, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Disability", "selections" : 1}},
 				{"name" : "Religious", "weight" : 3, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Religion", "selections" : 1}},
-				{"name" : "Suicidal", "weight" : 1},
+				{
+					"name" : "Suicidal", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [{"category_name" : "Quirk", "trait_name" : "Joyous"}]
+					}
+				},
 				{"name" : "Addict", "weight" : 1},
 				{"name" : "Sports Fan", "weight" : 1},
 				{"name" : "Sharp senses", "weight" : 1},
@@ -136,14 +143,45 @@
 				{"name" : "Overconfident", "weight" : 1},
 				{"name" : "ADHD", "weight" : 1},
 				{"name" : "Anxiety", "weight" : 1},
-				{"name" : "Depressed", "weight" : 1},
-				{"name" : "Joyous", "weight" : 1},
-				{"name" : "Shy", "weight" : 1},
+				{
+					"name" : "Depressed", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [{"category_name" : "Quirk", "trait_name" : "Joyous"}]
+					}
+				},
+				{
+					"name" : "Joyous", 
+					"weight" : 1, 
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [
+							{"category_name" : "Quirk", "trait_name" : "Depressed"},
+							{"category_name" : "Quirk", "trait_name" : "Suicidal"}
+						]
+					}
+				},
+				{
+					"name" : "Shy", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [{"category_name" : "Motivation", "trait_name" : "Fame"}]
+					}
+				},
 				{"name" : "Gregarious", "weight" : 1},
 				{"name" : "No filter", "weight" : 1},
 				{"name" : "Paranoid", "weight" : 1},
 				{"name" : "Beautiful", "weight" : 1},
-				{"name" : "Nymphomania", "weight" : 1},
+				{
+					"name" : "Nymphomania", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [{"category_name" : "Sexuality", "trait_name" : "Asexual"}]
+					}
+				},
 				{"name" : "Short temper", "weight" : 1},
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},

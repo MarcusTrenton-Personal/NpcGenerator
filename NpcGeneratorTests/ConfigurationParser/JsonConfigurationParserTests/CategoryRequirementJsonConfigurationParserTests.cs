@@ -17,12 +17,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using Services;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Tests.JsonConfigurationParserTests
 {
     [TestClass]
-    public class RequirementJsonConfigurationParserTests
+    public class CategoryRequirementJsonConfigurationParserTests
     {
         const string SCHEMA_PATH = "ConfigurationSchema.json";
 
@@ -477,7 +476,7 @@ namespace Tests.JsonConfigurationParserTests
                 "Category is incorrectly unlocked for npc without required trait");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void RequirementNoOperands()
         {
             string text = $@"{{
@@ -510,20 +509,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void RequirementEmptyOperand()
         {
             string text = $@"{{
@@ -557,20 +546,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void RequirementNoOperator()
         {
             string text = $@"{{
@@ -605,20 +584,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void RequirementPresentButEmpty()
         {
             string text = $@"{{
@@ -649,17 +618,7 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
         [TestMethod]
@@ -707,7 +666,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsTrue(threwException, "Failed to throw RequirementTraitIdNotFoundException");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void RequirementUnknownLogicalOperatorException()
         {
             const string OPERATOR = "BitShift";
@@ -745,17 +704,7 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw JsonFormatException");
+            parser.Parse(text);
         }
 
         [TestMethod]
