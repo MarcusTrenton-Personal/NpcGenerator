@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace NpcGenerator
 {
-    public class TraitCategory
+    public class TraitCategory : IGuardedByRequirement
     {
         public TraitCategory(string name) : this(name, outputName: name, selectionCount: 1)
         {
@@ -99,22 +99,6 @@ namespace NpcGenerator
             m_traits.Add(trait);
         }
 
-        public void Set(Requirement requirement)
-        {
-            m_requirement = requirement;
-        }
-
-        public bool IsUnlockedFor(Npc npc)
-        {
-            if (npc is null)
-            {
-                throw new ArgumentNullException(nameof(npc));
-            }
-
-            bool isUnlocked = m_requirement is null || m_requirement.IsUnlockedFor(npc);
-            return isUnlocked;
-        }
-
         public TraitChooser CreateTraitChooser(IRandom random)
         {
             return new TraitChooser(m_traits, Name, random);
@@ -141,12 +125,6 @@ namespace NpcGenerator
             return names;
         }
 
-        public HashSet<string> DependentCategoryNames()
-        {
-            HashSet<string> categories = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
-            return categories;
-        }
-
         public HashSet<string> BonusSelectionCategoryNames()
         {
             HashSet<string> categories = new HashSet<string>();
@@ -161,13 +139,45 @@ namespace NpcGenerator
             return categories;
         }
 
+        public void Set(Requirement requirement)
+        {
+            m_requirement = requirement;
+        }
+
+        public bool IsUnlockedFor(Npc npc)
+        {
+            if (npc is null)
+            {
+                throw new ArgumentNullException(nameof(npc));
+            }
+
+            bool isUnlocked = m_requirement is null || m_requirement.IsUnlockedFor(npc);
+            return isUnlocked;
+        }
+
+        public HashSet<string> DependentCategoryNames()
+        {
+            HashSet<string> dependentCategories = new HashSet<string>();
+            foreach (Trait trait in m_traits)
+            {
+                HashSet<string> traitDependentCategories = trait.DependentCategoryNames();
+                dependentCategories.UnionWith(traitDependentCategories);
+            }
+            dependentCategories.Remove(Name); //Mutually exclusive traits in the same category are not dependencies for inter-category ordering.
+
+            HashSet<string> localCategoryDependencies = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
+            dependentCategories.UnionWith(localCategoryDependencies);
+
+            return dependentCategories;
+        }
+
         public string Name { get; private set; }
 
         public string OutputName { get; private set; }
 
         public int DefaultSelectionCount { get; private set; }
 
-        private Requirement m_requirement;
         private List<Trait> m_traits = new List<Trait>();
+        private Requirement m_requirement;
     }
 }

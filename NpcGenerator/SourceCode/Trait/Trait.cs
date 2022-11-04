@@ -13,9 +13,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using System;
+using System.Collections.Generic;
+
 namespace NpcGenerator
 {
-    public class Trait
+    public class Trait : IGuardedByRequirement
     {
         public Trait(string name) : this(name, weight: 1, isHidden: false)
         {
@@ -41,10 +44,34 @@ namespace NpcGenerator
             return copy;
         }
 
+        public void Set(Requirement requirement)
+        {
+            m_requirement = requirement;
+        }
+
+        public bool IsUnlockedFor(Npc npc)
+        {
+            if (npc is null)
+            {
+                throw new ArgumentNullException(nameof(npc));
+            }
+
+            bool isUnlocked = m_requirement is null || m_requirement.IsUnlockedFor(npc);
+            return isUnlocked;
+        }
+
+        public HashSet<string> DependentCategoryNames()
+        {
+            HashSet<string> categories = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
+            return categories;
+        }
+
         public string Name { get; private set; }
         public string OriginalName { get; private set; }
         public int Weight { get; private set; }
         public bool IsHidden { get; private set; }
         public BonusSelection BonusSelection { get; set; } = null;
+
+        private Requirement m_requirement;
     }
 }

@@ -190,6 +190,12 @@ namespace NpcGenerator
 
         private static void ParseRequirements(ProtoTraitSchema protoTraitSchema, TraitSchema schema)
         {
+            ParseRequirementsOnCategories(protoTraitSchema, schema);
+            ParseRequirementsOnTraits(protoTraitSchema, schema);
+        }
+
+        private static void ParseRequirementsOnCategories(ProtoTraitSchema protoTraitSchema, TraitSchema schema)
+        {
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
                 TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
@@ -202,6 +208,29 @@ namespace NpcGenerator
 
                 Requirement requirement = ParseRequirement(protoCategory.requirements, category, schema);
                 category.Set(requirement);
+            }
+        }
+
+        private static void ParseRequirementsOnTraits(ProtoTraitSchema protoTraitSchema, TraitSchema schema)
+        {
+            foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
+            {
+                TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
+
+                foreach (ProtoTrait protoTrait in protoCategory.traits)
+                {
+                    Trait trait = category.GetTrait(protoTrait.Name);
+
+                    TraitId selfRequiringTraitId = new TraitId(category.Name, trait.Name);
+                    bool selfRequiringTrait = RequiresTrait(protoTrait.requirements, selfRequiringTraitId);
+                    if (selfRequiringTrait)
+                    {
+                        throw new SelfRequiringTraitException(selfRequiringTraitId);
+                    }
+
+                    Requirement requirement = ParseRequirement(protoTrait.requirements, category, schema);
+                    trait.Set(requirement);
+                }
             }
         }
 
@@ -221,6 +250,32 @@ namespace NpcGenerator
                 {
                     bool doeSubExpressionRequireCategory = RequiresCategory(subExpression, category);
                     if (doeSubExpressionRequireCategory)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool RequiresTrait(ProtoLogicalExpression protoExpression, TraitId traitId)
+        {
+            if (protoExpression is null || traitId is null)
+            {
+                return false;
+            }
+            TraitId requiredTraitId = new TraitId(protoExpression.category_name, protoExpression.trait_name);
+            if (requiredTraitId == traitId)
+            {
+                return true;
+            }
+            if (protoExpression.operands != null)
+            {
+                foreach (ProtoLogicalExpression subExpression in protoExpression.operands)
+                {
+                    bool doeSubExpressionRequireTraitId = RequiresTrait(subExpression, traitId);
+                    if (doeSubExpressionRequireTraitId)
                     {
                         return true;
                     }
@@ -371,6 +426,7 @@ namespace NpcGenerator
             public string Name { get; set; }
             public int Weight { get; set; }
             public bool Hidden { get; set; } = false;
+            public ProtoLogicalExpression requirements;
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
             public ProtoBonusSelection bonus_selection { get; set; }

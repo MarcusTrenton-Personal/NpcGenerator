@@ -155,6 +155,16 @@ namespace NpcGenerator
         public string Category { get; private set; }
     }
 
+    public class SelfRequiringTraitException : FormatException
+    {
+        public SelfRequiringTraitException(TraitId traitId)
+        {
+            TraitId = traitId;
+        }
+
+        public TraitId TraitId { get; private set; }
+    }
+
     public class CircularRequirementsException : FormatException
     {
         public CircularRequirementsException(List<TraitSchema.Dependency> cycle)

@@ -21,30 +21,31 @@ using System.Collections.Generic;
 namespace Tests.JsonConfigurationParserTests
 {
     [TestClass]
-    public class CategoryRequirementJsonConfigurationParserTests
+    public class TraitRequirementJsonConfigurationParserTests
     {
         const string SCHEMA_PATH = "ConfigurationSchema.json";
 
         [TestMethod]
         public void RequirementTrait()
         {
-            const string GUARDED_CATEGORY = "Animal";
+            const string CATEGORY_OF_GUARDED_TRAIT = "Animal";
+            const string GUARDED_TRAIT = "Bear";
             const string REQUIREMENT_CATEGORY = "Colour";
             const string REQUIREMENT_TRAIT = "Blue";
 
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : '{GUARDED_CATEGORY}',
+                        'name' : '{CATEGORY_OF_GUARDED_TRAIT}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{REQUIREMENT_CATEGORY}',
-				            'trait_name' : '{REQUIREMENT_TRAIT}'
-			            }},
                         'traits' : [
                             {{ 
-                                'name' : 'Bear', 
-                                'weight' : 1
+                                'name' : '{GUARDED_TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{REQUIREMENT_CATEGORY}',
+				                    'trait_name' : '{REQUIREMENT_TRAIT}'
+			                    }}
                             }}
                         ]
                     }},
@@ -65,25 +66,28 @@ namespace Tests.JsonConfigurationParserTests
             TraitSchema schema = parser.Parse(text);
 
             Assert.IsNotNull(schema, "Schema is null");
-            
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
-            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+
+            TraitCategory categoryOfGuardedTrait = ListUtil.Find(
+                schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+            Trait guardedTrait = categoryOfGuardedTrait.GetTrait(GUARDED_TRAIT);
+            HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(1, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY), "Wrong dependency");
 
             TraitId requiredTraitId = new TraitId(REQUIREMENT_CATEGORY, REQUIREMENT_TRAIT);
             Npc npcWithTrait = new Npc();
             npcWithTrait.Add(REQUIREMENT_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT, REQUIREMENT_CATEGORY, isHidden: false) });
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait), "Category is incorrectly locked for npc with required trait");
-            
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithTrait), "Trait is incorrectly locked for npc with required trait");
+
             Npc npcWithoutTrait = new Npc();
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutTrait), "Category is incorrectly unlocked for npc without required trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithoutTrait), "Trait is incorrectly unlocked for npc without required trait");
         }
 
         [TestMethod]
         public void RequirementAny()
         {
-            const string GUARDED_CATEGORY = "Animal";
+            const string CATEGORY_OF_GUARDED_TRAIT = "Animal";
+            const string GUARDED_TRAIT = "Bear";
             const string REQUIREMENT_CATEGORY0 = "Colour";
             const string REQUIREMENT_TRAIT0 = "Blue";
             const string REQUIREMENT_CATEGORY1 = "Hair";
@@ -92,25 +96,25 @@ namespace Tests.JsonConfigurationParserTests
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : '{GUARDED_CATEGORY}',
+                        'name' : '{CATEGORY_OF_GUARDED_TRAIT}',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : 'Any',
-                            'operands' : [
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY0}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT0}'
-                                }},
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY1}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT1}'
-                                }}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
-                                'name' : 'Bear', 
-                                'weight' : 1
+                                'name' : '{GUARDED_TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'Any',
+                                    'operands' : [
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY0}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT0}'
+                                        }},
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY1}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT1}'
+                                        }}
+                                    ]
+			                    }},
                             }}
                         ]
                     }},
@@ -142,8 +146,10 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
-            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+            TraitCategory categoryOfGuardTrait = ListUtil.Find(
+                schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+            Trait guardedTrait = categoryOfGuardTrait.GetTrait(GUARDED_TRAIT);
+            HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY0), "Wrong dependency");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY1), "Wrong dependency");
@@ -154,29 +160,30 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithTrait0 = new Npc();
             npcWithTrait0.Add(REQUIREMENT_CATEGORY0, 
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, REQUIREMENT_CATEGORY0, isHidden: false) });
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly locked for npc with required trait");
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithTrait0), "Trait is incorrectly locked for npc with required trait");
 
             Npc npcWithTrait1 = new Npc();
             npcWithTrait1.Add(REQUIREMENT_CATEGORY1, 
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, REQUIREMENT_CATEGORY1, isHidden: false) });
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly locked for npc with required trait");
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithTrait1), "Trait is incorrectly locked for npc with required trait");
 
             Npc npcWithBothTraits = new Npc();
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, 
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, REQUIREMENT_CATEGORY0, isHidden: false) });
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, 
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, REQUIREMENT_CATEGORY1, isHidden: false) });
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithBothTraits), "Category is incorrectly locked for npc with required trait");
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithBothTraits), "Trait is incorrectly locked for npc with required trait");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits), 
-                "Category is incorrectly unlocked for npc without required trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithoutAnyRequiredTraits),
+                "Trait is incorrectly unlocked for npc without required trait");
         }
 
         [TestMethod]
         public void RequirementAll()
         {
-            const string GUARDED_CATEGORY = "Animal";
+            const string CATEGORY_OF_GUARDED_TRAIT = "Animal";
+            const string GUARDED_TRAIT = "Bear";
             const string REQUIREMENT_CATEGORY0 = "Colour";
             const string REQUIREMENT_TRAIT0 = "Blue";
             const string REQUIREMENT_CATEGORY1 = "Hair";
@@ -185,25 +192,25 @@ namespace Tests.JsonConfigurationParserTests
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : '{GUARDED_CATEGORY}',
+                        'name' : '{CATEGORY_OF_GUARDED_TRAIT}',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : 'All',
-                            'operands' : [
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY0}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT0}'
-                                }},
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY1}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT1}'
-                                }}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
-                                'name' : 'Bear', 
-                                'weight' : 1
+                                'name' : '{GUARDED_TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'All',
+                                    'operands' : [
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY0}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT0}'
+                                        }},
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY1}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT1}'
+                                        }}
+                                    ]
+			                    }}
                             }}
                         ]
                     }},
@@ -235,8 +242,9 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
-            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+            Trait guardedTrait = guardedCategory.GetTrait(GUARDED_TRAIT);
+            HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY0), "Wrong dependency");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY1), "Wrong dependency");
@@ -247,29 +255,30 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithTrait0 = new Npc();
             npcWithTrait0.Add(REQUIREMENT_CATEGORY0, 
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, REQUIREMENT_CATEGORY0, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly unlocked for npc without required trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithTrait0), "Trait is incorrectly unlocked for npc without required trait");
 
             Npc npcWithTrait1 = new Npc();
             npcWithTrait1.Add(REQUIREMENT_CATEGORY1, 
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, REQUIREMENT_CATEGORY1, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly unlocked for npc without required trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithTrait1), "Trait is incorrectly unlocked for npc without required trait");
 
             Npc npcWithBothTraits = new Npc();
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, 
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, REQUIREMENT_CATEGORY0, isHidden: false) });
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, 
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, REQUIREMENT_CATEGORY1, isHidden: false) });
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithBothTraits), "Category is incorrectly locked for npc with required trait");
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithBothTraits), "Trait is incorrectly locked for npc with required trait");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits),
-                "Category is incorrectly unlocked for npc without required trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithoutAnyRequiredTraits),
+                "Trait is incorrectly unlocked for npc without required trait");
         }
 
         [TestMethod]
         public void RequirementNone()
         {
-            const string GUARDED_CATEGORY = "Animal";
+            const string CATEGORY_OF_GUARDED_TRAIT = "Animal";
+            const string GUARDED_TRAIT = "Bear";
             const string REQUIREMENT_CATEGORY0 = "Colour";
             const string REQUIREMENT_TRAIT0 = "Blue";
             const string REQUIREMENT_CATEGORY1 = "Hair";
@@ -278,25 +287,25 @@ namespace Tests.JsonConfigurationParserTests
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : '{GUARDED_CATEGORY}',
+                        'name' : '{CATEGORY_OF_GUARDED_TRAIT}',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : 'None',
-                            'operands' : [
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY0}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT0}'
-                                }},
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY1}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT1}'
-                                }}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
-                                'name' : 'Bear', 
-                                'weight' : 1
+                                'name' : '{GUARDED_TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'None',
+                                    'operands' : [
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY0}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT0}'
+                                        }},
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY1}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT1}'
+                                        }}
+                                    ]
+			                    }}
                             }}
                         ]
                     }},
@@ -328,8 +337,10 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
-            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+            TraitCategory categoryOfGuardedTrait = 
+                ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+            Trait guardedTrait = categoryOfGuardedTrait.GetTrait(GUARDED_TRAIT);
+            HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY0), "Wrong dependency");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY1), "Wrong dependency");
@@ -340,30 +351,30 @@ namespace Tests.JsonConfigurationParserTests
             Npc npcWithTrait0 = new Npc();
             npcWithTrait0.Add(REQUIREMENT_CATEGORY0, 
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, REQUIREMENT_CATEGORY0, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait0), "Category is incorrectly unlocked for npc with disqualifying trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithTrait0), "Trait is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithTrait1 = new Npc();
             npcWithTrait1.Add(REQUIREMENT_CATEGORY1, 
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, REQUIREMENT_CATEGORY1, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithTrait1), "Category is incorrectly unlocked for npc with disqualifying trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithTrait1), "Trait is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithBothTraits = new Npc();
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0, 
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY0,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT0, REQUIREMENT_CATEGORY0, isHidden: false) });
-            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1, 
+            npcWithBothTraits.Add(REQUIREMENT_CATEGORY1,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT1, REQUIREMENT_CATEGORY1, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithBothTraits), 
-                "Category is incorrectly unlocked for npc with disqualifying traits");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithBothTraits), "Trait is incorrectly unlocked for npc with disqualifying traits");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits),
-                "Category is incorrectly locked for npc without disqualifying traits");
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithoutAnyRequiredTraits),
+                "Trait is incorrectly locked for npc without disqualifying traits");
         }
 
         [TestMethod]
         public void RequirementNested()
         {
-            const string GUARDED_CATEGORY = "Animal";
+            const string CATEGORY_OF_GUARDED_TRAIT = "Animal";
+            const string GUARDED_TRAIT = "Bear";
             const string REQUIREMENT_CATEGORY = "Colour";
             const string REQUIREMENT_TRAIT = "Blue";
             const string DISQUALIFYING_CATEGORY = "Hair";
@@ -372,30 +383,30 @@ namespace Tests.JsonConfigurationParserTests
             string text = $@"{{
                 'trait_categories' : [
                     {{
-                        'name' : '{GUARDED_CATEGORY}',
+                        'name' : '{CATEGORY_OF_GUARDED_TRAIT}',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : 'All',
-                            'operands' : [
-                                {{
-                                    'category_name' : '{REQUIREMENT_CATEGORY}',
-				                    'trait_name' : '{REQUIREMENT_TRAIT}'
-                                }},
-                                {{
-                                    'operator' : 'None',
-                                    'operands' : [
-                                        {{
-                                            'category_name' : '{DISQUALIFYING_CATEGORY}',
-				                            'trait_name' : '{DISQUALIFYING_TRAIT}'
-                                        }}
-                                    ]
-                                }}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
-                                'name' : 'Bear', 
-                                'weight' : 1
+                                'name' : '{GUARDED_TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'All',
+                                    'operands' : [
+                                        {{
+                                            'category_name' : '{REQUIREMENT_CATEGORY}',
+				                            'trait_name' : '{REQUIREMENT_TRAIT}'
+                                        }},
+                                        {{
+                                            'operator' : 'None',
+                                            'operands' : [
+                                                {{
+                                                    'category_name' : '{DISQUALIFYING_CATEGORY}',
+				                                    'trait_name' : '{DISQUALIFYING_TRAIT}'
+                                                }}
+                                            ]
+                                        }}
+                                    ]
+			                    }}
                             }}
                         ]
                     }},
@@ -427,8 +438,10 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
-            HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
+            TraitCategory categoryOfGuardedTrait = 
+                ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+            Trait guardedTrait = categoryOfGuardedTrait.GetTrait(GUARDED_TRAIT);
+            HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY), "Wrong dependency");
             Assert.IsTrue(dependentCategoryNames.Contains(DISQUALIFYING_CATEGORY), "Wrong dependency");
@@ -437,27 +450,27 @@ namespace Tests.JsonConfigurationParserTests
             TraitId requiredTraitId1 = new TraitId(DISQUALIFYING_CATEGORY, DISQUALIFYING_TRAIT);
 
             Npc npcWithRequiredTrait = new Npc();
-            npcWithRequiredTrait.Add(REQUIREMENT_CATEGORY, 
+            npcWithRequiredTrait.Add(REQUIREMENT_CATEGORY,
                 new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT, REQUIREMENT_CATEGORY, isHidden: false) });
-            Assert.IsTrue(guardedCategory.IsUnlockedFor(npcWithRequiredTrait), "Category is incorrectly locked for npc with required trait");
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithRequiredTrait), "Trait is incorrectly locked for npc with required trait");
 
             Npc npcWithDisqualifyingTrait = new Npc();
-            npcWithDisqualifyingTrait.Add(DISQUALIFYING_CATEGORY, 
+            npcWithDisqualifyingTrait.Add(DISQUALIFYING_CATEGORY,
                 new Npc.Trait[] { new Npc.Trait(DISQUALIFYING_TRAIT, DISQUALIFYING_CATEGORY, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithDisqualifyingTrait), 
-                "Category is incorrectly unlocked for npc with disqualifying trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithDisqualifyingTrait),
+                "Trait is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithBothRequiredAndDisqualifyingTraits = new Npc();
             npcWithBothRequiredAndDisqualifyingTraits.Add(
                 REQUIREMENT_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIREMENT_TRAIT, REQUIREMENT_CATEGORY, isHidden: false) });
             npcWithBothRequiredAndDisqualifyingTraits.Add(
                 DISQUALIFYING_CATEGORY, new Npc.Trait[] { new Npc.Trait(DISQUALIFYING_TRAIT, DISQUALIFYING_CATEGORY, isHidden: false) });
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithBothRequiredAndDisqualifyingTraits),
-                "Category is incorrectly unlocked for npc with disqualifying trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithBothRequiredAndDisqualifyingTraits),
+                "Trait is incorrectly unlocked for npc with disqualifying trait");
 
             Npc npcWithoutAnyRequiredTraits = new Npc();
-            Assert.IsFalse(guardedCategory.IsUnlockedFor(npcWithoutAnyRequiredTraits),
-                "Category is incorrectly unlocked for npc without required trait");
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithoutAnyRequiredTraits),
+                "Trait is incorrectly unlocked for npc without required trait");
         }
 
         [TestMethod, ExpectedException(typeof(JsonFormatException))]
@@ -468,13 +481,13 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : 'Animal',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : 'Any'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'Any'
+			                    }}
                             }}
                         ]
                     }},
@@ -504,14 +517,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : 'Animal',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : 'Any',
-				            'operands' : []
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'Any',
+				                    'operands' : []
+			                    }}
                             }}
                         ]
                     }},
@@ -541,15 +554,15 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : 'Animal',
                         'selections': 1,
-                        'requirements' : {{
-				            'operands' : [
-                                {{'category_name': 'Quirk', 'trait_name' : 'Fashionable'}}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+				                    'operands' : [
+                                        {{'category_name': 'Quirk', 'trait_name' : 'Fashionable'}}
+                                    ]
+			                    }}
                             }}
                         ]
                     }},
@@ -579,11 +592,11 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : 'Animal',
                         'selections': 1,
-                        'requirements' : {{}},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{}}
                             }}
                         ]
                     }},
@@ -617,14 +630,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{REQUIREMENT_CATEGORY}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{NOT_FOUND_CATEGORY}',
-				            'trait_name' : '{NOT_FOUND_TRAIT}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{NOT_FOUND_CATEGORY}',
+				                    'trait_name' : '{NOT_FOUND_TRAIT}'
+			                    }}
                             }}
                         ]
                     }}
@@ -660,16 +673,16 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : 'Animal',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : '{OPERATOR}',
-				            'operands' : [
-                                {{'category_name': 'Colour', 'trait_name' : 'Blue'}}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : '{OPERATOR}',
+				                    'operands' : [
+                                        {{'category_name': 'Colour', 'trait_name' : 'Blue'}}
+                                    ]
+			                    }}
                             }}
                         ]
                     }},
@@ -701,16 +714,16 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : 'Animal',
                         'selections': 1,
-                        'requirements' : {{
-                            'operator' : '{OPERATOR}',
-				            'operands' : [
-                                {{'category_name': 'Colour', 'trait_name' : 'Blue'}}
-                            ]
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : 'Bear', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : '{OPERATOR}',
+				                    'operands' : [
+                                        {{'category_name': 'Colour', 'trait_name' : 'Blue'}}
+                                    ]
+			                    }}
                             }}
                         ]
                     }},
@@ -745,34 +758,74 @@ namespace Tests.JsonConfigurationParserTests
         }
 
         [TestMethod]
-        public void RequirementSelfRequiringCategoryException()
+        public void RequirementSelfRequiringCategory()
         {
             const string CATEGORY = "Animal";
-            const string TRAIT = "Bear";
+            const string REQUIRED_TRAIT = "Bear";
+            const string GUARDED_TRAIT = "Rhino";
 
             string text = $@"{{
                 'trait_categories' : [
                     {{
                         'name' : '{CATEGORY}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY}',
-				            'trait_name' : '{TRAIT}'
-			            }},
                         'traits' : [
                             {{ 
-                                'name' : '{TRAIT}', 
+                                'name' : '{REQUIRED_TRAIT}', 
                                 'weight' : 1
+                            }},
+                            {{ 
+                                'name' : '{GUARDED_TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY}',
+				                    'trait_name' : '{REQUIRED_TRAIT}'
+			                    }}
                             }}
                         ]
-                    }},
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+            Assert.IsNotNull(schema, "Schema is null");
+
+            TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY);
+            Trait guardedTrait = category.GetTrait(GUARDED_TRAIT);
+            HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
+            Assert.AreEqual(1, dependentCategoryNames.Count, "Wrong number of dependencies");
+            Assert.IsTrue(dependentCategoryNames.Contains(CATEGORY), "Wrong dependent category");
+
+            Npc npcWithRequiredTrait = new Npc();
+            npcWithRequiredTrait.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIRED_TRAIT, CATEGORY, isHidden: false) });
+            Assert.IsTrue(guardedTrait.IsUnlockedFor(npcWithRequiredTrait), "Trait is incorrectly locked for npc with required trait");
+
+            Npc npcWithoutAnyRequiredTraits = new Npc();
+            Assert.IsFalse(guardedTrait.IsUnlockedFor(npcWithoutAnyRequiredTraits), "Trait is incorrectly unlocked for npc without required trait");
+
+        }
+
+        [TestMethod]
+        public void RequirementSelfRequiringTraitException()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Rhino";
+
+            string text = $@"{{
+                'trait_categories' : [
                     {{
-                        'name' : 'Colour',
+                        'name' : '{CATEGORY}',
                         'selections': 1,
                         'traits' : [
                             {{ 
-                                'name' : 'Blue', 
-                                'weight' : 1
+                                'name' : '{TRAIT}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY}',
+				                    'trait_name' : '{TRAIT}'
+			                    }}
                             }}
                         ]
                     }}
@@ -784,16 +837,17 @@ namespace Tests.JsonConfigurationParserTests
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(text);
+                parser.Parse(text);
             }
-            catch (SelfRequiringCategoryException exception)
+            catch(SelfRequiringTraitException exception)
             {
-                Assert.AreEqual(CATEGORY, exception.Category, "Wrong category in SelfRequiringCategoryException");
-
                 threwException = true;
+
+                TraitId requiredTraitId = new TraitId(CATEGORY, TRAIT);
+                Assert.AreEqual(requiredTraitId, exception.TraitId, "Wrong TraitId in SelfRequiringTraitException");
             }
 
-            Assert.IsTrue(threwException, "Failed to throw SelfRequiringCategoryException");
+            Assert.IsTrue(threwException, "Failed to throw SelfRequiringTraitException");
         }
 
         [TestMethod]
@@ -809,28 +863,28 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY0}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY1}',
-				            'trait_name' : '{TRAIT1}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT0}', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY1}',
+				                    'trait_name' : '{TRAIT1}'
+			                    }}
                             }}
                         ]
                     }},
                     {{
                         'name' : '{CATEGORY1}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY0}',
-				            'trait_name' : '{TRAIT0}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT1}', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY0}',
+				                    'trait_name' : '{TRAIT0}'
+			                    }},
                             }}
                         ]
                     }}
@@ -883,14 +937,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY0}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY2}',
-				            'trait_name' : '{TRAIT2}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT0}', 
                                 'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY2}',
+				                    'trait_name' : '{TRAIT2}'
+			                    }},
                                 'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY1}', 'selections' : 1 }}
                             }}
                         ]
@@ -908,14 +962,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY2}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY1}',
-				            'trait_name' : '{TRAIT1}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT2}', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY1}',
+				                    'trait_name' : '{TRAIT1}'
+			                    }},
                             }}
                         ]
                     }}
@@ -975,14 +1029,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY0}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY3}',
-				            'trait_name' : '{TRAIT3}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT0}', 
                                 'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY3}',
+				                    'trait_name' : '{TRAIT3}'
+			                    }},
                                 'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY1}', 'selections' : 1 }}
                             }}
                         ]
@@ -1011,14 +1065,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY3}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY2}',
-				            'trait_name' : '{TRAIT2}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT3}', 
-                                'weight' : 1
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY2}',
+				                    'trait_name' : '{TRAIT2}'
+			                    }},
                             }}
                         ]
                     }}
@@ -1087,14 +1141,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY_A}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY_F}',
-				            'trait_name' : '{TRAIT_F}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT_A}', 
                                 'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY_F}',
+				                    'trait_name' : '{TRAIT_F}'
+			                    }},
                                 'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY_B}', 'selections' : 1 }}
                             }}
                         ]
@@ -1123,14 +1177,14 @@ namespace Tests.JsonConfigurationParserTests
                     {{
                         'name' : '{CATEGORY_D}',
                         'selections': 1,
-                        'requirements' : {{
-                            'category_name' : '{CATEGORY_C}',
-				            'trait_name' : '{TRAIT_C}'
-			            }},
                         'traits' : [
                             {{ 
                                 'name' : '{TRAIT_D}', 
                                 'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY_C}',
+				                    'trait_name' : '{TRAIT_C}'
+			                    }},
                                 'bonus_selection' : {{ 'trait_category_name' : '{CATEGORY_E}', 'selections' : 1 }}
                             }}
                         ]
@@ -1208,6 +1262,147 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw CircularRequirementsException");
+        }
+
+        [TestMethod]
+        public void RequirementCategoryAndTraitCircularRequirementsException()
+        {
+            const string CATEGORY0 = "Animal";
+            const string TRAIT0 = "Bear";
+            const string CATEGORY1 = "Colour";
+            const string TRAIT1 = "Blue";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT0}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'category_name' : '{CATEGORY1}',
+				                    'trait_name' : '{TRAIT1}'
+			                    }}
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections': 1,
+                        'requirements' : {{
+                            'category_name' : '{CATEGORY0}',
+				            'trait_name' : '{TRAIT0}'
+			            }},
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT1}', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                TraitSchema schema = parser.Parse(text);
+            }
+            catch (CircularRequirementsException exception)
+            {
+                Assert.AreEqual(2, exception.Cycle.Count, "Wrong number of links in the CircularRequirementsException");
+                foreach (TraitSchema.Dependency cycle in exception.Cycle)
+                {
+                    if (cycle.DependentCategory == CATEGORY0)
+                    {
+                        Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY1, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                    else
+                    {
+                        Assert.AreEqual(CATEGORY1, cycle.DependentCategory, "Wrong OriginalCategory");
+                        Assert.AreEqual(TraitSchema.Dependency.Type.Requirement, cycle.DependencyType, "Wrong dependency type");
+                        Assert.AreEqual(CATEGORY0, cycle.OriginalCategory, "Wrong DependentCategory");
+                    }
+                }
+
+                threwException = true;
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw CircularRequirementsException");
+        }
+
+        [TestMethod]
+        public void RequirementMutuallyExclusiveTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT0 = "Bear";
+            const string TRAIT1 = "Rhino";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{TRAIT0}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'None',
+                                    'operands' : [
+                                        {{
+                                            'category_name' : '{CATEGORY}',
+				                            'trait_name' : '{TRAIT1}'
+                                        }}
+                                    ]
+			                    }}
+                            }},
+                            {{
+                                'name' : '{TRAIT1}', 
+                                'weight' : 1,
+                                'requirements' : {{
+                                    'operator' : 'None',
+                                    'operands' : [
+                                        {{
+                                            'category_name' : '{CATEGORY}',
+				                            'trait_name' : '{TRAIT0}'
+                                        }}
+                                    ]
+			                    }}
+			                }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            TraitSchema schema = parser.Parse(text);
+
+            Assert.IsNotNull(schema, "Schema is null");
+
+            TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY);
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+            Assert.AreEqual(0, dependentCategoryNames.Count, "Wrong number of dependencies");
+
+            Trait trait0 = category.GetTrait(TRAIT0);
+            Trait trait1 = category.GetTrait(TRAIT1);
+
+            Npc npcWithTrait0 = new Npc();
+            npcWithTrait0.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT0, CATEGORY, isHidden: false) });
+            Assert.IsFalse(trait1.IsUnlockedFor(npcWithTrait0), "Trait is incorrectly unlocked for npc with mutually exclusive trait");
+
+            Npc npcWithTrait1 = new Npc();
+            npcWithTrait1.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT1, CATEGORY, isHidden: false) });
+            Assert.IsFalse(trait0.IsUnlockedFor(npcWithTrait1), "Trait is incorrectly unlocked for npc with mutually exclusive trait");
+
+            Npc npcWithoutAnyTraits = new Npc();
+            Assert.IsTrue(trait0.IsUnlockedFor(npcWithoutAnyTraits), "Trait is incorrectly locked for npc without mutually exclusive traits");
+            Assert.IsTrue(trait1.IsUnlockedFor(npcWithoutAnyTraits), "Trait is incorrectly locked for npc without mutually exclusive traits");
         }
     }
 }
