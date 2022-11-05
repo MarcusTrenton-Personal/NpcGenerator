@@ -681,5 +681,109 @@ namespace Tests
         {
             new TraitCategory("Colour", outputName: null, selectionCount: 1);
         }
+
+        [TestMethod]
+        public void HasIntraCategoryTraitDependenciesWithEmptyCategory()
+        {
+            TraitCategory category = new TraitCategory("Animal");
+
+            Assert.IsFalse(category.HasIntraCategoryTraitDependencies(), "Incorrect return value");
+        }
+
+        [TestMethod]
+        public void HasIntraCategoryTraitDependenciesWhenOnlyCategoryHasRequirements()
+        {
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId("Animal", "Bear"), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+
+            TraitCategory category = new TraitCategory("Animal");
+            category.Set(req);
+
+            Assert.IsFalse(category.HasIntraCategoryTraitDependencies(), "Incorrect return value");
+        }
+
+        [TestMethod]
+        public void HasIntraCategoryTraitDependenciesFalse()
+        {
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId("Colour", "Blue"), npcHolder0);
+            Requirement req0 = new Requirement(npcHasTrait0, npcHolder0);
+
+            Trait trait0 = new Trait("Bear");
+            trait0.Set(req0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId("Colour", "Red"), npcHolder1);
+            Requirement req1 = new Requirement(npcHasTrait1, npcHolder1);
+            
+            Trait trait1 = new Trait("Rhino");
+            trait1.Set(req1);
+
+            TraitCategory category = new TraitCategory("Animal");
+            category.Add(trait0);
+            category.Add(trait1);
+
+            Assert.IsFalse(category.HasIntraCategoryTraitDependencies(), "Incorrect return value");
+        }
+
+        [TestMethod]
+        public void HasIntraCategoryTraitDependenciesTrue()
+        {
+            const string CATEGORY = "Animal";
+            const string DEPENDENCY_TRAIT = "Bear";
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId("Colour", "Blue"), npcHolder0);
+            Requirement req0 = new Requirement(npcHasTrait0, npcHolder0);
+
+            Trait trait0 = new Trait(DEPENDENCY_TRAIT);
+            trait0.Set(req0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(CATEGORY, DEPENDENCY_TRAIT), npcHolder1);
+            Requirement req1 = new Requirement(npcHasTrait1, npcHolder1);
+
+            Trait trait1 = new Trait("Rhino");
+            trait1.Set(req1);
+
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait0);
+            category.Add(trait1);
+
+            Assert.IsTrue(category.HasIntraCategoryTraitDependencies(), "Incorrect return value");
+        }
+
+        [TestMethod]
+        public void HasIntraCategoryTraitDependenciesMutuallyExclusiveTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string DEPENDENCY_TRAIT0 = "Bear";
+            const string DEPENDENCY_TRAIT1 = "Rhino";
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(CATEGORY, DEPENDENCY_TRAIT1), npcHolder0);
+            LogicalNone none0 = new LogicalNone();
+            none0.Add(npcHasTrait0);
+            Requirement req0 = new Requirement(none0, npcHolder0);
+
+            Trait trait0 = new Trait(DEPENDENCY_TRAIT0);
+            trait0.Set(req0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(CATEGORY, DEPENDENCY_TRAIT0), npcHolder1);
+            LogicalNone none1 = new LogicalNone();
+            none1.Add(npcHasTrait1);
+            Requirement req1 = new Requirement(none1, npcHolder1);
+
+            Trait trait1 = new Trait(DEPENDENCY_TRAIT1);
+            trait1.Set(req1);
+
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait0);
+            category.Add(trait1);
+
+            Assert.IsTrue(category.HasIntraCategoryTraitDependencies(), "Incorrect return value");
+        }
     }
 }

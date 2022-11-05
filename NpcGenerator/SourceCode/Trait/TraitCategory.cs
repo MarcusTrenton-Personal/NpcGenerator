@@ -157,17 +157,30 @@ namespace NpcGenerator
 
         public HashSet<string> DependentCategoryNames()
         {
+            HashSet<string> dependentCategories = TraitDependenciesOnCategories();
+            dependentCategories.Remove(Name); //Mutually exclusive traits in the same category are not dependencies for inter-category ordering.
+
+            HashSet<string> localCategoryDependencies = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
+            dependentCategories.UnionWith(localCategoryDependencies);
+
+            return dependentCategories;
+        }
+
+        public bool HasIntraCategoryTraitDependencies()
+        {
+            HashSet<string> dependentCategories = TraitDependenciesOnCategories();
+            bool selfDedependency = dependentCategories.Contains(Name);
+            return selfDedependency;
+        }
+
+        private HashSet<string> TraitDependenciesOnCategories()
+        {
             HashSet<string> dependentCategories = new HashSet<string>();
             foreach (Trait trait in m_traits)
             {
                 HashSet<string> traitDependentCategories = trait.DependentCategoryNames();
                 dependentCategories.UnionWith(traitDependentCategories);
             }
-            dependentCategories.Remove(Name); //Mutually exclusive traits in the same category are not dependencies for inter-category ordering.
-
-            HashSet<string> localCategoryDependencies = m_requirement == null ? new HashSet<string>() : m_requirement.DependentCategoryNames();
-            dependentCategories.UnionWith(localCategoryDependencies);
-
             return dependentCategories;
         }
 
