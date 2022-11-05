@@ -311,22 +311,12 @@ namespace Tests
             Assert.IsTrue(isUnlocked, "Null requirement should always unlock category for every Npc");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void IsUnlockedForNullNpc()
         {
             TraitCategory category = new TraitCategory("Colour");
 
-            bool threwException = false;
-            try
-            {
-                bool isUnlocked = category.IsUnlockedFor(npc: null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwException = true;
-            }
-            
-            Assert.IsTrue(threwException, "Test whether a null Npc unlocks a category should throw ArgumentNullException");
+            category.IsUnlockedFor(npc: null);
         }
 
         [TestMethod]
