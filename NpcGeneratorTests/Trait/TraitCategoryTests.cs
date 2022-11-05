@@ -553,14 +553,8 @@ namespace Tests
             HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
 
             Assert.AreEqual(2, dependentCategoryNames.Count, "Incorrect number of dependencies");
-            SortedList<string, string> alphabeticalCategoryDependencies = new SortedList<string, string>();
-            foreach (string dep in dependentCategoryNames)
-            {
-                alphabeticalCategoryDependencies.Add(dep, dep);
-            }
-
-            Assert.AreEqual(DEPENDENT_CATEGORY0, alphabeticalCategoryDependencies.Values[0], "Wrong dependency");
-            Assert.AreEqual(DEPENDENT_CATEGORY1, alphabeticalCategoryDependencies.Values[1], "Wrong dependency");
+            Assert.IsTrue(dependentCategoryNames.Contains(DEPENDENT_CATEGORY0), "Dependencies does not contain expected element");
+            Assert.IsTrue(dependentCategoryNames.Contains(DEPENDENT_CATEGORY1), "Dependencies does not contain expected element");
         }
 
         [TestMethod]
@@ -573,7 +567,7 @@ namespace Tests
 
             NpcHolder npcHolder = new NpcHolder();
             NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY0, "Blue"), npcHolder);
-            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "BLue"), npcHolder);
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "Blue"), npcHolder);
             NpcHasTrait npcHasTrait2 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "Green"), npcHolder);
             LogicalAny expression = new LogicalAny();
             expression.Add(npcHasTrait0);
@@ -585,14 +579,105 @@ namespace Tests
             HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
 
             Assert.AreEqual(2, dependentCategoryNames.Count, "Incorrect number of dependencies");
-            SortedList<string, string> alphabeticalCategoryDependencies = new SortedList<string, string>();
-            foreach (string dep in dependentCategoryNames)
-            {
-                alphabeticalCategoryDependencies.Add(dep, dep);
-            }
+            Assert.IsTrue(dependentCategoryNames.Contains(DEPENDENT_CATEGORY0), "Dependencies does not contain expected element");
+            Assert.IsTrue(dependentCategoryNames.Contains(DEPENDENT_CATEGORY1), "Dependencies does not contain expected element");
+        }
 
-            Assert.AreEqual(DEPENDENT_CATEGORY0, alphabeticalCategoryDependencies.Values[0], "Wrong dependency");
-            Assert.AreEqual(DEPENDENT_CATEGORY1, alphabeticalCategoryDependencies.Values[1], "Wrong dependency");
+        [TestMethod]
+        public void DependentCategoryNamesFromTraits()
+        {
+            const string DEPENDENT_CATEGORY0 = "Colour";
+            const string DEPENDENT_CATEGORY1 = "Hair";
+
+            TraitCategory category = new TraitCategory("Animal");
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY0, "Blue"), npcHolder0);
+            Requirement req0 = new Requirement(npcHasTrait0, npcHolder0);
+
+            Trait trait0 = new Trait("Bear");
+            trait0.Set(req0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(DEPENDENT_CATEGORY1, "Blue"), npcHolder1);
+            Requirement req1 = new Requirement(npcHasTrait1, npcHolder1);
+
+            Trait trait1 = new Trait("Rhino");
+            trait1.Set(req1);
+
+            category.Add(trait0);
+            category.Add(trait1);
+
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(2, dependentCategoryNames.Count, "Incorrect number of dependencies");
+            Assert.IsTrue(dependentCategoryNames.Contains(DEPENDENT_CATEGORY0), "Dependencies does not contain expected element");
+            Assert.IsTrue(dependentCategoryNames.Contains(DEPENDENT_CATEGORY1), "Dependencies does not contain expected element");
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesFromTraitsExcludeSelf()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT0 = "Bear";
+            const string TRAIT1 = "Rhino";
+
+            TraitCategory category = new TraitCategory(CATEGORY);
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(CATEGORY, TRAIT1), npcHolder0);
+            LogicalNone none0 = new LogicalNone();
+            none0.Add(npcHasTrait0);
+            Requirement req0 = new Requirement(none0, npcHolder0);
+
+            Trait trait0 = new Trait(TRAIT0);
+            trait0.Set(req0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(CATEGORY, TRAIT0), npcHolder1);
+            LogicalNone none1 = new LogicalNone();
+            none1.Add(npcHasTrait1);
+            Requirement req1 = new Requirement(none1, npcHolder1);
+
+            Trait trait1 = new Trait(TRAIT1);
+            trait1.Set(req1);
+
+            category.Add(trait0);
+            category.Add(trait1);
+
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(0, dependentCategoryNames.Count, "Incorrect number of dependencies");
+        }
+
+        [TestMethod]
+        public void DependentCategoryNamesFromTraitsAndCategories()
+        {
+            const string CATEGORY0 = "Animal";
+            const string TRAIT0 = "Bear";
+            const string CATEGORY1 = "Colour";
+            const string TRAIT1 = "Blue";
+
+            TraitCategory category = new TraitCategory("Age");
+
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(CATEGORY0, TRAIT0), npcHolder0);
+            Requirement req0 = new Requirement(npcHasTrait0, npcHolder0);
+
+            Trait trait0 = new Trait(TRAIT0);
+            trait0.Set(req0);
+            category.Add(trait0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(CATEGORY1, TRAIT1), npcHolder1);
+            Requirement req1 = new Requirement(npcHasTrait1, npcHolder1);
+            category.Set(req1);
+
+            HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
+
+            Assert.AreEqual(2, dependentCategoryNames.Count, "Incorrect number of dependencies");
+            Assert.IsTrue(dependentCategoryNames.Contains(CATEGORY0), "Dependencies does not contain expected element");
+            Assert.IsTrue(dependentCategoryNames.Contains(CATEGORY1), "Dependencies does not contain expected element");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
