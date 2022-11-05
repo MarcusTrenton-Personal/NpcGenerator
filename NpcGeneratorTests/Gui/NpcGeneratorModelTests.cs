@@ -497,6 +497,18 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GenerateCatchesSelfRequiringTraitException()
+        {
+            static SelfRequiringTraitException CreateCallback()
+            {
+                return new SelfRequiringTraitException(new TraitId("Animal", "Rhino"));
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateCatches(CreateCallback, method);
+        }
+
+        [TestMethod]
         public void GenerateCatchesTooFewTraitsInCategoryException()
         {
             static TooFewTraitsInCategoryException CreateCallback()

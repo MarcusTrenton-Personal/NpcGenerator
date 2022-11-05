@@ -48,3 +48,4 @@ trait_replacement	User operation to replace one trait name with another name.	AU
 npcs	Non player characters	AVAVAVA	Npcs	Npcs	
 support_email_call_to_action	When an application error happens, ask if user wants to send a support email	AWAWAW	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
 localized_text_not_found	When the GUI needs text that does not exist for the selected language	AXAXAX	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
+self_requiring_trait	User error message pop-up for npc json configuration file.	AYAYAY	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	

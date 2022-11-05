@@ -542,6 +542,10 @@ namespace NpcGenerator
                 {
                     ShowLocalizedErrorMessageIfAllowed("self_requiring_category", exception.Category);
                 }
+                catch (SelfRequiringTraitException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("self_requiring_trait", exception.TraitId.TraitName, exception.TraitId.CategoryName);
+                }
                 catch (TooFewTraitsInCategoryException exception)
                 {
                     ShowLocalizedErrorMessageIfAllowed(
