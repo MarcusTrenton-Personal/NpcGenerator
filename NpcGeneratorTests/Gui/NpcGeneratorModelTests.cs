@@ -329,7 +329,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GenerateCatchesIOException()
+        public void GenerateFromConfigurationCatchesIOException()
         {
             static IOException CreateCallback()
             {
@@ -337,11 +337,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesEmptyFileException()
+        public void GenerateFromConfigurationCatchesEmptyFileException()
         {
             static EmptyFileException CreateCallback()
             {
@@ -349,11 +349,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesEmptyCategoryNameException()
+        public void GenerateFromConfigurationCatchesEmptyCategoryNameException()
         {
             static EmptyCategoryNameException CreateCallback()
             {
@@ -361,11 +361,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesCategoryWeightMismatchException()
+        public void GenerateFromConfigurationCatchesCategoryWeightMismatchException()
         {
             static CategoryWeightMismatchException CreateCallback()
             {
@@ -373,11 +373,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesTraitMissingCategoryException()
+        public void GenerateFromConfigurationCatchesTraitMissingCategoryException()
         {
             static TraitMissingCategoryException CreateCallback()
             {
@@ -385,11 +385,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesMissingWeightException()
+        public void GenerateFromConfigurationCatchesMissingWeightException()
         {
             static MissingWeightException CreateCallback()
             {
@@ -397,11 +397,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesWeightIsNotWholeNumberException()
+        public void GenerateFromConfigurationCatchesWeightIsNotWholeNumberException()
         {
             static WeightIsNotWholeNumberException CreateCallback()
             {
@@ -409,11 +409,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesMismatchedBonusSelectionException()
+        public void GenerateFromConfigurationCatchesMismatchedBonusSelectionException()
         {
             static MismatchedBonusSelectionException CreateCallback()
             {
@@ -421,11 +421,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesMismatchedReplacementTraitException()
+        public void GenerateFromConfigurationCatchesMismatchedReplacementTraitException()
         {
             static MissingReplacementTraitException CreateCallback()
             {
@@ -433,11 +433,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesMismatchedReplacementCategoryException()
+        public void GenerateFromConfigurationCatchesMismatchedReplacementCategoryException()
         {
             static MissingReplacementCategoryException CreateCallback()
             {
@@ -445,11 +445,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesDuplicateCategoryNameException()
+        public void GenerateFromConfigurationCatchesDuplicateCategoryNameException()
         {
             static DuplicateCategoryNameException CreateCallback()
             {
@@ -457,11 +457,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesRequirementTraitIdNotFoundException()
+        public void GenerateFromConfigurationCatchesRequirementTraitIdNotFoundException()
         {
             static RequirementTraitIdNotFoundException CreateCallback()
             {
@@ -469,11 +469,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesUnknownLogicalOperatorException()
+        public void GenerateFromConfigurationCatchesUnknownLogicalOperatorException()
         {
             static UnknownLogicalOperatorException CreateCallback()
             {
@@ -481,11 +481,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesSelfRequiringCategoryException()
+        public void GenerateFromConfigurationCatchesSelfRequiringCategoryException()
         {
             static SelfRequiringCategoryException CreateCallback()
             {
@@ -493,11 +493,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesSelfRequiringTraitException()
+        public void GenerateFromConfigurationCatchesSelfRequiringTraitException()
         {
             static SelfRequiringTraitException CreateCallback()
             {
@@ -505,11 +505,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesTooFewTraitsInCategoryException()
+        public void GenerateFromConfigurationCatchesTooFewTraitsInCategoryException()
         {
             static TooFewTraitsInCategoryException CreateCallback()
             {
@@ -517,11 +517,11 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
         [TestMethod]
-        public void GenerateCatchesCircularRequirementsException()
+        public void GenerateFromConfigurationCatchesCircularRequirementsException()
         {
             static CircularRequirementsException CreateCallback()
             {
@@ -529,10 +529,10 @@ namespace Tests
             }
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            GenerateCatches(CreateCallback, method);
+            GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
-        private void GenerateCatches<T>(Func<T> createException, string fileName) where T : Exception
+        private void GenerateFromConfigurationCatches<T>(Func<T> createException, string fileName) where T : Exception
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile(fileName);
 
@@ -654,7 +654,69 @@ namespace Tests
             {
                 npcGeneratorModel.GenerateNpcs.Execute(null);
             }
-            catch (Exception)
+            catch (TooFewTraitsInCategoryException)
+            {
+                modelCaughtException = false;
+            }
+
+            Assert.IsTrue(modelCaughtException, "NpcGeneratorModel.GenerateNpcs() failed to catch TooFewTraitsInCategoryException");
+
+            File.Delete(userSettings.ConfigurationPath);
+        }
+
+        [TestMethod]
+        public void GenerateCatchesTooFewTraitsPassTraitRequirementsException()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
+
+            static TraitSchema Callback(string path)
+            {
+                const string REQUIRED_CATEGORY = "Animal";
+                const string REQUIRED_TRAIT = "Bear";
+
+                NpcHolder npcHolder = new NpcHolder();
+                NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+                Requirement req = new Requirement(npcHasTrait, npcHolder);
+                
+                Trait trait = new Trait("Green");
+                trait.Set(req);
+
+                TraitCategory category = new TraitCategory("Colour", 1);
+                category.Add(trait);
+
+                TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY, 0);
+                Trait requiredTrait = new Trait(REQUIRED_TRAIT);
+                requiredCategory.Add(requiredTrait);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+                schema.Add(requiredCategory);
+
+                return schema;
+            }
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new CallbackConfigurationParser(Callback),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false)
+            {
+                NpcQuantity = 1
+            };
+
+            bool modelCaughtException = true;
+            try
+            {
+                npcGeneratorModel.GenerateNpcs.Execute(null);
+            }
+            catch (TooFewTraitsPassTraitRequirementsException)
             {
                 modelCaughtException = false;
             }

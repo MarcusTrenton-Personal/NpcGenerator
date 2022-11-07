@@ -22,19 +22,34 @@ namespace NpcGenerator
 {
     public class TraitChooser
     {
-        public TraitChooser(List<Trait> traits, string originalCategory, IRandom random)
+        public TraitChooser(in IReadOnlyList<Trait> traits, in string originalCategory, in IRandom random, in Npc npc)
         {
             ParamUtil.VerifyNotNull(nameof(traits), traits);
-            ParamUtil.VerifyStringHasContent(nameof(originalCategory), originalCategory);
+            ParamUtil.VerifyHasContent(nameof(originalCategory), originalCategory);
             ParamUtil.VerifyNotNull(nameof(random), random);
+            ParamUtil.VerifyNotNull(nameof(npc), npc);
 
             m_remainingTraits = new List<Trait>(traits);
             m_originalCategory = originalCategory;
             m_random = random;
-            foreach (Trait trait in traits)
+            m_npc = npc;
+        }
+
+        private List<Trait> CalculateValidTraits(out int totalWeight)
+        {
+            List<Trait> validTraits = new List<Trait>();
+            totalWeight = 0;
+            foreach (Trait trait in m_remainingTraits)
             {
-                m_remainingWeight += trait.Weight;
+                bool isValid = trait.IsUnlockedFor(m_npc);
+                if (isValid)
+                {
+                    validTraits.Add(trait);
+                    totalWeight += trait.Weight;
+                }
             }
+
+            return validTraits;
         }
 
         public Npc.Trait[] Choose(int count, out IReadOnlyList<BonusSelection> bonusSelectionsReadonly)
@@ -50,22 +65,26 @@ namespace NpcGenerator
                 throw new TooFewTraitsException(requested: count, available: m_remainingTraits.Count);
             }
 
-            //Number of selected traits is actually variable, with a maximum of SelectionCount. If a hidden trait is selected,
-            //it consumes a selection count but is not added to the selected list.
+            List<Trait> validTraits = CalculateValidTraits(out int remainingWeight);
+            if (validTraits.Count < count)
+            {
+                throw new TooFewTraitsPassRequirementsException(requested: count, available: validTraits.Count);
+            }
+
             List<Npc.Trait> selected = new List<Npc.Trait>();
             for (int i = 0; i < count; i++)
             {
-                if (m_remainingWeight == 0)
+                if (remainingWeight == 0)
                 {
                     throw new NoRemainingWeightException();
                 }
 
-                int randomSelection = m_random.Int(0, m_remainingWeight);
+                int randomSelection = m_random.Int(0, remainingWeight);
                 int selectedIndex = -1;
                 int weightCount = 0;
-                for (int j = 0; j < m_remainingTraits.Count; ++j)
+                for (int j = 0; j < validTraits.Count; ++j)
                 {
-                    weightCount += m_remainingTraits[j].Weight;
+                    weightCount += validTraits[j].Weight;
                     if (randomSelection < weightCount)
                     {
                         selectedIndex = j;
@@ -78,29 +97,49 @@ namespace NpcGenerator
                     throw new FailedToChooseTrait();
                 }
 
-                Trait trait = m_remainingTraits[selectedIndex];
+                Trait trait = validTraits[selectedIndex];
                 selected.Add(new Npc.Trait(trait.Name, m_originalCategory, trait.IsHidden, trait.OriginalName));
                 if (trait.BonusSelection != null)
                 {
                     bonusSelections.Add(trait.BonusSelection);
                 }
 
-                m_remainingWeight -= m_remainingTraits[selectedIndex].Weight;
-                m_remainingTraits.RemoveAt(selectedIndex);
+                remainingWeight -= validTraits[selectedIndex].Weight;
+                validTraits.RemoveAt(selectedIndex);
             }
 
+            m_remainingTraits.RemoveAll(trait => IsTraitSelected(trait, selected));
+
             return selected.ToArray();
+        }
+
+        private bool IsTraitSelected(Trait trait, List<Npc.Trait> selected)
+        {
+            bool isFound = selected.Find(select => select.OriginalName == trait.OriginalName) != null;
+            return isFound;
         }
 
         private readonly IRandom m_random;
         private readonly string m_originalCategory;
         private readonly List<Trait> m_remainingTraits = new List<Trait>();
-        private int m_remainingWeight = 0;
+        private Npc m_npc;
     }
 
     public class TooFewTraitsException : ArgumentException
     {
         public TooFewTraitsException(int requested, int available)
+        {
+            Requested = requested;
+            Available = available;
+        }
+
+        public int Requested { get; private set; }
+        public int Available { get; private set; }
+    }
+
+    public class TooFewTraitsPassRequirementsException : ArgumentException
+    {
+        public TooFewTraitsPassRequirementsException(int requested, int available)
         {
             Requested = requested;
             Available = available;

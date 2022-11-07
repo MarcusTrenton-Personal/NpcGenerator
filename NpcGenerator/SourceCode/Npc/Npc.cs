@@ -24,7 +24,7 @@ namespace NpcGenerator
     {
         public void Add(string category, Trait[] traits)
         {
-            ParamUtil.VerifyStringHasContent(nameof(category), category);
+            ParamUtil.VerifyHasContent(nameof(category), category);
             ParamUtil.VerifyNotNull(nameof(traits), traits);
             foreach (Trait trait in traits)
             {
@@ -106,9 +106,9 @@ namespace NpcGenerator
 
             public Trait(string name, string originalCategory, bool isHidden, string originalName)
             {
-                ParamUtil.VerifyStringHasContent(nameof(name), name);
-                ParamUtil.VerifyStringHasContent(nameof(originalCategory), originalCategory);
-                ParamUtil.VerifyStringHasContent(nameof(originalName), originalName);
+                ParamUtil.VerifyHasContent(nameof(name), name);
+                ParamUtil.VerifyHasContent(nameof(originalCategory), originalCategory);
+                ParamUtil.VerifyHasContent(nameof(originalName), originalName);
 
                 Name = name;
                 OriginalCategory = originalCategory;

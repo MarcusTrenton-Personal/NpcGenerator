@@ -40,12 +40,14 @@ npc_error_too_many_traits_in_category	Application error when npcs violate their 
 npc_error_trait_not_found_in_schema	Application error when npcs violate their own configuration schema.	ANANAN	Trait {0} of category {1} is not found in the configuration file.	Trait {0} of category {1} is not found in the configuration file.	
 npc_error_category_not_found_in_schema	Application error when npcs violate their own configuration schema.	AOAOAO	Category {0} is not found in the configuration file.	Category {0} is not found in the configuration file.	
 npc_error_unused_replacement	Application error when npcs violate their own configuration schema.	APAPAP	Category {0} trait {1} is not replaced when it should be.	Category {0} trait {1} is not replaced when it should be.	
-error	Application error	AQAQAQ	Error	Error	
-error_email_subject	Email subject line	ARARAR	Error During Npc Generation	Error During Npc Generation	
-error_email_body_start	Email body start. Several json text blobs follow.	ASASAS	The configuration, replacements, npc errors, and npc text are below.	The configuration, replacements, npc errors, and npc text are below.	
-trait_replacement_description	User operation to replace one trait name with another name.	ATATAT	Replace trait {0} with {1} in category {2}.	Replace trait {0} with {1} in category {2}.	
-trait_replacement	User operation to replace one trait name with another name.	AUAUAU	Replacement	Replacement	
-npcs	Non player characters	AVAVAVA	Npcs	Npcs	
-support_email_call_to_action	When an application error happens, ask if user wants to send a support email	AWAWAW	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
-localized_text_not_found	When the GUI needs text that does not exist for the selected language	AXAXAX	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
-self_requiring_trait	User error message pop-up for npc json configuration file.	AYAYAY	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	
+npc_error_trait_is_locked	Application error when npcs violate their own configuration schema.	AQAQAQ	Category {0} should not have trait {1} since trait requirements are not met.	Category {0} should not have trait {1} since trait requirements are not met.	
+error	Application error	ARARAR	Error	Error	
+error_email_subject	Email subject line	ASASAS	Error During Npc Generation	Error During Npc Generation	
+error_email_body_start	Email body start. Several json text blobs follow.	ATATAT	The configuration, replacements, npc errors, and npc text are below.	The configuration, replacements, npc errors, and npc text are below.	
+trait_replacement_description	User operation to replace one trait name with another name.	AUAUAU	Replace trait {0} with {1} in category {2}.	Replace trait {0} with {1} in category {2}.	
+trait_replacement	User operation to replace one trait name with another name.	AVAVAVA	Replacement	Replacement	
+npcs	Non player characters	AWAWAW	Npcs	Npcs	
+support_email_call_to_action	When an application error happens, ask if user wants to send a support email	AXAXAX	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
+localized_text_not_found	When the GUI needs text that does not exist for the selected language	AYAYAY	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
+self_requiring_trait	User error message pop-up for npc json configuration file.	AZAZAZ	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	
+too_few_traits_pass_requirements	User error message pop-up for npc json configuration file.	BABABA	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	

@@ -39,7 +39,7 @@ namespace NpcGenerator
 
         public static HashSet<string> VisibleDistinctTraits(Npc.Trait[] traits)
         {
-            ParamUtil.VerifyArrayElementsNotNull(nameof(traits), traits);
+            ParamUtil.VerifyElementsAreNotNull(nameof(traits), traits);
 
             HashSet<string> visibleDistinctTraits = new HashSet<string>();
             foreach (Npc.Trait trait in traits)

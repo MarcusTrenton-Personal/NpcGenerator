@@ -31,18 +31,9 @@ namespace NpcGenerator
 
         public TraitCategory(string name, string outputName, int selectionCount)
         {
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-            if (outputName is null)
-            {
-                throw new ArgumentNullException(nameof(outputName));
-            }
-            if (selectionCount < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(selectionCount), "Must be 0 or greater");
-            }
+            ParamUtil.VerifyHasContent(nameof(name), name);
+            ParamUtil.VerifyHasContent(nameof(outputName), outputName);
+            ParamUtil.VerifyWholeNumber(nameof(selectionCount), selectionCount);
 
             Name = name;
             OutputName = outputName;
@@ -51,6 +42,8 @@ namespace NpcGenerator
 
         public TraitCategory DeepCopyWithReplacements(IReadOnlyList<Replacement> replacements)
         {
+            ParamUtil.VerifyElementsAreNotNull(nameof(replacements), replacements);
+
             TraitCategory copy = (TraitCategory)MemberwiseClone();
             IReadOnlyList<Replacement> replacementsForThisCategory = ReplacementsForThisCategory(replacements);
             copy.m_traits = new List<Trait>(m_traits.Count);
@@ -91,17 +84,17 @@ namespace NpcGenerator
 
         public void Add(Trait trait)
         {
-            if (trait is null)
-            {
-                throw new ArgumentNullException(nameof(trait));
-            }
+            ParamUtil.VerifyNotNull(nameof(trait), trait);
 
             m_traits.Add(trait);
         }
 
-        public TraitChooser CreateTraitChooser(IRandom random)
+        public TraitChooser CreateTraitChooser(IRandom random, Npc npc)
         {
-            return new TraitChooser(m_traits, Name, random);
+            ParamUtil.VerifyNotNull(nameof(random), random);
+            ParamUtil.VerifyNotNull(nameof(npc), npc);
+
+            return new TraitChooser(m_traits, Name, random, npc);
         }
 
         public Trait GetTrait(string name)
@@ -146,10 +139,7 @@ namespace NpcGenerator
 
         public bool IsUnlockedFor(Npc npc)
         {
-            if (npc is null)
-            {
-                throw new ArgumentNullException(nameof(npc));
-            }
+            ParamUtil.VerifyNotNull(nameof(npc), npc);
 
             bool isUnlocked = m_requirement is null || m_requirement.IsUnlockedFor(npc);
             return isUnlocked;

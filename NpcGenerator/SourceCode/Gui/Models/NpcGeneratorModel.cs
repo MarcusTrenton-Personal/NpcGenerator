@@ -240,6 +240,11 @@ namespace NpcGenerator
                 ShowLocalizedErrorMessageIfAllowed(
                     "too_few_traits_in_category", exception.Requested, exception.Category, exception.Available);
             }
+            catch (TooFewTraitsPassTraitRequirementsException exception)
+            {
+                ShowLocalizedErrorMessageIfAllowed(
+                    "too_few_traits_pass_requirements", exception.Requested, exception.Category, exception.Available);
+            }
         }
 
         private void UpdateNpcTable()
@@ -303,6 +308,8 @@ namespace NpcGenerator
                     {
                         NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
                             m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
+                        NpcSchemaViolation.Reason.HasLockedTrait =>
+                            m_localization.GetText("npc_error_trait_is_locked", violation.Category, violation.Trait),
                         NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
                             m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
                         NpcSchemaViolation.Reason.TooManyTraitsInCategory =>

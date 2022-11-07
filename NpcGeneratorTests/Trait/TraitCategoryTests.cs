@@ -120,6 +120,20 @@ namespace Tests
                 "Irrelevent category was changed when it shouldn't.");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void DeepCopyWithReplacementsIsNull()
+        {
+            TraitCategory original = new TraitCategory("Animal", 1);
+            original.DeepCopyWithReplacements(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void DeepCopyWithReplacementsHasNullElement()
+        {
+            TraitCategory original = new TraitCategory("Animal", 1);
+            original.DeepCopyWithReplacements(new List<Replacement>() { null });
+        }
+
         [TestMethod]
         public void AddAndGetTrait()
         {
@@ -241,9 +255,31 @@ namespace Tests
             Trait trait = new Trait(TRAIT_NAME);
             category.Add(trait);
 
-            TraitChooser chooser = category.CreateTraitChooser(new MockRandom());
+            TraitChooser chooser = category.CreateTraitChooser(new MockRandom(), new Npc());
 
             Assert.IsNotNull(chooser, "Chooser is null, which should be impossible");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void CreateTraitChooserNullRandom()
+        {
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour");
+            Trait trait = new Trait(TRAIT_NAME);
+            category.Add(trait);
+
+            category.CreateTraitChooser(null, new Npc());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void CreateTraitChooserNullNpc()
+        {
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour");
+            Trait trait = new Trait(TRAIT_NAME);
+            category.Add(trait);
+
+            category.CreateTraitChooser(new MockRandom(), null);
         }
 
         [TestMethod]

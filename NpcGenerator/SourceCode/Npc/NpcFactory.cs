@@ -23,18 +23,9 @@ namespace NpcGenerator
     {
         public static NpcGroup Create(TraitSchema traitSchema, int npcCount, IReadOnlyList<Replacement> replacements, IRandom random)
         {
-            if (traitSchema is null)
-            {
-                throw new ArgumentNullException(nameof(traitSchema));
-            }
-            if (replacements is null)
-            {
-                throw new ArgumentNullException(nameof(replacements));
-            }
-            if (npcCount < 0)
-            {
-                throw new ArgumentException("npcCount must be greater than or equal to 0.", nameof(npcCount));
-            }
+            ParamUtil.VerifyNotNull(nameof(traitSchema), traitSchema);
+            ParamUtil.VerifyElementsAreNotNull(nameof(replacements), replacements);
+            ParamUtil.VerifyWholeNumber(nameof(npcCount), npcCount);
             
             List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
             List<string> outputCategoryNames = categoriesWithReplacements.ConvertAll(category => category.OutputName);
@@ -76,7 +67,7 @@ namespace NpcGenerator
             foreach (TraitCategory category in categoryOrder)
             {
                 selectionsPerCategory[category] = category.DefaultSelectionCount;
-                chooserForCategory[category] = category.CreateTraitChooser(random);
+                chooserForCategory[category] = category.CreateTraitChooser(random, npc);
             }
 
             bool gainedNewTraitThisIteration;
@@ -121,16 +112,26 @@ namespace NpcGenerator
             {
                 try
                 {
-                    wasTraitAdded = ChooseTraitsFromCategory(
-                        chooser, selectionCount, npc, category.OutputName, out IReadOnlyList<BonusSelection> bonusSelections);
-
                     selectionsPerCategory[category] = 0;
 
-                    AddBonusSelections(bonusSelections, categories, selectionsPerCategory);
+                    bool hasSelfDependencies = category.HasIntraCategoryTraitDependencies();
+                    int iterations =                hasSelfDependencies ? selectionCount : 1;
+                    int selectionsPerIteration =    hasSelfDependencies ? 1 : selectionCount;
+                    for (int i = 0; i < iterations; ++i)
+                    {
+                        wasTraitAdded |= ChooseTraitsFromCategory(
+                            chooser, selectionsPerIteration, npc, category.OutputName, out IReadOnlyList<BonusSelection> bonusSelections);
+                        AddBonusSelections(bonusSelections, categories, selectionsPerCategory);
+                    }
                 }
                 catch (TooFewTraitsException exception)
                 {
                     throw new TooFewTraitsInCategoryException(category.Name, requested: exception.Requested, available: exception.Available);
+                }
+                catch (TooFewTraitsPassRequirementsException exception)
+                {
+                    throw new TooFewTraitsPassTraitRequirementsException(
+                        category.Name, requested: exception.Requested, available: exception.Available);
                 }
             }
 
@@ -163,17 +164,17 @@ namespace NpcGenerator
                 {
                     throw new MissingBonusSelectionCategory(bonusSelection.CategoryName);
                 }
-                selectionsPerCategory[cat] = bonusSelection.SelectionCount;
+                selectionsPerCategory[cat] += bonusSelection.SelectionCount;
             }
         }
 
         public static bool AreNpcsValid(in NpcGroup npcGroup, in TraitSchema schema, IReadOnlyList<Replacement> replacements, 
             out Dictionary<Npc,List<NpcSchemaViolation>> violationsPerNpc)
         {
-            if (npcGroup is null)
-            {
-                throw new ArgumentNullException(nameof(npcGroup));
-            }
+            ParamUtil.VerifyNotNull(nameof(npcGroup), npcGroup);
+            ParamUtil.VerifyNotNull(nameof(schema), schema);
+            ParamUtil.VerifyElementsAreNotNull(nameof(replacements), replacements);
+
             for (int i = 0; i < npcGroup.NpcCount; ++i)
             {
                 Npc npc = npcGroup.GetNpcAtIndex(i);
@@ -181,14 +182,6 @@ namespace NpcGenerator
                 {
                     throw new ArgumentException("An npc in the " + nameof(npcGroup) + " is null");
                 }
-            }
-            if (schema is null)
-            {
-                throw new ArgumentNullException(nameof(schema));
-            }
-            if (replacements is null)
-            {
-                throw new ArgumentNullException(nameof(replacements));
             }
 
             bool areValid = true;
@@ -210,7 +203,7 @@ namespace NpcGenerator
 
             AddUnknownTraitViolations(npc, schema, violations);
             AddUnusedReplacementViolations(npc, replacements, violations);
-            AddLockedCategoryViolations(npc, schema, violations);
+            AddLockedCategoryAndTraitViolations(npc, schema, violations);
             AddIncorrectTraitCountViolations(npc, schema, violations);
 
             return violations.Count == 0;
@@ -282,23 +275,38 @@ namespace NpcGenerator
             }
         }
 
-        private static void AddLockedCategoryViolations(in Npc npc, in TraitSchema schema, List<NpcSchemaViolation> violations)
+        private static void AddLockedCategoryAndTraitViolations(in Npc npc, in TraitSchema schema, List<NpcSchemaViolation> violations)
         {
             IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
             IReadOnlyList<string> npcCategories = npc.GetCategories();
 
             foreach (string npcCategory in npcCategories)
             {
-                TraitCategory category = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
-                if (category != null)
+                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                if (schemaCategory != null)
                 {
-                    bool couldHaveTraitsFromCategory = category.IsUnlockedFor(npc);
-                    if (!couldHaveTraitsFromCategory)
+                    Npc.Trait[] npcTraits = npc.GetTraitsOfCategory(npcCategory);
+
+                    bool couldHaveTraitsFromCategory = schemaCategory.IsUnlockedFor(npc);
+                    if (!couldHaveTraitsFromCategory && npcTraits.Length > 0)
                     {
-                        Npc.Trait[] traits = npc.GetTraitsOfCategory(npcCategory);
-                        if (traits.Length > 0)
+                        violations.Add(new NpcSchemaViolation(
+                            npcCategory, npcTraits[0].Name, NpcSchemaViolation.Reason.HasTraitInLockedCategory));
+                    }
+                    if (couldHaveTraitsFromCategory)
+                    {
+                        foreach (Npc.Trait npcTrait in npcTraits)
                         {
-                            violations.Add(new NpcSchemaViolation(npcCategory, traits[0].Name, NpcSchemaViolation.Reason.HasTraitInLockedCategory));
+                            Trait schemaTrait = schemaCategory.GetTrait(npcTrait.Name);
+                            if (schemaTrait != null)
+                            {
+                                bool couldHaveTrait = schemaTrait.IsUnlockedFor(npc);
+                                if (!couldHaveTrait)
+                                {
+                                    violations.Add(new NpcSchemaViolation(
+                                        npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.HasLockedTrait));
+                                }
+                            }
                         }
                     }
                 }
@@ -374,6 +382,20 @@ namespace NpcGenerator
         public int Available { get; private set; }
     }
 
+    public class TooFewTraitsPassTraitRequirementsException : ArgumentException
+    {
+        public TooFewTraitsPassTraitRequirementsException(string category, int requested, int available)
+        {
+            Category = category;
+            Requested = requested;
+            Available = available;
+        }
+
+        public string Category { get; private set; }
+        public int Requested { get; private set; }
+        public int Available { get; private set; }
+    }
+
     public class NpcSchemaViolation
     {
         public NpcSchemaViolation(string category, Reason violation) : this(category, trait: null, violation)
@@ -396,6 +418,7 @@ namespace NpcGenerator
         public enum Reason
         {
             HasTraitInLockedCategory,
+            HasLockedTrait,
             TooFewTraitsInCategory,
             TooManyTraitsInCategory,
             TraitNotFoundInSchema,

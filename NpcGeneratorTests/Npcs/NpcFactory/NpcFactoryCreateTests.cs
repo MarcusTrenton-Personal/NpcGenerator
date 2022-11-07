@@ -937,6 +937,288 @@ namespace Tests.NpcFactoryTests.Create
             Assert.IsNotNull(npcTrait1, "Trait was not added to the output category");
         }
 
+        [TestMethod]
+        public void NpcPassesTraitRequirements()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string GUARDED_CATEGORY = "Colour";
+            const string GUARDED_TRAIT = "Blue";
+            
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY);
+            requiredCategory.Add(new Trait(REQUIRED_TRAIT));
+            
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            guardedTrait.Set(req);
+            guardedCategory.Add(guardedTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(requiredCategory);
+            schema.Add(guardedCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+
+            Npc.Trait[] traitsOfRequiredCategory = npc.GetTraitsOfCategory(REQUIRED_CATEGORY);
+            Assert.AreEqual(1, traitsOfRequiredCategory.Length, "Wrong number of traits in category");
+            Assert.AreEqual(REQUIRED_TRAIT, traitsOfRequiredCategory[0].Name, "Wrong trait in category");
+
+            Npc.Trait[] traitsOfGuardedCategory = npc.GetTraitsOfCategory(GUARDED_CATEGORY);
+            Assert.AreEqual(1, traitsOfGuardedCategory.Length, "Wrong number of traits in category");
+            Assert.AreEqual(GUARDED_TRAIT, traitsOfGuardedCategory[0].Name, "Wrong trait in category");
+        }
+
+        [TestMethod]
+        public void NpcFailsTraitRequirements()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string GUARDED_CATEGORY = "Colour";
+            const string GUARDED_TRAIT = "Blue";
+            const string NONGUARDED_TRAIT = "Red";
+
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY, 0);
+            requiredCategory.Add(new Trait(REQUIRED_TRAIT));
+
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            guardedTrait.Set(req);
+            guardedCategory.Add(guardedTrait);
+
+            Trait nonGuardedTrait = new Trait(NONGUARDED_TRAIT);
+            guardedCategory.Add(nonGuardedTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(requiredCategory);
+            schema.Add(guardedCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+
+            Npc.Trait[] traitsOfRequiredCategory = npc.GetTraitsOfCategory(REQUIRED_CATEGORY);
+            Assert.AreEqual(0, traitsOfRequiredCategory.Length, "Wrong number of traits in category");
+
+            Npc.Trait[] traitsOfGuardedCategory = npc.GetTraitsOfCategory(GUARDED_CATEGORY);
+            Assert.AreEqual(1, traitsOfGuardedCategory.Length, "Wrong number of traits in category");
+            Assert.AreEqual(NONGUARDED_TRAIT, traitsOfGuardedCategory[0].Name, "Wrong trait in category");
+        }
+
+        [TestMethod, ExpectedException(typeof(TooFewTraitsPassTraitRequirementsException))]
+        public void NpcFailsTraitRequirementsLeavesNoOption()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string GUARDED_CATEGORY = "Colour";
+            const string GUARDED_TRAIT = "Blue";
+
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY, 0);
+            requiredCategory.Add(new Trait(REQUIRED_TRAIT));
+
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            guardedTrait.Set(req);
+            guardedCategory.Add(guardedTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(requiredCategory);
+            schema.Add(guardedCategory);
+
+            NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+        }
+
+        [TestMethod]
+        public void NpcPassesSomeFailsSomeTraitRequirements()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string PASSED_REQUIRED_TRAIT = "Bear";
+            const string FAILED_REQUIRED_TRAIT = "Rhino";
+            const string GUARDED_CATEGORY = "Colour";
+            const string PASSED_GUARDED_TRAIT = "Blue";
+            const string FAILED_GUARDED_TRAIT = "Red";
+
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY);
+            requiredCategory.Add(new Trait(PASSED_REQUIRED_TRAIT));
+            requiredCategory.Add(new Trait(FAILED_REQUIRED_TRAIT));
+
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+
+            //Deliberately include the locked trait first to show that it is skipped over in favour of the unlocked trait.
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasTrait0 = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, FAILED_REQUIRED_TRAIT), npcHolder0);
+            Requirement req0 = new Requirement(npcHasTrait0, npcHolder0);
+            Trait failedGuardedTrait = new Trait(FAILED_GUARDED_TRAIT);
+            failedGuardedTrait.Set(req0);
+            guardedCategory.Add(failedGuardedTrait);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasTrait1 = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, PASSED_REQUIRED_TRAIT), npcHolder1);
+            Requirement req1 = new Requirement(npcHasTrait1, npcHolder1);
+            Trait passedGuardedTrait = new Trait(PASSED_GUARDED_TRAIT);
+            passedGuardedTrait.Set(req1);
+            guardedCategory.Add(passedGuardedTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(requiredCategory);
+            schema.Add(guardedCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+
+            Npc.Trait[] traitsOfRequiredCategory = npc.GetTraitsOfCategory(REQUIRED_CATEGORY);
+            Assert.AreEqual(1, traitsOfRequiredCategory.Length, "Wrong number of traits in category");
+            Assert.AreEqual(PASSED_REQUIRED_TRAIT, traitsOfRequiredCategory[0].Name, "Wrong trait in category");
+
+            Npc.Trait[] traitsOfGuardedCategory = npc.GetTraitsOfCategory(GUARDED_CATEGORY);
+            Assert.AreEqual(1, traitsOfGuardedCategory.Length, "Wrong number of traits in category");
+            Assert.AreEqual(PASSED_GUARDED_TRAIT, traitsOfGuardedCategory[0].Name, "Wrong trait in category");
+        }
+
+        [TestMethod]
+        public void MutuallyExclusiveTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string MUTUALLY_EXCLUSIVE_TRAIT0 = "Bear";
+            const string MUTUALLY_EXCLUSIVE_TRAIT1 = "Rhino";
+            const string NON_EXCLUSIVE_TRAIT = "Velociraptor";
+
+            TraitCategory category = new TraitCategory(CATEGORY, 2);
+
+            //Deliberately include the locked trait first to show that it is skipped over in favour of the unlocked trait.
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait1 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT1), npcHolder0);
+            LogicalNone none0 = new LogicalNone();
+            none0.Add(npcHasMutuallyExclusiveTrait1);
+            Requirement req0 = new Requirement(none0, npcHolder0);
+            Trait mutuallyExclusiveTrait0 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT0);
+            mutuallyExclusiveTrait0.Set(req0);
+            category.Add(mutuallyExclusiveTrait0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait0 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT0), npcHolder1);
+            LogicalNone none1 = new LogicalNone();
+            none1.Add(npcHasMutuallyExclusiveTrait0);
+            Requirement req1 = new Requirement(none1, npcHolder1);
+            Trait mutuallyExclusiveTrait1 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT1);
+            mutuallyExclusiveTrait1.Set(req1);
+            category.Add(mutuallyExclusiveTrait1);
+
+            category.Add(new Trait(NON_EXCLUSIVE_TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+
+            Npc.Trait[] selectedTraits = npc.GetTraitsOfCategory(CATEGORY);
+            Assert.AreEqual(2, selectedTraits.Length, "Wrong number of traits in category");
+            Npc.Trait selectedMutuallyExclusiveTrait0 = Array.Find(selectedTraits, element => element.Name == MUTUALLY_EXCLUSIVE_TRAIT0);
+            Assert.IsNotNull(selectedMutuallyExclusiveTrait0, "Wrong trait in category");
+            Npc.Trait selectedNonExclusiveTrait = Array.Find(selectedTraits, element => element.Name == NON_EXCLUSIVE_TRAIT);
+            Assert.IsNotNull(selectedNonExclusiveTrait, "Wrong trait in category");
+        }
+
+        [TestMethod]
+        public void MutuallyExclusiveTraitsWithBonusSelection()
+        {
+            const string CATEGORY = "Animal";
+            const string MUTUALLY_EXCLUSIVE_TRAIT0 = "Bear";
+            const string MUTUALLY_EXCLUSIVE_TRAIT1 = "Rhino";
+            const string NON_EXCLUSIVE_TRAIT0 = "Velociraptor";
+            const string NON_EXCLUSIVE_TRAIT1 = "Tyrannosaurus Rex";
+            const string NON_EXCLUSIVE_TRAIT2 = "Baryonyx";
+            const string NON_EXCLUSIVE_TRAIT3 = "Tricerotops";
+
+            TraitCategory category = new TraitCategory(CATEGORY, 2);
+
+            //Deliberately include the locked trait first to show that it is skipped over in favour of the unlocked trait.
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait1 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT1), npcHolder0);
+            LogicalNone none0 = new LogicalNone();
+            none0.Add(npcHasMutuallyExclusiveTrait1);
+            Requirement req0 = new Requirement(none0, npcHolder0);
+            Trait mutuallyExclusiveTrait0 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT0)
+            {
+                BonusSelection = new BonusSelection(CATEGORY, 2)
+            };
+            mutuallyExclusiveTrait0.Set(req0);
+            category.Add(mutuallyExclusiveTrait0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait0 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT0), npcHolder1);
+            LogicalNone none1 = new LogicalNone();
+            none1.Add(npcHasMutuallyExclusiveTrait0);
+            Requirement req1 = new Requirement(none1, npcHolder1);
+            Trait mutuallyExclusiveTrait1 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT1)
+            {
+                BonusSelection = new BonusSelection(CATEGORY, 2)
+            };
+            mutuallyExclusiveTrait1.Set(req1);
+            category.Add(mutuallyExclusiveTrait1);
+
+            Trait nonExclusiveTrait0 = new Trait(NON_EXCLUSIVE_TRAIT0)
+            {
+                BonusSelection = new BonusSelection(CATEGORY, 1)
+            };
+            category.Add(nonExclusiveTrait0);
+
+            category.Add(new Trait(NON_EXCLUSIVE_TRAIT1));
+
+            category.Add(new Trait(NON_EXCLUSIVE_TRAIT2));
+
+            category.Add(new Trait(NON_EXCLUSIVE_TRAIT3));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+
+            Npc.Trait[] selectedTraits = npc.GetTraitsOfCategory(CATEGORY);
+            Assert.AreEqual(5, selectedTraits.Length, "Wrong number of traits in category");
+            Npc.Trait selectedMutuallyExclusiveTrait0 = Array.Find(selectedTraits, element => element.Name == MUTUALLY_EXCLUSIVE_TRAIT0);
+            Assert.IsNotNull(selectedMutuallyExclusiveTrait0, "Wrong trait in category");
+            Npc.Trait selectedNonExclusiveTrait0 = Array.Find(selectedTraits, element => element.Name == NON_EXCLUSIVE_TRAIT0);
+            Assert.IsNotNull(selectedNonExclusiveTrait0, "Wrong trait in category");
+            Npc.Trait selectedNonExclusiveTrait1 = Array.Find(selectedTraits, element => element.Name == NON_EXCLUSIVE_TRAIT1);
+            Assert.IsNotNull(selectedNonExclusiveTrait1, "Wrong trait in category");
+            Npc.Trait selectedNonExclusiveTrait2 = Array.Find(selectedTraits, element => element.Name == NON_EXCLUSIVE_TRAIT2);
+            Assert.IsNotNull(selectedNonExclusiveTrait2, "Wrong trait in category");
+            Npc.Trait selectedNonExclusiveTrait3 = Array.Find(selectedTraits, element => element.Name == NON_EXCLUSIVE_TRAIT3);
+            Assert.IsNotNull(selectedNonExclusiveTrait3, "Wrong trait in category");
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

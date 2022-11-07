@@ -27,31 +27,30 @@ namespace ServicesTests
         public void VerifyStringHasContentWhenValid()
         {
             string value = "Red";
-            ParamUtil.VerifyStringHasContent(nameof(value), value);
+            ParamUtil.VerifyHasContent(nameof(value), value);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyStringHasContentWhenNull()
         {
             string value = null;
-            ParamUtil.VerifyStringHasContent(nameof(value), value);
+            ParamUtil.VerifyHasContent(nameof(value), value);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void VerifyStringHasContentWhenEmpty()
         {
             string value = string.Empty;
-            ParamUtil.VerifyStringHasContent(nameof(value), value);
+            ParamUtil.VerifyHasContent(nameof(value), value);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void VerifyStringHasContentWhenWhitespace()
         {
             string value = " ";
-            ParamUtil.VerifyStringHasContent(nameof(value), value);
+            ParamUtil.VerifyHasContent(nameof(value), value);
         }
 
-        
         [TestMethod]
         public void VerifyNotNullWhenValid()
         {
@@ -67,31 +66,66 @@ namespace ServicesTests
         }
 
         [TestMethod]
-        public void VerifyArrayElementsNotNullWhenValidNotEmptyArray()
+        public void VerifyElementsAreNotNullWhenValidNotEmptyArray()
         {
             object[] values = new object[1] { new object() };
-            ParamUtil.VerifyArrayElementsNotNull(nameof(values), values);
+            ParamUtil.VerifyElementsAreNotNull(nameof(values), values);
         }
 
         [TestMethod]
-        public void VerifyArrayElementsNotNullWhenEmptyArray()
+        public void VerifyElementsAreNotNullWhenEmptyArray()
         {
             object[] values = Array.Empty<object>();
-            ParamUtil.VerifyArrayElementsNotNull(nameof(values), values);
+            ParamUtil.VerifyElementsAreNotNull(nameof(values), values);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyArrayElementsNotNullWhenArrayIsNull()
+        public void VerifyElementsAreNotNullWhenArrayIsNull()
         {
             object[] values = null;
-            ParamUtil.VerifyArrayElementsNotNull("values", values);
+            ParamUtil.VerifyElementsAreNotNull("values", values);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void VerifyArrayElementsNotNullWhenArrayHasNulls()
+        public void VerifyElementsAreNotNullWhenArrayHasNulls()
         {
             object[] values = new object[1] { null };
-            ParamUtil.VerifyArrayElementsNotNull(nameof(values), values);
+            ParamUtil.VerifyElementsAreNotNull(nameof(values), values);
+        }
+
+        [TestMethod]
+        public void VerifyElementsAreNotNullWhenValidNotEmptyList()
+        {
+            List<object> values = new List<object> { new object() };
+            ParamUtil.VerifyElementsAreNotNull(nameof(values), values);
+        }
+
+        [TestMethod]
+        public void VerifyElementsAreNotNullWhenValidNotEmptyListOfInts()
+        {
+            List<int> values = new List<int> { 0 };
+            ParamUtil.VerifyElementsAreNotNull(nameof(values), values);
+        }
+
+        [TestMethod]
+        public void VerifyWholeNumberOf1()
+        {
+            int x = 1;
+            ParamUtil.VerifyWholeNumber(nameof(x), x);
+        }
+
+        [TestMethod]
+        public void VerifyWholeNumberOf0()
+        {
+            int x = 0;
+            ParamUtil.VerifyWholeNumber(nameof(x), x);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VerifyWholeNumberOfNegative1()
+        {
+            int x = -1;
+            ParamUtil.VerifyWholeNumber(nameof(x), x);
         }
     }
 }

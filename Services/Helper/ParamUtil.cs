@@ -14,12 +14,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using System;
+using System.Collections.Generic;
 
 namespace Services
 {
     public class ParamUtil
     {
-        public static void VerifyStringHasContent(string name, string value)
+        public static void VerifyHasContent(string name, string value)
         {
             if (value is null)
             {
@@ -39,18 +40,26 @@ namespace Services
             }
         }
 
-        public static void VerifyArrayElementsNotNull<T>(string name, T[] values) where T: notnull
+        public static void VerifyElementsAreNotNull<T>(string name, IEnumerable<T> values) where T: notnull
         {
             if (values is null)
             {
                 throw new ArgumentNullException(name);
             }
-            foreach(T value in values)
+            foreach (T value in values)
             {
                 if (value is null)
                 {
                     throw new ArgumentException(name + " has a null element");
                 }
+            }
+        }
+
+        public static void VerifyWholeNumber(string name, int value)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException(name + " must 0 or greater");
             }
         }
     }

@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -1082,6 +1083,199 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
             Assert.AreEqual(OUTPUT_CATEGORY_NOT_FOUND, violations[0].Category, "Wrong category not found");
             Assert.AreEqual(NpcSchemaViolation.Reason.CategoryNotFoundInSchema, violations[1].Violation, "Wrong violation type");
             Assert.AreEqual(OUTPUT_CATEGORY_NOT_FOUND, violations[1].Category, "Wrong category not found");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidWithUnlockedTrait()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+
+            const string GUARDED_CATEGORY = "Colour";
+            const string GUARDED_TRAIT = "Blue";
+
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY);
+            Trait requiredTrait = new Trait(REQUIRED_TRAIT);
+            requiredCategory.Add(requiredTrait);
+
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            guardedTrait.Set(req);
+            guardedCategory.Add(guardedTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(requiredCategory);
+            schema.Add(guardedCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIRED_TRAIT, REQUIRED_CATEGORY) });
+            npc.Add(GUARDED_CATEGORY, new Npc.Trait[] { new Npc.Trait(GUARDED_TRAIT, GUARDED_CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { REQUIRED_CATEGORY, GUARDED_CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationTraitLocked()
+        {
+            const string REQUIRED_CATEGORY = "Animal";
+            const string REQUIRED_TRAIT = "Bear";
+            const string NON_REQUIRED_TRAIT = "Rhino";
+
+            const string GUARDED_CATEGORY = "Colour";
+            const string GUARDED_TRAIT = "Blue";
+
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY);
+            Trait requiredTrait = new Trait(REQUIRED_TRAIT);
+            requiredCategory.Add(requiredTrait);
+
+            requiredCategory.Add(new Trait(NON_REQUIRED_TRAIT));
+
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            guardedTrait.Set(req);
+            guardedCategory.Add(guardedTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(requiredCategory);
+            schema.Add(guardedCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(NON_REQUIRED_TRAIT, REQUIRED_CATEGORY) });
+            npc.Add(GUARDED_CATEGORY, new Npc.Trait[] { new Npc.Trait(GUARDED_TRAIT, GUARDED_CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { REQUIRED_CATEGORY, GUARDED_CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+            Assert.AreEqual(NpcSchemaViolation.Reason.HasLockedTrait, violations[0].Violation, "Wrong violation reason");
+            Assert.AreEqual(GUARDED_CATEGORY, violations[0].Category, "Wrong violation category");
+            Assert.AreEqual(GUARDED_TRAIT, violations[0].Trait, "Wrong violation trait");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidWithOneOfTheMutuallyExclusiveTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string MUTUALLY_EXCLUSIVE_TRAIT0 = "Bear";
+            const string MUTUALLY_EXCLUSIVE_TRAIT1 = "Rhino";
+            const string NON_EXCLUSIVE_TRAIT = "Velociraptor";
+
+            TraitCategory category = new TraitCategory(CATEGORY, 2);
+
+            //Deliberately include the locked trait first to show that it is skipped over in favour of the unlocked trait.
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait1 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT1), npcHolder0);
+            LogicalNone none0 = new LogicalNone();
+            none0.Add(npcHasMutuallyExclusiveTrait1);
+            Requirement req0 = new Requirement(none0, npcHolder0);
+            Trait mutuallyExclusiveTrait0 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT0);
+            mutuallyExclusiveTrait0.Set(req0);
+            category.Add(mutuallyExclusiveTrait0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait0 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT0), npcHolder1);
+            LogicalNone none1 = new LogicalNone();
+            none1.Add(npcHasMutuallyExclusiveTrait0);
+            Requirement req1 = new Requirement(none1, npcHolder1);
+            Trait mutuallyExclusiveTrait1 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT1);
+            mutuallyExclusiveTrait1.Set(req1);
+            category.Add(mutuallyExclusiveTrait1);
+
+            category.Add(new Trait(NON_EXCLUSIVE_TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { 
+                new Npc.Trait(MUTUALLY_EXCLUSIVE_TRAIT0, CATEGORY), 
+                new Npc.Trait(NON_EXCLUSIVE_TRAIT, CATEGORY) 
+            });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationWithBothMutuallyExclusiveTraits()
+        {
+            const string CATEGORY = "Animal";
+            const string MUTUALLY_EXCLUSIVE_TRAIT0 = "Bear";
+            const string MUTUALLY_EXCLUSIVE_TRAIT1 = "Rhino";
+
+            TraitCategory category = new TraitCategory(CATEGORY, 2);
+
+            //Deliberately include the locked trait first to show that it is skipped over in favour of the unlocked trait.
+            NpcHolder npcHolder0 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait1 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT1), npcHolder0);
+            LogicalNone none0 = new LogicalNone();
+            none0.Add(npcHasMutuallyExclusiveTrait1);
+            Requirement req0 = new Requirement(none0, npcHolder0);
+            Trait mutuallyExclusiveTrait0 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT0);
+            mutuallyExclusiveTrait0.Set(req0);
+            category.Add(mutuallyExclusiveTrait0);
+
+            NpcHolder npcHolder1 = new NpcHolder();
+            NpcHasTrait npcHasMutuallyExclusiveTrait0 = new NpcHasTrait(new TraitId(CATEGORY, MUTUALLY_EXCLUSIVE_TRAIT0), npcHolder1);
+            LogicalNone none1 = new LogicalNone();
+            none1.Add(npcHasMutuallyExclusiveTrait0);
+            Requirement req1 = new Requirement(none1, npcHolder1);
+            Trait mutuallyExclusiveTrait1 = new Trait(MUTUALLY_EXCLUSIVE_TRAIT1);
+            mutuallyExclusiveTrait1.Set(req1);
+            category.Add(mutuallyExclusiveTrait1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { 
+                new Npc.Trait(MUTUALLY_EXCLUSIVE_TRAIT0, CATEGORY), 
+                new Npc.Trait(MUTUALLY_EXCLUSIVE_TRAIT1, CATEGORY) 
+            });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(2, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation lockedTrait0Violation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait == MUTUALLY_EXCLUSIVE_TRAIT0 &&
+                violation.Violation == NpcSchemaViolation.Reason.HasLockedTrait);
+            Assert.IsNotNull(lockedTrait0Violation, "HasLockedTrait violation not detected");
+
+            NpcSchemaViolation lockedTrait1Violation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait == MUTUALLY_EXCLUSIVE_TRAIT1 &&
+                violation.Violation == NpcSchemaViolation.Reason.HasLockedTrait);
+            Assert.IsNotNull(lockedTrait1Violation, "HasLockedTrait violation not detected");
         }
     }
 }
