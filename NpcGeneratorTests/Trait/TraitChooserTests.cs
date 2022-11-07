@@ -303,7 +303,7 @@ namespace Tests
             Assert.AreEqual(0, bonusSelections.Count, "Wrong number of bonusSelections");
         }
 
-        [TestMethod, ExpectedException(typeof(TooFewTraitsPassRequirementsException))]
+        [TestMethod]
         public void TooFewTraitsDueToRequirements()
         {
             const string REQUIRED_CATEGORY = "Colour";
@@ -322,7 +322,20 @@ namespace Tests
 
             TraitChooser chooser = new TraitChooser(traits, GUARDED_CATEGORY, m_random, new Npc());
 
-            chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+            bool threwException = false;
+            try
+            {
+                chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+            }
+            catch (TooFewTraitsPassRequirementsException exception)
+            {
+                threwException = true;
+
+                Assert.AreEqual(1, exception.Requested, "Wrong number of Requested traits");
+                Assert.AreEqual(0, exception.Available, "Wrong number of Available traits");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw TooFewTraitsPassRequirementsException");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
