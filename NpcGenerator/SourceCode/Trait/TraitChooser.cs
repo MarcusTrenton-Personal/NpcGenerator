@@ -24,7 +24,7 @@ namespace NpcGenerator
     {
         public TraitChooser(in IReadOnlyList<Trait> traits, in string originalCategory, in IRandom random, in Npc npc)
         {
-            ParamUtil.VerifyNotNull(nameof(traits), traits);
+            ParamUtil.VerifyElementsAreNotNull(nameof(traits), traits);
             ParamUtil.VerifyHasContent(nameof(originalCategory), originalCategory);
             ParamUtil.VerifyNotNull(nameof(random), random);
             ParamUtil.VerifyNotNull(nameof(npc), npc);

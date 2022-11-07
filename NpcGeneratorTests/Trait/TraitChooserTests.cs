@@ -247,6 +247,120 @@ namespace Tests
             Assert.AreEqual(2, bonusSelections[0].SelectionCount, "Incorrect bonus selection count");
         }
 
+        [TestMethod]
+        public void UnlockedTrait()
+        {
+            const string REQUIRED_CATEGORY = "Colour";
+            const string REQUIRED_TRAIT = "Blue";
+
+            const string GUARDED_CATEGORY = "Animal";
+            const string GUARDED_TRAIT = "Bear";
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            Trait trait = new Trait(GUARDED_TRAIT);
+            trait.Set(req);
+
+            List<Trait> traits = new List<Trait>() { trait };
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(REQUIRED_TRAIT, REQUIRED_CATEGORY) });
+
+            TraitChooser chooser = new TraitChooser(traits, GUARDED_CATEGORY, m_random, npc);
+
+            Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+
+            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
+            Assert.AreEqual(GUARDED_TRAIT, selections[0].Name, "Selected trait name is wrong");
+            Assert.AreEqual(0, bonusSelections.Count, "Wrong number of bonusSelections");
+        }
+
+        [TestMethod]
+        public void LockedTrait()
+        {
+            const string REQUIRED_CATEGORY = "Colour";
+            const string REQUIRED_TRAIT = "Blue";
+
+            const string GUARDED_CATEGORY = "Animal";
+            const string GUARDED_TRAIT = "Bear";
+            const string UNGUARDED_TRAIT = "Rhino";
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            Trait guardTrait = new Trait(GUARDED_TRAIT);
+            guardTrait.Set(req);
+
+            List<Trait> traits = new List<Trait>() { guardTrait, new Trait(UNGUARDED_TRAIT) };
+
+            TraitChooser chooser = new TraitChooser(traits, GUARDED_CATEGORY, m_random, new Npc());
+
+            Npc.Trait[] selections = chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+
+            Assert.AreEqual(1, selections.Length, "Selected traits is not the correct number.");
+            Assert.AreEqual(UNGUARDED_TRAIT, selections[0].Name, "Selected trait name is wrong");
+            Assert.AreEqual(0, bonusSelections.Count, "Wrong number of bonusSelections");
+        }
+
+        [TestMethod, ExpectedException(typeof(TooFewTraitsPassRequirementsException))]
+        public void TooFewTraitsDueToRequirements()
+        {
+            const string REQUIRED_CATEGORY = "Colour";
+            const string REQUIRED_TRAIT = "Blue";
+
+            const string GUARDED_CATEGORY = "Animal";
+            const string GUARDED_TRAIT = "Bear";
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            Trait trait = new Trait(GUARDED_TRAIT);
+            trait.Set(req);
+
+            List<Trait> traits = new List<Trait>() { trait };
+
+            TraitChooser chooser = new TraitChooser(traits, GUARDED_CATEGORY, m_random, new Npc());
+
+            chooser.Choose(1, out IReadOnlyList<BonusSelection> bonusSelections);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullTraitList()
+        {
+            new TraitChooser(null, "Animal", m_random, new Npc());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NullElementInTraitList()
+        {
+            new TraitChooser(new List<Trait>() { null }, "Animal", m_random, new Npc());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullRandom()
+        {
+            new TraitChooser(new List<Trait>(), "Animal", null, new Npc());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptyCategory()
+        {
+            new TraitChooser(new List<Trait>(), string.Empty, m_random, new Npc());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullCategory()
+        {
+            new TraitChooser(new List<Trait>(), null, m_random, new Npc());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullNpc()
+        {
+            new TraitChooser(new List<Trait>(), "Animal", m_random, null);
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }
