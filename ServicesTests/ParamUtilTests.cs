@@ -18,7 +18,7 @@ using Services;
 using System;
 using System.Collections.Generic;
 
-namespace ServicesTests
+namespace Tests
 {
     [TestClass]
     public class ParamUtilTests
