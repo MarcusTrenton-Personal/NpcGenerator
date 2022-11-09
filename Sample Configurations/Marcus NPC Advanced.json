@@ -186,7 +186,18 @@
 				{"name" : "Fidgeter", "weight" : 1},
 				{"name" : "Mismatched eye colour", "weight" : 1},
 				{"name" : "Dancer", "weight" : 1},
-				{"name" : "Famous", "weight" : 1}
+				{"name" : "Famous", "weight" : 1},
+				{"name" : "War Veteran", "weight" : 1, "bonus_selection" : { "trait_category_name" : "War Veteran Injury", "selections" : 1}}
+			]
+		},
+		{
+			"name": "War Veteran Injury",
+			"selections": 0,
+			"hidden": true,
+			"traits" :
+			[
+				{"name" : "None", "weight" : 80},
+				{"name" : "Injury", "weight" : 20, "bonus_selection" : { "trait_category_name" : "Disability", "selections" : 1}}
 			]
 		},
 		{
@@ -204,7 +215,8 @@
 				{"name" : "One eye", "weight" : 1},
 				{"name" : "Blind", "weight" : 1},
 				{"name" : "Prosthetic", "weight" : 1},
-				{"name" : "Deaf", "weight" : 1}
+				{"name" : "Deaf", "weight" : 1},
+				{"name" : "Leg Braces", "weight" : 1}
 			]
 		},
 		{

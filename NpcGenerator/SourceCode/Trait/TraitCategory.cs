@@ -21,15 +21,20 @@ namespace NpcGenerator
 {
     public class TraitCategory : IGuardedByRequirement
     {
-        public TraitCategory(string name) : this(name, outputName: name, selectionCount: 1)
+        public TraitCategory(string name) : this(name, outputName: name, selectionCount: 1, isHidden: false)
         {
         }
 
-        public TraitCategory(string name, int selectionCount) : this(name, outputName: name, selectionCount: selectionCount)
+        public TraitCategory(string name, int selectionCount) : this(name, outputName: name, selectionCount: selectionCount, isHidden: false)
         {
         }
 
-        public TraitCategory(string name, string outputName, int selectionCount)
+        public TraitCategory(string name, string outputName, int selectionCount) : 
+            this(name, outputName: outputName, selectionCount: selectionCount, isHidden: false)
+        {
+        }
+
+        public TraitCategory(string name, string outputName, int selectionCount, bool isHidden)
         {
             ParamUtil.VerifyHasContent(nameof(name), name);
             ParamUtil.VerifyHasContent(nameof(outputName), outputName);
@@ -38,6 +43,7 @@ namespace NpcGenerator
             Name = name;
             OutputName = outputName;
             DefaultSelectionCount = selectionCount;
+            IsHidden = isHidden;
         }
 
         public TraitCategory DeepCopyWithReplacements(IReadOnlyList<Replacement> replacements)
@@ -175,10 +181,9 @@ namespace NpcGenerator
         }
 
         public string Name { get; private set; }
-
         public string OutputName { get; private set; }
-
         public int DefaultSelectionCount { get; private set; }
+        public bool IsHidden { get; private set; }
 
         private List<Trait> m_traits = new List<Trait>();
         private Requirement m_requirement;

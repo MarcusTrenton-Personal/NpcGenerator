@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
+using Services;
 using System.Collections.Generic;
 
 namespace Tests.JsonConfigurationParserTests
@@ -565,6 +566,115 @@ namespace Tests.JsonConfigurationParserTests
             }
 
             Assert.IsTrue(threwException, "Failed to throw a TooFewTraitsInCategoryException");
+        }
+
+        [DataTestMethod]
+        [DataRow(true, DisplayName = "True")]
+        [DataRow(false, DisplayName = "False")]
+        public void HiddenCategory(bool isHidden)
+        {
+            const string CATEGORY = "Hair";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections' : 1,
+                        'hidden' : {isHidden.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Brown', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+
+            Assert.AreEqual(1, categories.Count, "Wrong number of categories");
+            TraitCategory category = categories[0];
+            Assert.AreEqual(CATEGORY, category.Name, "Wrong category name");
+            Assert.AreEqual(isHidden, category.IsHidden, "Wrong IsHidden value");
+        }
+
+        [TestMethod]
+        public void HiddenAndVisibleCategories()
+        {
+            const string CATEGORY0 = "Animal";
+            const bool CATEGORY0_IS_HIDDEN = false;
+            const string CATEGORY1 = "Colour";
+            const bool CATEGORY1_IS_HIDDEN = true;
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'hidden' : {CATEGORY0_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'hidden' : {CATEGORY1_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+
+            Assert.AreEqual(2, categories.Count, "Wrong number of categories");
+            TraitCategory category0 = ListUtil.Find(categories, category => category.Name == CATEGORY0);
+            Assert.IsNotNull(category0, "Category is missing");
+            Assert.AreEqual(CATEGORY0_IS_HIDDEN, category0.IsHidden, "Wrong IsHidden value");
+            TraitCategory category1 = ListUtil.Find(categories, category => category.Name == CATEGORY1);
+            Assert.IsNotNull(category1, "Category is missing");
+            Assert.AreEqual(CATEGORY1_IS_HIDDEN, category1.IsHidden, "Wrong IsHidden value");
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void CategoryHiddenAsInt()
+        {
+            const string CATEGORY = "Hair";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY}',
+                        'selections' : 1,
+                        'hidden' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Brown', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            parser.Parse(text);
         }
 
         private readonly MockRandom m_random = new MockRandom();

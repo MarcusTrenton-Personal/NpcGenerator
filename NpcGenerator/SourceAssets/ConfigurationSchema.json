@@ -43,6 +43,11 @@
 						{"$ref": "#/$defs/trait_id"}
 					]
 				},
+				"hidden": {
+					"description": "Whether the category is shown in Npcs. For example a hidden Npc category of 'War Injury' with a 80% chance of 'No' and a 20% chance of 'Yes' with a bonus on into the 'Disability' category. Optional and assumed false if not present.",
+					"type": "boolean",
+					"default": "false"
+				},
 				"traits": {
 					"description": "List of all traits in one category. By default an NPC can only have 1 trait from a category.",
 					"type": "array",
