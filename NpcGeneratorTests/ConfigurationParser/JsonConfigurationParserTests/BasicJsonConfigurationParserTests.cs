@@ -555,7 +555,7 @@ namespace Tests.JsonConfigurationParserTests
             bool threwException = false;
             try
             {
-                TraitSchema schema = parser.Parse(text);
+                parser.Parse(text);
             }
             catch (TooFewTraitsInCategoryException exception)
             {
@@ -675,6 +675,200 @@ namespace Tests.JsonConfigurationParserTests
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
             parser.Parse(text);
+        }
+
+        [TestMethod]
+        public void ConflictingOutputCategoryVisibilityWith2Conflicts()
+        {
+            const string OUTPUT_CATEGORY_NAME = "Fame";
+            const string CATEGORY0 = "Young Fame";
+            const bool CATEGORY0_IS_HIDDEN = true;
+            const string CATEGORY1 = "Old Fame";
+            const bool CATEGORY1_IS_HIDDEN = false;
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {CATEGORY0_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Social Media', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {CATEGORY1_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Radio', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                parser.Parse(text);
+            }
+            catch (ConflictingCategoryVisibilityException exception)
+            {
+                threwException = true;
+
+                Assert.AreEqual(2, exception.ConflictingCategories.Count, "Wrong number of conflicting categories");
+
+                TraitCategory category0 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY0);
+                Assert.IsNotNull(category0, "Wrong category in exception");
+
+                TraitCategory category1 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY1);
+                Assert.IsNotNull(category1, "Wrong category in exception");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw ConflictingCategoryVisibilityException");
+        }
+
+        [TestMethod]
+        public void ConflictingOutputCategoryVisibilityWithManyConflicts()
+        {
+            const string OUTPUT_CATEGORY_NAME = "Fame";
+            const string CATEGORY0 = "Young Fame";
+            const bool CATEGORY0_IS_HIDDEN = true;
+            const string CATEGORY1 = "Old Fame";
+            const bool CATEGORY1_IS_HIDDEN = false;
+            const string CATEGORY2 = "Ancient Fame";
+            const bool CATEGORY2_IS_HIDDEN = true;
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {CATEGORY0_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Social Media', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {CATEGORY1_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Radio', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : 'Animal',
+                        'selections' : 1,
+                        'output_name' : 'Species',
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY2}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {CATEGORY2_IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Cave Painting', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                parser.Parse(text);
+            }
+            catch (ConflictingCategoryVisibilityException exception)
+            {
+                threwException = true;
+
+                Assert.AreEqual(3, exception.ConflictingCategories.Count, "Wrong number of conflicting categories");
+
+                TraitCategory category0 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY0);
+                Assert.IsNotNull(category0, "Wrong category in exception");
+
+                TraitCategory category1 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY1);
+                Assert.IsNotNull(category1, "Wrong category in exception");
+
+                TraitCategory category2 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY2);
+                Assert.IsNotNull(category2, "Wrong category in exception");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw ConflictingCategoryVisibilityException");
+        }
+
+        [TestMethod]
+        public void CategoryHiddenSharingOutputCategories()
+        {
+            const string OUTPUT_CATEGORY_NAME = "Fame";
+            const string CATEGORY0 = "Young Fame";
+            const bool IS_HIDDEN = true;
+            const string CATEGORY1 = "Old Fame";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Social Media', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'output_name' : '{OUTPUT_CATEGORY_NAME}',
+                        'hidden' : {IS_HIDDEN.ToString().ToLower()},
+                        'traits' : [
+                            {{ 
+                                'name' : 'Radio', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            
+            TraitSchema schema = parser.Parse(text);
+
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
         }
 
         private readonly MockRandom m_random = new MockRandom();

@@ -196,8 +196,8 @@
 			"hidden": true,
 			"traits" :
 			[
-				{"name" : "None", "weight" : 80},
-				{"name" : "Injury", "weight" : 20, "bonus_selection" : { "trait_category_name" : "Disability", "selections" : 1}}
+				{"name" : "None", "weight" : 70},
+				{"name" : "Injury", "weight" : 30, "bonus_selection" : { "trait_category_name" : "Disability", "selections" : 1}}
 			]
 		},
 		{

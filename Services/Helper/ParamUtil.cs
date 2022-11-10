@@ -40,7 +40,7 @@ namespace Services
             }
         }
 
-        public static void VerifyElementsAreNotNull<T>(string name, IEnumerable<T> values) where T: notnull
+        public static void VerifyElementsAreNotNull<T>(string name, in IEnumerable<T> values) where T: notnull
         {
             if (values is null)
             {
@@ -60,6 +60,21 @@ namespace Services
             if (value < 0)
             {
                 throw new ArgumentException(name + " must 0 or greater");
+            }
+        }
+
+        public static void VerifyDictionaryKeyExists<T,U>(string dictionaryName, in IDictionary<T,U> dictionary, string keyName, T key)
+        {
+            bool dictionaryExists = dictionary != null;
+            if (!dictionaryExists)
+            {
+                throw new InvalidOperationException(dictionaryName + " is null");
+            }
+
+            bool elementExists = dictionary.ContainsKey(key);
+            if (!elementExists)
+            {
+                throw new KeyNotFoundException(keyName + " was not found in dictionary " + dictionaryName);
             }
         }
     }

@@ -54,6 +54,7 @@ namespace NpcGenerator
             DetectTooFewTraitsInCategory(protoTraitSchema.trait_categories);
             TraitSchema traitSchema = ParseInternal(protoTraitSchema);
             DetectCircularRequirements(traitSchema);
+            DetectConflictingCategoryVisibility(traitSchema.GetTraitCategories());
             return traitSchema;
         }
 
@@ -121,6 +122,33 @@ namespace NpcGenerator
                 if (requiredTraits > availableTraits)
                 {
                     throw new TooFewTraitsInCategoryException(category.Name, requiredTraits, availableTraits);
+                }
+            }
+        }
+
+        private static void DetectConflictingCategoryVisibility(IReadOnlyList<TraitCategory> categories)
+        {
+            Dictionary<string, List<TraitCategory>> m_categoriesByOutputNames = new Dictionary<string, List<TraitCategory>>();
+            foreach (TraitCategory category in categories)
+            {
+                if (!m_categoriesByOutputNames.ContainsKey(category.OutputName))
+                {
+                    m_categoriesByOutputNames[category.OutputName] = new List<TraitCategory>();
+                }
+                m_categoriesByOutputNames[category.OutputName].Add(category);
+            }
+
+            foreach (List<TraitCategory> categoriesOfSameOutputName in m_categoriesByOutputNames.Values)
+            {
+                if (categoriesOfSameOutputName.Count > 1)
+                {
+                    bool originalIsHidden = categoriesOfSameOutputName[0].IsHidden;
+                    TraitCategory conflictingCategory = 
+                        ListUtil.Find(categoriesOfSameOutputName, category => category.IsHidden != originalIsHidden);
+                    if (conflictingCategory != null)
+                    {
+                        throw new ConflictingCategoryVisibilityException(categoriesOfSameOutputName);
+                    }
                 }
             }
         }

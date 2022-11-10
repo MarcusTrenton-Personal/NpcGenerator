@@ -22,6 +22,21 @@ namespace NpcGenerator
     //Not just a trait holder, but holds enough data to audit that the npc is a valid product of the schema.
     public class Npc
     {
+        public void SetIsHidden(string category, bool isHidden)
+        {
+            ParamUtil.VerifyHasContent(nameof(category), category);
+
+            m_areCategoriesHidden[category] = isHidden;
+        }
+
+        public bool IsCategoryHidden(string category)
+        {
+            ParamUtil.VerifyHasContent(nameof(category), category);
+            ParamUtil.VerifyDictionaryKeyExists("Categories", m_areCategoriesHidden, "Category", category);
+
+            return m_areCategoriesHidden[category];
+        }
+
         public void Add(string category, Trait[] traits)
         {
             ParamUtil.VerifyHasContent(nameof(category), category);
@@ -49,6 +64,12 @@ namespace NpcGenerator
             {
                 m_traitsByCategory[category] = new HashSet<Trait>();
                 traitSet = m_traitsByCategory[category];
+
+                bool isHiddenStatusSet = m_areCategoriesHidden.ContainsKey(category);
+                if (!isHiddenStatusSet)
+                {
+                    m_areCategoriesHidden[category] = false;
+                }
             }
 
             foreach (Trait trait in traits)
@@ -174,5 +195,6 @@ namespace NpcGenerator
         }
 
         private readonly Dictionary<string,HashSet<Trait>> m_traitsByCategory = new Dictionary<string, HashSet<Trait>>();
+        private readonly Dictionary<string, bool> m_areCategoriesHidden = new Dictionary<string, bool>();
     }
 }

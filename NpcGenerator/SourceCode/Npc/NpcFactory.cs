@@ -106,6 +106,8 @@ namespace NpcGenerator
         {
             bool wasTraitAdded = false;
 
+            npc.SetIsHidden(category.OutputName, category.IsHidden);
+
             int selectionCount = selectionsPerCategory[category];
             bool canUseCategory = category.IsUnlockedFor(npc);
             if (selectionCount > 0 && canUseCategory)

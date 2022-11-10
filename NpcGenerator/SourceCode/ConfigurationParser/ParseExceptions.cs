@@ -174,4 +174,14 @@ namespace NpcGenerator
 
         public List<TraitSchema.Dependency> Cycle;
     }
+
+    public class ConflictingCategoryVisibilityException : FormatException
+    {
+        public ConflictingCategoryVisibilityException(List<TraitCategory> conflicingCategories)
+        {
+            ConflictingCategories = conflicingCategories;
+        }
+
+        public List<TraitCategory> ConflictingCategories { get; private set; }
+    }
 }
