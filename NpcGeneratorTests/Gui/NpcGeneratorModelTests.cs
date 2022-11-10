@@ -532,6 +532,18 @@ namespace Tests
             GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
+        [TestMethod]
+        public void GenerateFromConfigurationCatchesConflictingCategoryVisibilityException()
+        {
+            static ConflictingCategoryVisibilityException CreateCallback()
+            {
+                return new ConflictingCategoryVisibilityException(new List<TraitCategory>());
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateFromConfigurationCatches(CreateCallback, method);
+        }
+
         private void GenerateFromConfigurationCatches<T>(Func<T> createException, string fileName) where T : Exception
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile(fileName);

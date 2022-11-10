@@ -1277,5 +1277,100 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
                 violation.Violation == NpcSchemaViolation.Reason.HasLockedTrait);
             Assert.IsNotNull(lockedTrait1Violation, "HasLockedTrait violation not detected");
         }
+
+        [TestMethod]
+        public void AreNpcsValidWithHiddenCategory()
+        {
+            const string CATEGORY = "Young Fame";
+            const string TRAIT = "Social Media";
+
+            Trait trait = new Trait(TRAIT);
+            TraitCategory category = new TraitCategory(CATEGORY, CATEGORY, 1, isHidden: true);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.SetIsHidden(CATEGORY, isHidden: true);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationIncorrectlyHiddenCategory()
+        {
+            const string CATEGORY = "Young Fame";
+            const string TRAIT = "Social Media";
+
+            Trait trait = new Trait(TRAIT);
+            TraitCategory category = new TraitCategory(CATEGORY, CATEGORY, 1, isHidden: false);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.SetIsHidden(CATEGORY, isHidden: true);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation incorrectlyHiddenCategoryViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden);
+            Assert.IsNotNull(incorrectlyHiddenCategoryViolation, "CategoryIsIncorrectlyHidden violation not detected");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationIncorrectlyNotHiddenCategory()
+        {
+            const string CATEGORY = "Young Fame";
+            const string TRAIT = "Social Media";
+
+            Trait trait = new Trait(TRAIT);
+            TraitCategory category = new TraitCategory(CATEGORY, CATEGORY, 1, isHidden: true);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            Npc npc = new Npc();
+            npc.SetIsHidden(CATEGORY, isHidden: false);
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<string>() { CATEGORY });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out Dictionary<Npc, List<NpcSchemaViolation>> violationsPerNpc);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+
+            List<NpcSchemaViolation> violations = violationsPerNpc[npc];
+            Assert.AreEqual(1, violations.Count, "Wrong number of violations");
+
+            NpcSchemaViolation incorrectlyHiddenCategoryViolation = violations.Find(
+                violation => violation.Category == CATEGORY &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.CategoryIsIncorrectlyNotHidden);
+            Assert.IsNotNull(incorrectlyHiddenCategoryViolation, "CategoryIsIncorrectlyHidden violation not detected");
+        }
     }
 }

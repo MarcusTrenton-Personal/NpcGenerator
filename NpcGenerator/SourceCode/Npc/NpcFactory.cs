@@ -207,6 +207,7 @@ namespace NpcGenerator
             AddUnusedReplacementViolations(npc, replacements, violations);
             AddLockedCategoryAndTraitViolations(npc, schema, violations);
             AddIncorrectTraitCountViolations(npc, schema, violations);
+            AddIncorrectCategoryIsHiddenViolations(npc, schema, violations);
 
             return violations.Count == 0;
         }
@@ -338,6 +339,24 @@ namespace NpcGenerator
             }
         }
 
+        private static void AddIncorrectCategoryIsHiddenViolations(in Npc npc, in TraitSchema schema, List<NpcSchemaViolation> violations)
+        {
+            IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
+
+            IReadOnlyList<string> npcCategories = npc.GetCategories();
+            foreach (string npcCategory in npcCategories)
+            {
+                bool isNpcCategoryHidden = npc.IsCategoryHidden(npcCategory);
+                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.OutputName == npcCategory);
+                if (schemaCategory != null && schemaCategory.IsHidden != isNpcCategoryHidden)
+                {
+                    NpcSchemaViolation.Reason reason = isNpcCategoryHidden ? NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden :
+                        NpcSchemaViolation.Reason.CategoryIsIncorrectlyNotHidden;
+                    violations.Add(new NpcSchemaViolation(npcCategory, reason));
+                }
+            }
+        }
+
         private static Dictionary<string, int> BonusSelectionIntoCount(in Npc npc, in TraitSchema schema)
         {
             Dictionary<string, int> bonusSelectionIntoCount = new Dictionary<string, int>();
@@ -427,6 +446,8 @@ namespace NpcGenerator
             CategoryNotFoundInSchema,
             TraitIsIncorrectlyHidden,
             TraitIsIncorrectlyNotHidden,
+            CategoryIsIncorrectlyHidden,
+            CategoryIsIncorrectlyNotHidden,
             UnusedReplacement
         }
     }

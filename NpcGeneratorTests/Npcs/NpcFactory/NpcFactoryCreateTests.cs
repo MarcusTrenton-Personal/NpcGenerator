@@ -1219,6 +1219,51 @@ namespace Tests.NpcFactoryTests.Create
             Assert.IsNotNull(selectedNonExclusiveTrait3, "Wrong trait in category");
         }
 
+        [TestMethod]
+        public void HiddenCategory()
+        {
+            const string CATEGORY = "Young Fame";
+            TraitCategory youngFameCategory = new TraitCategory(CATEGORY, CATEGORY, 1, isHidden: true);
+            youngFameCategory.Add(new Trait("Social Media"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(youngFameCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            bool isHidden = npc.IsCategoryHidden(CATEGORY);
+            Assert.IsTrue(isHidden, "Category is incorrectly not hidden");
+        }
+
+        [TestMethod]
+        public void HiddenCategoryOfSharedOutput()
+        {
+            const string CATEGORY0_NAME = "Young Fame";
+            const string CATEGORY1_NAME = "Old Fame";
+            const string SHARED_OUTPUT_CATEGORY_NAME = "Fame";
+            TraitCategory youngFameCategory = new TraitCategory(CATEGORY0_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1, isHidden: true);
+            youngFameCategory.Add(new Trait("Social Media"));
+            TraitCategory oldFameCategory = new TraitCategory(CATEGORY1_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1, isHidden: true);
+            oldFameCategory.Add(new Trait("Radio"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(youngFameCategory);
+            schema.Add(oldFameCategory);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+
+            Npc npc = npcGroup.GetNpcAtIndex(0);
+            bool isHidden = npc.IsCategoryHidden(SHARED_OUTPUT_CATEGORY_NAME);
+            Assert.IsTrue(isHidden, "Category is incorrectly not hidden");
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

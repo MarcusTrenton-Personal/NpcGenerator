@@ -322,6 +322,10 @@ namespace NpcGenerator
                             m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
                         NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
                             m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
+                        NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden =>
+                            m_localization.GetText("npc_error_category_incorrectly_hidden", violation.Category),
+                        NpcSchemaViolation.Reason.CategoryIsIncorrectlyNotHidden =>
+                            m_localization.GetText("npc_error_category_incorrectly_not_hidden", violation.Category),
                         NpcSchemaViolation.Reason.UnusedReplacement =>
                             m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
                         _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
@@ -572,6 +576,23 @@ namespace NpcGenerator
                                 "circular_requirement_link" : "circular_requirement_link_bonus_selection";
                             string link = m_localization.GetText(localizationId, dependency.OriginalCategory, dependency.DependentCategory);
                             builder.Append(link);
+                        }
+
+                        MessageBox.Show(builder.ToString());
+                    }
+                }
+                catch (ConflictingCategoryVisibilityException exception)
+                {
+                    if (m_showErrorMessages)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        string header = m_localization.GetText("conflicting_output_category_visibility");
+                        builder.AppendLine(header);
+                        foreach (TraitCategory conflictingCategory in exception.ConflictingCategories)
+                        {
+                            string categoryLine = m_localization.GetText("conflicting_output_category_visibility_element",
+                                conflictingCategory.Name, conflictingCategory.OutputName, conflictingCategory.IsHidden);
+                            builder.AppendLine(categoryLine);
                         }
 
                         MessageBox.Show(builder.ToString());
