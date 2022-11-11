@@ -316,6 +316,84 @@ namespace Tests
             Assert.AreEqual(TRAIT, traits[0].Name, "Wrong trait name");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void SetIsHiddenNull()
+        {
+            Npc npc = new Npc();
+
+            npc.SetIsHidden(null, isHidden: true);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void SetIsHiddenEmpty()
+        {
+            Npc npc = new Npc();
+
+            npc.SetIsHidden(string.Empty, isHidden: true);
+        }
+
+        [DataTestMethod]
+        [DataRow(true, DisplayName = "True")]
+        [DataRow(false, DisplayName = "False")]
+        public void SetIsHiddenNotFound(bool isHidden)
+        {
+            const string CATEGORY = "Animal";
+
+            Npc npc = new Npc();
+
+            npc.SetIsHidden(CATEGORY, isHidden: isHidden);
+
+            Assert.AreEqual(isHidden, npc.IsCategoryHidden(CATEGORY), "Wrong value returned");
+        }
+
+        [DataTestMethod]
+        [DataRow(true, DisplayName = "True")]
+        [DataRow(false, DisplayName = "False")]
+        public void SetIsHidden(bool isHidden)
+        {
+            const string CATEGORY = "Animal";
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { } );
+
+            npc.SetIsHidden(CATEGORY, isHidden: isHidden);
+
+            Assert.AreEqual(isHidden, npc.IsCategoryHidden(CATEGORY), "Wrong value returned");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void IsCategoryHiddenNull()
+        {
+            Npc npc = new Npc();
+
+            npc.IsCategoryHidden(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void IsCategoryHiddenEmpty()
+        {
+            Npc npc = new Npc();
+
+            npc.IsCategoryHidden(string.Empty);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void IsCategoryHiddenNotFound()
+        {
+            Npc npc = new Npc();
+            npc.Add("Animal", new Npc.Trait[] { });
+
+            npc.IsCategoryHidden("Colour");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void IsCategoryHiddenNullDictionary()
+        {
+            Npc npc = new Npc();
+
+            npc.IsCategoryHidden("Colour");
+        }
+
 #pragma warning disable CS0253 // Possible unintended reference comparison. Intentional for testing equality.
 #pragma warning disable CS1718 // Comparison made to the same variable. Intential for testing equality.
 

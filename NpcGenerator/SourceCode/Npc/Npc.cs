@@ -32,7 +32,7 @@ namespace NpcGenerator
         public bool IsCategoryHidden(string category)
         {
             ParamUtil.VerifyHasContent(nameof(category), category);
-            ParamUtil.VerifyDictionaryKeyExists("Categories", m_areCategoriesHidden, "Category", category);
+            ParamUtil.VerifyInternalDictionaryKeyExists("Categories", m_areCategoriesHidden, "Category", category);
 
             return m_areCategoriesHidden[category];
         }

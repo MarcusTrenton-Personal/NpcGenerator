@@ -127,5 +127,38 @@ namespace Tests
             int x = -1;
             ParamUtil.VerifyWholeNumber(nameof(x), x);
         }
+
+        [TestMethod]
+        public void VerifyInternalDictionaryKeyExistsElementFound()
+        {
+            Dictionary<int, string> dictionary = new Dictionary<int, string>
+            {
+                [1] = "One"
+            };
+
+            int key = 1;
+            ParamUtil.VerifyInternalDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VerifyInternalDictionaryKeyExistsElementMissing()
+        {
+            Dictionary<int, string> dictionary = new Dictionary<int, string>
+            {
+                [1] = "One"
+            };
+
+            int key = 2;
+            ParamUtil.VerifyInternalDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyInternalDictionaryKeyExistsDictionaryIsNull()
+        {
+            Dictionary<int, string> dictionary = null;
+
+            int key = 1;
+            ParamUtil.VerifyInternalDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+        }
     }
 }
