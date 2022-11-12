@@ -49,7 +49,7 @@ namespace Tests
             string[] categories = NpcToStringArray.Export(npc, new string[] { "Colour" });
 
             Assert.AreEqual(1, categories.Length, "Wrong number of categories");
-            Assert.AreEqual(TRAIT0 + ExportUtil.MULTI_TRAIT_SEPARATOR + TRAIT1, categories[0], "Wrong traits in category");
+            Assert.AreEqual(TRAIT0 + NpcToStringArray.MULTI_TRAIT_SEPARATOR + TRAIT1, categories[0], "Wrong traits in category");
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace Tests
             Npc npc = new Npc();
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npcGroup.GetNpcAtIndex(0), npcGroup.CategoryOrder);
+            string[] categories = NpcToStringArray.Export(npcGroup.GetNpcAtIndex(0), npcGroup.VisibleCategoryOrder);
 
             Assert.AreEqual(0, categories.Length, "Wrong number of categories");
         }
@@ -133,14 +133,15 @@ namespace Tests
             npc.Add(category: C0_NAME, traits: new Npc.Trait[] { new Npc.Trait(C0T0, C0_NAME), new Npc.Trait(C0T1, C0_NAME) });
             npc.Add(category: C1_NAME, traits: new Npc.Trait[] { new Npc.Trait(C1T0, C1_NAME), new Npc.Trait(C1T1, C1_NAME) });
 
-            NpcGroup npcGroup = new NpcGroup(new List<string> { C0_NAME, C1_NAME });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { 
+                new NpcGroup.Category(C0_NAME), new NpcGroup.Category(C1_NAME) });
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npc, new List<string>() { C0_NAME, C1_NAME });
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
 
             Assert.AreEqual(2, categories.Length, "Wrong number of categories");
-            Assert.AreEqual(C0T0 + ExportUtil.MULTI_TRAIT_SEPARATOR + C0T1, categories[0], "Wrong traits in category");
-            Assert.AreEqual(C1T0 + ExportUtil.MULTI_TRAIT_SEPARATOR + C1T1, categories[1], "Wrong traits in category");
+            Assert.AreEqual(C0T0 + NpcToStringArray.MULTI_TRAIT_SEPARATOR + C0T1, categories[0], "Wrong traits in category");
+            Assert.AreEqual(C1T0 + NpcToStringArray.MULTI_TRAIT_SEPARATOR + C1T1, categories[1], "Wrong traits in category");
         }
 
         [TestMethod]
@@ -149,13 +150,14 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string NOT_FOUND_CATEGORY = "Animal";
             const string TRAIT = "Blue";
-            NpcGroup npcGroup = new NpcGroup(new List<string> { NOT_FOUND_CATEGORY, CATEGORY });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(NOT_FOUND_CATEGORY), new NpcGroup.Category(CATEGORY) });
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npc, new List<string>() { NOT_FOUND_CATEGORY, CATEGORY });
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
 
             Assert.AreEqual(2, categories.Length, "Wrong number of categories");
         }
@@ -165,13 +167,13 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
-            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { new NpcGroup.Category(CATEGORY) });
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
 
             Assert.AreEqual(1, categories.Length, "Wrong number of categories");
             Assert.AreEqual(0, categories[0].Length, "Hidden incorrectly trait appears");
@@ -183,13 +185,13 @@ namespace Tests
             const string CATEGORY = "Colour";
             const string VISIBLE_TRAIT = "Blue";
             const string HIDDEN_TRAIT = "Red";
-            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { new NpcGroup.Category(CATEGORY) });
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(VISIBLE_TRAIT, CATEGORY), new Npc.Trait(HIDDEN_TRAIT, CATEGORY, isHidden: true) });
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
 
             Assert.AreEqual(1, categories.Length, "Wrong number of categories");
             Assert.AreEqual(VISIBLE_TRAIT, categories[0], "Output is not just visible trait with no extra punctuation");
@@ -200,18 +202,66 @@ namespace Tests
         {
             const string CATEGORY = "Colour";
             const string TRAIT = "Blue";
-            NpcGroup npcGroup = new NpcGroup(new List<string> { CATEGORY });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { new NpcGroup.Category(CATEGORY) });
 
             Npc npc = new Npc();
             npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY), new Npc.Trait(TRAIT, CATEGORY) });
             npcGroup.Add(npc);
 
-            string[] categories = NpcToStringArray.Export(npc, new List<string>() { CATEGORY });
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
 
             Assert.AreEqual(1, categories.Length, "Wrong number of categories");
             Assert.AreEqual(TRAIT, categories[0], "Output is not just visible trait with no extra punctuation");
         }
 
-        MockRandom m_random = new MockRandom();
+        [TestMethod]
+        public void HiddenCategory()
+        {
+            const string C0_NAME = "Colour";
+            const string C0T0 = "Blue";
+            const string C0T1 = "Green";
+            const string C1_NAME = "Terrain";
+            const string C1T0 = "Hills";
+            const string C1T1 = "River";
+
+            Npc npc = new Npc();
+            npc.Add(category: C0_NAME, traits: new Npc.Trait[] { new Npc.Trait(C0T0, C0_NAME), new Npc.Trait(C0T1, C0_NAME) });
+            npc.Add(category: C1_NAME, traits: new Npc.Trait[] { new Npc.Trait(C1T0, C1_NAME), new Npc.Trait(C1T1, C1_NAME) });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(C0_NAME, isHidden: true), new NpcGroup.Category(C1_NAME) });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
+
+            Assert.AreEqual(1, categories.Length, "Wrong number of categories");
+            string expectedText = C1T0 + NpcToCsv.MULTI_TRAIT_SEPARATOR + C1T1;
+            Assert.AreEqual(expectedText, categories[0], "Output is not just visible trait with no extra punctuation");
+        }
+
+        [TestMethod]
+        public void AllCategoriesHidden()
+        {
+            const string C0_NAME = "Colour";
+            const string C0T0 = "Blue";
+            const string C0T1 = "Green";
+            const string C1_NAME = "Terrain";
+            const string C1T0 = "Hills";
+            const string C1T1 = "River";
+
+            Npc npc = new Npc();
+            npc.Add(category: C0_NAME, traits: new Npc.Trait[] { new Npc.Trait(C0T0, C0_NAME), new Npc.Trait(C0T1, C0_NAME) });
+            npc.Add(category: C1_NAME, traits: new Npc.Trait[] { new Npc.Trait(C1T0, C1_NAME), new Npc.Trait(C1T1, C1_NAME) });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(C0_NAME, isHidden: true), new NpcGroup.Category(C1_NAME, isHidden: true) });
+            npcGroup.Add(npc);
+
+            string[] categories = NpcToStringArray.Export(npc, npcGroup.VisibleCategoryOrder);
+
+            Assert.AreEqual(0, categories.Length, "Wrong number of categories");
+        }
+
+        private readonly MockRandom m_random = new MockRandom();
     }
 }

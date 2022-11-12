@@ -235,7 +235,7 @@ namespace NpcGenerator
             }
         }
 
-        private void WriteSaveNpcsEvent(JsonWriter writer, string format)
+        private static void WriteSaveNpcsEvent(JsonWriter writer, string format)
         {
             writer.WriteStartObject(); //Start of event object
 
@@ -329,10 +329,14 @@ namespace NpcGenerator
             }
         }
 
-        private static HashSet<NpcSchemaViolation.Reason> GetTypesOfNpcSchemaViolation(Dictionary<Npc, List<NpcSchemaViolation>> violations)
+        private static HashSet<NpcSchemaViolation.Reason> GetTypesOfNpcSchemaViolation(NpcSchemaViolationCollection violations)
         {
             HashSet<NpcSchemaViolation.Reason> result = new HashSet<NpcSchemaViolation.Reason>();
-            foreach (List<NpcSchemaViolation> violationList in violations.Values)
+            foreach (NpcSchemaViolation violation in violations.categoryViolations)
+            {
+                result.Add(violation.Violation);
+            }
+            foreach (List<NpcSchemaViolation> violationList in violations.violationsByNpc.Values)
             {
                 foreach (NpcSchemaViolation violation in violationList)
                 {

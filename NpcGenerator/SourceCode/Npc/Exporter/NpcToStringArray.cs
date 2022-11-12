@@ -20,6 +20,8 @@ namespace NpcGenerator
 {
     public class NpcToStringArray
     {
+        public const string MULTI_TRAIT_SEPARATOR = ExportUtil.MULTI_TRAIT_SEPARATOR;
+
         public static string[] Export(Npc npc, IReadOnlyList<string> categoryOrder)
         {
             StringBuilder stringBuilder = new StringBuilder();

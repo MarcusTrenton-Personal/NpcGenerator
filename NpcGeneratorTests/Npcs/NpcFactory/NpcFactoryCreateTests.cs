@@ -1223,8 +1223,9 @@ namespace Tests.NpcFactoryTests.Create
         public void HiddenCategory()
         {
             const string CATEGORY = "Young Fame";
+            const string TRAIT = "Social Media";
             TraitCategory youngFameCategory = new TraitCategory(CATEGORY, CATEGORY, 1, isHidden: true);
-            youngFameCategory.Add(new Trait("Social Media"));
+            youngFameCategory.Add(new Trait(TRAIT));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(youngFameCategory);
@@ -1232,11 +1233,12 @@ namespace Tests.NpcFactoryTests.Create
             NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
-            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+            Assert.AreEqual(0, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
 
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            bool isHidden = npc.IsCategoryHidden(CATEGORY);
-            Assert.IsTrue(isHidden, "Category is incorrectly not hidden");
+            Assert.IsNotNull(npc, "Failed to create an npc using a valid schema");
+            Assert.IsTrue(npc.HasTrait(new TraitId(CATEGORY, TRAIT)), "Npc has the wrong trait");
         }
 
         [TestMethod]
@@ -1245,10 +1247,12 @@ namespace Tests.NpcFactoryTests.Create
             const string CATEGORY0_NAME = "Young Fame";
             const string CATEGORY1_NAME = "Old Fame";
             const string SHARED_OUTPUT_CATEGORY_NAME = "Fame";
+            const string TRAIT0 = "Social Media";
+            const string TRAIT1 = "Radio";
             TraitCategory youngFameCategory = new TraitCategory(CATEGORY0_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1, isHidden: true);
-            youngFameCategory.Add(new Trait("Social Media"));
+            youngFameCategory.Add(new Trait(TRAIT0));
             TraitCategory oldFameCategory = new TraitCategory(CATEGORY1_NAME, SHARED_OUTPUT_CATEGORY_NAME, 1, isHidden: true);
-            oldFameCategory.Add(new Trait("Radio"));
+            oldFameCategory.Add(new Trait(TRAIT1));
 
             TraitSchema schema = new TraitSchema();
             schema.Add(youngFameCategory);
@@ -1257,11 +1261,14 @@ namespace Tests.NpcFactoryTests.Create
             NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
 
             Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
-            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
+            Assert.AreEqual(0, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
 
+            Assert.AreEqual(1, npcGroup.NpcCount, "Wrong number of npcs created.");
             Npc npc = npcGroup.GetNpcAtIndex(0);
-            bool isHidden = npc.IsCategoryHidden(SHARED_OUTPUT_CATEGORY_NAME);
-            Assert.IsTrue(isHidden, "Category is incorrectly not hidden");
+            Assert.IsNotNull(npc, "Failed to create an npc using a valid schema");
+            Assert.IsTrue(npc.HasTrait(new TraitId(SHARED_OUTPUT_CATEGORY_NAME, TRAIT0)), "Npc has the wrong trait");
+            Assert.IsNotNull(npc, "Failed to create an npc using a valid schema");
+            Assert.IsTrue(npc.HasTrait(new TraitId(SHARED_OUTPUT_CATEGORY_NAME, TRAIT1)), "Npc has the wrong trait");
         }
 
         private readonly MockRandom m_random = new MockRandom();

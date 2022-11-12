@@ -50,7 +50,7 @@ namespace NpcGenerator
 
                 for (int i = 0; i < group.NpcCount; ++i)
                 {
-                    ToJsonObject(group.GetNpcAtIndex(i), writer, group.CategoryOrder);
+                    ToJsonObject(group.GetNpcAtIndex(i), writer, group.VisibleCategoryOrder);
                 }
 
                 writer.WriteEndArray();

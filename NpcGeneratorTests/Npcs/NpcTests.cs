@@ -317,81 +317,47 @@ namespace Tests
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void SetIsHiddenNull()
+        public void HasCategoryNull()
         {
             Npc npc = new Npc();
 
-            npc.SetIsHidden(null, isHidden: true);
+            bool hasCategory = npc.HasCategory(null);
+
+            Assert.IsFalse(hasCategory, "Wrong result from HasCategory");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void SetIsHiddenEmpty()
+        [TestMethod]
+        public void HasCategoryEmpty()
         {
             Npc npc = new Npc();
 
-            npc.SetIsHidden(string.Empty, isHidden: true);
+            bool hasCategory = npc.HasCategory(string.Empty);
+
+            Assert.IsFalse(hasCategory, "Wrong result from HasCategory");
         }
 
-        [DataTestMethod]
-        [DataRow(true, DisplayName = "True")]
-        [DataRow(false, DisplayName = "False")]
-        public void SetIsHiddenNotFound(bool isHidden)
-        {
-            const string CATEGORY = "Animal";
-
-            Npc npc = new Npc();
-
-            npc.SetIsHidden(CATEGORY, isHidden: isHidden);
-
-            Assert.AreEqual(isHidden, npc.IsCategoryHidden(CATEGORY), "Wrong value returned");
-        }
-
-        [DataTestMethod]
-        [DataRow(true, DisplayName = "True")]
-        [DataRow(false, DisplayName = "False")]
-        public void SetIsHidden(bool isHidden)
+        [TestMethod]
+        public void HasCategoryTrue()
         {
             const string CATEGORY = "Animal";
 
             Npc npc = new Npc();
-            npc.Add(CATEGORY, new Npc.Trait[] { } );
+            npc.Add(CATEGORY, new Npc.Trait[] { });
 
-            npc.SetIsHidden(CATEGORY, isHidden: isHidden);
+            bool hasCategory = npc.HasCategory(CATEGORY);
 
-            Assert.AreEqual(isHidden, npc.IsCategoryHidden(CATEGORY), "Wrong value returned");
+            Assert.IsTrue(hasCategory, "Wrong result from HasCategory");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void IsCategoryHiddenNull()
-        {
-            Npc npc = new Npc();
-
-            npc.IsCategoryHidden(null);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void IsCategoryHiddenEmpty()
-        {
-            Npc npc = new Npc();
-
-            npc.IsCategoryHidden(string.Empty);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void IsCategoryHiddenNotFound()
+        [TestMethod]
+        public void HasCategoryFalse()
         {
             Npc npc = new Npc();
             npc.Add("Animal", new Npc.Trait[] { });
 
-            npc.IsCategoryHidden("Colour");
-        }
+            bool hasCategory = npc.HasCategory("Colour");
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void IsCategoryHiddenNullDictionary()
-        {
-            Npc npc = new Npc();
-
-            npc.IsCategoryHidden("Colour");
+            Assert.IsFalse(hasCategory, "Wrong result from HasCategory");
         }
 
 #pragma warning disable CS0253 // Possible unintended reference comparison. Intentional for testing equality.

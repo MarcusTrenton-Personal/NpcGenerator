@@ -250,13 +250,13 @@ namespace NpcGenerator
         private void UpdateNpcTable()
         {
             DataTable table = new DataTable("Npc Table");
-            for (int i = 0; i < m_npcGroup.CategoryOrder.Count; ++i)
+            for (int i = 0; i < m_npcGroup.VisibleCategoryOrder.Count; ++i)
             {
-                table.Columns.Add(m_npcGroup.GetTraitCategoryNameAtIndex(i));
+                table.Columns.Add(m_npcGroup.VisibleCategoryOrder[i]);
             }
             for (int i = 0; i < m_npcGroup.NpcCount; ++i)
             {
-                string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.CategoryOrder);
+                string[] text = NpcToStringArray.Export(m_npcGroup.GetNpcAtIndex(i), m_npcGroup.VisibleCategoryOrder);
                 table.Rows.Add(text);
             }
             m_table = table;
@@ -266,11 +266,11 @@ namespace NpcGenerator
         private void ValidateNpcs(List<Replacement> replacements)
         {
             bool areValid = NpcFactory.AreNpcsValid(
-                    m_npcGroup, m_traitSchema, replacements, out Dictionary<Npc, List<NpcSchemaViolation>> violations);
+                    m_npcGroup, m_traitSchema, replacements, out NpcSchemaViolationCollection violations);
             if (m_forceFailNpcGeneration)
             {
                 NpcSchemaViolation fakeViolation = new NpcSchemaViolation("Fake Failure Test", NpcSchemaViolation.Reason.CategoryNotFoundInSchema);
-                violations[new Npc()] = new List<NpcSchemaViolation>() { fakeViolation };
+                violations.categoryViolations.Add(fakeViolation);
                 areValid = false;
             }
             if (!areValid)
@@ -297,43 +297,52 @@ namespace NpcGenerator
             }
         }
 
-        private string NpcErrorBody(Dictionary<Npc, List<NpcSchemaViolation>> violations)
+        private string NpcErrorBody(NpcSchemaViolationCollection violations)
         {
             StringBuilder errorBody = new StringBuilder();
-            foreach (List<NpcSchemaViolation> violationList in violations.Values)
+            foreach (NpcSchemaViolation violation in violations.categoryViolations)
+            {
+                AddTextLineForNpcSchemaViolation(violation, errorBody);
+            }
+            foreach (List<NpcSchemaViolation> violationList in violations.violationsByNpc.Values)
             {
                 foreach (NpcSchemaViolation violation in violationList)
                 {
-                    string errorMessage = violation.Violation switch
-                    {
-                        NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
-                            m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
-                        NpcSchemaViolation.Reason.HasLockedTrait =>
-                            m_localization.GetText("npc_error_trait_is_locked", violation.Category, violation.Trait),
-                        NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
-                            m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
-                        NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
-                            m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
-                        NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
-                            m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
-                        NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
-                            m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
-                        NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
-                            m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
-                        NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
-                            m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
-                        NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden =>
-                            m_localization.GetText("npc_error_category_incorrectly_hidden", violation.Category),
-                        NpcSchemaViolation.Reason.CategoryIsIncorrectlyNotHidden =>
-                            m_localization.GetText("npc_error_category_incorrectly_not_hidden", violation.Category),
-                        NpcSchemaViolation.Reason.UnusedReplacement =>
-                            m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
-                        _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
-                    };
-                    errorBody.AppendLine(errorMessage);
+                    AddTextLineForNpcSchemaViolation(violation, errorBody);
                 }
             }
             return errorBody.ToString();
+        }
+
+        private void AddTextLineForNpcSchemaViolation(NpcSchemaViolation violation, StringBuilder text)
+        {
+            string errorMessage = violation.Violation switch
+            {
+                NpcSchemaViolation.Reason.HasTraitInLockedCategory =>
+                    m_localization.GetText("npc_error_trait_in_locked_category", violation.Category, violation.Trait),
+                NpcSchemaViolation.Reason.HasLockedTrait =>
+                    m_localization.GetText("npc_error_trait_is_locked", violation.Category, violation.Trait),
+                NpcSchemaViolation.Reason.TooFewTraitsInCategory =>
+                    m_localization.GetText("npc_error_too_few_traits_in_category", violation.Category),
+                NpcSchemaViolation.Reason.TooManyTraitsInCategory =>
+                    m_localization.GetText("npc_error_too_many_traits_in_category", violation.Category),
+                NpcSchemaViolation.Reason.TraitNotFoundInSchema =>
+                    m_localization.GetText("npc_error_trait_not_found_in_schema", violation.Trait, violation.Category),
+                NpcSchemaViolation.Reason.CategoryNotFoundInSchema =>
+                    m_localization.GetText("npc_error_category_not_found_in_schema", violation.Category),
+                NpcSchemaViolation.Reason.TraitIsIncorrectlyHidden =>
+                    m_localization.GetText("npc_error_trait_incorrectly_hidden", violation.Category, violation.Trait),
+                NpcSchemaViolation.Reason.TraitIsIncorrectlyNotHidden =>
+                    m_localization.GetText("npc_error_trait_incorrectly_not_hidden", violation.Category, violation.Trait),
+                NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden =>
+                    m_localization.GetText("npc_error_category_incorrectly_hidden", violation.Category),
+                NpcSchemaViolation.Reason.CategoryIsIncorrectlyNotHidden =>
+                    m_localization.GetText("npc_error_category_incorrectly_not_hidden", violation.Category),
+                NpcSchemaViolation.Reason.UnusedReplacement =>
+                    m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
+                _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
+            };
+            text.AppendLine(errorMessage);
         }
 
         private void SendErrorEmail(string errorTitle, string errorBody, List<Replacement> replacements)

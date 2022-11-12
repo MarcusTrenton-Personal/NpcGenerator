@@ -31,15 +31,19 @@ namespace NpcGenerator
         {
             StringBuilder text = new StringBuilder();
 
-            TraitCategoryNamesToCsv(text, group.CategoryOrder);
-            text.Append('\n');
-
-            for (int i = 0; i < group.NpcCount; ++i)
+            IReadOnlyList<string> visibleCategoryOrder = group.VisibleCategoryOrder;
+            if (visibleCategoryOrder.Count > 0)
             {
-                ToCsvRow(group.GetNpcAtIndex(i), text, group.CategoryOrder);
-                if (i + 1 < group.NpcCount)
+                TraitCategoryNamesToCsv(text, visibleCategoryOrder);
+                text.Append('\n');
+
+                for (int i = 0; i < group.NpcCount; ++i)
                 {
-                    text.Append('\n');
+                    ToCsvRow(group.GetNpcAtIndex(i), text, visibleCategoryOrder);
+                    if (i + 1 < group.NpcCount)
+                    {
+                        text.Append('\n');
+                    }
                 }
             }
 

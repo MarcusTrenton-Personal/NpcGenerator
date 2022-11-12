@@ -19,11 +19,11 @@ namespace NpcGenerator.Message
 {
     public class InvalidNpcs
     {
-        public InvalidNpcs(Dictionary<Npc, List<NpcSchemaViolation>> violations)
+        public InvalidNpcs(NpcSchemaViolationCollection violations)
         {
             Violations = violations;
         }
 
-        public Dictionary<Npc, List<NpcSchemaViolation>> Violations { get; private set; }
+        public NpcSchemaViolationCollection Violations { get; private set; }
     }
 }
