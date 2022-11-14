@@ -324,14 +324,14 @@ namespace NpcGenerator
                     {
                         foreach (Npc.Trait npcTrait in npcTraits)
                         {
-                            Trait schemaTrait = schemaCategory.GetTrait(npcTrait.Name);
+                            Trait schemaTrait = schemaCategory.GetTraitWithOriginalName(npcTrait.OriginalName);
                             if (schemaTrait != null)
                             {
                                 bool couldHaveTrait = schemaTrait.IsUnlockedFor(npc);
                                 if (!couldHaveTrait)
                                 {
                                     violations.Add(new NpcSchemaViolation(
-                                        npcCategory, npcTrait.Name, NpcSchemaViolation.Reason.HasLockedTrait));
+                                        npcCategory, npcTrait.OriginalName, NpcSchemaViolation.Reason.HasLockedTrait));
                                 }
                             }
                         }

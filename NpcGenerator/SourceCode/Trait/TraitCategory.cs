@@ -108,6 +108,11 @@ namespace NpcGenerator
             return m_traits.Find(trait => trait.Name == name);
         }
 
+        public Trait GetTraitWithOriginalName(string originalName)
+        {
+            return m_traits.Find(trait => trait.OriginalName == originalName);
+        }
+
         public bool HasTrait(string name)
         {
             return m_traits.FindIndex(trait => trait.Name == name) > -1;

@@ -822,6 +822,101 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
         }
 
         [TestMethod]
+        public void AreNpcsValidWithReplacementSatisfyingRequirement()
+        {
+            const string GUARDED_CATEGORY = "Animal";
+            const string GUARDED_TRAIT = "Bear";
+            const string TRAIT_ORIGINAL_NAME = "Red";
+            const string REPLACEMENT_NAME = "Blue";
+            const string REQUIRED_CATEGORY = "Colour";
+
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            guardedCategory.Add(guardedTrait);
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REPLACEMENT_NAME), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY);
+            requiredCategory.Set(req);
+            Trait traitWithReplacement = new Trait(TRAIT_ORIGINAL_NAME);
+            requiredCategory.Add(traitWithReplacement);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(guardedCategory);
+            schema.Add(requiredCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] {
+                new Npc.Trait(REPLACEMENT_NAME, REQUIRED_CATEGORY, isHidden: false, originalName: TRAIT_ORIGINAL_NAME) });
+            npc.Add(GUARDED_CATEGORY, new Npc.Trait[] { new Npc.Trait(GUARDED_TRAIT, GUARDED_CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { 
+                new NpcGroup.Category(GUARDED_CATEGORY), new NpcGroup.Category(REQUIRED_CATEGORY) });
+            npcGroup.Add(npc);
+
+            Replacement replacement = new Replacement(traitWithReplacement, REPLACEMENT_NAME, requiredCategory);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
+            List<NpcSchemaViolation> violations = violationCollection.violationsByNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidWithReplacementBypassingRequirement()
+        {
+            const string GUARDED_CATEGORY = "Animal";
+            const string GUARDED_TRAIT = "Bear";
+            const string ORIGINAL_UNGUARDED_TRAIT = "Rhino";
+            const string REQUIRED_TRAIT = "Blue";
+            const string ALTERNATIVE_REQUIRED_TRAIT = "Red";
+            const string REQUIRED_CATEGORY = "Colour";
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId(REQUIRED_CATEGORY, REQUIRED_TRAIT), npcHolder);
+            Requirement req = new Requirement(npcHasTrait, npcHolder);
+            Trait guardedTrait = new Trait(GUARDED_TRAIT);
+            guardedTrait.Set(req);
+
+            Trait unguardedTrait = new Trait(ORIGINAL_UNGUARDED_TRAIT);
+
+            TraitCategory guardedCategory = new TraitCategory(GUARDED_CATEGORY);
+            guardedCategory.Add(guardedTrait);
+            guardedCategory.Add(unguardedTrait);
+
+            TraitCategory requiredCategory = new TraitCategory(REQUIRED_CATEGORY);
+
+            Trait alternativeTrait = new Trait(ALTERNATIVE_REQUIRED_TRAIT);
+            Trait requiredTrait = new Trait(REQUIRED_TRAIT);
+            requiredCategory.Add(alternativeTrait);
+            requiredCategory.Add(requiredTrait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(guardedCategory);
+            schema.Add(requiredCategory);
+
+            Npc npc = new Npc();
+            npc.Add(REQUIRED_CATEGORY, new Npc.Trait[] { new Npc.Trait(ALTERNATIVE_REQUIRED_TRAIT, REQUIRED_CATEGORY) });
+            npc.Add(GUARDED_CATEGORY, new Npc.Trait[] { 
+                new Npc.Trait(GUARDED_TRAIT, GUARDED_CATEGORY, isHidden: false, originalName: ORIGINAL_UNGUARDED_TRAIT) });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(GUARDED_CATEGORY), new NpcGroup.Category(REQUIRED_CATEGORY) });
+            npcGroup.Add(npc);
+
+            Replacement replacement = new Replacement(unguardedTrait, REQUIRED_TRAIT, guardedCategory);
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>() { replacement }, out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
+            List<NpcSchemaViolation> violations = violationCollection.violationsByNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
         public void AreNpcsValidWithLockedCategory()
         {
             const string REQUIRED_CATEGORY = "Animal";

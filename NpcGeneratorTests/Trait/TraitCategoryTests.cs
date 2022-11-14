@@ -159,6 +159,44 @@ namespace Tests
         }
 
         [TestMethod]
+        public void AddAndGetTraitWithOriginalName()
+        {
+            const string ORIGINAL_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour");
+            Trait trait = new Trait(ORIGINAL_NAME);
+            category.Add(trait);
+
+            Assert.AreEqual(trait, category.GetTraitWithOriginalName(ORIGINAL_NAME), ORIGINAL_NAME + " was not found in the copy");
+        }
+
+        [TestMethod]
+        public void GetTraitWithOriginalNameAfterReplacement()
+        {
+            const string ORIGINAL_NAME = "Blue";
+            const string REPLACEMENT_NAME = "Red";
+            TraitCategory category = new TraitCategory("Colour");
+            Trait trait = new Trait(ORIGINAL_NAME);
+            category.Add(trait);
+            TraitCategory replacedCategory = category.DeepCopyWithReplacements(new List<Replacement> { 
+                new Replacement(trait, REPLACEMENT_NAME, category) });
+
+            Assert.IsNotNull(replacedCategory.GetTraitWithOriginalName(ORIGINAL_NAME), ORIGINAL_NAME + " was not found in the copy");
+        }
+
+        [TestMethod]
+        public void GetTraitWithOriginalNameThatDoesNotExist()
+        {
+            const string TRAIT_NAME = "Blue";
+            TraitCategory category = new TraitCategory("Colour");
+            Trait trait = new Trait(TRAIT_NAME);
+            category.Add(trait);
+
+            Trait foundTrait = category.GetTraitWithOriginalName("Purple");
+
+            Assert.IsNull(foundTrait, "Getting a trait that does not exist should return null but is not");
+        }
+
+        [TestMethod]
         public void GetEmptyBonusSelectionCategories()
         {
             TraitCategory category = new TraitCategory("Animal");
