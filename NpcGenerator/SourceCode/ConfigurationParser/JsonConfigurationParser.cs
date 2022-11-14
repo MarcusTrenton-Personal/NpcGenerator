@@ -25,6 +25,8 @@ namespace NpcGenerator
 {
     public class JsonConfigurationParser : IFormatConfigurationParser
     {
+        public const int DEFAULT_WEIGHT = 1;
+
         public JsonConfigurationParser(string schemaPath)
         {
             bool hasSchemaPath = !string.IsNullOrEmpty(schemaPath);
@@ -453,7 +455,7 @@ namespace NpcGenerator
         private class ProtoTrait
         {
             public string Name { get; set; }
-            public int Weight { get; set; }
+            public int Weight { get; set; } = DEFAULT_WEIGHT;
             public bool Hidden { get; set; } = false;
             public ProtoLogicalExpression requirements;
             //Deliberately breaking with the normal naming scheme.

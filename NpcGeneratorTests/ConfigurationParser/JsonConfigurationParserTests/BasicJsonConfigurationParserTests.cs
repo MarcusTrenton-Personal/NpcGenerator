@@ -279,30 +279,43 @@ namespace Tests.JsonConfigurationParserTests
             parser.Parse(text);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        [TestMethod]
         public void MissingWeightTrait()
         {
-            string text = @"{
+            const string CATEGORY = "Colour";
+            const string WEIGHTLESS_TRAIT = "Green";
+
+            string text = $@"{{
                 'trait_categories' : [
-                    {
-                        'name' : 'Colour',
+                    {{
+                        'name' : '{CATEGORY}',
                         'selections': 1,
                         'traits' : [
-                            { 
-                                'name' : 'Green'
-                            },
-                            { 
+                            {{ 
+                                'name' : '{WEIGHTLESS_TRAIT}'
+                            }},
+                            {{ 
                                 'name' : 'Red', 
                                 'weight' : 1
-                            }
+                            }}
                         ]
-                    }
+                    }}
                 ]
-            }";
+            }}";
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            parser.Parse(text);
+            TraitSchema schema = parser.Parse(text);
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
+            Assert.IsNotNull(categories, "Schema categories is null, which should be impossible");
+            Assert.AreEqual(1, categories.Count, "Schema has incorrect number of TraitCategories");
+            
+            TraitCategory category = categories[0];
+            Trait weightlessTrait = category.GetTrait(WEIGHTLESS_TRAIT);
+            Assert.IsNotNull(weightlessTrait, "Trait is not found");
+            Assert.AreEqual(JsonConfigurationParser.DEFAULT_WEIGHT, weightlessTrait.Weight, "Wrong default weight");
         }
 
         [TestMethod, ExpectedException(typeof(JsonFormatException))]

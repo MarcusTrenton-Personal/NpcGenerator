@@ -68,7 +68,7 @@
 					"type": "string"
 				},
 				"weight": {
-					"description": "The likelihood that this trait will be picked. Two traits of equal weight are equally as likely to be picked. If one trait has double the weight of another, it is twice as likely to be picked. If the sum of all weights in a category add up to 100, the weight is a percentage change to be picked.",
+					"description": "The optional likelihood that this trait will be picked. Two traits of equal weight are equally as likely to be picked. If one trait has double the weight of another, it is twice as likely to be picked. If the sum of all weights in a category add up to 100, the weight is a percentage change to be picked. If not specified, it will default to 1.",
 					"type": "integer",
 					"minimum": 0
 				},
@@ -98,7 +98,7 @@
 					"additionalProperties": false
 				}
 			},
-			"required": ["name", "weight"],
+			"required": ["name"],
 			"additionalProperties": false
 		},
 		"selections": {
