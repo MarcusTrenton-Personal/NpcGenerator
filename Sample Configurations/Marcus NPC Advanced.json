@@ -757,6 +757,46 @@
 			]
 		},
 		{
+			"name": "Hungarian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hungarian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"László"},	{"name":"István"},		{"name":"József"},	{"name":"János"}, 	{"name":"Zoltán"},	{"name":"András"},	{"name":"Attila"},	{"name":"Béla"},	{"name":"Csaba"},	{"name":"Géza"},
+				{"name":"György"},	{"name":"Imre"},		{"name":"Károly"},	{"name":"Lajos"},	{"name":"Rókus"},	{"name":"Lőrinc"},	{"name":"Márk"},	{"name":"Márton"},	{"name":"Mátyás"},	{"name":"Sándor"},
+				{"name":"Tamás"},	{"name":"Zsigmond"},	{"name":"Balasz"},	{"name":"Levente"},	{"name":"Gaspar"},	{"name":"Dominik"},	{"name":"Mojzesz"},	{"name":"Salaman"},	{"name":"Toncse"},	{"name":"Zako"},
+			]
+		},
+		{
+			"name": "Hungarian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hungarian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Boglárka"},	{"name":"Csilla"},	{"name":"Enikő"},	{"name":"Erzsébet"},	{"name":"Eszter"},	{"name":"Ildikó"},	{"name":"Katalin"},		{"name":"Margit"},	{"name":"Mária"},	{"name":"Melinda"},
+				{"name":"Orsolya"},		{"name":"Piroska"},	{"name":"Ráhel"},	{"name":"Réka"},		{"name":"Tünde"},	{"name":"Zsófia"},	{"name":"Zsuzsanna"},	{"name":"Hanna"},	{"name":"Zoé"},		{"name":"Anna"},
+				{"name":"Léna,"},		{"name":"Luca"},	{"name":"Emma"},	{"name":"Lili"},		{"name":"Lilien"},	{"name":"Lara"},	{"name":"Laura"},		{"name":"Mira"},	{"name":"Sára"},	{"name":"Olívia"},
+			]
+		},
+		{
+			"name": "Hungarian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hungarian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Bence"},	{"name":"Lorand"},	{"name":"Lorant"},	{"name":"Hunor"},		{"name":"Kitti"},	{"name":"Luca"},	{"name":"Fridrik"},	{"name":"Marcell"},	{"name":"Ili"},			{"name":"Laci"},
+				{"name":"Kinga"},	{"name":"Sami"},	{"name":"Mali"},	{"name":"Alexandra"},	{"name":"Tomi"},	{"name":"Rudi"},	{"name":"Vida"},	{"name":"Margit"},	{"name":"Demeter"},		{"name":"Valeria"},
+				{"name":"Sara"},	{"name":"Adrienn"},	{"name":"Kato"},	{"name":"Edit"},		{"name":"Vili"},	{"name":"Kati"},	{"name":"Malika"},	{"name":"Otto"},	{"name":"Margarita"},	{"name":"Frici"},
+			]
+		},
+		{
+			"name": "Hungarian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Hungarian"},
+			"traits" :
+			[
+				{"name":"Nagy"},	{"name":"Kovács"},	{"name":"Tóth"},	{"name":"Szabó"},	{"name":"Horváth"},	{"name":"Varga"},		{"name":"Kiss"},	{"name":"Molnár"},	{"name":"Németh"},	{"name":"Farkas"},
+				{"name":"Balogh"},	{"name":"Papp"},	{"name":"Takács"},	{"name":"Juhász"},	{"name":"Lakatos"},	{"name":"Mészáros"},	{"name":"Oláh"},	{"name":"Simon"},	{"name":"Rácz"},	{"name":"Fekete"},
+				{"name":"Almassy"},	{"name":"Bathory"},	{"name":"Csonka"},	{"name":"Erdos"},	{"name":"Garai"},	{"name":"Halasz"},		{"name":"Kerekes"},	{"name":"Nemes"},	{"name":"Solyom"},	{"name":"Vadas"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
