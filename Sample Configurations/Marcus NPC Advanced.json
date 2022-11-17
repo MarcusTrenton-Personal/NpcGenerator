@@ -2,7 +2,8 @@
 	"replacements" :
 	[
 		{ "category_name" : "Race", "trait_name" : "Region-specific" },
-		{ "category_name" : "Religion", "trait_name" : "Region-specific" }
+		{ "category_name" : "Ancestry", "trait_name" : "Region-specific" },
+		{ "category_name" : "Religion", "trait_name" : "Region-specific" },
 	],
 	"trait_categories" : 
 	[
@@ -35,7 +36,7 @@
 				{"name" : "Region-specific", "weight" : 50},
 				{"name" : "Caucasian", "weight" : 6},
 				{"name" : "African", "weight" : 3},
-				{"name" : "Hispanic", "weight" : 4},
+				{"name" : "Latino", "weight" : 4},
 				{"name" : "East Asian", "weight" : 6},
 				{"name" : "Aboriginal", "weight" : 1},
 				{"name" : "Indigenous", "weight" : 1},
@@ -45,6 +46,714 @@
 				{"name" : "South-East Asian", "weight" : 2},
 				{"name" : "Pacific Islander", "weight" : 1},
 				{"name" : "Biracial", "weight" : 20, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Race", "selections" : 2}}
+			]
+		},
+		{
+			"name": "Ancestry",
+			"selections": 1,
+			"traits" :
+			[
+				{"name" : "Region-specific", "weight" : 50},
+				{
+					"name" : "American", 
+					"weight" : 1, 
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+							{"category_name" : "Race", "trait_name" : "Latino"},
+							{"category_name" : "Race", "trait_name" : "East Asian"},
+							{"category_name" : "Race", "trait_name" : "Indigenous"},
+							{"category_name" : "Race", "trait_name" : "Indian"},
+							{"category_name" : "Race", "trait_name" : "South-East Asian"},
+						]
+					}
+				},
+				{
+					"name" : "Canadian", 
+					"weight" : 1, 
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "East Asian"},
+							{"category_name" : "Race", "trait_name" : "Indigenous"},
+							{"category_name" : "Race", "trait_name" : "Indian"},
+						]
+					}
+				},
+				{
+					"name" : "Québécois", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+							{"category_name" : "Race", "trait_name" : "Indigenous"},
+						]
+					}
+				},
+				{
+					"name" : "Hispanic", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+							{"category_name" : "Race", "trait_name" : "Latino"},
+							{"category_name" : "Race", "trait_name" : "Indigenous"},
+						]
+					}
+				},
+				{
+					"name" : "Brazilian", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+							{"category_name" : "Race", "trait_name" : "Latino"},
+							{"category_name" : "Race", "trait_name" : "Indigenous"},
+						]
+					}
+				},
+				{"name" : "North American Native", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Indigenous"}},
+				{"name" : "Meso American Native", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Indigenous"}},
+				{
+					"name" : "British", 
+					"weight" : 1, 
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "Indian"},
+						]
+					}
+				},
+				{
+					"name" : "French", 
+					"weight" : 1, 
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+						]
+					}
+				},
+				{
+					"name" : "Spanish", 
+					"weight" : 1, 
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+						]
+					}
+				},
+				{"name" : "Italian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Caucasian"}},
+				{
+					"name" : "German", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "Turkic"},
+						]
+					}
+				},
+				{"name" : "Hungarian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Caucasian"}},
+				{"name" : "Greek", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Caucasian"}},
+				{"name" : "Swedish", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Caucasian"}},
+				{
+					"name" : "Russian", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "Turkic"},
+						]
+					}
+				},
+				{"name" : "Arab", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Arabic"}},
+				{
+					"name" : "Israeli", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "Arabic"},
+							{"category_name" : "Race", "trait_name" : "African"},
+						]
+					}
+				},
+				{"name" : "Iranian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Arabic"}},
+				{"name" : "Nigerian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "African"}},
+				{"name" : "Ethiopian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "African"}},
+				{
+					"name" : "South African", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "Indian"},
+							{"category_name" : "Race", "trait_name" : "African"},
+						]
+					}
+				},
+				{
+					"name" : "Turk", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Turkic"},
+							{"category_name" : "Race", "trait_name" : "Arabic"},
+						]
+					}
+				},
+				{"name" : "Indian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Indian"}},
+				{"name" : "Kazak", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Turkic"}},
+				{"name" : "Chinese", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "East Asian"}},
+				{"name" : "Japanese", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "East Asian"}},
+				{"name" : "Korean", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "East Asian"}},
+				{"name" : "Vietnamese", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "South-East Asian"}},
+				{"name" : "Filipino", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "South-East Asian"}},
+				{"name" : "Indonesian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "South-East Asian"}},
+				{
+					"name" : "Australian", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "Any",
+						"operands" : 
+						[
+							{"category_name" : "Race", "trait_name" : "Caucasian"},
+							{"category_name" : "Race", "trait_name" : "East Asian"},
+							{"category_name" : "Race", "trait_name" : "Aboriginal"},
+						]
+					}
+				},
+				{"name" : "Aboriginal", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Aboriginal"}},
+				{"name" : "Māori", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Pacific Islander"}},
+			]
+		},
+		{
+			"name": "Default Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Region-specific"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" : [{"name":"John"}]
+		},
+		{
+			"name": "Default Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Region-specific"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" : [{"name":"Jane"}]
+		},
+		{
+			"name": "Default Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Region-specific"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" : [{"name":"Jean"}]
+		},
+		{
+			"name": "Default Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Region-specific"},
+			"traits" : [{"name":"Doe"}]
+		},
+		{
+			"name": "American Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "American"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"James"},	{"name":"Robert"},	{"name":"John"},	{"name":"Michael"},	{"name":"David"}, 	{"name":"William"},	{"name":"Richard"},	{"name":"Joseph"},	{"name":"Thomas"},	{"name":"Charles"},
+				{"name":"Chris"},	{"name":"Daniel"},	{"name":"Matthew"},	{"name":"Anthony"},	{"name":"Mark"},	{"name":"Donald"},	{"name":"Steven"},	{"name":"Paul"},	{"name":"Andrew"},	{"name":"Joshua"},
+				{"name":"Kenneth"},	{"name":"Kevin"},	{"name":"Brian"},	{"name":"George"},	{"name":"Timothy"},	{"name":"Ronald"},	{"name":"Edward"},	{"name":"Jason"},	{"name":"Jeffrey"},	{"name":"Ryan"},
+			]
+		},
+		{
+			"name": "American Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "American"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Mary"},	{"name":"Patricia"},	{"name":"Jennifer"},	{"name":"Linda"},		{"name":"Elizabeth"}, 	{"name":"Barbara"},		{"name":"Susan"},		{"name":"Jessica"},	{"name":"Sarah"},	{"name":"Karen"},
+				{"name":"Lisa"},	{"name":"Nancy"},		{"name":"Betty"},		{"name":"Margaret"},	{"name":"Sandra"},		{"name":"Ashley"},		{"name":"Kimberly"},	{"name":"Emily"},	{"name":"Donna"},	{"name":"Michelle"},
+				{"name":"Carol"},	{"name":"Amanda"},		{"name":"Dorothy"},		{"name":"Melissa"},		{"name":"Deborah"},		{"name":"Stephanie"},	{"name":"Rebecca"},		{"name":"Sharon"},	{"name":"Laura"},	{"name":"Cynthia"},
+			]
+		},
+		{
+			"name": "American Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "American"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Valentine"},	{"name":"Whitley"},	{"name":"Camden"},	{"name":"Tanner"},	{"name":"Flynn"},	{"name":"Harlowe"},	{"name":"Beck"},	{"name":"Ali"},		{"name":"Brooks"},	{"name":"Carter"},
+				{"name":"Channing"},	{"name":"Ramsey"},	{"name":"Remy"},	{"name":"Max"},		{"name":"Jesse"},	{"name":"Casey"},	{"name":"Nicki"},	{"name":"Blake"},	{"name":"Morgan"},	{"name":"Dylan"},
+				{"name":"Tai"},			{"name":"Eli"},		{"name":"Merritt"},	{"name":"Reese"},	{"name":"Aubrey"},	{"name":"Colin"},	{"name":"Hollis"},	{"name":"Wynn"},	{"name":"Jo"},		{"name":"Ash"},
+			]
+		},
+		{
+			"name": "American Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "American"},
+			"traits" :
+			[
+				{"name":"Smith"},		{"name":"Johnson"},	{"name":"Williams"},	{"name":"Brown"},	{"name":"Jones"},	{"name":"Taylor"},		{"name":"Miller"},	{"name":"Davis"},	{"name":"Wilson"},	{"name":"Anderson"},
+				{"name":"Thomas"},		{"name":"Moore"},	{"name":"Jackson"},		{"name":"Lee"},		{"name":"Perez"},	{"name":"Thompson"},	{"name":"White"},	{"name":"Harris"},	{"name":"Clark"},	{"name":"Lewis"},
+				{"name":"Robinson"},	{"name":"Walker"},	{"name":"Young"},		{"name":"Allen"},	{"name":"King"},	{"name":"Wright"},		{"name":"Scott"},	{"name":"Torres"},	{"name":"Hill"},	{"name":"Green"},
+			]
+		},
+		{
+			"name": "Canadian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Canadian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Jackson"},	{"name":"Noah"},	{"name":"Liam"},	{"name":"Lucas"},	{"name":"Benjamin"}, 	{"name":"Oliver"},	{"name":"Ethan"},	{"name":"Jacob"},	{"name":"Leo"},		{"name":"Logan"},
+				{"name":"William"},	{"name":"Grayson"},	{"name":"Jack"},	{"name":"James"},	{"name":"Aiden"},		{"name":"Lincoln"},	{"name":"Theo"},	{"name":"Thomas"},	{"name":"Mateo"},	{"name":"Hudson"},
+				{"name":"Gabriel"},	{"name":"Mason"},	{"name":"Owen"},	{"name":"Kayden"},	{"name":"Alexander"},	{"name":"Luca"},	{"name":"Jayden"},	{"name":"Nathan"},	{"name":"Hunter"},	{"name":"Theodore"},
+			]
+		},
+		{
+			"name": "Canadian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Canadian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Sophia"},		{"name":"Olivia"},		{"name":"Emma"},	{"name":"Amelia"},	{"name":"Aria"}, 	{"name":"Charlotte"},	{"name":"Ava"},		{"name":"Mia"},		{"name":"Mila"},	{"name":"Chloe"},
+				{"name":"Isabella"},	{"name":"Zoe"},			{"name":"Abigail"},	{"name":"Riley"},	{"name":"Lily"},	{"name":"Everly"},		{"name":"Layla"},	{"name":"Ella"},	{"name":"Maya"},	{"name":"Nora"},
+				{"name":"Hannah"},		{"name":"Scarlett"},	{"name":"Harper"},	{"name":"Avery"},	{"name":"Isla"},	{"name":"Alice"},		{"name":"Hailey"},	{"name":"Emily"},	{"name":"Charlie"},	{"name":"Sophie"},
+			]
+		},
+		{
+			"name": "Canadian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Canadian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Addison"},	{"name":"Ainsley"},	{"name":"Ash"},		{"name":"Aubrey"},	{"name":"Bailey"},	{"name":"Bobbie"},	{"name":"Brett"},	{"name":"Brook"},	{"name":"Charlie"},	{"name":"Corey"},
+				{"name":"Dakota"},	{"name":"Daryl"},	{"name":"Eli"},		{"name":"Frankie"},	{"name":"Gray"},	{"name":"Harper"},	{"name":"Hayden"},	{"name":"Jamie"},	{"name":"Jesse"},	{"name":"Kennedy"},
+				{"name":"Morgan"},	{"name":"Peyton"},	{"name":"River"},	{"name":"Rudy"},	{"name":"Stevie"},	{"name":"Tanner"},	{"name":"Taylor"},	{"name":"Tyler"},	{"name":"West"},	{"name":"Winter"},
+			]
+		},
+		{
+			"name": "Canadian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Canadian"},
+			"traits" :
+			[
+				{"name":"Smith"},	{"name":"Brown"},		{"name":"Tremblay"},	{"name":"Martin"},	{"name":"Roy"},			{"name":"Gagnon"},	{"name":"Lee"},			{"name":"Wilson"},		{"name":"Johnson"},		{"name":"MacDonald"},
+				{"name":"Taylor"},	{"name":"Campbell"},	{"name":"Anderson"},	{"name":"Jones"},	{"name":"Leblanc"},		{"name":"Cote"},	{"name":"Williams"},	{"name":"Miller"},		{"name":"Thompson"},	{"name":"Gauthier"},
+				{"name":"White"},	{"name":"Morin"},		{"name":"Wong"},		{"name":"Young"},	{"name":"Bouchard"},	{"name":"Scott"},	{"name":"Stewart"},		{"name":"Pelletier"},	{"name":"Lavoie"},		{"name":"Robinson"},
+			]
+		},
+		{
+			"name": "Québécois Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Thomas"},	{"name":"William"},	{"name":"Jacob"},	{"name":"Liam"}, 	{"name":"Felix"},	{"name":"Nathan"},	{"name":"Samuel"},	{"name":"Logan"},		{"name":"Alexis"},	{"name":"Noah"},
+				{"name":"Olivier"},	{"name":"Raphael"},	{"name":"Gabriel"},	{"name":"Emile"},	{"name":"Leo"},		{"name":"Charles"},	{"name":"Antoine"},	{"name":"Benjamin"},	{"name":"Adam"},	{"name":"Edouard"},
+				{"name":"Adrián"},	{"name":"André"},	{"name":"Bastien"},	{"name":"Benoit"},	{"name":"Cédric"},	{"name":"Édouard"},	{"name":"Étienne"},	{"name":"Jérémie"},		{"name":"Jérôme"},	{"name":"Xavier"},
+			]
+		},
+		{
+			"name": "Québécois Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Emma"},	{"name":"Léa"},			{"name":"Olivia"},		{"name":"Alice"},		{"name":"Florence"},	{"name":"Zoe"},			{"name":"Chloe"},	{"name":"Béatrice"},	{"name":"Charlotte"},	{"name":"Rosalie"},
+				{"name":"Eva"},		{"name":"Juliette"},	{"name":"Sofia"},		{"name":"Jade"},		{"name":"Camille"},		{"name":"Victoria"},	{"name":"Mia"},		{"name":"Charlie"},		{"name":"Romy"},		{"name":"Laurence"},
+				{"name":"Adèle"},	{"name":"Amélie"},		{"name":"Clémentine"},	{"name":"Éleanore"},	{"name":"Émilie"},		{"name":"Frédérique"},	{"name":"Genavié"},	{"name":"Maélie"},		{"name":"Pénélope"},	{"name":"Renée"},
+			]
+		},
+		{
+			"name": "Québécois Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Alix"},	{"name":"Ariel"},	{"name":"Ashley"},	{"name":"Charlie"},	{"name":"Claude"},	{"name":"Dominique"},	{"name":"Eden"},	{"name":"Kim"},	{"name":"Lindsay"},	{"name":"Lou"},
+				{"name":"Noa"},		{"name":"Sacha"},	{"name":"Sandy"},	{"name":"Sasha"},
+			]
+		},
+		{
+			"name": "Québécois Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Québécois"},
+			"traits" :
+			[
+				{"name":"Tremblay"},	{"name":"Gagnon"},		{"name":"Roy"},			{"name":"Cote"},	{"name":"Gauthier"},	{"name":"Morin"},	{"name":"Belanger"},	{"name":"Bouchard"},	{"name":"Pelletier"},	{"name":"Gagne"},
+				{"name":"Lavoie"},		{"name":"Fortin"},		{"name":"Levesque"},	{"name":"Boucher"},	{"name":"Bergeron"},	{"name":"Caron"},	{"name":"LeBlanc"},		{"name":"Girard"},		{"name":"Simard"},		{"name":"LeFebvre"},
+				{"name":"Ouellet"},		{"name":"Fournier"},	{"name":"Cloutier"},	{"name":"LeClerc"},	{"name":"Martin"},		{"name":"Poirier"},	{"name":"Poulin"},		{"name":"Thibault"},	{"name":"Beaulieu"},	{"name":"Martel"},
+			]
+		},
+		{
+			"name": "Hispanic Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"José"},	{"name":"Luis"},	{"name":"Carlos"},	{"name":"Juan"}, 		{"name":"Jorge"},		{"name":"Pedro"},	{"name":"Jesús"},		{"name":"Manuel"},		{"name":"Santiago"},	{"name":"Sebastián"},
+				{"name":"Matías"},	{"name":"Nicolás"},	{"name":"Samuel"},	{"name":"Alejandro"},	{"name":"Mateo"},		{"name":"Diego"},	{"name":"Benjamín"},	{"name":"Daniel"},		{"name":"Joaquín"},		{"name":"Tomás"},
+				{"name":"Gabriel"},	{"name":"Lucas"},	{"name":"Martín"},	{"name":"Emmanuel"},	{"name":"Alexander"},	{"name":"David"},	{"name":"Emiliano"},	{"name":"Juan José"},	{"name":"Andrés"},		{"name":"Felipe"},
+			]
+		},
+		{
+			"name": "Hispanic Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Sofía"},		{"name":"Valentina"},	{"name":"Isabella"},	{"name":"Camila"},		{"name":"Valeria"},	{"name":"Mariana"},		{"name":"Gabriela"},	{"name":"Sara"},		{"name":"Daniella"},	{"name":"María José"},
+				{"name":"Victoria"},	{"name":"Martina"},		{"name":"Luciana"},		{"name":"Ximena"},		{"name":"María"},	{"name":"Lucía"},		{"name":"Natalia"},		{"name":"Catalina"},	{"name":"Mía"},			{"name":"Fernanda"},
+				{"name":"Nicole"},		{"name":"Julieta"},		{"name":"Abril"},		{"name":"Samantha"},	{"name":"Andrea"},	{"name":"Antonella"},	{"name":"Emily"},		{"name":"Emilia"},		{"name":"Paula"},		{"name":"Alessandra"},
+			]
+		},
+		{
+			"name": "Hispanic Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Aguilar"},	{"name":"Amadis"},	{"name":"Amor"},	{"name":"Angel"},	{"name":"Ariel"},	{"name":"Ávila"},	{"name":"Azul"},	{"name":"Belén"},	{"name":"Camille"},	{"name":"Castel"},
+				{"name":"Claude"},	{"name":"Dani"},	{"name":"Desi"},	{"name":"Elia"},	{"name":"Fran"},	{"name":"Gabi"},	{"name":"Ginez"},	{"name":"Jules"},	{"name":"Lani"},	{"name":"Lyn"},
+			]
+		},
+		{
+			"name": "Hispanic Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Hispanic"},
+			"traits" :
+			[
+				{"name":"Hernández"},	{"name":"García"},	{"name":"Martínez"},	{"name":"González"},	{"name":"López"},	{"name":"Rodríguez"},	{"name":"Pérez"},		{"name":"Fredrick"},	{"name":"Fernández"},	{"name":"Álvarez"},
+				{"name":"Reyes"},		{"name":"Sánchez"},	{"name":"Díaz"},		{"name":"Peña"},		{"name":"Jiménez"},	{"name":"Ramírez"},		{"name":"Rosario"},		{"name":"Santana"},		{"name":"Rivera"},		{"name":"Narvaez"},
+				{"name":"Burgos"},		{"name":"Colón"},	{"name":"Vázquez"},		{"name":"Ramos"},		{"name":"Morales"},	{"name":"De León"},		{"name":"Castillo"},	{"name":"Estrada"},		{"name":"Marroquín"},	{"name":"Gómez"},
+			]
+		},
+		{
+			"name": "Brazilian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"José"},	{"name":"João"},		{"name":"Antônio"},		{"name":"Francisco"}, 	{"name":"Carlos"},	{"name":"Paulo"},	{"name":"Pedro"},	{"name":"Lucas"},	{"name":"Luiz"},		{"name":"Marcos"},
+				{"name":"Luís"},	{"name":"Gabriel"},		{"name":"Rafael"},		{"name":"Daniel"},		{"name":"Marcelo"},	{"name":"Bruno"},	{"name":"Eduardo"},	{"name":"Felipe"},	{"name":"Raimundo"},	{"name":"Rodrigo"},
+				{"name":"Ademir"},	{"name":"Anastacio"},	{"name":"Bernardo"},	{"name":"Cipriano"},	{"name":"Davi"},	{"name":"Jaren"},	{"name":"Keyton"},	{"name":"Ligongo"},	{"name":"Neymar"},		{"name":"Miguel"},
+			]
+		},
+		{
+			"name": "Brazilian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Maria"},	{"name":"Ana"},			{"name":"Francisca"},	{"name":"Antônia"},	{"name":"Adriana"},	{"name":"Juliana"},	{"name":"Márcia"},		{"name":"Fernanda"},	{"name":"Patrícia"},	{"name":"Aline"},
+				{"name":"Sandra"},	{"name":"Camila"},		{"name":"Amanda"},		{"name":"Bruna"},	{"name":"Jéssica"},	{"name":"Letícia"},	{"name":"Julia"},		{"name":"Luciana"},		{"name":"Vanessa"},		{"name":"Mariana"},
+				{"name":"Alandra"},	{"name":"Manuella"},	{"name":"Augustinha"},	{"name":"Benigna"},	{"name":"Teressa"},	{"name":"Clara"},	{"name":"Diolinda"},	{"name":"Isabella"},	{"name":"Giovanna"},	{"name":"Yara"},
+			]
+		},
+		{
+			"name": "Brazilian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Araci"},	{"name":"Jaci"},	{"name":"Darci"},	{"name":"René"},	{"name":"Amarilis"},	{"name":"Cris"},	{"name":"Alison"},	{"name":"Juraci"},	{"name":"Lucimar"},	{"name":"Céu"},
+				{"name":"Dias"},	{"name":"Ivani"},
+			]
+		},
+		{
+			"name": "Brazilian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Brazilian"},
+			"traits" :
+			[
+				{"name":"da Silva"},	{"name":"dos Santos"},	{"name":"de Oliveira"},	{"name":"Souza"},		{"name":"Rodrigues"},	{"name":"Ferreira"},	{"name":"Alves"},	{"name":"Pereira"},		{"name":"Lima"},	{"name":"Gomes"},
+				{"name":"Costa"},		{"name":"Ribeiro"},		{"name":"Martins"},		{"name":"Carvalho"},	{"name":"Almeida"},		{"name":"Lopes"},		{"name":"Soares"},	{"name":"Fernandes"},	{"name":"Vieira"},	{"name":"Barbosa"},
+				{"name":"Rocha"},		{"name":"Dias"},		{"name":"Nascimento"},	{"name":"Andrade"},		{"name":"Moreira"},		{"name":"Nunes"},		{"name":"Marques"},	{"name":"Machado"},		{"name":"Mendes"},	{"name":"Freitas"},
+			]
+		},
+		{
+			"name": "North American Native Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "North American Native"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Shweabe"},	{"name":"Xelas"},	{"name":"Chayton"},	{"name":"Cochise"}, 	{"name":"Dohasan"},		{"name":"Goyathlay"},	{"name":"Hiawatha"},	{"name":"Holata"},		{"name":"Kele"},	{"name":"Keokuk"},
+				{"name":"Lúta"},	{"name":"Mato"},	{"name":"Nashoba"},	{"name":"Onacona"},		{"name":"Powhatan"},	{"name":"Sahale"},		{"name":"Seattle"},		{"name":"Sequoyah"},	{"name":"Tahoma"},	{"name":"Tecumseh"},
+				{"name":"Tokala"},	{"name":"Yuma"},	{"name":"Bodaway"},	{"name":"Comanche"},	{"name":"Dustu"},		{"name":"Enapay"},		{"name":"Jacy"},		{"name":"Wiyot"},		{"name":"Waban"},	{"name":"Wicasa"},
+			]
+		},
+		{
+			"name": "North American Native Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "North American Native"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Kavusiya"},	{"name":"Matika"},	{"name":"Olahl"},	{"name":"Sholeetsa"},	{"name":"Ticwtkwa"},	{"name":"Aponi"},	{"name":"Chenoa"},		{"name":"Cheyenne"},	{"name":"Dyani"},	{"name":"Hialeah"},
+				{"name":"Kaya"},		{"name":"Koko"},	{"name":"Kiona"},	{"name":"Lulu"},		{"name":"Mika"},		{"name":"Malia"},	{"name":"Moana"},		{"name":"Mona"},		{"name":"Nina"},	{"name":"Nita"},
+				{"name":"Nokomis"},		{"name":"Odina"},	{"name":"Oneida"},	{"name":"Pocahontas"},	{"name":"Poloma"},		{"name":"Tala"},	{"name":"Tallulah"},	{"name":"Winona"},		{"name":"Aiyana "},	{"name":"Sauk"},
+			]
+		},
+		{
+			"name": "North American Native Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "North American Native"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Tahoma"},	{"name":"Cherokee"},	{"name":"Dakota"},	{"name":"Elan"},	{"name":"Kai"},			{"name":"Opa"},		{"name":"Shawnee"},	{"name":"Tyee"},		{"name":"Elu"},		{"name":"Hosa"},
+				{"name":"Lakota"},	{"name":"Mika"},		{"name":"Nova"},	{"name":"Sequoia"},	{"name":"Shoshone"},	{"name":"Simi"},	{"name":"Weayaya"},	{"name":"Ameyalli"},	{"name":"Awena"},	{"name":"Chardon"},
+				{"name":"Chetan"},	{"name":"Chimalus"},	{"name":"Esadowa"},	{"name":"Kabecka"},	{"name":"Kansas"},		{"name":"Kishil"},	{"name":"Pala"},	{"name":"Teneca"},		{"name":"Seneca"},	{"name":"Shayan"},
+			]
+		},
+		{
+			"name": "North American Native Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "North American Native"},
+			"traits" :
+			[
+				{"name":"Cornfield"},	{"name":"Deere"},	{"name":"Denton"},		{"name":"Hensley"},		{"name":"Kipp"},		{"name":"Maize"},		{"name":"Arrow"},		{"name":"Blackrock"},	{"name":"Bravebird"},	{"name":"Chubbuck"},
+				{"name":"Countryman"},	{"name":"Huaman"},	{"name":"Summerhill"},	{"name":"Swiftwater"},	{"name":"Thunderhawk"},	{"name":"Warcloud"},	{"name":"Achothley"},	{"name":"Adakai"},		{"name":"Begay"},		{"name":"Benally"},
+				{"name":"Altaha"},		{"name":"Apache"},	{"name":"Cosay"},		{"name":"Ethelbah"},	{"name":"Mescal"},		{"name":"Anoki"},		{"name":"Canowicakte"},	{"name":"Cetanwakuwa"},	{"name":"Kadoka"},		{"name":"Maka"},
+			]
+		},
+		{
+			"name": "Meso American Native Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Meso American Native"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Atl"},		{"name":"Atlahua"},		{"name":"Canneo"},	{"name":"Danaá"}, 		{"name":"Hedía"},	{"name":"Ikal"},	{"name":"Irepani"},	{"name":"Kabil"},		{"name":"Kasakir"},		{"name":"Maatiaak"},
+				{"name":"Masawa"},	{"name":"Polo"},		{"name":"Rahui"},	{"name":"Semeel jak"},	{"name":"Séneca"},	{"name":"Surem"},	{"name":"Tanok"},	{"name":"Tlayolotl"},	{"name":"Tsijiari"},	{"name":"Yooko"},
+				{"name":"Aapo"},	{"name":"Babajide"},	{"name":"Cadmael"},	{"name":"Dacey"},		{"name":"Eadrich"},	{"name":"Enapay"},	{"name":"Fabio"},	{"name":"Gabor"},		{"name":"Hadwin"},		{"name":"Sachihiro"},
+			]
+		},
+		{
+			"name": "Meso American Native Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Meso American Native"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Ajaniame"},	{"name":"Anam"},		{"name":"Ariché"},		{"name":"Axochitl"},	{"name":"Bimorí"},	{"name":"Citlali"},		{"name":"Inda Jani"},	{"name":"Itan de hüi"},	{"name":"Ix Chel"},	{"name":"Ix Kaknab"},
+				{"name":"Kantyi"},		{"name":"Malinalli"},	{"name":"Nakawé"},		{"name":"Sesasi"},		{"name":"Soona'"},	{"name":"Xochimitl"},	{"name":"Yamanik"},		{"name":"Sequoyah"},	{"name":"Yatzil"},	{"name":"Yej susen"},
+				{"name":"Itzel"},		{"name":"Akna"},		{"name":"Sacniete"},	{"name":"Xoc"},			{"name":"Zac-Kuk"},	{"name":"Chimalmat"},	{"name":"Ixazaluoh"},	{"name":"Xmucane"},		{"name":"Xpiayoc"},	{"name":"Colel"},
+			]
+		},
+		{
+			"name": "Meso American Native Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Meso American Native"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Erendirani"},	{"name":"Hasen"},	{"name":"Iktan"},	{"name":"Itzamatul"},	{"name":"Naran"},	{"name":"Nima"},	{"name":"Seti"},	{"name":"Shanarani"},	{"name":"Suré"},		{"name":"Taiyari"},
+				{"name":"Aapo"},		{"name":"Dacey"},	{"name":"Atl"},		{"name":"Aztec"},		{"name":"Coyote"},	{"name":"Cualli"},	{"name":"Eztli"},	{"name":"Ichtaca"},		{"name":"Ichnoyotl"},	{"name":"Ihuicatl"},
+				{"name":"Itotia"},		{"name":"Ixtli"},	{"name":"Izel"},	{"name":"Mazatl"},		{"name":"Meztli"},	{"name":"Nahuatl"},	{"name":"Patli"},	{"name":"Xipil"},		{"name":"Yaotl"},		{"name":"Zuma"},
+			]
+		},
+		{
+			"name": "Meso American Native Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Meso American Native"},
+			"traits" :
+			[
+				{"name":"Aca"},			{"name":"Acxotlan"},	{"name":"Chapul"},	{"name":"Colexcua"},	{"name":"Cuahutenco"},	{"name":"Ehecatl"},	{"name":"Huitle"},	{"name":"Itzcua"},		{"name":"Maxil"},	{"name":"Naxi"},
+				{"name":"Ocotoxtle"},	{"name":"Papaqui"},		{"name":"Quitl"},	{"name":"Teotl"},		{"name":"Tlachi"},		{"name":"Xicale"},	{"name":"Xique"},	{"name":"Zepahua"},		{"name":"Zitlal "},	{"name":"Cuachayo"},
+				{"name":"Cuatzo"},		{"name":"Tlahuex"},		{"name":"Ahuatl"},	{"name":"Cuahuizo"},	{"name":"Huexotl"},		{"name":"Piantzi"},	{"name":"Tecpa"},	{"name":"Tlapalama"},	{"name":"Xoampil"},	{"name":"Zontlimatzi"},
+			]
+		},
+		{
+			"name": "British Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "British"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Noah"},		{"name":"Oliver"},	{"name":"George"},	{"name":"Arthur"}, 	{"name":"Muhammad"},	{"name":"Leo"},		{"name":"Harry"},		{"name":"Oscar"},	{"name":"Archie"},	{"name":"Henry"},
+				{"name":"Theodore"},	{"name":"Freddie"},	{"name":"Jack"},	{"name":"Charlie"},	{"name":"Theo"},		{"name":"Alfie"},	{"name":"Jacob"},		{"name":"Thomas"},	{"name":"Finley"},	{"name":"Arlo"},
+				{"name":"William"},		{"name":"Lucas"},	{"name":"Roman"},	{"name":"Tommy"},	{"name":"Isaac"},		{"name":"Teddy"},	{"name":"Alexander"},	{"name":"Luca"},	{"name":"Edward"},	{"name":"James"},
+			]
+		},
+		{
+			"name": "British Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "British"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Olivia"},	{"name":"Amelia"},	{"name":"Isla"},		{"name":"Ava"},		{"name":"Ivy"},			{"name":"Freya"},	{"name":"Lily"},	{"name":"Florence"},	{"name":"Mia"},		{"name":"Willow"},
+				{"name":"Rosie"},	{"name":"Sophia"},	{"name":"Isabella"},	{"name":"Grace"},	{"name":"Daisy"},		{"name":"Sienna"},	{"name":"Poppy"},	{"name":"Elsie"},		{"name":"Emily"},	{"name":"Ella"},
+				{"name":"Evelyn"},	{"name":"Phoebe"},	{"name":"Sofia"},		{"name":"Evie"},	{"name":"Charlotte"},	{"name":"Harper"},	{"name":"Millie"},	{"name":"Matilda"},		{"name":"Maya"},	{"name":"Sophie"},
+			]
+		},
+		{
+			"name": "British Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "British"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Frankie"},	{"name":"River"},	{"name":"Remi"},	{"name":"Harley"},	{"name":"Eden"},	{"name":"Riley"},	{"name":"Quinn"},	{"name":"Rowan"},	{"name":"Avery"},	{"name":"Blake"},
+				{"name":"Bobbie"},	{"name":"Harlow"},	{"name":"Charlie"},	{"name":"Aubrey"},	{"name":"Parker"},	{"name":"Casey"},	{"name":"Addison"},	{"name":"Harper"},	{"name":"Ellis"},	{"name":"Ezra"},
+				{"name":"Bowie"},	{"name":"Cassidy"},	{"name":"Dakota"},	{"name":"Alex"},	{"name":"Drew"},	{"name":"Wren"},	{"name":"Zephyr"},	{"name":"Toni"},	{"name":"Terry"},	{"name":"Shay"},
+			]
+		},
+		{
+			"name": "British Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "British"},
+			"traits" :
+			[
+				{"name":"Smith"},	{"name":"Jones"},		{"name":"Taylor"},	{"name":"Brown"},	{"name":"Williams"},	{"name":"Wilson"},	{"name":"Johnson"},	{"name":"Davies"},	{"name":"Patel"},	{"name":"Robinson"},
+				{"name":"Wright"},	{"name":"Thompson"},	{"name":"Evans"},	{"name":"Walker"},	{"name":"White"},		{"name":"Roberts"},	{"name":"Green"},	{"name":"Hall"},	{"name":"Thomas "},	{"name":"Clarke"},
+				{"name":"Jackson"},	{"name":"Wood"},		{"name":"Harris"},	{"name":"Edwards"},	{"name":"Turner"},		{"name":"Martin"},	{"name":"Cooper"},	{"name":"Hill"},	{"name":"Ward"},	{"name":"Hughes"},
+			]
+		},
+		{
+			"name": "French Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "French"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Gabriel"},	{"name":"Raphaël"},	{"name":"Léo"},			{"name":"Louis"}, 	{"name":"Lucas"},		{"name":"Adam"},	{"name":"Arthur"},	{"name":"Hugo"},	{"name":"Jules"},		{"name":"Maël"},
+				{"name":"Liam"},	{"name":"Ethan"},	{"name":"Paul"},		{"name":"Gabin"},	{"name":"Nathan"},		{"name":"Sacha"},	{"name":"Noah"},	{"name":"Tom"},		{"name":"Mohamed"},		{"name":"Aaron"},
+				{"name":"Antoine"},	{"name":"Charles"},	{"name":"François"},	{"name":"Georges"},	{"name":"Guillaume"},	{"name":"Henri"},	{"name":"Jean"},	{"name":"Nicolas"},	{"name":"Matthieu"},	{"name":"Sébastien"},
+			]
+		},
+		{
+			"name": "French Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "French"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Emma"},		{"name":"Jade"},	{"name":"Louise"},		{"name":"Alice"},		{"name":"Chloé"},		{"name":"Lina"},		{"name":"Rose"},	{"name":"Léa"},		{"name":"Anna"},	{"name":"Mila"},
+				{"name":"Mia"},			{"name":"Inès"},	{"name":"Ambre"},		{"name":"Julia"},		{"name":"Lou"},			{"name":"Juliette"},	{"name":"Agathe"},	{"name":"Léna"},	{"name":"Iris"},	{"name":"Jeanne"},
+				{"name":"Marianne"},	{"name":"Aurélie"},	{"name":"Caroline"},	{"name":"Charlotte"},	{"name":"Delphine"},	{"name":"Hélène"},		{"name":"Pauline"},	{"name":"Marine"},	{"name":"Laure"},	{"name":"Valérie"},
+			]
+		},
+		{
+			"name": "French Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "French"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Adel"},		{"name":"Ames"},	{"name":"Aramis"},	{"name":"Avignon"},	{"name":"Axel"},	{"name":"Beau"},	{"name":"Celestine"},	{"name":"Chandell"},	{"name":"Coty"},	{"name":"Cress"},
+				{"name":"Elie"},		{"name":"Gene"},	{"name":"Jade"},	{"name":"Jeryn"},	{"name":"Jules"},	{"name":"Lavern"},	{"name":"Simone"},		{"name":"Belot"},		{"name":"Candide"},	{"name":"Chandler"},
+				{"name":"Clarence"},	{"name":"Darel"},	{"name":"Dior"},	{"name":"Gabriel"},	{"name":"Izod"},	{"name":"Jocelin"},	{"name":"Marquette"},	{"name":"Monet"},		{"name":"Noel"},	{"name":"Zuri"},
+			]
+		},
+		{
+			"name": "French Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "French"},
+			"traits" :
+			[
+				{"name":"Martin"},	{"name":"Bernard"},	{"name":"Robert"},	{"name":"Richard"},	{"name":"Durand"},		{"name":"Dubois"},	{"name":"Moreau"},	{"name":"Simon"},		{"name":"Laurent"},		{"name":"Michel"},
+				{"name":"Garcia"},	{"name":"Thomas"},	{"name":"Leroy"},	{"name":"David"},	{"name":"Morel"},		{"name":"Roux"},	{"name":"Girard"},	{"name":"Fournier"},	{"name":"Lambert "},	{"name":"Lefebvre"},
+				{"name":"Mercier"},	{"name":"Blanc"},	{"name":"Dupont"},	{"name":"Faure"},	{"name":"Bertrand"},	{"name":"Morin"},	{"name":"Garnier"},	{"name":"Nicolas"},		{"name":"Marie"},		{"name":"Rousseau"},
+			]
+		},
+		{
+			"name": "Spanish Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Spanish"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Liam"},	{"name":"Lucas"},	{"name":"Warenfried"},	{"name":"Alexander"}, 	{"name":"Timothé"},	{"name":"Elias"},	{"name":"Oliver"},	{"name":"Lilio"},	{"name":"Eyden"},	{"name":"Mateo"},
+				{"name":"Nahel"},	{"name":"Samuel"},	{"name":"Nicolás"},		{"name":"Adrián"},		{"name":"Thélio"},	{"name":"Max"},		{"name":"David"},	{"name":"Emil"},	{"name":"Jack"},	{"name":"Isaac"},
+				{"name":"Paul"},	{"name":"Mathis"},	{"name":"Benjamin"},	{"name":"Levi"},		{"name":"Hugo"},	{"name":"Timaé"},	{"name":"Lean"},	{"name":"Caylean"},	{"name":"Hjarnar"},	{"name":"Ezio"},
+			]
+		},
+		{
+			"name": "Spanish Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Spanish"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Raphaëlla"},	{"name":"Mía"},		{"name":"Sofía"},		{"name":"Emma"},	{"name":"Karlin"},	{"name":"Olivia"},	{"name":"Émilia"},		{"name":"Maëlys"},	{"name":"Aryanna"},		{"name":"Keyla"},
+				{"name":"Lily"},		{"name":"Sophie"},	{"name":"Ellianna"},	{"name":"Lïa"},		{"name":"Abigaël"},	{"name":"Hannah"},	{"name":"Isabella"},	{"name":"Julia"},	{"name":"Zoé"},			{"name":"Mila"},
+				{"name":"Yaëlle,"},		{"name":"Emily"},	{"name":"Eva"},			{"name":"Cecilia"},	{"name":"Kayla"},	{"name":"Amelia"},	{"name":"Luna"},		{"name":"Lylia"},	{"name":"Stéphanie"},	{"name":"Ella"},
+			]
+		},
+		{
+			"name": "Spanish Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Spanish"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Noah"},	{"name":"Luca"},	{"name":"Élia"},	{"name":"Sam"},		{"name":"Leo"},		{"name":"Tyler"},	{"name":"Aria"},	{"name":"Hunter"},	{"name":"Eyke"},	{"name":"Jesse"},
+				{"name":"Sidney"},	{"name":"Kai"},		{"name":"Ryan"},	{"name":"Sandy"},	{"name":"Noam"},	{"name":"Sammie"},	{"name":"Avery"},	{"name":"Skylar"},	{"name":"Aylan"},	{"name":"Viv"},
+				{"name":"Lyan"},	{"name":"Sunny"},	{"name":"Yanick"},	{"name":"Noel"},	{"name":"Aydan"},	{"name":"Taylor"},	{"name":"Devin"},	{"name":"Uli"},		{"name":"Jamie"},	{"name":"Thale"},
+			]
+		},
+		{
+			"name": "Spanish Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Spanish"},
+			"traits" :
+			[
+				{"name":"García"},	{"name":"Fernández"},	{"name":"González"},	{"name":"Rodríguez"},	{"name":"López"},	{"name":"Martínez"},	{"name":"Sánchez"},	{"name":"Pérez"},	{"name":"Martín"},		{"name":"Gómez"},
+				{"name":"Ruiz"},	{"name":"Hernández"},	{"name":"Jiménez"},		{"name":"Díaz"},		{"name":"Álvarez"},	{"name":"Moreno"},		{"name":"Muñoz"},	{"name":"Alonso"},	{"name":"Gutiérrez "},	{"name":"Romero"},
+				{"name":"Navarro"},	{"name":"Torres"},		{"name":"Domínguez"},	{"name":"Gil"},			{"name":"Vázquez"},	{"name":"Serrano "},	{"name":"Garnier"},	{"name":"Ramos"},	{"name":"Blanco"},		{"name":"Sanz"},
+			]
+		},
+		{
+			"name": "Italian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Italian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Leonardo"},	{"name":"Francesco"},	{"name":"Lorenzo"},	{"name":"Alessandro"}, 	{"name":"Andrea"},		{"name":"Mattia"},	{"name":"Gabriele"},	{"name":"Tommaso"},		{"name":"Riccardo"},	{"name":"Edoardo"},
+				{"name":"Matteo"},		{"name":"Giuseppe"},	{"name":"Niccolò"},	{"name":"Antonio"},		{"name":"Federico"},	{"name":"Marco"},	{"name":"Flavio"},		{"name":"Luca"},		{"name":"Giovanni"},	{"name":"Roberto"},
+				{"name":"Pietro"},		{"name":"Stefano"},		{"name":"Angelo"},	{"name":"Mario"},		{"name":"Luigi"},		{"name":"Alberto"},	{"name":"Enzo"},		{"name":"Cristiano"},	{"name":"Orlando"},		{"name":"Valentino"},
+			]
+		},
+		{
+			"name": "Italian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Italian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Anna"},		{"name":"Maria"},		{"name":"Sara"},		{"name":"Laura"},	{"name":"Aurora"},		{"name":"Valentina"},	{"name":"Giulia"},		{"name":"Rosa"},		{"name":"Gianna"},	{"name":"Giuseppina"},
+				{"name":"Angela"},		{"name":"Giovanna"},	{"name":"Sofia"},		{"name":"Stella"},	{"name":"Adriana"},		{"name":"Greta"},		{"name":"Cristiana"},	{"name":"Fabrizia"},	{"name":"Alice"},	{"name":"Isabella"},
+				{"name":"Lucrezia,"},	{"name":"Gaia"},		{"name":"Diletta"},		{"name":"Olivia"},	{"name":"Nicoletta"},	{"name":"Azzura"},		{"name":"Zita"},		{"name":"Agnese"},		{"name":"Irene"},	{"name":"Noemi"},
+			]
+		},
+		{
+			"name": "Italian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Italian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Adri"},	{"name":"Adrian"},		{"name":"Ale"},	{"name":"Andrea"},		{"name":"Ari"},		{"name":"Cesare"},	{"name":"Dani"},	{"name":"Daniele"},	{"name":"Elio"},	{"name":"Fede"},
+				{"name":"France"},	{"name":"Gabriele"},	{"name":"Gioele"},	{"name":"Leone"},	{"name":"Luca"},	{"name":"Lupo"},	{"name":"Mattia"},	{"name":"Miche"},	{"name":"Michi"},	{"name":"Nico"},
+				{"name":"Nicola"},	{"name":"Remo"},		{"name":"Simo"},	{"name":"Vale"},	{"name":"Vieri"},	{"name":"Vitto"},	{"name":"Aquila"},	{"name":"Inizio"},	{"name":"Vita"},	{"name":"Valente"},
+			]
+		},
+		{
+			"name": "Italian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Italian"},
+			"traits" :
+			[
+				{"name":"Rossi"},		{"name":"Russo"},	{"name":"Ferrari"},		{"name":"Esposito"},	{"name":"Bianchi"},	{"name":"Romano"},	{"name":"Colombo"},		{"name":"Ricci"},	{"name":"Marino"},		{"name":"Greco"},
+				{"name":"Bruno"},		{"name":"Gallo"},	{"name":"Conti"},		{"name":"De Luca"},		{"name":"Mancini"},	{"name":"Costa"},	{"name":"Giordano"},	{"name":"Rizzo"},	{"name":"Lombardi"},	{"name":"Moretti"},
+				{"name":"Alighieri"},	{"name":"Capone"},	{"name":"Endrizzi"},	{"name":"Gatto"},		{"name":"Izzo"},	{"name":"Lo Duca"},	{"name":"Napoli"},		{"name":"Pisano"},	{"name":"Santucci"},	{"name":"Valachi"},
+			]
+		},
+		{
+			"name": "German Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "German"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Jonas"},	{"name":"Ben"},		{"name":"Linus"},	{"name":"Elias"}, 	{"name":"Emil"},	{"name":"Jonah"},	{"name":"Matz"},	{"name":"Felix"},	{"name":"Finn"},		{"name":"Anton"},
+				{"name":"Julian"},	{"name":"Mathis"},	{"name":"Jakob"},	{"name":"Henry"},	{"name":"Levi"},	{"name":"Liam"},	{"name":"Oskar"},	{"name":"Theo"},	{"name":"Maximilian"},	{"name":"Moritz"},
+				{"name":"Leon"},	{"name":"Milo"},	{"name":"Yannis"},	{"name":"Jonatan"},	{"name":"Julius"},	{"name":"Milan"},	{"name":"Till"},	{"name":"Lewin"},	{"name":"Konstantin"},	{"name":"Lennard"},
+			]
+		},
+		{
+			"name": "German Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "German"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Emma"},	{"name":"Mila"},	{"name":"Lina"},	{"name":"Emilia"},	{"name":"Amelie"},		{"name":"Hannah"},	{"name":"Matilda"},	{"name":"Leah"},	{"name":"Leni"},	{"name":"Greta"},
+				{"name":"Ella"},	{"name":"Lena"},	{"name":"Marie"},	{"name":"Luisa"},	{"name":"Klara"},		{"name":"Lotte"},	{"name":"Nora"},	{"name":"Mara"},	{"name":"Nele"},	{"name":"Carlotta"},
+				{"name":"Ida,"},	{"name":"Lilly"},	{"name":"Frida"},	{"name":"Johanna"},	{"name":"Isabella"},	{"name":"Maya"},	{"name":"Elina"},	{"name":"Mira"},	{"name":"Tilda"},	{"name":"Madita"},
+			]
+		},
+		{
+			"name": "German Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "German"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Noah"},	{"name":"Luka"},	{"name":"Jona"},	{"name":"Romy"},	{"name":"Merle"},	{"name":"Sam"},		{"name":"Jule"},	{"name":"Charlie"},	{"name":"Janis"},	{"name":"Alexis"},
+				{"name":"Kim"},		{"name":"Robin"},	{"name":"Jann"},	{"name":"Mika"},	{"name":"Yannik"},	{"name":"Sina"},	{"name":"Maxi"},	{"name":"Til"},		{"name":"Nino"},	{"name":"Mo"},
+				{"name":"Lilian"},	{"name":"Jasmin"},	{"name":"Nicky"},	{"name":"Noel"},	{"name":"Sky"},		{"name":"Nicola"},	{"name":"Dylan"},	{"name":"Chris"},	{"name":"Dana"},	{"name":"Vivian"},
+			]
+		},
+		{
+			"name": "German Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "German"},
+			"traits" :
+			[
+				{"name":"Müller"},	{"name":"Schmidt"},	{"name":"Schneider"},	{"name":"Fischer"},		{"name":"Weber"},	{"name":"Meyer"},	{"name":"Wagner"},		{"name":"Becker"},	{"name":"Schulz"},	{"name":"Hoffmann"},
+				{"name":"Schäfer"},	{"name":"Koch"},	{"name":"Bauer"},		{"name":"Richter"},		{"name":"Klein"},	{"name":"Wolf"},	{"name":"Schröder"},	{"name":"Neumann"},	{"name":"Schwarz"},	{"name":"Zimmermann"},
+				{"name":"Braun"},	{"name":"Krüger"},	{"name":"Hofmann"},		{"name":"Hartmann"},	{"name":"Lange"},	{"name":"Werner"},	{"name":"Krause"},		{"name":"Meier"},	{"name":"Lehmann"},	{"name":"Schulze"},
 			]
 		},
 		{
@@ -212,8 +921,22 @@
 				{"name" : "Mute", "weight" : 1},
 				{"name" : "One arm", "weight" : 1},
 				{"name" : "Wheelchair", "weight" : 1},
-				{"name" : "One eye", "weight" : 1},
-				{"name" : "Blind", "weight" : 1},
+				{
+					"name" : "One eye", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [{"category_name" : "Disability", "trait_name" : "Blind"}]
+					}
+				},
+				{
+					"name" : "Blind", 
+					"weight" : 1,
+					"requirements" : {
+						"operator" : "None",
+						"operands" : [{"category_name" : "Disability", "trait_name" : "One eye"}]
+					}
+				},
 				{"name" : "Prosthetic", "weight" : 1},
 				{"name" : "Deaf", "weight" : 1},
 				{"name" : "Leg Braces", "weight" : 1}
