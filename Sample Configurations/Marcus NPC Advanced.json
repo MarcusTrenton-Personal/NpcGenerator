@@ -797,6 +797,49 @@
 			]
 		},
 		{
+			"name": "Greek Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Greek"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Georgios"},	{"name":"Dimitrios"},	{"name":"Ioannis"},		{"name":"Nikolaos"}, 	{"name":"Konstantin"},	{"name":"Christos"},{"name":"Panagiotis"},	{"name":"Vasileios"},	{"name":"Konstantinos"},{"name":"Athanasios"},
+				{"name":"Michail"},		{"name":"Evangelos"},	{"name":"Antonios"},	{"name":"Emmanouil"},	{"name":"Theodoros"},	{"name":"Spyridon"},{"name":"Anastasios"},	{"name":"Andreas"},		{"name":"Ilias"},		{"name":"Charalampos"},
+				{"name":"Alexandros"},	{"name":"Stavros"},		{"name":"Apostolos"},	{"name":"Petros"},		{"name":"Stylianos"},	{"name":"Sotirios"},{"name":"Georg"},		{"name":"Thomas"},		{"name":"Stefanos"},	{"name":"Ioan"},
+			]
+		},
+		{
+			"name": "Greek Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Greek"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Maria"},		{"name":"Eleni"},		{"name":"Aikaterini"},	{"name":"Vasiliki"},	{"name":"Sofia"},		{"name":"Anastasia"},	{"name":"Georgia"},		{"name":"Evangelia"},	{"name":"Eirini"},		{"name":"Anna"},
+				{"name":"Angeliki"},	{"name":"Dimitra"},		{"name":"Ioanna"},		{"name":"Panagiota"},	{"name":"Despoina"},	{"name":"Christina"},	{"name":"Foteini"},		{"name":"Paraskevi"},	{"name":"Kalliopi"},	{"name":"Alexandra"},
+				{"name":"Kyriaki,"},	{"name":"Stavroula"},	{"name":"Chrysoula"},	{"name":"Theodora"},	{"name":"Athina"},		{"name":"Eleftheria"},	{"name":"Athanasia"},	{"name":"Olga"},		{"name":"Styliani"},	{"name":"Evgenia"},
+			]
+		},
+		{
+			"name": "Greek Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Greek"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Agoran"},	{"name":"Calais"},	{"name":"Cyn"},		{"name":"Cyrille"},	{"name":"Diamanto"},	{"name":"Ellery"},	{"name":"Eridian"},	{"name":"Eurythmia"},	{"name":"Galen"},	{"name":"Gene"},
+				{"name":"Jayce"},	{"name":"Jaycee"},	{"name":"Jayson"},	{"name":"Leka"},	{"name":"Memphis"},		{"name":"Neko"},	{"name":"Nicolae"},	{"name":"Nika"},		{"name":"Nikeiza"},	{"name":"Ocean"},
+				{"name":"Ojal"},	{"name":"Pasi"},	{"name":"Pyralis"},	{"name":"Sandi"},	{"name":"Sasha"},		{"name":"Sonja"},	{"name":"Sonya"},	{"name":"Stefanie"},	{"name":"Thea"},	{"name":"Trina"},
+			]
+		},
+		{
+			"name": "Greek Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Greek"},
+			"traits" :
+			[
+				{"name":"Papadopoulos"},{"name":"Papadopoulou"},	{"name":"Papageorgiou"},	{"name":"Oikonomou"},		{"name":"Papadimitriou"},	
+				{"name":"Georgiou"},	{"name":"Papaioannou"},		{"name":"Pappas"},			{"name":"Vasileiou"},		{"name":"Nikolaou"},
+				{"name":"Karagiannis"},	{"name":"Vlachos"},			{"name":"Antoniou"},		{"name":"Makris"},			{"name":"Papanikolaou"},
+				{"name":"Dimitriou"},	{"name":"Ioannidis"},		{"name":"Georgiadis"},		{"name":"Triantafyllou"},	{"name":"Papadakis"},
+				{"name":"Athanasiou"},	{"name":"Konstantinidis"},	{"name":"Ioannou"},			{"name":"Alexiou"},			{"name":"Christodoulou"},	
+				{"name":"Theodorou"},	{"name":"Giannopoulos"},	{"name":"Aetós"},			{"name":"Drakos"},			{"name":"Metaxas"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
