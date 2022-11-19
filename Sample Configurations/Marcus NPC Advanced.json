@@ -840,6 +840,46 @@
 			]
 		},
 		{
+			"name": "Swedish Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Anshelm"},	{"name":"Elay"},	{"name":"Ray"},		{"name":"Lucas"}, 	{"name":"Liam"},	{"name":"Caesar"},	{"name":"Elias"},	{"name":"Levi"},	{"name":"Valentin"},	{"name":"Julián"},
+				{"name":"Jake"},	{"name":"Ilja"},	{"name":"Cedrik"},	{"name":"Leonel"},	{"name":"Theo"},	{"name":"Ión"},		{"name":"William"},	{"name":"Matteo"},	{"name":"León"},		{"name":"Thorvald"},
+				{"name":"Thélio"},	{"name":"Birk"},	{"name":"Oliver"},	{"name":"Nick"},	{"name":"Maëlan"},	{"name":"Milo"},	{"name":"Leonard"},	{"name":"Vincent"},	{"name":"Aston"},		{"name":"Oskar"},
+			]
+		},
+		{
+			"name": "Swedish Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Aischa"},	{"name":"Ottilia"},	{"name":"Lillie"},	{"name":"Rachel"},		{"name":"Jazmine"},	{"name":"Anastasia"},	{"name":"Freya"},	{"name":"Natalía"},	{"name":"Ellie"},	{"name":"Loélia"},
+				{"name":"Lucía"},	{"name":"Mila"},	{"name":"Élea"},	{"name":"Ayleen"},		{"name":"Roxie"},	{"name":"Lissi"},		{"name":"Leah"},	{"name":"Lía"},		{"name":"Cléo"},	{"name":"Emilia"},
+				{"name":"Alicia,"},	{"name":"Desiree"},	{"name":"Kellie"},	{"name":"Anabelle"},	{"name":"Luna"},	{"name":"Vera"},		{"name":"Amilia"},	{"name":"Alia"},	{"name":"Valeria"},	{"name":"Klara"},
+			]
+		},
+		{
+			"name": "Swedish Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Aischa"},	{"name":"Ottilia"},	{"name":"Lilly"},	{"name":"Jazmine"},		{"name":"Mandy"},	{"name":"Natália"},		{"name":"Ellie"},		{"name":"Loélia"},		{"name":"Rachel"},	{"name":"Freya"},
+				{"name":"Lucía"},	{"name":"Mila"},		{"name":"Eléa"},		{"name":"Ayleen"},		{"name":"Roxie"},	{"name":"Lissie"},		{"name":"Leah"},	{"name":"Lía"},	{"name":"Cléo"},	{"name":"Emilia"},
+				{"name":"Alicia"},	{"name":"Desiree"},	{"name":"Kellie"},	{"name":"Anabelle"},	{"name":"Luna"},		{"name":"Vera"},	{"name":"Amilia"},	{"name":"Alia"},	{"name":"Valeria"},		{"name":"Anastasia"},
+			]
+		},
+		{
+			"name": "Swedish Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Swedish"},
+			"traits" :
+			[
+				{"name":"Andersson"},	{"name":"Johansson"},	{"name":"Karlsson"},	{"name":"Nilsson"},		{"name":"Eriksson"},	{"name":"Larsson"},		{"name":"Olsson"},		{"name":"Persson"},		{"name":"Svensson"},	{"name":"Gustafsson"},
+				{"name":"Pettersson"},	{"name":"Jonsson"},		{"name":"Jansson"},		{"name":"Hansson"},		{"name":"Bengtsson"},	{"name":"Jönsson"},		{"name":"Lindberg"},	{"name":"Jakobsson"},	{"name":"Magnusson"},	{"name":"Olofsson"},
+				{"name":"Lindström"},	{"name":"Lindqvist"},	{"name":"Lindgren"},	{"name":"Axelsson"},	{"name":"Berg"},		{"name":"Bergström"},	{"name":"Lundberg"},	{"name":"Lundgren"},	{"name":"Lind"},		{"name":"Lundqvist"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
