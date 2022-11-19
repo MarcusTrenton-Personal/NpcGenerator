@@ -920,6 +920,46 @@
 			]
 		},
 		{
+			"name": "Arab Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Arab"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Zayn"},		{"name":"Muhammad"},	{"name":"Idris"},	{"name":"Hamza"}, 		{"name":"Malik"},	{"name":"Samir"},	{"name":"Zayd"},	{"name":"Rayan"},	{"name":"Rafi"},	{"name":"Mustafa"},
+				{"name":"Omar"},		{"name":"Amir"},		{"name":"Zahir"},	{"name":"Shaquille"},	{"name":"Yasir"},	{"name":"Ara"},		{"name":"Jed"},		{"name":"Kanan"},	{"name":"Eyad"},	{"name":"Vega"},
+				{"name":"Zinedine"},	{"name":"Yusuf"},		{"name":"Ali"},		{"name":"Khalil"},		{"name":"Yahir"},	{"name":"Zavier"},	{"name":"Barack"},	{"name":"Kahlil"},	{"name":"Amael"},	{"name":"Osman"},
+			]
+		},
+		{
+			"name": "Arab Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Arab"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Aaliyah"},	{"name":"Akilah"},	{"name":"Djamila"},	{"name":"Elham"},	{"name":"Farah"},	{"name":"Fatima"},	{"name":"Gamila"},	{"name":"Ishtar"},	{"name":"Jamila"},	{"name":"Kamaria"},
+				{"name":"Khadija"},	{"name":"Layla"},	{"name":"Lina"},	{"name":"Malika"},	{"name":"Nabila"},	{"name":"Nashwa"},	{"name":"Nawra"},	{"name":"Niesha"},	{"name":"Nura"},	{"name":"Oma"},
+				{"name":"Qadira,"},	{"name":"Rihanna"},	{"name":"Sabah"},	{"name":"Sahar"},	{"name":"Shakira"},	{"name":"Takisha"},	{"name":"Thana"},	{"name":"Yadira"},	{"name":"Zahra"},	{"name":"Zaina"},
+			]
+		},
+		{
+			"name": "Arab Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Arab"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Zain"},	{"name":"Ilhan"},	{"name":"Dara"},	{"name":"Isa"},		{"name":"Nour"},	{"name":"Ula"},		{"name":"Fuzail"},	{"name":"Aamirah"},	{"name":"Dina"},	{"name":"Farwah"},
+				{"name":"Imaan"},	{"name":"Zaha"},	{"name":"Azize"},	{"name":"Badr"},	{"name":"Deneb"},	{"name":"Duha"},	{"name":"Elam"},	{"name":"Gulzar"},	{"name":"Hikmat"},	{"name":"Ishtar"},
+				{"name":"Jahlia"},	{"name":"Khayrat"},	{"name":"Lunis"},	{"name":"Malak"},	{"name":"Nazar"},	{"name":"Youssef"},	{"name":"Rahat"},	{"name":"Sabri"},	{"name":"Shahnaz"},	{"name":"Taifa"},
+			]
+		},
+		{
+			"name": "Arab Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Arab"},
+			"traits" :
+			[
+				{"name":"Rajab"},	{"name":"Bilal"},	{"name":"Hashim"},		{"name":"Ebeid"},	{"name":"Habib"},	{"name":"Qureshi"},		{"name":"Aziz"},		{"name":"Irfan"},	{"name":"Mughrabi"},	{"name":"Ibrahim"},
+				{"name":"Abadi"},	{"name":"Kassab"},	{"name":"Osman"},		{"name":"Jameel"},	{"name":"Jaziri"},	{"name":"Wahid"},		{"name":"Yasin"},		{"name":"Dawoud"},	{"name":"Shariq"},		{"name":"Ghulam"},
+				{"name":"Ramzan"},	{"name":"Al-Amin"},	{"name":"Al-Harbi"},	{"name":"Bashar"},	{"name":"Taleb"},	{"name":"Al-Fasih"},	{"name":"Al-Najjar"},	{"name":"Khalid"},	{"name":"Maloof"},		{"name":"Nahdi"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
