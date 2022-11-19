@@ -880,6 +880,46 @@
 			]
 		},
 		{
+			"name": "Russian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Sergey"},	{"name":"Aleksandr"},	{"name":"Andrey"},		{"name":"Dmitriy"}, {"name":"Vladimir"},	{"name":"Aleksey"},	{"name":"Maksim"},	{"name":"Ivan"},	{"name":"Evgeniy"},	{"name":"Alexander"},
+				{"name":"Nikolay"},	{"name":"Mikhail"},		{"name":"Denis"},		{"name":"Roman"},	{"name":"Pavel"},		{"name":"Igor"},	{"name":"Anton"},	{"name":"Nikita"},	{"name":"Oleg"},	{"name":"Ilya"},
+				{"name":"Viktor"},	{"name":"Alexey"},		{"name":"Konstantin"},	{"name":"Artyom"},	{"name":"Kirill"},		{"name":"Yuriy"},	{"name":"Dmitry"},	{"name":"Ruslan"},	{"name":"Vadim"},	{"name":"Vitaliy"},
+			]
+		},
+		{
+			"name": "Russian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Elena"},		{"name":"Tatyana"},	{"name":"Olga"},	{"name":"Natalya"},		{"name":"Ekaterina"},	{"name":"Irina"},		{"name":"Svetlana"},	{"name":"Anastasiya"},	{"name":"Anna"},		{"name":"Marina"},
+				{"name":"Mariya"},		{"name":"Yuliya"},	{"name":"Darya"},	{"name":"Nadezhda"},	{"name":"Viktoriya"},	{"name":"Lyudmila"},	{"name":"Galina"},		{"name":"Kristina"},	{"name":"Alina"},		{"name":"Kseniya"},
+				{"name":"Valentina,"},	{"name":"Lyubov"},	{"name":"Alyona"},	{"name":"Aleksandra"},	{"name":"Oksana"},		{"name":"Evgeniya"},	{"name":"Anastasia"},	{"name":"Yulia"},		{"name":"Elizaveta"},	{"name":"Anya"},
+			]
+		},
+		{
+			"name": "Russian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Angel"},	{"name":"Sema"},	{"name":"Alishka"},	{"name":"Zu"},		{"name":"Danka"},	{"name":"Mister"},		{"name":"Artysh"},	{"name":"Aydys"},	{"name":"Mika"},	{"name":"Leska"},
+				{"name":"Maret"},	{"name":"Kesha"},	{"name":"Khadi"},	{"name":"Kris"},	{"name":"Iman"},	{"name":"Sima"},		{"name":"Tosha"},	{"name":"Gera"},	{"name":"Aza"},		{"name":"Mina"},
+				{"name":"Asiat"},	{"name":"Ayshat"},	{"name":"Senya"},	{"name":"Raisa"},	{"name":"Aynur"},	{"name":"Adel"},		{"name":"Mata"},	{"name":"Marem"},	{"name":"Khazan"},	{"name":"Mira"},
+			]
+		},
+		{
+			"name": "Russian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Russian"},
+			"traits" :
+			[
+				{"name":"Ivanov"},		{"name":"Smirnov"},	{"name":"Petrov"},	{"name":"Sidorov"},		{"name":"Kuznetsov"},	{"name":"Popov"},		{"name":"Vassiliev"},	{"name":"Sokolov"},	{"name":"Mikhailov"},	{"name":"Novikov"},
+				{"name":"Fyodorov"},	{"name":"Morozov"},	{"name":"Volkov"},	{"name":"Alekseev"},	{"name":"Lebedev"},		{"name":"Semyonov"},	{"name":"Yegorov"},		{"name":"Pavlov"},	{"name":"Kozlov"},		{"name":"Stepanov"},
+				{"name":"Nikolaev"},	{"name":"Orlov"},	{"name":"Andreev"},	{"name":"Makarov"},		{"name":"Nikitin"},		{"name":"Zakharov"},	{"name":"Solovyov"},	{"name":"Zaitsev"},	{"name":"Golubev"},		{"name":"Vinogradov"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
