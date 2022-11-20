@@ -960,6 +960,46 @@
 			]
 		},
 		{
+			"name": "Israeli Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Israeli"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Yosef"},		{"name":"David"},	{"name":"Moshe"},	{"name":"Avraham"}, {"name":"Yaakv"},		{"name":"Muhammad"},	{"name":"Isaac"},		{"name":"Miykhael"},	{"name":"Haim"},	{"name":"Shlomo"},
+				{"name":"Aleksander"},	{"name":"Ahmad"},	{"name":"Samuel"},	{"name":"Eliyahu"},	{"name":"Yisrael"},		{"name":"Meiyr"},		{"name":"Mardkhay"},	{"name":"Shimon"},		{"name":"Yhudah"},	{"name":"Amiyr"},
+				{"name":"Roy"},			{"name":"Mahmood"},	{"name":"Raphael"},	{"name":"Guy"},		{"name":"Binyamiyn"},	{"name":"Tzviy"},		{"name":"Eyal"},		{"name":"Abed"},		{"name":"Shalom"},	{"name":"Boris"},
+			]
+		},
+		{
+			"name": "Israeli Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Israeli"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Rachel"},		{"name":"Ester"},	{"name":"Sarah"},	{"name":"Miriam"},	{"name":"Chanah"},	{"name":"Rebecca"},	{"name":"Miykhal"},	{"name":"Yael"},	{"name":"Leah"},	{"name":"Shoshanah"},
+				{"name":"Rut"},			{"name":"Chayah"},	{"name":"Anah"},	{"name":"Yhudiyt"},	{"name":"Yelena"},	{"name":"Irina"},	{"name":"Malkah"},	{"name":"Karen"},	{"name":"Anat"},	{"name":"Deborah"},
+				{"name":"Iylanah,"},	{"name":"Eleh"},	{"name":"Fatma"},	{"name":"Tatiana"},	{"name":"Mazal"},	{"name":"Olga"},	{"name":"Hilah"},	{"name":"Zipora"},	{"name":"Diynah"},	{"name":"Shiyrah"},
+			]
+		},
+		{
+			"name": "Israeli Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Israeli"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Daniyel"},	{"name":"Tal"},		{"name":"Adiy"},	{"name":"Tamar"},	{"name":"Liyor"},	{"name":"Shay"},	{"name":"Uriy"},	{"name":"Omer"},	{"name":"Yuval"},	{"name":"Amiyt"},
+				{"name":"Noam"},	{"name":"Sharon"},	{"name":"Or"},		{"name":"Noah"},	{"name":"Eden"},	{"name":"Gal"},		{"name":"Hen"},		{"name":"Shahar"},	{"name":"Meriy"},	{"name":"Tomer"},
+				{"name":"Rony"},	{"name":"Ariyel"},	{"name":"Yafeh"},	{"name":"Rinah"},	{"name":"Oren"},	{"name":"Simchah"},	{"name":"Ron"},		{"name":"Idan"},	{"name":"Rotem"},	{"name":"Ronen"},
+			]
+		},
+		{
+			"name": "Israeli Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Israeli"},
+			"traits" :
+			[
+				{"name":"Cohen"},	{"name":"Levy"},	{"name":"Mizrahi"},	{"name":"Peretz"},		{"name":"Bitton"},	{"name":"Dahan"},	{"name":"Agbaria"},	{"name":"Avraham"},		{"name":"Friedman"},	{"name":"Katz"},
+				{"name":"Yosef"},	{"name":"Omer"},	{"name":"Mhamid"},	{"name":"Schwartz"},	{"name":"David"},	{"name":"Azulay"},	{"name":"Malkah"},	{"name":"Zoabi"},		{"name":"Jabarin"},		{"name":"Weiss"},
+				{"name":"Gaby"},	{"name":"Shapiro"},	{"name":"Chided"},	{"name":"Ohayon"},		{"name":"Reuben"},	{"name":"Lavyan"},	{"name":"Mahagna"},	{"name":"Masarweh"},	{"name":"Vaknin"},		{"name":"Khatib"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
