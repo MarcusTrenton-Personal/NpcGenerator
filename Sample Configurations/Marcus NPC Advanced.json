@@ -384,8 +384,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
 			"traits" :
 			[
-				{"name":"Alix"},	{"name":"Ariel"},	{"name":"Ashley"},	{"name":"Charlie"},	{"name":"Claude"},	{"name":"Dominique"},	{"name":"Eden"},	{"name":"Kim"},	{"name":"Lindsay"},	{"name":"Lou"},
-				{"name":"Noa"},		{"name":"Sacha"},	{"name":"Sandy"},	{"name":"Sasha"},
+				{"name":"Alix"},	{"name":"Ariel"},	{"name":"Ashley"},	{"name":"Charlie"},	{"name":"Claude"},	{"name":"Dominique"},	{"name":"Eden"},		{"name":"Kim"},		{"name":"Lindsay"},	{"name":"Lou"},
+				{"name":"Noa"},		{"name":"Sacha"},	{"name":"Sandy"},	{"name":"Sasha"},	{"name":"Jean"},	{"name":"Mackenson"},	{"name":"Robenson"},	{"name":"Wilner"},	{"name":"Camille"},	{"name":"Yannik"},
+				{"name":"Cyrille"},	{"name":"Elie"},	{"name":"Micka"},	{"name":"Dani"},	{"name":"Rachel"},	{"name":"Christel"},	{"name":"Edwige"},		{"name":"Dany"},	{"name":"Gael"},	{"name":"Jackie"},
 			]
 		},
 		{
@@ -423,8 +424,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
 			"traits" :
 			[
-				{"name":"Aguilar"},	{"name":"Amadis"},	{"name":"Amor"},	{"name":"Angel"},	{"name":"Ariel"},	{"name":"Ávila"},	{"name":"Azul"},	{"name":"Belén"},	{"name":"Camille"},	{"name":"Castel"},
-				{"name":"Claude"},	{"name":"Dani"},	{"name":"Desi"},	{"name":"Elia"},	{"name":"Fran"},	{"name":"Gabi"},	{"name":"Ginez"},	{"name":"Jules"},	{"name":"Lani"},	{"name":"Lyn"},
+				{"name":"Aguilar"},	{"name":"Amadis"},		{"name":"Amor"},	{"name":"Angel"},	{"name":"Ariel"},		{"name":"Ávila"},	{"name":"Azul"},	{"name":"Belén"},	{"name":"Camille"},	{"name":"Castel"},
+				{"name":"Claude"},	{"name":"Dani"},		{"name":"Desi"},	{"name":"Elia"},	{"name":"Fran"},		{"name":"Gabi"},	{"name":"Ginez"},	{"name":"Jules"},	{"name":"Lani"},	{"name":"Lyn"},
+				{"name":"Jesus"},	{"name":"Guadalupe"},	{"name":"Carmen"},	{"name":"Isabel"},	{"name":"Concepcion"},	{"name":"Felix"},	{"name":"Rosario"},	{"name":"Dolores"},	{"name":"Socorro"},	{"name":"Santos"},
 			]
 		},
 		{
@@ -462,8 +464,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
 			"traits" :
 			[
-				{"name":"Araci"},	{"name":"Jaci"},	{"name":"Darci"},	{"name":"René"},	{"name":"Amarilis"},	{"name":"Cris"},	{"name":"Alison"},	{"name":"Juraci"},	{"name":"Lucimar"},	{"name":"Céu"},
-				{"name":"Dias"},	{"name":"Ivani"},
+				{"name":"Araci"},	{"name":"Jaci"},	{"name":"Darci"},	{"name":"René"},		{"name":"Amarilis"},	{"name":"Cris"},	{"name":"Alison"},	{"name":"Juraci"},	{"name":"Lucimar"},	{"name":"Céu"},
+				{"name":"Dias"},	{"name":"Ivani"},	{"name":"Marcia"},	{"name":"Patricia"},	{"name":"Sandra"},		{"name":"Luciana"},	{"name":"Rita"},	{"name":"Vera"},	{"name":"Sonia"},	{"name":"Renata"},
+				{"name":"Lucia"},	{"name":"Regina"},	{"name":"Silvana"},	{"name":"Solange"},		{"name":"Silvia"},		{"name":"Marta"},	{"name":"Sueli"},	{"name":"Monica"},	{"name":"Rosana"},	{"name":"Valeria"},
 			]
 		},
 		{
@@ -864,9 +867,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
 			"traits" :
 			[
-				{"name":"Aischa"},	{"name":"Ottilia"},	{"name":"Lilly"},	{"name":"Jazmine"},		{"name":"Mandy"},	{"name":"Natália"},		{"name":"Ellie"},		{"name":"Loélia"},		{"name":"Rachel"},	{"name":"Freya"},
-				{"name":"Lucía"},	{"name":"Mila"},		{"name":"Eléa"},		{"name":"Ayleen"},		{"name":"Roxie"},	{"name":"Lissie"},		{"name":"Leah"},	{"name":"Lía"},	{"name":"Cléo"},	{"name":"Emilia"},
-				{"name":"Alicia"},	{"name":"Desiree"},	{"name":"Kellie"},	{"name":"Anabelle"},	{"name":"Luna"},		{"name":"Vera"},	{"name":"Amilia"},	{"name":"Alia"},	{"name":"Valeria"},		{"name":"Anastasia"},
+				{"name":"Aischa"},	{"name":"Ottilia"},	{"name":"Lilly"},	{"name":"Jazmine"},		{"name":"Mandy"},	{"name":"Natália"},		{"name":"Ellie"},	{"name":"Loélia"},	{"name":"Rachel"},	{"name":"Freya"},
+				{"name":"Lucía"},	{"name":"Mila"},	{"name":"Eléa"},	{"name":"Ayleen"},		{"name":"Roxie"},	{"name":"Lissie"},		{"name":"Leah"},	{"name":"Lía"},		{"name":"Cléo"},	{"name":"Emilia"},
+				{"name":"Alicia"},	{"name":"Desiree"},	{"name":"Kellie"},	{"name":"Anabelle"},	{"name":"Luna"},	{"name":"Vera"},		{"name":"Amilia"},	{"name":"Alia"},	{"name":"Valeria"},	{"name":"Anastasia"},
 			]
 		},
 		{
