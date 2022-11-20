@@ -40,7 +40,7 @@
 				{"name" : "East Asian", "weight" : 6},
 				{"name" : "Aboriginal", "weight" : 1},
 				{"name" : "Indigenous", "weight" : 1},
-				{"name" : "Arabic", "weight" : 2},
+				{"name" : "Arab", "weight" : 2},
 				{"name" : "Indian", "weight" : 3},
 				{"name" : "Turkic", "weight" : 1},
 				{"name" : "South-East Asian", "weight" : 2},
@@ -53,7 +53,7 @@
 			"selections": 1,
 			"traits" :
 			[
-				{"name" : "Region-specific", "weight" : 50},
+				{"name" : "Region-specific", "weight" : 30},
 				{
 					"name" : "American", 
 					"weight" : 1, 
@@ -192,7 +192,7 @@
 						]
 					}
 				},
-				{"name" : "Arab", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Arabic"}},
+				{"name" : "Arab", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Arab"}},
 				{
 					"name" : "Israeli", 
 					"weight" : 1,
@@ -201,12 +201,12 @@
 						"operands" : 
 						[
 							{"category_name" : "Race", "trait_name" : "Caucasian"},
-							{"category_name" : "Race", "trait_name" : "Arabic"},
+							{"category_name" : "Race", "trait_name" : "Arab"},
 							{"category_name" : "Race", "trait_name" : "African"},
 						]
 					}
 				},
-				{"name" : "Iranian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Arabic"}},
+				{"name" : "Iranian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Arab"}},
 				{"name" : "Nigerian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "African"}},
 				{"name" : "Ethiopian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "African"}},
 				{
@@ -230,7 +230,7 @@
 						"operands" : 
 						[
 							{"category_name" : "Race", "trait_name" : "Turkic"},
-							{"category_name" : "Race", "trait_name" : "Arabic"},
+							{"category_name" : "Race", "trait_name" : "Arab"},
 						]
 					}
 				},
@@ -1040,6 +1040,46 @@
 				{"name":"Mohammadi"},	{"name":"Hosseini"},	{"name":"Ahmadi"},	{"name":"Ali"},			{"name":"Moradi"},	{"name":"Heydari"},	{"name":"Karimi"},	{"name":"Mousavi"},	{"name":"Jafari"},	{"name":"Mohammad"},
 				{"name":"Pour"},		{"name":"Ghasemi"},		{"name":"Rahimi"},	{"name":"Ebrahimi"},	{"name":"Sadeghi"},	{"name":"Abbasi"},	{"name":"Gholami"},	{"name":"Akbari"},	{"name":"Asadi"},	{"name":"Zare"},
 				{"name":"Mahmoudi"},	{"name":"Ghorbani"},	{"name":"Bagheri"},	{"name":"Amiri"},		{"name":"Kazemi"},	{"name":"Zarei"},	{"name":"Haji"},	{"name":"Hashemi"},	{"name":"Nouri"},	{"name":"Yousefi"},
+			]
+		},
+		{
+			"name": "Nigerian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Nigerian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Musa"},	{"name":"Ibrahim"},	{"name":"Abubakar"},	{"name":"Sani"},	{"name":"Abdullahi"},	{"name":"Mohammed"},	{"name":"Sunday"},	{"name":"Umar"},	{"name":"Emmanuel"},	{"name":"Adamu"},
+				{"name":"Usman"},	{"name":"Aliyu"},	{"name":"Joseph"},		{"name":"John"},	{"name":"Aminu"},		{"name":"Yusuf"},		{"name":"Ali"},		{"name":"Samuel"},	{"name":"Hassan"},		{"name":"Haruna"},
+				{"name":"Salisu"},	{"name":"Peter"},	{"name":"Bello"},		{"name":"Garba"},	{"name":"Kabiru"},		{"name":"Isa"},			{"name":"Idris"},	{"name":"Isah"},	{"name":"Yahaya"},		{"name":"David"},
+			]
+		},
+		{
+			"name": "Nigerian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Nigerian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Blessing"},	{"name":"Aisha"},		{"name":"Fatima"},	{"name":"Mary"},	{"name":"Esther"},	{"name":"Grace"},	{"name":"Amina"},		{"name":"Zainab"},		{"name":"Maryam"},		{"name":"Joy"},
+				{"name":"Victoria"},	{"name":"Elizabeth"},	{"name":"Hadiza"},	{"name":"Mercy"},	{"name":"Hauwa"},	{"name":"Ngozi"},	{"name":"Patience"},	{"name":"Comfort"},		{"name":"Christiana"},	{"name":"Aishatu"},
+				{"name":"Florence,"},	{"name":"Halima"},		{"name":"Felicia"},	{"name":"Rose"},	{"name":"Helen"},	{"name":"Ruth"},	{"name":"Charity"},		{"name":"Chinyere"},	{"name":"Janet"},		{"name":"Glory"},
+			]
+		},
+		{
+			"name": "Nigerian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Nigerian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Taiwo"},	{"name":"Kehinde"},		{"name":"Chinedu"},		{"name":"Rabi"},	{"name":"Abiodun"},	{"name":"Muhammadu"},	{"name":"Uche"},		{"name":"Christian"},	{"name":"Toyin"},		{"name":"Chika"},
+				{"name":"Idowu"},	{"name":"Uchenna"},		{"name":"Temitope"},	{"name":"Gift"},	{"name":"Audu"},	{"name":"Favour"},		{"name":"Bukola"},		{"name":"Lucky"},		{"name":"Precious"},	{"name":"Opeyemi"},
+				{"name":"Gambo"},	{"name":"Oluwaseun"},	{"name":"Bright"},		{"name":"Kelechi"},	{"name":"Amadu"},	{"name":"Ugochukwu"},	{"name":"Onyekachi"},	{"name":"Dan"},			{"name":"Adama"},		{"name":"Abu"},
+			]
+		},
+		{
+			"name": "Nigerian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Nigerian"},
+			"traits" :
+			[
+				{"name":"Ibrahim"},	{"name":"Musa"},	{"name":"Abubakar"},	{"name":"Abdullahi"},	{"name":"Mohammed"},	{"name":"Sani"},	{"name":"Adamu"},	{"name":"Usman"},	{"name":"Umar"},	{"name":"Aliyu"},
+				{"name":"Yusuf"},	{"name":"Ali"},		{"name":"Garba"},		{"name":"Bello"},		{"name":"Haruna"},		{"name":"Hassan"},	{"name":"Lawal"},	{"name":"Aminu"},	{"name":"Yakubu"},	{"name":"Isah"},
+				{"name":"John"},	{"name":"Idris"},	{"name":"Eze"},			{"name":"Yahaya"},		{"name":"Salisu"},		{"name":"Ahmed"},	{"name":"Sunday"},	{"name":"Akpan"},	{"name":"Isa"},		{"name":"Shehu"},
 			]
 		},
 		{
