@@ -1083,6 +1083,46 @@
 			]
 		},
 		{
+			"name": "Ethiopian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Ethiopian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Kebede"},	{"name":"Abebe"},		{"name":"Mekonnen"},	{"name":"Ahmed"},	{"name":"Alemu"},	{"name":"Ali"},		{"name":"Tesfaye"},	{"name":"Beyene"},		{"name":"Tefera"},		{"name":"Mamo"},
+				{"name":"Asfaw"},	{"name":"Getachew"},	{"name":"Hassen"},		{"name":"Seid"},	{"name":"Mohamed"},	{"name":"Tilahun"},	{"name":"Yimer"},	{"name":"Teshome"},		{"name":"Adem"},		{"name":"Mulugeta"},
+				{"name":"Negash"},	{"name":"Assefa"},		{"name":"Solomon"},		{"name":"Hussen"},	{"name":"Tsegaye"},	{"name":"Ayalew"},	{"name":"Jemal"},	{"name":"Mengesha"},	{"name":"Shiferaw"},	{"name":"Mesfin"},
+			]
+		},
+		{
+			"name": "Ethiopian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Ethiopian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Kassa"},	{"name":"Desta"},	{"name":"Lemma"},	{"name":"Lema"},	{"name":"Tekle"},	{"name":"Balcha"},	{"name":"Kasa"},	{"name":"Geleta"},	{"name":"Reta"},	{"name":"Shifa"},
+				{"name":"Demise"},	{"name":"Dagne"},	{"name":"Zenebe"},	{"name":"Maru"},	{"name":"Ayana"},	{"name":"Dessie"},	{"name":"Guta"},	{"name":"Wordofa"},	{"name":"Fanta"},	{"name":"Gebrie"},
+				{"name":"Alene,"},	{"name":"Adera"},	{"name":"Leta"},	{"name":"Ayano"},	{"name":"Helen"},	{"name":"Nur"},		{"name":"Belaye"},	{"name":"Telila"},	{"name":"Merga"},	{"name":"Meseret"},
+			]
+		},
+		{
+			"name": "Ethiopian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Ethiopian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Bekele"},	{"name":"Tadesse"},		{"name":"Ayele"},	{"name":"Belay"},	{"name":"Abera"},	{"name":"Hailu"},	{"name":"Asefa"},	{"name":"Zeleke"},	{"name":"Berhe"},	{"name":"Alemayehu"},
+				{"name":"Belete"},	{"name":"Mengistu"},	{"name":"Abate"},	{"name":"Sisay"},	{"name":"Girma"},	{"name":"Melese"},	{"name":"Taye"},	{"name":"Legesse"},	{"name":"Kedir"},	{"name":"Getahun"},
+				{"name":"Feleke"},	{"name":"Hagos"},		{"name":"Teka"},	{"name":"Nega"},	{"name":"Tadese"},	{"name":"Amare"},	{"name":"Eshete"},	{"name":"Tulu"},	{"name":"Gudeta"},	{"name":"Debele"},
+			]
+		},
+		{
+			"name": "Ethiopian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Ethiopian"},
+			"traits" :
+			[
+				{"name":"Tesfaye"},		{"name":"Mohammed"},	{"name":"Getachew"},	{"name":"Abebe"},	{"name":"Girma"},	{"name":"Tadesse"},	{"name":"Solomon"},		{"name":"Kebede"},	{"name":"Bekele"},	{"name":"Hailu"},
+				{"name":"Alemayehu"},	{"name":"Ahmed"},		{"name":"Alemu"},		{"name":"Almaz"},	{"name":"Mulu"},	{"name":"Teshome"},	{"name":"Mekonnen"},	{"name":"Genet"},	{"name":"Abera"},	{"name":"Mulugeta"},
+				{"name":"Tilahun"},		{"name":"Worku"},		{"name":"Tsegaye"},		{"name":"Ali"},		{"name":"Tsehay"},	{"name":"Asefa"},	{"name":"Abebech"},		{"name":"Jemal"},	{"name":"Assefa"},	{"name":"Desta"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
