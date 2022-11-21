@@ -1123,6 +1123,46 @@
 			]
 		},
 		{
+			"name": "South African Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "South African"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Johannes"},	{"name":"David"},	{"name":"John"},		{"name":"Michael"},		{"name":"Sipho"},	{"name":"Joseph"},	{"name":"Bongani"},	{"name":"Jan"},		{"name":"Daniel"},	{"name":"Sibusiso"},
+				{"name":"Petrus"},		{"name":"Patrick"},	{"name":"Peter"},		{"name":"Simon"},		{"name":"Willem"},	{"name":"Jacobus"},	{"name":"Samuel"},	{"name":"William"},	{"name":"Hendrik"},	{"name":"Pieter"},
+				{"name":"Thomas"},		{"name":"Richard"},	{"name":"Nkosinathi"},	{"name":"Jabulani"},	{"name":"Thulani"},	{"name":"Xolani"},	{"name":"Johan"},	{"name":"Andries"},	{"name":"Robert"},	{"name":"George"},
+			]
+		},
+		{
+			"name": "South African Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "South African"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Maria"},		{"name":"Elizabeth"},	{"name":"Anna"},		{"name":"Johanna"},		{"name":"Lindiwe"},		{"name":"Martha"},	{"name":"Busisiwe"},	{"name":"Patricia"},	{"name":"Nonhlanhla"},	{"name":"Sarah"},
+				{"name":"Nokuthula"},	{"name":"Joyce"},		{"name":"Margaret"},	{"name":"Cynthia"},		{"name":"Nompumelelo"},	{"name":"Nomsa"},	{"name":"Christina"},	{"name":"Bongiwe"},		{"name":"Nomusa"},		{"name":"Mary"},
+				{"name":"Susanna,"},	{"name":"Eunice"},		{"name":"Elsie"},		{"name":"Ntombifuthi"},	{"name":"Sylvia"},		{"name":"Zodwa"},	{"name":"Thandiwe"},	{"name":"Amanda"},		{"name":"Nelisiwe"},	{"name":"Hester"},
+			]
+		},
+		{
+			"name": "South African Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "South African"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Sibongile"},	{"name":"Mpho"},		{"name":"Themba"},		{"name":"Zanele"},	{"name":"Tebogo"},		{"name":"Linda"},		{"name":"Zandile"},	{"name":"Thandi"},		{"name":"Sello"},		{"name":"Fikile"},
+				{"name":"Lucky"},		{"name":"Siphiwe"},		{"name":"Thembinkosi"},	{"name":"Matome"},	{"name":"Sandile"},		{"name":"Phumzile"},	{"name":"Thembi"},	{"name":"Phindile"},	{"name":"Tshepo"},		{"name":"Simphiwe"},
+				{"name":"Andile"},		{"name":"Thokozani"},	{"name":"Thembisile"},	{"name":"Lerato"},	{"name":"Dimakatso"},	{"name":"Mokgadi"},		{"name":"Lungile"},	{"name":"Thabiso"},		{"name":"Lebogang"},	{"name":"Ayanda"},
+			]
+		},
+		{
+			"name": "South African Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "South African"},
+			"traits" :
+			[
+				{"name":"Dlamini"},	{"name":"Nkosi"},	{"name":"Ndlovu"},	{"name":"Khumalo"},		{"name":"Sithole"},	{"name":"Mahlangu"},	{"name":"Mokoena"},	{"name":"Mkhize"},	{"name":"Mthembu"},		{"name":"Zulu"},
+				{"name":"Ngcobo"},	{"name":"Gumede"},	{"name":"Naidoo"},	{"name":"Buthelezi"},	{"name":"Khoza"},	{"name":"Mathebula"},	{"name":"Sibiya"},	{"name":"Jacobs"},	{"name":"Govender"},	{"name":"Mofokeng"},
+				{"name":"Botha"},	{"name":"Mhlongo"},	{"name":"Smith"},	{"name":"Baloyi"},		{"name":"Mbatha"},	{"name":"Pillay"},		{"name":"Radebe"},	{"name":"Ntuli"},	{"name":"Zwane"},		{"name":"Mazibuko"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
