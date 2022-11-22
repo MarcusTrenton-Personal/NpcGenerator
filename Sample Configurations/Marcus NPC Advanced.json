@@ -42,7 +42,7 @@
 				{"name" : "Indigenous", "weight" : 1},
 				{"name" : "Arab", "weight" : 2},
 				{"name" : "Indian", "weight" : 3},
-				{"name" : "Turkic", "weight" : 1},
+				{"name" : "Turk", "weight" : 1},
 				{"name" : "South-East Asian", "weight" : 2},
 				{"name" : "Pacific Islander", "weight" : 1},
 				{"name" : "Biracial", "weight" : 20, "hidden" : true, "bonus_selection" : { "trait_category_name" : "Race", "selections" : 2}}
@@ -173,7 +173,7 @@
 						"operands" : 
 						[
 							{"category_name" : "Race", "trait_name" : "Caucasian"},
-							{"category_name" : "Race", "trait_name" : "Turkic"},
+							{"category_name" : "Race", "trait_name" : "Turk"},
 						]
 					}
 				},
@@ -188,7 +188,7 @@
 						"operands" : 
 						[
 							{"category_name" : "Race", "trait_name" : "Caucasian"},
-							{"category_name" : "Race", "trait_name" : "Turkic"},
+							{"category_name" : "Race", "trait_name" : "Turk"},
 						]
 					}
 				},
@@ -229,13 +229,13 @@
 						"operator" : "Any",
 						"operands" : 
 						[
-							{"category_name" : "Race", "trait_name" : "Turkic"},
+							{"category_name" : "Race", "trait_name" : "Turk"},
 							{"category_name" : "Race", "trait_name" : "Arab"},
 						]
 					}
 				},
 				{"name" : "Indian", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Indian"}},
-				{"name" : "Kazak", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Turkic"}},
+				{"name" : "Kazak", "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "Turk"}},
 				{"name" : "Chinese", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "East Asian"}},
 				{"name" : "Japanese", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "East Asian"}},
 				{"name" : "Korean", "weight" : 1, "weight" : 1, "requirements" : {"category_name" : "Race", "trait_name" : "East Asian"}},
@@ -1160,6 +1160,46 @@
 				{"name":"Dlamini"},	{"name":"Nkosi"},	{"name":"Ndlovu"},	{"name":"Khumalo"},		{"name":"Sithole"},	{"name":"Mahlangu"},	{"name":"Mokoena"},	{"name":"Mkhize"},	{"name":"Mthembu"},		{"name":"Zulu"},
 				{"name":"Ngcobo"},	{"name":"Gumede"},	{"name":"Naidoo"},	{"name":"Buthelezi"},	{"name":"Khoza"},	{"name":"Mathebula"},	{"name":"Sibiya"},	{"name":"Jacobs"},	{"name":"Govender"},	{"name":"Mofokeng"},
 				{"name":"Botha"},	{"name":"Mhlongo"},	{"name":"Smith"},	{"name":"Baloyi"},		{"name":"Mbatha"},	{"name":"Pillay"},		{"name":"Radebe"},	{"name":"Ntuli"},	{"name":"Zwane"},		{"name":"Mazibuko"},
+			]
+		},
+		{
+			"name": "Turk Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Turk"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Mehmet"},	{"name":"Mustafa"},	{"name":"Ahmet"},	{"name":"Ali"},		{"name":"Hasan"},		{"name":"Hüseyin"},		{"name":"Ibrahim"},	{"name":"Murat"},	{"name":"Ismail"},	{"name":"Ömer"},
+				{"name":"Osman"},	{"name":"Ramazan"},	{"name":"Halil"},	{"name":"Yusuf"},	{"name":"Abdullah"},	{"name":"Süleyman"},	{"name":"Fatih"},	{"name":"Mahmut"},	{"name":"Recep"},	{"name":"Hakan"},
+				{"name":"Adem"},	{"name":"Metin"},	{"name":"Kemal"},	{"name":"Kadir"},	{"name":"Salih"},		{"name":"Orhan"},		{"name":"Serkan"},	{"name":"Gökhan"},	{"name":"Bayram"},	{"name":"Uğur"},
+			]
+		},
+		{
+			"name": "Turk Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Turk"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Fatma"},	{"name":"Ayşe"},	{"name":"Emine"},		{"name":"Hatice"},	{"name":"Zeynep"},	{"name":"Elif"},	{"name":"Meryem"},	{"name":"Özlem"},	{"name":"Nonhlanhla"},	{"name":"Hülya"},
+				{"name":"Yasemin"},	{"name":"Sevim"},	{"name":"Margaret"},	{"name":"Şerife"},	{"name":"Dilek"},	{"name":"Aysel"},	{"name":"Fadime"},	{"name":"Leyla"},	{"name":"Zehra"},		{"name":"Hacer"},
+				{"name":"Hanife,"},	{"name":"Havva"},	{"name":"Songül"},		{"name":"Esra"},	{"name":"Aynur"},	{"name":"Zeliha"},	{"name":"Merve"},	{"name":"Filiz"},	{"name":"Melek"},		{"name":"Cemile"},
+			]
+		},
+		{
+			"name": "Turk Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Turk"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Sultan"},	{"name":"Yaşar"},	{"name":"Derya"},	{"name":"Ayhan"},	{"name":"Yüksel"},	{"name":"Ismet"},	{"name":"Ümit"},	{"name":"Dursun"},	{"name":"Deniz"},	{"name":"Muzaffer"},
+				{"name":"Canan"},	{"name":"Hikmet"},	{"name":"Özgür"},	{"name":"Ilhan"},	{"name":"Ihsan"},	{"name":"Irfan"},	{"name":"Nuri"},	{"name":"Zafer"},	{"name":"Özcan"},	{"name":"Cihan"},
+				{"name":"Hilal"},	{"name":"Tuncay"},	{"name":"Nimet"},	{"name":"Fikret"},	{"name":"Muammer"},	{"name":"Reyhan"},	{"name":"Nevzat"},	{"name":"Ersin"},	{"name":"Suat"},	{"name":"Sati"},
+			]
+		},
+		{
+			"name": "Turk Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Turk"},
+			"traits" :
+			[
+				{"name":"Yılmaz"},	{"name":"Kaya"},	{"name":"Demir"},	{"name":"Çelik"},	{"name":"Şahin"},	{"name":"Yıldız"},	{"name":"Yıldırım"},	{"name":"Öztürk"},	{"name":"Aydın"},	{"name":"Özdemir"},
+				{"name":"Arslan"},	{"name":"Doğan"},	{"name":"Kılıç"},	{"name":"Aslan"},	{"name":"Çetin"},	{"name":"Kara"},	{"name":"Koç"},			{"name":"Kurt"},	{"name":"Özkan"},	{"name":"Acar"},
+				{"name":"Polat"},	{"name":"Şimşek"},	{"name":"Korkmaz"},	{"name":"Özcan"},	{"name":"Erdoğan"},	{"name":"Çakir"},	{"name":"Yavuz"},		{"name":"Can"},		{"name":"Şen"},		{"name":"Yalçın"},
 			]
 		},
 		{
