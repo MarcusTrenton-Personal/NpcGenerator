@@ -913,13 +913,35 @@
 			]
 		},
 		{
-			"name": "Russian Surname", "output_name": "Surname", "selections": 1, 
-			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Russian"},
+			"name": "Russian Masculine Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : { 
+				"operator" : "All", 
+				"operands" : [ 
+					{"category_name" : "Ancestry", "trait_name" : "Russian"}, 
+					{
+						"operator" : "Any", 
+						"operands" : [
+							{"category_name" : "Gender", "trait_name" : "Male"},
+							{"category_name" : "Gender", "trait_name" : "Nonbinary"}
+						],
+					}
+				]
+			},
 			"traits" :
 			[
-				{"name":"Ivanov"},		{"name":"Smirnov"},	{"name":"Petrov"},	{"name":"Sidorov"},		{"name":"Kuznetsov"},	{"name":"Popov"},		{"name":"Vassiliev"},	{"name":"Sokolov"},	{"name":"Mikhailov"},	{"name":"Novikov"},
-				{"name":"Fyodorov"},	{"name":"Morozov"},	{"name":"Volkov"},	{"name":"Alekseev"},	{"name":"Lebedev"},		{"name":"Semyonov"},	{"name":"Yegorov"},		{"name":"Pavlov"},	{"name":"Kozlov"},		{"name":"Stepanov"},
-				{"name":"Nikolaev"},	{"name":"Orlov"},	{"name":"Andreev"},	{"name":"Makarov"},		{"name":"Nikitin"},		{"name":"Zakharov"},	{"name":"Solovyov"},	{"name":"Zaitsev"},	{"name":"Golubev"},		{"name":"Vinogradov"},
+				{"name":"Ivanov"},		{"name":"Kuznetsov"},	{"name":"Petrov"},		{"name":"Magomedov"},	{"name":"Smirnov"},		{"name":"Popov"},		{"name":"Volkov"},	{"name":"Shevchenko"},	{"name":"Vasilev"},		{"name":"Novikov"},
+				{"name":"Morozov"},		{"name":"Pavlov"},		{"name":"Sokolov"},		{"name":"Aliev"},		{"name":"Mikhaylov"},	{"name":"Romanov"},		{"name":"Makarov"},	{"name":"Egorov"},		{"name":"Kozlov"},		{"name":"Nikolaev"},
+				{"name":"Stepanov"},	{"name":"Andreev"},		{"name":"Zakharov"},	{"name":"Kovalenko"},	{"name":"Sergeev"},		{"name":"Bondarenko"},	{"name":"Nikitin"},	{"name":"Zaytsev"},		{"name":"Medvedev"},	{"name":"Orlov"},
+			]
+		},
+		{
+			"name": "Russian Feminine Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Ivanova"},		{"name":"Kuznetsova"},	{"name":"Smirnova"},	{"name":"Petrova"},		{"name":"Popova"},		{"name":"Volkova"},		{"name":"Novikova"},	{"name":"Morozova"},	{"name":"Sokolova"},	{"name":"Pavlova"},
+				{"name":"Romanova"},	{"name":"Andreeva"},	{"name":"Vasileva"},	{"name":"Mikhaylova"},	{"name":"Makarova"},	{"name":"Sergeeva"},	{"name":"Zaytseva"},	{"name":"Nikolaeva"},	{"name":"Zakharova"},	{"name":"Stepanova"},
+				{"name":"Lebedeva"},	{"name":"Kozlova"},		{"name":"Nikitina"},	{"name":"Egorova"},		{"name":"Yakovleva"},	{"name":"Frolova"},		{"name":"Orlova"},		{"name":"Ibragimova"},	{"name":"Kotova"},		{"name":"Belova"},
 			]
 		},
 		{
@@ -1240,6 +1262,68 @@
 				{"name":"Devi"},	{"name":"Singh"},	{"name":"Kumar"},	{"name":"Das"},		{"name":"Kaur"},	{"name":"Ram"},		{"name":"Yadav"},	{"name":"Kumari"},	{"name":"Lal"},		{"name":"Bai"},
 				{"name":"Khatun"},	{"name":"Mandal"},	{"name":"Ali"},		{"name":"Sharma"},	{"name":"Ray"},		{"name":"Mondal"},	{"name":"Khan"},	{"name":"Sah"},		{"name":"Patel"},	{"name":"Prasad"},
 				{"name":"Patil"},	{"name":"Ghosh"},	{"name":"Pal"},		{"name":"Sahu"},	{"name":"Gupta"},	{"name":"Shaikh"},	{"name":"Bibi"},	{"name":"Sekh"},	{"name":"Begam"},	{"name":"Biswas"},
+			]
+		},
+		{
+			"name": "Kazak Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Sergey"},	{"name":"Vladimir"},	{"name":"Aleksandr"},	{"name":"Ruslan"},	{"name":"Andrey"},	{"name":"Azamat"},	{"name":"Viktor"},	{"name":"Talgat"},	{"name":"Nikolay"},	{"name":"Serik"},
+				{"name":"Dmitriy"},	{"name":"Nursultan"},	{"name":"Denis"},		{"name":"Ivan"},	{"name":"Erzhan"},	{"name":"Arman"},	{"name":"Timur"},	{"name":"Nurlan"},	{"name":"Alexey"},	{"name":"Igor"},
+				{"name":"Erlan"},	{"name":"Kanat"},		{"name":"Evgeniy"},		{"name":"Mikhail"},	{"name":"Pavel"},	{"name":"Oleg"},	{"name":"Roman"},	{"name":"Dauren"},	{"name":"Maksim"},	{"name":"Dmitry"},
+			]
+		},
+		{
+			"name": "Kazak Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Elena"},	{"name":"Natalya"},	{"name":"Tatyana"},		{"name":"Olga"},	{"name":"Irina"},		{"name":"Svetlana"},	{"name":"Nadezhda"},	{"name":"Aygerim"},		{"name":"Ekaterina"},	{"name":"Galina"},
+				{"name":"Marina"},	{"name":"Dinara"},	{"name":"Anastasiya"},	{"name":"Madina"},	{"name":"Alina"},		{"name":"Anna"},		{"name":"Lyudmila"},	{"name":"Akmaral"},		{"name":"Valentina"},	{"name":"Asel"},
+				{"name":"Aydana"},	{"name":"Diana"},	{"name":"Lyubov"},		{"name":"Gulmira"},	{"name":"Saltanat"},	{"name":"Oleg"},		{"name":"Mariya"},		{"name":"Kristina"},	{"name":"Aida"},		{"name":"Aygul"},
+			]
+		},
+		{
+			"name": "Kazak Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Marat"},	{"name":"Kuanysh"},	{"name":"Bakhytzhan"},	{"name":"Nurzhan"},	{"name":"Orken"},	{"name":"Askar"},		{"name":"Murat"},	{"name":"Inkar"},	{"name":"Bekzat"},	{"name":"Aruzhan"},
+				{"name":"Symbat"},	{"name":"Ramazan"},	{"name":"Didar"},		{"name":"Madi"},	{"name":"Bagdat"},	{"name":"Bakytzhan"},	{"name":"Zhanat"},	{"name":"Raisa"},	{"name":"Aa"},		{"name":"Na"},
+				{"name":"Ardak"},	{"name":"Amir"},	{"name":"Nazym"},		{"name":"Ayan"},	{"name":"Baglan"},	{"name":"Beka"},		{"name":"Rauan"},	{"name":"Salamat"},	{"name":"Aydyn"},	{"name":"Bayan"},
+			]
+		},
+		{
+			"name": "Kazak Masculine Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : { 
+				"operator" : "All", 
+				"operands" : [ 
+					{"category_name" : "Ancestry", "trait_name" : "Kazak"}, 
+					{
+						"operator" : "Any", 
+						"operands" : [
+							{"category_name" : "Gender", "trait_name" : "Male"},
+							{"category_name" : "Gender", "trait_name" : "Nonbinary"}
+						],
+					}
+				]
+			},
+			"traits" :
+			[
+				{"name":"Kenes"},		{"name":"Omarov"},	{"name":"Sultanov"},	{"name":"Barat"},		{"name":"Akhmetov"},	{"name":"Umarov"},	{"name":"Belgibaev"},	{"name":"Kemelov"},		{"name":"Bolatbek"},	{"name":"Ivanov"},
+				{"name":"Kambarov"},	{"name":"Boyko"},	{"name":"Smagulov"},	{"name":"Aliev"},		{"name":"Ospanov"},		{"name":"Serikov"},	{"name":"Tsoy"},		{"name":"Suleymenov"},	{"name":"Karimov"},		{"name":"Ibragimov"},
+				{"name":"Bondarenko"},	{"name":"Eleusiz"},	{"name":"Kaliev"},		{"name":"Nigmashev"},	{"name":"Shevchenko"},	{"name":"Popov"},	{"name":"Muratov"},		{"name":"Romanyuk"},	{"name":"Asanov"},		{"name":"Ibraev"},
+			]
+		},
+		{
+			"name": "Kazak Feminine Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Kenes"},		{"name":"Alieva"},	{"name":"Barat"},		{"name":"Akhmetova"},	{"name":"Bolatbek"},	{"name":"Ivanova"},		{"name":"Iskakova"},	{"name":"Boyko"},		{"name":"Omarova"},		{"name":"Ospanova"},
+				{"name":"Smagulova"},	{"name":"Eleusiz"},	{"name":"Sultanova"},	{"name":"Asanova"},		{"name":"Petrova"},		{"name":"Valieva"},		{"name":"Suleymenova"},	{"name":"Romanyuk"},	{"name":"Ibraeva"},		{"name":"Sarbalin"},
+				{"name":"Popova"},		{"name":"Musin"},	{"name":"Sadykova"},	{"name":"Muratova"},	{"name":"Aubakirova"},	{"name":"Kuznetsova"},	{"name":"Nurdulla"},	{"name":"Ibragimova"},	{"name":"Amangeldi"},	{"name":"Kusainova"},
 			]
 		},
 		{
