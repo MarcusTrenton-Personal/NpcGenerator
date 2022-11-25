@@ -1327,6 +1327,46 @@
 			]
 		},
 		{
+			"name": "Chinese Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Chinese"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Yìchén"},		{"name":"Yǔxuān"},	{"name":"Hàoyǔ"},		{"name":"Shí Lěi"}, {"name":"Yǔchén"},	{"name":"Zǐmò"},	{"name":"Yǔháng"},		{"name":"Hàorán"},		{"name":"Zǐháo"},	{"name":"Zhì Péng"},
+				{"name":"Míng Tāo"},	{"name":"Hào Rán"},	{"name":"Jùn Jié"},		{"name":"Zǐ Hán"},	{"name":"Huì Fēn"},	{"name":"Jiā Lì"},	{"name":"Jiā Háo"},		{"name":"Zǐ Ruì"},		{"name":"Bó Wén"},	{"name":"Yī Míng"},
+				{"name":"Jùn Dé"},		{"name":"Hào Yǔ"},	{"name":"Hào Yáng"},	{"name":"Jiā Wěi"},	{"name":"Yǒng Lè"},	{"name":"Yǔ Zé"},	{"name":"Xiǎo Dān"},	{"name":"Wěi Guó"},		{"name":"Míng Yù"},	{"name":"Zǐ Xīn"},
+			]
+		},
+		{
+			"name": "Chinese Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Chinese"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Yī Nuò"},		{"name":"Xīn Yí"},		{"name":"Zǐ Hán"},		{"name":"Měi Qí"},		{"name":"Xīn Yán"},		{"name":"Kě Xīn"},		{"name":"Yǔ Xī"},		{"name":"Yǔ Tóng"},		{"name":"Mèng Yáo"},{"name":"Chán Juān"},
+				{"name":"Chūn Huá"},	{"name":"Dōng Méi"},	{"name":"Huì Yǐng"},	{"name":"Huì Fēn"},		{"name":"Jiā Lì"},		{"name":"Jiā Yí"},		{"name":"Jiā Huì"},		{"name":"Lán Fēn"},		{"name":"Lì Huá"},	{"name":"Lì Méi"},
+				{"name":"Lì Nà"},		{"name":"Měi Lián"},	{"name":"Míng Xiá"},	{"name":"Éleanore"},	{"name":"Míng Zhū"},	{"name":"Qiǎo Huì"},	{"name":"Xiǎo Dān"},	{"name":"Xiǎo Huì"},	{"name":"Yù Míng"},	{"name":"Shī Yún"},
+			]
+		},
+		{
+			"name": "Chinese Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Chinese"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Huì"},		{"name":"An"},		{"name":"Chén"},	{"name":"Chūn"},	{"name":"Liǔ"},	{"name":"Jiāng"},	{"name":"Míng"},	{"name":"Píng"},	{"name":"Shàn"},	{"name":"Zǐhán"},
+				{"name":"Héng"},	{"name":"Guāng"},	{"name":"Huān"},	{"name":"Bō"},		{"name":"Qiū"},	{"name":"Bǎo"},		{"name":"Lín"},		{"name":"Meilin"},	{"name":"Cōng"},	{"name":"Líng"},
+				{"name":"Wén"},		{"name":"Nuò"},		{"name":"Xīn"},		{"name":"Yáng"},	{"name":"Fen"},	{"name":"Xiáng"},	{"name":"Yīng"},	{"name":"Jīng"},	{"name":"Xī"},		{"name":"Chàng"},
+			]
+		},
+		{
+			"name": "Chinese Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Chinese"},
+			"traits" :
+			[
+				{"name":"Wang"},	{"name":"Li"},	{"name":"Zhang"},	{"name":"Liu"},		{"name":"Chen"},	{"name":"Yang"},	{"name":"Huang"},	{"name":"Wu"},	{"name":"Xu"},	{"name":"Zhao"},
+				{"name":"Zhou"},	{"name":"Lu"},	{"name":"Zhu"},		{"name":"Sun"},		{"name":"He"},		{"name":"Ma"},		{"name":"Yu"},		{"name":"Hu"},	{"name":"Lin"},	{"name":"Jiang"},
+				{"name":"Guo"},		{"name":"Luo"},	{"name":"Gao"},		{"name":"Zheng"},	{"name":"Liang"},	{"name":"Tang"},	{"name":"Wei"},		{"name":"Shi"},	{"name":"Xie"},	{"name":"Song"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
