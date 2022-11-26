@@ -1447,6 +1447,46 @@
 			]
 		},
 		{
+			"name": "Vietnamese Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Vietnamese"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Tuan"},	{"name":"Hung"},	{"name":"Nam"},		{"name":"Huy"}, 	{"name":"Long"},	{"name":"Hai"},		{"name":"Hieu"},	{"name":"Son"},		{"name":"Hoang"},	{"name":"Duy"},
+				{"name":"Trung"},	{"name":"Tung"},	{"name":"Cuong"},	{"name":"Vu"},		{"name":"Duc"},		{"name":"Truong"},	{"name":"Tan"},		{"name":"Quang"},	{"name":"Thang"},	{"name":"Bao"},
+				{"name":"Phuc"},	{"name":"Vinh"},	{"name":"Toan"},	{"name":"Phong"},	{"name":"Dat"},		{"name":"Viet"},	{"name":"Manh"},	{"name":"Quan"},	{"name":"Thai"},	{"name":"Tai"},
+			]
+		},
+		{
+			"name": "Vietnamese Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Vietnamese"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Trang"},	{"name":"Thao"},	{"name":"Nga"},		{"name":"Huong"},	{"name":"Thu"},		{"name":"Yen"},		{"name":"Lan"},		{"name":"Huyen"},	{"name":"Nhi"},		{"name":"Hang"},
+				{"name":"My"},		{"name":"Mai"},		{"name":"Ngan"},	{"name":"Ly"},		{"name":"Nhu"},		{"name":"Quynh"},	{"name":"Nhung"},	{"name":"Vy"},		{"name":"Thi"},		{"name":"Trinh"},
+				{"name":"Han"},		{"name":"Tram"},	{"name":"Uyen"},	{"name":"Oanh"},	{"name":"Duyen"},	{"name":"Loan"},	{"name":"Hue"},		{"name":"Tuyet"},	{"name":"Truc"},	{"name":"Lien"},
+			]
+		},
+		{
+			"name": "Vietnamese Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Vietnamese"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Anh"},		{"name":"Linh"},	{"name":"Thanh"},	{"name":"Ha"},		{"name":"An"},		{"name":"Phuong"},	{"name":"Dung"},		{"name":"O"},		{"name":"Nam"},		{"name":"Thao"},
+				{"name":"Ngoc"},	{"name":"Thuy"},	{"name":"Minh"},	{"name":"Nguyen"},	{"name":"Hai"},		{"name":"Hieu"},	{"name":"Hyeon-Seo"},	{"name":"Hoa"},		{"name":"Hoang"},	{"name":"Van"},
+				{"name":"Tien"},	{"name":"Huong"},	{"name":"Tu"},		{"name":"Thu"},		{"name":"Duy"},		{"name":"Yen"},		{"name":"Trung"},		{"name":"Hien"},	{"name":"Duong"},	{"name":"Vu"},
+			]
+		},
+		{
+			"name": "Vietnamese Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Vietnamese"},
+			"traits" :
+			[
+				{"name":"Kim"},		{"name":"I"},		{"name":"Pak"},		{"name":"Chong"},	{"name":"Choe"},	{"name":"Cho"},	{"name":"Kang"},	{"name":"Yu"},		{"name":"Yun"},		{"name":"Chang"},
+				{"name":"Im"},		{"name":"Sin"},		{"name":"Song"},	{"name":"Chon"},	{"name":"So"},		{"name":"Han"},	{"name":"O"},		{"name":"Hwang"},	{"name":"Kwon"},	{"name":"An"},
+				{"name":"Hong"},	{"name":"Yang"},	{"name":"Son"},		{"name":"Ko"},		{"name":"Mun"},		{"name":"Pae"},	{"name":"Paek"},	{"name":"Ho"},		{"name":"No"},		{"name":"Chu"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
