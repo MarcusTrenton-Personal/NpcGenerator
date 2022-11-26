@@ -1367,6 +1367,46 @@
 			]
 		},
 		{
+			"name": "Japanese Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Japanese"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Hiroshi"},	{"name":"Toshio"},	{"name":"Yoshio"},		{"name":"Kazuo"}, 		{"name":"Masao"},	{"name":"Kiyoshi"},	{"name":"Takashi"},		{"name":"Yukio"},	{"name":"Hideo"},	{"name":"Koichi"},
+				{"name":"Koji"},	{"name":"Takeshi"},	{"name":"Tadashi"},		{"name":"Shoji"},		{"name":"Mitsuo"},	{"name":"Yasuo"},	{"name":"Hiroyuki"},	{"name":"Shigeo"},	{"name":"Susumu"},	{"name":"Akio"},
+				{"name":"Isamu"},	{"name":"Kenichi"},	{"name":"Masahiro"},	{"name":"Shinichi"},	{"name":"Shoichi"},	{"name":"Osamu"},	{"name":"Masayuki"},	{"name":"Takeo"},	{"name":"Takao"},	{"name":"Tsutomu"},
+			]
+		},
+		{
+			"name": "Japanese Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Japanese"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Shigeru"},	{"name":"Sachiko"},	{"name":"Masako"},	{"name":"Katsumi"},	{"name":"Yoko"},	{"name":"Michiko"},	{"name":"Yoshiko"},	{"name":"Hiroko"},	{"name":"Keiko"},	{"name":"Hisako"},
+				{"name":"Fumiko"},	{"name":"Toshiko"},	{"name":"Yasuko"},	{"name":"Reiko"},	{"name":"Takako"},	{"name":"Miyoko"},	{"name":"Tomiko"},	{"name":"Emiko"},	{"name":"Shizuko"},	{"name":"Noriko"},
+				{"name":"Yuko"},	{"name":"Kiyoko"},	{"name":"Nobuko"},	{"name":"Mieko"},	{"name":"Yoshie"},	{"name":"Teruko"},	{"name":"Ryoko"},	{"name":"Chiyoko"},	{"name":"Kazue"},	{"name":"Chieko"},
+			]
+		},
+		{
+			"name": "Japanese Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Japanese"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Kenji"},		{"name":"Hiromi"},	{"name":"Akira"},		{"name":"Yoshimi"},		{"name":"Koshi"},	{"name":"Masami"},	{"name":"Masaki"},	{"name":"Yuki"},		{"name":"Atsushi"},	{"name":"Yoshihiro"},
+				{"name":"Yoshiharu"},	{"name":"To"},		{"name":"Yoshikazu"},	{"name":"Kiyomi"},		{"name":"Fumio"},	{"name":"Yosuke"},	{"name":"Haruki"},	{"name":"Yoshinori"},	{"name":"Shiro"},	{"name":"Shozo"},
+				{"name":"Ei"},			{"name":"Miyoshi"},	{"name":"Masato"},		{"name":"Kenichiro"},	{"name":"Shinobu"},	{"name":"Misao"},	{"name":"Sho"},		{"name":"Kazumi"},		{"name":"Shin"},	{"name":"Yo"},
+			]
+		},
+		{
+			"name": "Japanese Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Japanese"},
+			"traits" :
+			[
+				{"name":"Sato"},	{"name":"Suzuki"},	{"name":"Tanaka"},	{"name":"Watanabe"},	{"name":"Takahashi"},	{"name":"Ito"},			{"name":"Yamamoto"},	{"name":"Nakamura"},	{"name":"Kobayashi"},	{"name":"Saito"},
+				{"name":"Kato"},	{"name":"Yoshida"},	{"name":"Yamada"},	{"name":"Sasaki"},		{"name":"Matsumoto"},	{"name":"Yamaguchi"},	{"name":"Inoue"},		{"name":"Kimura"},		{"name":"Shimizu"},		{"name":"Hayashi"},
+				{"name":"Abe"},		{"name":"Ono"},		{"name":"Mori"},	{"name":"Nakajima"},	{"name":"Hashimoto"},	{"name":"Ikeda"},		{"name":"Yamazaki"},	{"name":"Ishikawa"},	{"name":"Yamashita"},	{"name":"Ogawa"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
