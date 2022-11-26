@@ -1407,6 +1407,46 @@
 			]
 		},
 		{
+			"name": "Korean Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Korean"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Min-Jun"},	{"name":"Seo-Jun"},		{"name":"Ye-jun"},		{"name":"Ha-Jun"}, 	{"name":"Jun-Seo"},	{"name":"Jun-U"},		{"name":"Hyeon-u"},		{"name":"Do-Hyeon"},	{"name":"Ji-Hun"},		{"name":"Geon-u"},
+				{"name":"U-Jin"},	{"name":"Min-Jae"},		{"name":"Hyeon-jun"},	{"name":"Jeong-U"},	{"name":"Yu-Jun"},	{"name":"Jun-Hyeok"},	{"name":"Seung-U"},		{"name":"Ji-Hwan"},		{"name":"Seung-Min"},	{"name":"Min-Seong"},
+				{"name":"Yu-Chan"},	{"name":"Jun-Yeong"},	{"name":"Si-hu"},		{"name":"Yun-u"},	{"name":"Jin-U"},	{"name":"Jae-Yun"},		{"name":"Dong-Hyeon"},	{"name":"Jae-Won"},		{"name":"Tae-Yun"},		{"name":"Han-Gyeol"},
+			]
+		},
+		{
+			"name": "Korean Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Korean"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Seo-Yun"},	{"name":"Seo-Yeon"},	{"name":"Seo-Hyeon"},	{"name":"Ha-Eun"},	{"name":"Ji-Yu"},	{"name":"Ji-Yun"},	{"name":"Chae-Won"},	{"name":"Eun-Seo"},	{"name":"Su-Bin"},		{"name":"Su-A"},
+				{"name":"Da-Eun"},	{"name":"Ye-Eun"},		{"name":"So-yul"},		{"name":"Ye-Won"},	{"name":"Ji-A"},	{"name":"Ye-Rin"},	{"name":"So-Yun"},		{"name":"Si-Eun"},	{"name":"Seo-Yeong"},	{"name":"Chae-Eun"},
+				{"name":"Ga-Eun"},	{"name":"Ha-rin"},		{"name":"Ye-Na"},		{"name":"Min-Ji"},	{"name":"Yun-A"},	{"name":"Ye-Jin"},	{"name":"Yu-Na"},		{"name":"Su-Yeon"},	{"name":"Ye-seo"},		{"name":"Si-Yeon"},
+			]
+		},
+		{
+			"name": "Korean Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Korean"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Ji-u"},	{"name":"Min-Seo"},	{"name":"Ji-Min"},	{"name":"Ju-Won"},		{"name":"Ji-Won"},		{"name":"Ha-Yun"},	{"name":"Si-U"},		{"name":"Yeon-u"},	{"name":"Ji-Hu"},		{"name":"Yun-Seo"},
+				{"name":"Seo-Jin"},	{"name":"Ji-Ho"},	{"name":"Ji-An"},	{"name":"Su-Hyeon"},	{"name":"Si-Yun"},		{"name":"Seon-U"},	{"name":"Hyeon-Seo"},	{"name":"Yu-Jin"},	{"name":"Si-Hyeon"},	{"name":"Ha-yul"},
+				{"name":"Su-Min"},	{"name":"Ji-Yul"},	{"name":"Seo-u"},	{"name":"Eun-u"},		{"name":"Seung-Hyeon"},	{"name":"Seo-yul"},	{"name":"Yu-Bin"},		{"name":"A-in"},	{"name":"Si-On"},		{"name":"Jeong-Min"},
+			]
+		},
+		{
+			"name": "Korean Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Korean"},
+			"traits" :
+			[
+				{"name":"Kim"},		{"name":"I"},		{"name":"Pak"},		{"name":"Chong"},	{"name":"Choe"},	{"name":"Cho"},	{"name":"Kang"},	{"name":"Yu"},		{"name":"Yun"},		{"name":"Chang"},
+				{"name":"Im"},		{"name":"Sin"},		{"name":"Song"},	{"name":"Chon"},	{"name":"So"},		{"name":"Han"},	{"name":"O"},		{"name":"Hwang"},	{"name":"Kwon"},	{"name":"An"},
+				{"name":"Hong"},	{"name":"Yang"},	{"name":"Son"},		{"name":"Ko"},		{"name":"Mun"},		{"name":"Pae"},	{"name":"Paek"},	{"name":"Ho"},		{"name":"No"},		{"name":"Chu"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
