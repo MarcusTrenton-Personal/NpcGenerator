@@ -1487,6 +1487,46 @@
 			]
 		},
 		{
+			"name": "Filipino Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Filipino"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"John"},	{"name":"Jose"},	{"name":"Mark"},	{"name":"Michael"}, 	{"name":"Joel"},	{"name":"Romeo"},		{"name":"Antonio"},	{"name":"Reynaldo"},	{"name":"Rolando"},	{"name":"Danilo"},
+				{"name":"Joseph"},	{"name":"Richard"},	{"name":"Rogelio"},	{"name":"Eduardo"},		{"name":"Roberto"},	{"name":"Ronald"},		{"name":"Rodolfo"},	{"name":"Ernesto"},		{"name":"Mario"},	{"name":"Edwin"},
+				{"name":"Alfredo"},	{"name":"Noel"},	{"name":"Ricardo"},	{"name":"Jonathan"},	{"name":"Allan"},	{"name":"Francisco"},	{"name":"Arnel"},	{"name":"Marlon"},		{"name":"Renato"},	{"name":"Jeffrey"},
+			]
+		},
+		{
+			"name": "Filipino Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Filipino"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Mary"},	{"name":"Maria"},	{"name":"Jocelyn"},		{"name":"Teresita"},	{"name":"Maricel"},	{"name":"Evelyn"},	{"name":"Josephine"},	{"name":"Marilyn"},		{"name":"Rowena"},	{"name":"Erlinda"},
+				{"name":"Marites"},	{"name":"Gina"},	{"name":"Michelle"},	{"name":"Elizabeth"},	{"name":"Marilou"},	{"name":"Gloria"},	{"name":"Virginia"},	{"name":"Rosemarie"},	{"name":"Lolita"},	{"name":"Analyn"},
+				{"name":"Norma"},	{"name":"Alma"},	{"name":"Helen"},		{"name":"Cristina"},	{"name":"Myrna"},	{"name":"Imelda"},	{"name":"Lourdes"},		{"name":"Irene"},		{"name":"Corazon"},	{"name":"Rosita"},
+			]
+		},
+		{
+			"name": "Filipino Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Filipino"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Jennifer"},	{"name":"Christian"},	{"name":"Arlene"},		{"name":"Rey"},		{"name":"Jessie"},	{"name":"Joan"},	{"name":"Julie"},	{"name":"Jay"},		{"name":"Jenny"},	{"name":"Rene"},
+				{"name":"Cherry"},		{"name":"Joy"},			{"name":"Francis"},		{"name":"Joey"},	{"name":"Rosario"},	{"name":"Jean"},	{"name":"Melvin"},	{"name":"Raquel"},	{"name":"Judith"},	{"name":"April"},
+				{"name":"Ruby"},		{"name":"Glenn"},		{"name":"Geraldine"},	{"name":"Sonny"},	{"name":"Judy"},	{"name":"Charlie"},	{"name":"Ian"},		{"name":"Hazel"},	{"name":"Kenneth"},	{"name":"Jane"},
+			]
+		},
+		{
+			"name": "Filipino Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Filipino"},
+			"traits" :
+			[
+				{"name":"dela Cruz"},	{"name":"Garcia"},	{"name":"Reyes"},		{"name":"Ramos"},	{"name":"Mendoza"},		{"name":"Santos"},		{"name":"Flores"},		{"name":"Gonzales"},	{"name":"Bautista"},		{"name":"Villanueva"},
+				{"name":"Fernandez"},	{"name":"Cruz"},	{"name":"de Guzman"},	{"name":"Lopez"},	{"name":"Perez"},		{"name":"Castillo"},	{"name":"Francisco"},	{"name":"Rivera"},		{"name":"Aquino"},			{"name":"Castro"},
+				{"name":"Sanchez"},		{"name":"Torres"},	{"name":"de Leon"},		{"name":"Domingo"},	{"name":"Martinez"},	{"name":"Rodriguez"},	{"name":"Santiago"},	{"name":"Soriano"},		{"name":"Delos Santos"},	{"name":"Diaz"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
