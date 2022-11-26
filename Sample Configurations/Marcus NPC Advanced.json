@@ -1527,6 +1527,46 @@
 			]
 		},
 		{
+			"name": "Indonesian Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Indonesian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Muhammad"},	{"name":"Ahmad"},	{"name":"Agus"},		{"name":"Abdul"}, 	{"name":"Asep"},	{"name":"Slamet"},	{"name":"Ali"},		{"name":"Dedi"},	{"name":"Bambang"},	{"name":"Achmad"},
+				{"name":"Imam"},		{"name":"Adi"},		{"name":"Iwan"},		{"name":"Moch"},	{"name":"Rudi"},	{"name":"Joko"},	{"name":"Herman"},	{"name":"Rahmat"},	{"name":"Arif"},	{"name":"Wawan"},
+				{"name":"Ujang"},		{"name":"Hasan"},	{"name":"Sutrisno"},	{"name":"Ridwan"},	{"name":"Samsul"},	{"name":"Usman"},	{"name":"Ismail"},	{"name":"Teguh"},	{"name":"Yusuf"},	{"name":"Dadang"},
+			]
+		},
+		{
+			"name": "Indonesian Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Indonesian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Siti"},		{"name":"Sri"},		{"name":"Endang"},	{"name":"Maria"},	{"name":"Nurhayati"},	{"name":"Ratna"},	{"name":"Fitri"},	{"name":"Umi"},		{"name":"Rina"},	{"name":"Ani"},
+				{"name":"Sulastri"},	{"name":"Lilis"},	{"name":"Sumiati"},	{"name":"Rini"},	{"name":"Yanti"},		{"name":"Sumarni"},	{"name":"Desi"},	{"name":"Ika"},		{"name":"Yuliana"},	{"name":"Yeni"},
+				{"name":"Nani"},		{"name":"Titin"},	{"name":"Indah"},	{"name":"Ayu"},		{"name":"Rita"},		{"name":"Lina"},	{"name":"Santi"},	{"name":"Linda"},	{"name":"Aminah"},	{"name":"Erna"},
+			]
+		},
+		{
+			"name": "Indonesian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Indonesian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Nur"},		{"name":"Ni"},		{"name":"Haji"},	{"name":"Ade"},		{"name":"Asep"},	{"name":"Andi"},	{"name":"Dede"},	{"name":"Budi"},	{"name":"Ida"},		{"name":"Nurul"},
+				{"name":"Wayan"},	{"name":"Wahyu"},	{"name":"Dian"},	{"name":"Made"},	{"name":"Heri"},	{"name":"Ketut"},	{"name":"Indra"},	{"name":"Ari"},		{"name":"Nyoman"},	{"name":"Ai"},
+				{"name":"Deni"},	{"name":"Agung"},	{"name":"Yuli"},	{"name":"Eni"},		{"name":"Hadi"},	{"name":"Andri"},	{"name":"Sugeng"},	{"name":"Iis"},		{"name":"Aris"},	{"name":"Wa"},
+			]
+		},
+		{
+			"name": "Indonesian Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Indonesian"},
+			"traits" :
+			[
+				{"name":"Sari"},		{"name":"Setiawan"},	{"name":"Hidayat"},	{"name":"Lestari"},	{"name":"Saputra"},		{"name":"Wati"},	{"name":"Rahayu"},		{"name":"Dewi"},	{"name":"Kurniawan"},	{"name":"Santoso"},
+				{"name":"Putra"},		{"name":"Susanti"},		{"name":"Wahyuni"},	{"name":"Ningsih"},	{"name":"Susanto"},		{"name":"Gunawan"},	{"name":"Arifin"},		{"name":"Siregar"},	{"name":"Astuti"},		{"name":"Wijaya"},
+				{"name":"Handayani"},	{"name":"Rahman"},		{"name":"Irawan"},	{"name":"Hasanah"},	{"name":"Nurhayati"},	{"name":"Putri"},	{"name":"Wulandari"},	{"name":"Wibowo"},	{"name":"Aminah"},		{"name":"Efendi"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
