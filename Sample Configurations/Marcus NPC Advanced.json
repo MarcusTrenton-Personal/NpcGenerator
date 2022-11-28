@@ -1647,6 +1647,46 @@
 			]
 		},
 		{
+			"name": "Māori Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Māori"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Nikau"},	{"name":"Ari"},	{"name":"Niko"},		{"name":"Koa"}, 	{"name":"Mateo"},		{"name":"Keanu"},		{"name":"Mikaere"},		{"name":"Manaia"},		{"name":"Kairo"},		{"name":"Kiwa"},
+				{"name":"Manu"},	{"name":"Teina"},	{"name":"Hawaiki"},	{"name":"Tane"},	{"name":"Tama"},		{"name":"Ariki"},	{"name":"Anaru"},		{"name":"Wiremu"},	{"name":"Tangaroa"},	{"name":"Nikora"},
+				{"name":"Kai"},		{"name":"Kahurangi"},	{"name":"Tai"},		{"name":"Hemi"},		{"name":"Rawiri"},	{"name":"Ihaia"},		{"name":"Tawhiri"},	{"name":"Te Ariki"},		{"name":"Rui"},	{"name":"Kauri"},
+			]
+		},
+		{
+			"name": "Māori Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Māori"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Mia"},	{"name":"Aria"},	{"name":"Maia"},		{"name":"Aurora"}, 	{"name":"Amaia"},		{"name":"Kaiara"},		{"name":"Kaia"},		{"name":"Amara"},		{"name":"Kora"},		{"name":"Maria"},
+				{"name":"Ariana"},	{"name":"Manaia"},	{"name":"Anahera"},	{"name":"Hana"},	{"name":"Aroha"},	{"name":"Ataahua"},		{"name":"Tia"},	{"name":"Ria"},		{"name":"Tui"},	{"name":"Kaea"},
+				{"name":"Kara"},	{"name":"Te Ao"},	{"name":"Marekiura"},	{"name":"Miru"},		{"name":"Kahurangi"},		{"name":"Marama"},	{"name":"Moana"},	{"name":"Huia"},		{"name":"Tiare"},	{"name":"Koa"},
+			]
+		},
+		{
+			"name": "Māori Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Māori"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Kahurangi"},	{"name":"Kaea"},	{"name":"Manaia"},		{"name":"Koa"},	{"name":"Atawhai"},		{"name":"Harata"},	{"name":"Hau"},			{"name":"Hunapo"},	{"name":"Hunu"},	{"name":"Ikaroa"},
+				{"name":"Iorangi"},		{"name":"Iraia"},	{"name":"Irirangi"},	{"name":"Iwi"},	{"name":"Kaihautu"},	{"name":"Kamaka"},	{"name":"Makareta"},	{"name":"Rongo"},	{"name":"Tia"},		{"name":"Tui"},
+				{"name":"Aiali’i"},		{"name":"Amara"},	{"name":"Mere"},		{"name":"Kai"},	{"name":"Koraka"},		{"name":"Aroha"},	{"name":"Nyree"},		{"name":"Moana"},	{"name":"Rangi"},	{"name":"Aperahama"},
+			]
+		},
+		{
+			"name": "Māori Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Māori"},
+			"traits" :
+			[
+				{"name":"Henare"},	{"name":"Kaaka"},	{"name":"Kahinu"},		{"name":"Moana"},		{"name":"Ngata"},	{"name":"Ngatai"},		{"name":"Opetaia"},	{"name":"Paewai"},	{"name":"Parata"},		{"name":"Rameka-waapu"},
+				{"name":"Rangihau"},{"name":"Tenadii"},	{"name":"Wero"},		{"name":"Winiata"},		{"name":"Hira"},	{"name":"Pewhairangi"},	{"name":"Rewi"},	{"name":"Taumata"},	{"name":"Te Wiata"},	{"name":"Turei"},
+				{"name":"Waerea"},	{"name":"Waititi"},	{"name":"Vaatuitui"},	{"name":"Searancke"},	{"name":"Otimi"},	{"name":"Ngatoko"},		{"name":"Lecca"},	{"name":"Kaponga"},	{"name":"Aranui"},		{"name":"Birro"},
+			]
+		},
+		{
 			"name": "Motivation",
 			"selections": 1,
 			"traits" :
