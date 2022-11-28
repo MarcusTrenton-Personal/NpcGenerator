@@ -1571,9 +1571,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Australian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
 			"traits" :
 			[
-				{"name":"David"},	{"name":"John"},	{"name":"Peter"},	{"name":"Michael"}, {"name":"Paul"},		{"name":"Andrew"},	{"name":"Mark"},	{"name":"Robert"},	{"name":"Ian"},		{"name":"Chris"},
-				{"name":"Steven"},	{"name":"James"},	{"name":"Tony"},	{"name":"Greg"},	{"name":"Benjamin"},	{"name":"Richard"},	{"name":"Tim"},		{"name":"Jason"},	{"name":"Stephen"},	{"name":"Daniel"},
-				{"name":"Scott"},	{"name":"Craig"},	{"name":"Matthew"},	{"name":"William"},	{"name":"Simon"},		{"name":"Anthony"},	{"name":"Thomas"},	{"name":"Brian"},	{"name":"Gary"},	{"name":"Adam"},
+				{"name":"David"},	{"name":"John"},		{"name":"Peter"},		{"name":"Michael"}, {"name":"Paul"},		{"name":"Andrew"},	{"name":"Mark"},	{"name":"Robert"},	{"name":"Ian"},		{"name":"Chris"},
+				{"name":"Aiden"},	{"name":"Muhammad"},	{"name":"Ashton"},		{"name":"Beau"},	{"name":"Caleb"},		{"name":"Marcus"},	{"name":"Darwin"},	{"name":"Elijah"},	{"name":"Felix"},	{"name":"Lachlan"},
+				{"name":"Liam"},	{"name":"Levi"},		{"name":"Theodore"},	{"name":"William"},	{"name":"Lucas"},		{"name":"Leo"},		{"name":"Henry"},	{"name":"Jack"},	{"name":"Noah"},	{"name":"Oliver"},
 			]
 		},
 		{
@@ -1581,9 +1581,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Australian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
 			"traits" :
 			[
-				{"name":"Julie"},	{"name":"Karen"},		{"name":"Michelle"},	{"name":"Helen"},	{"name":"Sue"},		{"name":"Elizabeth"},	{"name":"Sarah"},		{"name":"Lisa"},	{"name":"Kate"},		{"name":"Jane"},
-				{"name":"Rebecca"},	{"name":"Jenny"},		{"name":"Susan"},		{"name":"Wendy"},	{"name":"Amanda"},	{"name":"Anne"},		{"name":"Christine"},	{"name":"Sharon"},	{"name":"Jennifer"},	{"name":"Fiona"},
-				{"name":"Robyn"},	{"name":"Margaret"},	{"name":"Emma"},		{"name":"Nicole"},	{"name":"Melissa"},	{"name":"Stephanie"},	{"name":"Vicki"},		{"name":"Linda"},	{"name":"Catherine"},	{"name":"Jo"},
+				{"name":"Julie"},	{"name":"Karen"},	{"name":"Michelle"},	{"name":"Helen"},	{"name":"Sue"},		{"name":"Elizabeth"},	{"name":"Sarah"},		{"name":"Lisa"},		{"name":"Kate"},		{"name":"Jane"},
+				{"name":"Anika"},	{"name":"Ariana"},	{"name":"Aurora"},		{"name":"Bridie"},	{"name":"Eden"},	{"name":"Freya"},		{"name":"Hallie"},		{"name":"Heidi"},		{"name":"Ivy"},			{"name":"Luella"},
+				{"name":"Ella"},	{"name":"Matilda"},	{"name":"Chloe"},		{"name":"Grace"},	{"name":"Mia"},		{"name":"Ava"},			{"name":"Isla"},		{"name":"Charlotte"},	{"name":"Amelia"},		{"name":"Olivia"},
 			]
 		},
 		{
@@ -1591,9 +1591,9 @@
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Australian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
 			"traits" :
 			[
-				{"name":"Kim"},		{"name":"Terry"},	{"name":"Alex"},		{"name":"Jean"},	{"name":"Kelly"},	{"name":"Pat"},		{"name":"Robin"},	{"name":"Rene"},	{"name":"Jan"},			{"name":"Shannon"},
-				{"name":"Dale"},	{"name":"Jackie"},	{"name":"Jamie"},		{"name":"Leslie"},	{"name":"Gerry"},	{"name":"Dana"},	{"name":"Sandy"},	{"name":"Kerry"},	{"name":"Lee"},			{"name":"Stacey"},
-				{"name":"Bernie"},	{"name":"Jody"},	{"name":"Dominique"},	{"name":"Val"},		{"name":"Darcy"},	{"name":"Noel"},	{"name":"Jessie"},	{"name":"Kris"},	{"name":"Courtney"},	{"name":"Leigh"},
+				{"name":"Addison"},	{"name":"Ali"},		{"name":"Bodhi"},		{"name":"Bronte"},	{"name":"Charlie"},	{"name":"Darcy"},	{"name":"Frankie"},		{"name":"Harlow"},	{"name":"Harper"},		{"name":"Indiana"},
+				{"name":"Indie"},	{"name":"James"},	{"name":"Jayden"},		{"name":"Jett"},	{"name":"Jordan"},	{"name":"Kai"},		{"name":"Mackenzie"},	{"name":"Noah"},	{"name":"Peyton"},		{"name":"Quinn"},
+				{"name":"Remi"},	{"name":"Riley"},	{"name":"River"},		{"name":"Val"},		{"name":"Alex"},	{"name":"Noel"},	{"name":"Jessie"},		{"name":"Kris"},	{"name":"Courtney"},	{"name":"Leigh"},
 			]
 		},
 		{
@@ -1604,6 +1604,46 @@
 				{"name":"Smith"},	{"name":"Jones"},	{"name":"Williams"},	{"name":"Brown"},	{"name":"Wilson"},	{"name":"Taylor"},		{"name":"Anderson"},	{"name":"Johnson"},	{"name":"White"},		{"name":"Thompson"},
 				{"name":"Lee"},		{"name":"Martin"},	{"name":"Thomas"},		{"name":"Walker"},	{"name":"Kelly"},	{"name":"Young"},		{"name":"Harris"},		{"name":"King"},	{"name":"Ryan"},		{"name":"Roberts"},
 				{"name":"Hall"},	{"name":"Evans"},	{"name":"Davis"},		{"name":"Wright"},	{"name":"Baker"},	{"name":"Campbell"},	{"name":"Edwards"},		{"name":"Clark"},	{"name":"Robinson"},	{"name":"McDonald"},
+			]
+		},
+		{
+			"name": "Aboriginal Male Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Aboriginal"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
+			"traits" :
+			[
+				{"name":"Allambee"},	{"name":"Bambam"},	{"name":"Bouddi"},		{"name":"Ces"}, 	{"name":"Dainen"},		{"name":"Daymion"},		{"name":"Dimity"},		{"name":"Dural"},		{"name":"Gef"},		{"name":"Gie"},
+				{"name":"Gurumarra"},	{"name":"Huon"},	{"name":"Irabinna"},	{"name":"Jabiru"},	{"name":"Julij"},		{"name":"Kudnarto"},	{"name":"Lowan"},		{"name":"Mawukura"},	{"name":"Monti"},	{"name":"Nullah"},
+				{"name":"Omeo"},		{"name":"Rashtin"},	{"name":"Talei"},		{"name":"Tau"},		{"name":"Warragul"},	{"name":"Warriya"},		{"name":"Yannathan"},	{"name":"Yileen"},		{"name":"Monaro"},	{"name":"Jindalee"},
+			]
+		},
+		{
+			"name": "Aboriginal Female Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Aboriginal"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
+			"traits" :
+			[
+				{"name":"Aaina"},	{"name":"Aalaa"},	{"name":"Aase"},	{"name":"Abaigael"},	{"name":"Abigael"},		{"name":"Adaliya"},		{"name":"Adeena"},	{"name":"Alinta"},		{"name":"Allora"},	{"name":"Anele"},
+				{"name":"Arika"},	{"name":"Bahia"},	{"name":"Basima"},	{"name":"Callanna"},	{"name":"Collerina"},	{"name":"Ellin"},		{"name":"Jarrah"},	{"name":"Kareela"},		{"name":"Killara"},	{"name":"Kylie"},
+				{"name":"Lowanna"},	{"name":"Medika"},	{"name":"Narelle"},	{"name":"Talia"},		{"name":"Waratah"},		{"name":"Victoria"},	{"name":"Rianna"},	{"name":"Orana"},		{"name":"Ngarra"},	{"name":"Myaree"},
+			]
+		},
+		{
+			"name": "Aboriginal Unisex Given Name", "output_name": "Given Name", "selections": 1, 
+			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Aboriginal"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
+			"traits" :
+			[
+				{"name":"Bili"},		{"name":"Aabroo"},	{"name":"Aarzoo"},		{"name":"Bayan"},	{"name":"Ciji"},	{"name":"Mirri"},	{"name":"Jannali"},	{"name":"Kaiya"},	{"name":"Maali"},	{"name":"Marli"},
+				{"name":"Maroochy"},	{"name":"Merri"},	{"name":"Pengana"},		{"name":"Sydney"},	{"name":"Tidam"},	{"name":"Waru"},	{"name":"Watorea"},	{"name":"Yarran"},	{"name":"Yindi"},	{"name":"Alinta"},
+				{"name":"Allyra"},		{"name":"Arika"},	{"name":"Bindi"},		{"name":"Coen"},	{"name":"Daku"},	{"name":"Ellin"},	{"name":"Jarli"},	{"name":"Jarrah"},	{"name":"Medika"},	{"name":"Ngarra"},
+			]
+		},
+		{
+			"name": "Aboriginal Surname", "output_name": "Surname", "selections": 1, 
+			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Aboriginal"},
+			"traits" :
+			[
+				{"name":"Ah Chee"},	{"name":"Ah Matt"},	{"name":"Baymarrwangga"},	{"name":"Bulunbulun"},	{"name":"Corowa"},		{"name":"Dhurrkay"},	{"name":"Djilangya"},	{"name":"Garimara"},	{"name":"Gurruwiwi"},	{"name":"Jungarai"},
+				{"name":"Kerinaiua"},{"name":"Kulitja"},{"name":"Lanhupuy"},		{"name":"Mawurndjul"},	{"name":"Minyintiri"},	{"name":"Mudjidell"},	{"name":"Mununggurr"},	{"name":"Nakamarra"},	{"name":"Nannup"},		{"name":"Napangardi"},
+				{"name":"Ngale"},	{"name":"Noonuccal"},{"name":"Ofanengaue"},		{"name":"Petyarre"},	{"name":"Rubuntja"},	{"name":"Sampi"},		{"name":"Tipiloura"},	{"name":"Ulungura"},	{"name":"Wapau"},		{"name":"Yagmoor"},
 			]
 		},
 		{
