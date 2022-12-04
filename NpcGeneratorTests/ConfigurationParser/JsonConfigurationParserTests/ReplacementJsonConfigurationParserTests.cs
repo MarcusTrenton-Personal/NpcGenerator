@@ -364,5 +364,86 @@ namespace Tests.JsonConfigurationParserTests
 
             parser.Parse(text);
         }
+
+        [TestMethod]
+        public void ReplacementHasValidSortBy()
+        {
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string REPLACEMENT_TRAIT = "Green";
+            const ReplacementSearch.Sort SORT_BY = ReplacementSearch.Sort.Alphabetical;
+
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{REPLACEMENT_TRAIT}',
+                        'sort_by' : '{SORT_BY}',
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{REPLACEMENT_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REPLACEMENT_TRAIT}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            TraitSchema schema = parser.Parse(text);
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category.Name, "Wrong replacement category");
+            Assert.AreEqual(REPLACEMENT_TRAIT, replacements[0].Trait.Name, "Wrong replacement trait");
+            Assert.AreEqual(SORT_BY, replacements[0].SortBy, "Wrong sort criteria");
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void ReplacementHasInvalidSortBy()
+        {
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string REPLACEMENT_TRAIT = "Green";
+            const string INVALID_SORT_BY = "Astrology";
+
+            string text = $@"{{
+                'replacements' : [
+                    {{
+                        'category_name' : '{REPLACEMENT_CATEGORY}',
+                        'trait_name' : '{REPLACEMENT_TRAIT}',
+                        'sort_by' : '{INVALID_SORT_BY}',
+                    }}
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{REPLACEMENT_CATEGORY}',
+                        'selections': 1,
+                        'traits' : [
+                            {{ 
+                                'name' : '{REPLACEMENT_TRAIT}', 
+                                'weight' : 1
+                            }},
+                            {{ 
+                                'name' : 'Red', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            parser.Parse(text);
+        }
     }
 }

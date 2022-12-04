@@ -1,9 +1,9 @@
 {
 	"replacements" :
 	[
-		{ "category_name" : "Race", "trait_name" : "Region-specific" },
-		{ "category_name" : "Ancestry", "trait_name" : "Region-specific" },
-		{ "category_name" : "Religion", "trait_name" : "Region-specific" },
+		{ "category_name" : "Race", "trait_name" : "Region-specific", "sort_by" : "Alphabetical" },
+		{ "category_name" : "Ancestry", "trait_name" : "Region-specific", "sort_by" : "Alphabetical" },
+		{ "category_name" : "Religion", "trait_name" : "Region-specific", "sort_by" : "Alphabetical" },
 	],
 	"trait_categories" : 
 	[

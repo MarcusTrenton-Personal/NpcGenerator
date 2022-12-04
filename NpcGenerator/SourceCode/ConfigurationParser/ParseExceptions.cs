@@ -184,4 +184,14 @@ namespace NpcGenerator
 
         public List<TraitCategory> ConflictingCategories { get; private set; }
     }
+
+    public class UnknownSortByException : FormatException
+    {
+        public UnknownSortByException(string sortBy)
+        {
+            SortBy = sortBy;
+        }
+
+        public string SortBy { get; private set; }
+    }
 }

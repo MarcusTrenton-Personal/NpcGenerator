@@ -17,13 +17,26 @@ namespace NpcGenerator
 {
     public class ReplacementSearch
     {
-        public ReplacementSearch(Trait trait, TraitCategory category)
+        public enum Sort
+        {
+            Alphabetical,
+            Weight,
+            Given
+        }
+
+        public ReplacementSearch(Trait trait, TraitCategory category) : this(trait, category, Sort.Given)
+        {
+        }
+
+        public ReplacementSearch(Trait trait, TraitCategory category, Sort sortBy)
         {
             Trait = trait;
             Category = category;
+            SortBy = sortBy;
         }
 
         public Trait Trait { get; private set; }
         public TraitCategory Category { get; private set; }
+        public Sort SortBy { get; private set; }
     }
 }

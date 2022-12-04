@@ -8,7 +8,7 @@
 		"replacements": {
 			"description": "Traits that are replaced with a user-specified choice for the next batch of npcs. For example, a trait of 'region-specific' in the 'race' category is replaced with user selected race. The replacement for one batch of npcs could be Japanese and another could be Nigerian. This allows quick generation of region-specific npcs in a globe trotting session.",
 			"type": "array",
-			"items": { "$ref": "#/$defs/trait_id"},
+			"items": { "$ref": "#/$defs/replacement"},
 			"uniqueItems": true
 		},
 		"trait_categories": {
@@ -117,6 +117,25 @@
 				"trait_name": {
 					"description": "The trait name.",
 					"type": "string"
+				}
+			},
+			"required": ["category_name", "trait_name"],
+			"additionalProperties": false
+		},
+		"replacement" : {
+			"description": "A Trait that is replaced with a user-specified choice for the next batch of npcs. For example, a trait of 'region-specific' in the 'race' category is replaced with user selected race. The replacement for one batch of npcs could be Japanese and another could be Nigerian. This allows quick generation of region-specific npcs in a globe trotting session.",
+			"properties": {
+				"category_name": {
+					"description": "The category of the trait.",
+					"type": "string"
+				},
+				"trait_name": {
+					"description": "The trait name.",
+					"type": "string"
+				},
+				"sort_by": {
+					"description": "Optional choice of how the replacement options are sorted. If not specified, it will default to order Given in the Configuration.",
+					"enum": ["Alphabetical", "Weight", "Given"]
 				}
 			},
 			"required": ["category_name", "trait_name"],

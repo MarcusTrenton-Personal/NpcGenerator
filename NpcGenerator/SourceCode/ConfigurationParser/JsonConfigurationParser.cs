@@ -405,11 +405,11 @@ namespace NpcGenerator
             return logicalOperator;
         }
 
-        private static void ParseReplacements(List<ProtoTraitId> protoReplacements, TraitSchema traitSchema)
+        private static void ParseReplacements(List<ProtoReplacement> protoReplacements, TraitSchema traitSchema)
         {
             if (protoReplacements != null)
             {
-                foreach (ProtoTraitId protoReplacement in protoReplacements)
+                foreach (ProtoReplacement protoReplacement in protoReplacements)
                 {
                     IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
                     TraitCategory category = ListUtil.Find(categories, category => category.Name == protoReplacement.category_name);
@@ -425,10 +425,29 @@ namespace NpcGenerator
                             new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
 
-                    ReplacementSearch replacement = new ReplacementSearch(trait, category);
+                    ReplacementSearch.Sort sortBy = ParseSort(protoReplacement.sort_by);
+                    ReplacementSearch replacement = new ReplacementSearch(trait, category, sortBy);
                     traitSchema.Add(replacement);
                 }
             }
+        }
+
+        private static ReplacementSearch.Sort ParseSort(string sort)
+        {
+            if (string.IsNullOrWhiteSpace(sort))
+            {
+                return ReplacementSearch.Sort.Given;
+            }
+
+            ReplacementSearch.Sort parsedSort = sort switch
+            {
+                "Alphabetical" => ReplacementSearch.Sort.Alphabetical,
+                "Weight" => ReplacementSearch.Sort.Weight,
+                "Given" => ReplacementSearch.Sort.Given,
+                _ => throw new UnknownSortByException(sort),
+            };
+
+            return parsedSort;
         }
 
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value null
@@ -438,7 +457,7 @@ namespace NpcGenerator
         {
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
-            public List<ProtoTraitId> replacements;
+            public List<ProtoReplacement> replacements;
             public List<ProtoTraitCategory> trait_categories;
         }
 
@@ -475,6 +494,13 @@ namespace NpcGenerator
         {
             public string trait_name;
             public string category_name;
+        }
+
+        private class ProtoReplacement
+        {
+            public string trait_name;
+            public string category_name;
+            public string sort_by;
         }
 
         private class ProtoLogicalExpression
