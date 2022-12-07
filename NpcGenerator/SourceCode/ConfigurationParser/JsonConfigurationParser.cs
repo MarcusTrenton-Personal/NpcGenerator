@@ -444,7 +444,7 @@ namespace NpcGenerator
                 "Alphabetical" => Sort.Alphabetical,
                 "Weight" => Sort.Weight,
                 "Given" => Sort.Given,
-                _ => throw new UnknownSortException(sort),
+                _ => throw new UnknownSortCriteriaException(sort),
             };
 
             return parsedSort;

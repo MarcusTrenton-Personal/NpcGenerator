@@ -129,14 +129,14 @@ namespace NpcGenerator
             return names;
         }
 
-        public string[] GetTraitNames(Sort sortBy)
+        public string[] GetTraitNames(Sort sortCriteria)
         {
-            string[] result = sortBy switch
+            string[] result = sortCriteria switch
             {
                 Sort.Alphabetical => GetTraitNamesSortedAlphabetically(),
                 Sort.Weight => GetTraitNamesSortedByWeight(),
                 Sort.Given => GetTraitNames(),
-                _ => throw new InvalidOperationException("Missing implementation for sorting by " + sortBy)
+                _ => throw new InvalidOperationException("Missing implementation for sorting by " + sortCriteria)
             };
             return result;
         }

@@ -329,6 +329,180 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ReplacementsForSchemaWithReplacementsByAlphabetical()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
+
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string GREEN = "Green";
+            const string RED = "Red";
+            const string BLUE = "Blue";
+
+            static TraitSchema Callback(string path)
+            {
+                Trait originalTrait = new Trait(GREEN, 5);
+                Trait replacementCandidateTrait = new Trait(RED, 6);
+                Trait blue = new Trait(BLUE, 1);
+
+                TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY);
+                category.Add(originalTrait);
+                category.Add(replacementCandidateTrait);
+                category.Add(blue);
+
+                ReplacementSearch replacementSearch = new ReplacementSearch(originalTrait, category, Sort.Alphabetical);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+                schema.Add(replacementSearch);
+
+                return schema;
+            }
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new CallbackConfigurationParser(Callback),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+
+            IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
+
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category, "Wrong replacement category");
+            Assert.AreEqual(GREEN, replacements[0].OriginalTrait, "Wrong original trait");
+            string[] replacementCandidates = replacements[0].ReplacementTraits;
+
+            Assert.AreEqual(3, replacementCandidates.Length, "Wrong number of replacement candidates");
+            Assert.AreEqual(BLUE, replacementCandidates[0], "Wrong sorted order");
+            Assert.AreEqual(GREEN, replacementCandidates[1], "Wrong sorted order");
+            Assert.AreEqual(RED, replacementCandidates[2], "Wrong sorted order");
+
+            File.Delete(userSettings.ConfigurationPath);
+        }
+
+        [TestMethod]
+        public void ReplacementsForSchemaWithReplacementsByWeight()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
+
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string GREEN = "Green";
+            const string RED = "Red";
+            const string BLUE = "Blue";
+
+            static TraitSchema Callback(string path)
+            {
+                Trait originalTrait = new Trait(GREEN, 5);
+                Trait replacementCandidateTrait = new Trait(RED, 6);
+                Trait blue = new Trait(BLUE, 1);
+
+                TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY);
+                category.Add(originalTrait);
+                category.Add(replacementCandidateTrait);
+                category.Add(blue);
+
+                ReplacementSearch replacementSearch = new ReplacementSearch(originalTrait, category, Sort.Weight);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+                schema.Add(replacementSearch);
+
+                return schema;
+            }
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new CallbackConfigurationParser(Callback),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+
+            IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
+
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category, "Wrong replacement category");
+            Assert.AreEqual(GREEN, replacements[0].OriginalTrait, "Wrong original trait");
+            string[] replacementCandidates = replacements[0].ReplacementTraits;
+
+            Assert.AreEqual(3, replacementCandidates.Length, "Wrong number of replacement candidates");
+            Assert.AreEqual(RED, replacementCandidates[0], "Wrong sorted order");
+            Assert.AreEqual(GREEN, replacementCandidates[1], "Wrong sorted order");
+            Assert.AreEqual(BLUE, replacementCandidates[2], "Wrong sorted order");
+
+            File.Delete(userSettings.ConfigurationPath);
+        }
+
+        [TestMethod]
+        public void ReplacementsForSchemaWithReplacementsByGivenOrder()
+        {
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            StubUserSettings userSettings = UserSettingsWithFakeInputFile(method);
+
+            const string REPLACEMENT_CATEGORY = "Colour";
+            const string GREEN = "Green";
+            const string RED = "Red";
+            const string BLUE = "Blue";
+
+            static TraitSchema Callback(string path)
+            {
+                Trait originalTrait = new Trait(GREEN, 5);
+                Trait replacementCandidateTrait = new Trait(RED, 6);
+                Trait blue = new Trait(BLUE, 1);
+
+                TraitCategory category = new TraitCategory(REPLACEMENT_CATEGORY);
+                category.Add(originalTrait);
+                category.Add(replacementCandidateTrait);
+                category.Add(blue);
+
+                ReplacementSearch replacementSearch = new ReplacementSearch(originalTrait, category, Sort.Given);
+
+                TraitSchema schema = new TraitSchema();
+                schema.Add(category);
+                schema.Add(replacementSearch);
+
+                return schema;
+            }
+
+            NpcGeneratorModel npcGeneratorModel = new NpcGeneratorModel(
+                userSettings,
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new CallbackConfigurationParser(Callback),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+
+            IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
+
+            Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found");
+            Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category, "Wrong replacement category");
+            Assert.AreEqual(GREEN, replacements[0].OriginalTrait, "Wrong original trait");
+            string[] replacementCandidates = replacements[0].ReplacementTraits;
+
+            Assert.AreEqual(3, replacementCandidates.Length, "Wrong number of replacement candidates");
+            Assert.AreEqual(GREEN, replacementCandidates[0], "Wrong sorted order");
+            Assert.AreEqual(RED, replacementCandidates[1], "Wrong sorted order");
+            Assert.AreEqual(BLUE, replacementCandidates[2], "Wrong sorted order");
+
+            File.Delete(userSettings.ConfigurationPath);
+        }
+
+        [TestMethod]
         public void GenerateFromConfigurationCatchesIOException()
         {
             static IOException CreateCallback()
@@ -543,6 +717,20 @@ namespace Tests
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             GenerateFromConfigurationCatches(CreateCallback, method);
         }
+
+        [TestMethod]
+        public void GenerateFromConfigurationCatchesUnknownSortException()
+        {
+            static UnknownSortCriteriaException CreateCallback()
+            {
+                return new UnknownSortCriteriaException("Astrological");
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateFromConfigurationCatches(CreateCallback, method);
+        }
+
+        //GenerateFromConfigurationCatchesUnknownSortException
 
         private void GenerateFromConfigurationCatches<T>(Func<T> createException, string fileName) where T : Exception
         {

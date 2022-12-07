@@ -21,15 +21,15 @@ namespace NpcGenerator
         {
         }
 
-        public ReplacementSearch(Trait trait, TraitCategory category, Sort sortBy)
+        public ReplacementSearch(Trait trait, TraitCategory category, Sort sortCriteria)
         {
             Trait = trait;
             Category = category;
-            SortBy = sortBy;
+            SortCriteria = sortCriteria;
         }
 
         public Trait Trait { get; private set; }
         public TraitCategory Category { get; private set; }
-        public Sort SortBy { get; private set; }
+        public Sort SortCriteria { get; private set; }
     }
 }

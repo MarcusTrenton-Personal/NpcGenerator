@@ -406,7 +406,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.AreEqual(1, replacements.Count, "Wrong number of replacements found.");
             Assert.AreEqual(REPLACEMENT_CATEGORY, replacements[0].Category.Name, "Wrong replacement category");
             Assert.AreEqual(REPLACEMENT_TRAIT, replacements[0].Trait.Name, "Wrong replacement trait");
-            Assert.AreEqual(SORT_BY, replacements[0].SortBy, "Wrong sort criteria");
+            Assert.AreEqual(SORT_BY, replacements[0].SortCriteria, "Wrong sort criteria");
         }
 
         [TestMethod, ExpectedException(typeof(JsonFormatException))]

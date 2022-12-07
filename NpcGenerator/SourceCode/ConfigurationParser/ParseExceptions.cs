@@ -185,13 +185,13 @@ namespace NpcGenerator
         public List<TraitCategory> ConflictingCategories { get; private set; }
     }
 
-    public class UnknownSortException : FormatException
+    public class UnknownSortCriteriaException : FormatException
     {
-        public UnknownSortException(string sortBy)
+        public UnknownSortCriteriaException(string sortBy)
         {
-            SortBy = sortBy;
+            SortCriteria = sortBy;
         }
 
-        public string SortBy { get; private set; }
+        public string SortCriteria { get; private set; }
     }
 }

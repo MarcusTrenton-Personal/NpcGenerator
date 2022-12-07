@@ -31,27 +31,28 @@ self_requiring_category	User error message pop-up for npc json configuration fil
 circular_requirements	User error message pop-up for npc json configuration file. Followed by a list.	AEAEAE	Categories have circular requirements that need to be broken:	Categories have circular requirements that need to be broken:	
 circular_requirement_link	User error message pop-up for npc json configuration file.	AFAFAF	Category {0} is required by category {1}.	Category {0} is required by category {1}	
 circular_requirement_link_bonus_selection	User error message pop-up for npc json configuration file.	AGAGAG	Category {0} can create a bonus selection in category {1}.	Category {0} can create a bonus selection in category {1}.	
-npcs_generated_incorrectly	Application error when npcs violate their own configuration schema.	AHAHAH	Npcs violate their own schema.	Npcs violate their own schema.	
-npc_error_trait_incorrectly_hidden	Application error when npcs violate their own configuration schema.	AIAIAIAI	Category {0} trait {1} should be not hidden but is hidden.	Category {0} trait {1} should be hidden but is not.	
-npc_error_trait_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AJAJAJ	Category {0} trait {1} should be hidden but is not.	Category {0} trait {1} should be not hidden but is hidden.	
-npc_error_category_incorrectly_hidden	Application error when npcs violate their own configuration schema.	AKAKAK	Category {0} should not be hidden but is hidden		
-npc_error_category_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	ALALAL	Category {0} should be hidden but is not		
-npc_error_trait_in_locked_category	Application error when npcs violate their own configuration schema.	AMAMAM	Category {0} should not have trait {1} since category requirements are not met.	Category {0} should not have trait {1} since category requirements are not met.	
-npc_error_too_few_traits_in_category	Application error when npcs violate their own configuration schema.	ANANAN	Category {0} has too few traits.	Category {0} has too few traits.	
-npc_error_too_many_traits_in_category	Application error when npcs violate their own configuration schema.	AOAOAO	Category {0} has too many traits.	Category {0} has too many traits.	
-npc_error_trait_not_found_in_schema	Application error when npcs violate their own configuration schema.	APAPAP	Trait {0} of category {1} is not found in the configuration file.	Trait {0} of category {1} is not found in the configuration file.	
-npc_error_category_not_found_in_schema	Application error when npcs violate their own configuration schema.	AQAQAQ	Category {0} is not found in the configuration file.	Category {0} is not found in the configuration file.	
-npc_error_unused_replacement	Application error when npcs violate their own configuration schema.	ARARAR	Category {0} trait {1} is not replaced when it should be.	Category {0} trait {1} is not replaced when it should be.	
-npc_error_trait_is_locked	Application error when npcs violate their own configuration schema.	ASASAS	Category {0} should not have trait {1} since trait requirements are not met.	Category {0} should not have trait {1} since trait requirements are not met.	
-error	Application error	ATATAT	Error	Error	
-error_email_subject	Email subject line	AUAUAU	Error During Npc Generation	Error During Npc Generation	
-error_email_body_start	Email body start. Several json text blobs follow.	AVAVAVA	The configuration, replacements, npc errors, and npc text are below.	The configuration, replacements, npc errors, and npc text are below.	
-trait_replacement_description	User operation to replace one trait name with another name.	AWAWAW	Replace trait {0} with {1} in category {2}.	Replace trait {0} with {1} in category {2}.	
-trait_replacement	User operation to replace one trait name with another name.	AXAXAX	Replacement	Replacement	
-npcs	Non player characters	AYAYAY	Npcs	Npcs	
-support_email_call_to_action	When an application error happens, ask if user wants to send a support email	AZAZAZ	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
-localized_text_not_found	When the GUI needs text that does not exist for the selected language	BABABA	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
-self_requiring_trait	User error message pop-up for npc json configuration file.	BCBCBC	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	
-too_few_traits_pass_requirements	User error message pop-up for npc json configuration file.	BDBDBD	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	
-conflicting_output_category_visibility	User error message pop-up for npc json configuration file. Followed by a list.	BEBEBE	Categories with same output_name have conflicting value for ‘hidden’.	Categories with same output_name have conflicting value for ‘hidden’.	
-conflicting_output_category_visibility_element	User error message pop-up for npc json configuration file.	BFBFBF	Category {0}, output_name {1}, hidden {2}	Category {0}, output_name {1}, hidden {2}	
+unknown_sort_criteria	User error message pop-up for npc json configuration file.	AHAHAH	Unknown sort criteria: {0}	Unknown sort criteria: {0}	
+npcs_generated_incorrectly	Application error when npcs violate their own configuration schema.	AIAIAIAI	Npcs violate their own schema.	Npcs violate their own schema.	
+npc_error_trait_incorrectly_hidden	Application error when npcs violate their own configuration schema.	AJAJAJ	Category {0} trait {1} should be not hidden but is hidden.	Category {0} trait {1} should be hidden but is not.	
+npc_error_trait_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AKAKAK	Category {0} trait {1} should be hidden but is not.	Category {0} trait {1} should be not hidden but is hidden.	
+npc_error_category_incorrectly_hidden	Application error when npcs violate their own configuration schema.	ALALAL	Category {0} should not be hidden but is hidden		
+npc_error_category_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AMAMAM	Category {0} should be hidden but is not		
+npc_error_trait_in_locked_category	Application error when npcs violate their own configuration schema.	ANANAN	Category {0} should not have trait {1} since category requirements are not met.	Category {0} should not have trait {1} since category requirements are not met.	
+npc_error_too_few_traits_in_category	Application error when npcs violate their own configuration schema.	AOAOAO	Category {0} has too few traits.	Category {0} has too few traits.	
+npc_error_too_many_traits_in_category	Application error when npcs violate their own configuration schema.	APAPAP	Category {0} has too many traits.	Category {0} has too many traits.	
+npc_error_trait_not_found_in_schema	Application error when npcs violate their own configuration schema.	AQAQAQ	Trait {0} of category {1} is not found in the configuration file.	Trait {0} of category {1} is not found in the configuration file.	
+npc_error_category_not_found_in_schema	Application error when npcs violate their own configuration schema.	ARARAR	Category {0} is not found in the configuration file.	Category {0} is not found in the configuration file.	
+npc_error_unused_replacement	Application error when npcs violate their own configuration schema.	ASASAS	Category {0} trait {1} is not replaced when it should be.	Category {0} trait {1} is not replaced when it should be.	
+npc_error_trait_is_locked	Application error when npcs violate their own configuration schema.	ATATAT	Category {0} should not have trait {1} since trait requirements are not met.	Category {0} should not have trait {1} since trait requirements are not met.	
+error	Application error	AUAUAU	Error	Error	
+error_email_subject	Email subject line	AVAVAVA	Error During Npc Generation	Error During Npc Generation	
+error_email_body_start	Email body start. Several json text blobs follow.	AWAWAW	The configuration, replacements, npc errors, and npc text are below.	The configuration, replacements, npc errors, and npc text are below.	
+trait_replacement_description	User operation to replace one trait name with another name.	AXAXAX	Replace trait {0} with {1} in category {2}.	Replace trait {0} with {1} in category {2}.	
+trait_replacement	User operation to replace one trait name with another name.	AYAYAY	Replacement	Replacement	
+npcs	Non player characters	AZAZAZ	Npcs	Npcs	
+support_email_call_to_action	When an application error happens, ask if user wants to send a support email	BABABA	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
+localized_text_not_found	When the GUI needs text that does not exist for the selected language	BCBCBC	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
+self_requiring_trait	User error message pop-up for npc json configuration file.	BDBDBD	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	
+too_few_traits_pass_requirements	User error message pop-up for npc json configuration file.	BEBEBE	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	
+conflicting_output_category_visibility	User error message pop-up for npc json configuration file. Followed by a list.	BFBFBF	Categories with same output_name have conflicting value for ‘hidden’.	Categories with same output_name have conflicting value for ‘hidden’.	
+conflicting_output_category_visibility_element	User error message pop-up for npc json configuration file.	BGBGBG	Category {0}, output_name {1}, hidden {2}	Category {0}, output_name {1}, hidden {2}	

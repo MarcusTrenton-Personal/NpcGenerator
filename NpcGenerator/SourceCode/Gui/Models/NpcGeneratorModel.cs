@@ -607,6 +607,10 @@ namespace NpcGenerator
                         MessageBox.Show(builder.ToString());
                     }
                 }
+                catch (UnknownSortCriteriaException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("unknown_sort_criteria", exception.SortCriteria);
+                }
                 catch (IOException exception)
                 {
                     ShowMessageIfAllowed(exception);
@@ -654,7 +658,7 @@ namespace NpcGenerator
                     Category = replacementSearch.Category.Name,
                     OriginalTrait = replacementSearch.Trait.Name,
                     CurrentReplacementTrait = replacementSearch.Trait.Name,
-                    ReplacementTraits = replacementSearch.Category.GetTraitNames()
+                    ReplacementTraits = replacementSearch.Category.GetTraitNames(replacementSearch.SortCriteria)
                 };
                 replacements.Add(replacementSubModel);
             }
