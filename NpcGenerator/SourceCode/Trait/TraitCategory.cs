@@ -129,6 +129,53 @@ namespace NpcGenerator
             return names;
         }
 
+        public string[] GetTraitNames(Sort sortBy)
+        {
+            string[] result = sortBy switch
+            {
+                Sort.Alphabetical => GetTraitNamesSortedAlphabetically(),
+                Sort.Weight => GetTraitNamesSortedByWeight(),
+                Sort.Given => GetTraitNames(),
+                _ => throw new InvalidOperationException("Missing implementation for sorting by " + sortBy)
+            };
+            return result;
+        }
+
+        private string[] GetTraitNamesSortedAlphabetically()
+        {
+            string[] names = GetTraitNames();
+            Array.Sort(names);
+            return names;
+        }
+
+        private class TraitWeightComparer : IComparer<Trait>
+        {
+            public int Compare(Trait a, Trait b)
+            {
+                if (a.Weight > b.Weight)
+                {
+                    return -1;
+                }
+                else if (a.Weight < b.Weight)
+                {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+
+        private string[] GetTraitNamesSortedByWeight()
+        {
+            Trait[] traits = m_traits.ToArray();
+            Array.Sort(traits, new TraitWeightComparer());
+            string[] names = new string[traits.Length];
+            for (int i = 0; i < traits.Length; ++i)
+            {
+                names[i] = traits[i].Name;
+            }
+            return names;
+        }
+
         public HashSet<string> BonusSelectionCategoryNames()
         {
             HashSet<string> categories = new HashSet<string>();

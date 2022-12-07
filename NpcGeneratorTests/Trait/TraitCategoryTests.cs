@@ -859,5 +859,77 @@ namespace Tests
 
             Assert.IsTrue(category.HasIntraCategoryTraitDependencies(), "Incorrect return value");
         }
+
+        [TestMethod]
+        public void GetTraitNamesSortedAlphabetically()
+        {
+            const string BEAR = "Bear";
+            const string CHICKEN = "Chicken";
+            const string RHINO = "Rhino";
+
+            Trait trait0 = new Trait(RHINO, 5);
+            Trait trait1 = new Trait(BEAR, 1);
+            Trait trait2 = new Trait(CHICKEN, 6);
+
+            TraitCategory category = new TraitCategory("Animal");
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+
+            string[] sortedTraits = category.GetTraitNames(Sort.Alphabetical);
+
+            Assert.AreEqual(3, sortedTraits.Length, "Wrong number of sorted traits");
+            Assert.AreEqual(BEAR, sortedTraits[0], "Traits sorted incorrectly");
+            Assert.AreEqual(CHICKEN, sortedTraits[1], "Traits sorted incorrectly");
+            Assert.AreEqual(RHINO, sortedTraits[2], "Traits sorted incorrectly");
+        }
+
+        [TestMethod]
+        public void GetTraitNamesSortedByWeight()
+        {
+            const string BEAR = "Bear";
+            const string CHICKEN = "Chicken";
+            const string RHINO = "Rhino";
+
+            Trait trait0 = new Trait(RHINO, 5);
+            Trait trait1 = new Trait(BEAR, 1);
+            Trait trait2 = new Trait(CHICKEN, 6);
+
+            TraitCategory category = new TraitCategory("Animal");
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+
+            string[] sortedTraits = category.GetTraitNames(Sort.Weight);
+
+            Assert.AreEqual(3, sortedTraits.Length, "Wrong number of sorted traits");
+            Assert.AreEqual(CHICKEN, sortedTraits[0], "Traits sorted incorrectly");
+            Assert.AreEqual(RHINO, sortedTraits[1], "Traits sorted incorrectly");
+            Assert.AreEqual(BEAR, sortedTraits[2], "Traits sorted incorrectly");
+        }
+
+        [TestMethod]
+        public void GetTraitNamesSortedByGivenOrder()
+        {
+            const string BEAR = "Bear";
+            const string CHICKEN = "Chicken";
+            const string RHINO = "Rhino";
+
+            Trait trait0 = new Trait(RHINO, 5);
+            Trait trait1 = new Trait(BEAR, 1);
+            Trait trait2 = new Trait(CHICKEN, 6);
+
+            TraitCategory category = new TraitCategory("Animal");
+            category.Add(trait0);
+            category.Add(trait1);
+            category.Add(trait2);
+
+            string[] sortedTraits = category.GetTraitNames(Sort.Given);
+
+            Assert.AreEqual(3, sortedTraits.Length, "Wrong number of sorted traits");
+            Assert.AreEqual(RHINO, sortedTraits[0], "Traits sorted incorrectly");
+            Assert.AreEqual(BEAR, sortedTraits[1], "Traits sorted incorrectly");
+            Assert.AreEqual(CHICKEN, sortedTraits[2], "Traits sorted incorrectly");
+        }
     }
 }

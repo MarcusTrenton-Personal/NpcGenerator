@@ -15,21 +15,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 namespace NpcGenerator
 {
-    public class ReplacementSearch
+    public enum Sort
     {
-        public ReplacementSearch(Trait trait, TraitCategory category) : this(trait, category, Sort.Given)
-        {
-        }
-
-        public ReplacementSearch(Trait trait, TraitCategory category, Sort sortBy)
-        {
-            Trait = trait;
-            Category = category;
-            SortBy = sortBy;
-        }
-
-        public Trait Trait { get; private set; }
-        public TraitCategory Category { get; private set; }
-        public Sort SortBy { get; private set; }
+        Alphabetical,
+        Weight,
+        Given
     }
 }

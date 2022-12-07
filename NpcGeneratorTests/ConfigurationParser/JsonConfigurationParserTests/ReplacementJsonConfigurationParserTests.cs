@@ -370,7 +370,7 @@ namespace Tests.JsonConfigurationParserTests
         {
             const string REPLACEMENT_CATEGORY = "Colour";
             const string REPLACEMENT_TRAIT = "Green";
-            const ReplacementSearch.Sort SORT_BY = ReplacementSearch.Sort.Alphabetical;
+            const Sort SORT_BY = Sort.Alphabetical;
 
             string text = $@"{{
                 'replacements' : [

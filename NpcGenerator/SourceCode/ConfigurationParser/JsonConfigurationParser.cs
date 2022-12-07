@@ -425,26 +425,26 @@ namespace NpcGenerator
                             new TraitId(protoReplacement.category_name, protoReplacement.trait_name));
                     }
 
-                    ReplacementSearch.Sort sortBy = ParseSort(protoReplacement.sort_by);
+                    Sort sortBy = ParseSort(protoReplacement.sort_by);
                     ReplacementSearch replacement = new ReplacementSearch(trait, category, sortBy);
                     traitSchema.Add(replacement);
                 }
             }
         }
 
-        private static ReplacementSearch.Sort ParseSort(string sort)
+        private static Sort ParseSort(string sort)
         {
             if (string.IsNullOrWhiteSpace(sort))
             {
-                return ReplacementSearch.Sort.Given;
+                return Sort.Given;
             }
 
-            ReplacementSearch.Sort parsedSort = sort switch
+            Sort parsedSort = sort switch
             {
-                "Alphabetical" => ReplacementSearch.Sort.Alphabetical,
-                "Weight" => ReplacementSearch.Sort.Weight,
-                "Given" => ReplacementSearch.Sort.Given,
-                _ => throw new UnknownSortByException(sort),
+                "Alphabetical" => Sort.Alphabetical,
+                "Weight" => Sort.Weight,
+                "Given" => Sort.Given,
+                _ => throw new UnknownSortException(sort),
             };
 
             return parsedSort;
