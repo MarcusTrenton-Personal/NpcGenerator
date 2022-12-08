@@ -11,6 +11,12 @@
 			"items": { "$ref": "#/$defs/replacement"},
 			"uniqueItems": true
 		},
+		"category_order": {
+			"description": "Optional ordering of trait categories in the resulting npcs. Each entry must be the name of a trait_category's output_name or - if absent - the name.",
+			"type": "array",
+			"items": { "type": "string"},
+			"uniqueItems": true
+		},
 		"trait_categories": {
 			"description": "List of all categories of traits. By default an NPC can only have 1 trait from each category.",
 			"type": "array",

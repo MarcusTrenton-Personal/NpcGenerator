@@ -5,6 +5,26 @@
 		{ "category_name" : "Ancestry", "trait_name" : "Region-specific", "sort_by" : "Alphabetical" },
 		{ "category_name" : "Religion", "trait_name" : "Region-specific", "sort_by" : "Alphabetical" },
 	],
+	"category_order":
+	[
+		"Given Name",
+		"Surname",
+		"Gender",
+		"Race",
+		"Ancestry",
+		"Sexuality",
+		"Motivation",
+		"Tactics",
+		"Age",
+		"Height",
+		"Mass",
+		"Quirk",
+		"War Veteran Injury",
+		"Disability",
+		"Religion",
+		"Hair Dye",
+		"Celebrity",
+	],
 	"trait_categories" : 
 	[
 		{
