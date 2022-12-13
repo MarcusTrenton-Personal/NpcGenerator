@@ -884,6 +884,314 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
         }
 
+        [TestMethod]
+        public void CategoryOrderingPartial()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+
+            string text = $@"{{
+                'category_order': [
+                    '{CATEGORY1}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<string> order = schema.GetCategoryOrder();
+            Assert.AreEqual(1, order.Count, "Wrong number of elements in category ordering");
+            Assert.AreEqual(CATEGORY1, order[0], "Wrong element in category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderingFull()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            string text = $@"{{
+                'category_order': [
+                    '{CATEGORY1}',
+                    '{CATEGORY2}',
+                    '{CATEGORY0}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY2}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bridge', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<string> order = schema.GetCategoryOrder();
+            Assert.AreEqual(3, order.Count, "Wrong number of elements in category ordering");
+            Assert.AreEqual(CATEGORY1, order[0], "Wrong element in category order");
+            Assert.AreEqual(CATEGORY2, order[1], "Wrong element in category order");
+            Assert.AreEqual(CATEGORY0, order[2], "Wrong element in category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderingPrefersOutputNameToName()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string OUTPUT_NAME1 = "Shade";
+
+            string text = $@"{{
+                'category_order': [
+                    '{OUTPUT_NAME1}',
+                    '{CATEGORY0}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'output_name' : '{OUTPUT_NAME1}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<string> order = schema.GetCategoryOrder();
+            Assert.AreEqual(2, order.Count, "Wrong number of elements in category ordering");
+            Assert.AreEqual(OUTPUT_NAME1, order[0], "Wrong element in category order");
+            Assert.AreEqual(CATEGORY0, order[1], "Wrong element in category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderingWithSharedOutputNames()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Old Fame";
+            const string CATEGORY2 = "Young Fame";
+            const string OUTPUT_NAME = "Fame";
+
+            string text = $@"{{
+                'category_order': [
+                    '{OUTPUT_NAME}',
+                    '{CATEGORY0}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'output_name' : '{OUTPUT_NAME}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Radio', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY2}',
+                        'output_name' : '{OUTPUT_NAME}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Pro Gamer', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            TraitSchema schema = parser.Parse(text);
+
+            Assert.IsNotNull(schema, "Failed to generate a schema from the valid text");
+
+            IReadOnlyList<string> order = schema.GetCategoryOrder();
+            Assert.AreEqual(2, order.Count, "Wrong number of elements in category ordering");
+            Assert.AreEqual(OUTPUT_NAME, order[0], "Wrong element in category order");
+            Assert.AreEqual(CATEGORY0, order[1], "Wrong element in category order");
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void CategoryOrderingDuplicate()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+
+            string text = $@"{{
+                'category_order': [
+                    '{CATEGORY1}',
+                    '{CATEGORY1}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            parser.Parse(text);
+        }
+
+        [TestMethod]
+        public void CategoryOrderingUnknown()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string UNKNOWN_CATEGORY = "Location";
+
+            string text = $@"{{
+                'category_order': [
+                    '{CATEGORY1}',
+                    '{UNKNOWN_CATEGORY}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+
+            bool threwException = false;
+            try
+            {
+                parser.Parse(text);
+            }
+            catch (OrderCategoryNotFoundException exception)
+            {
+                threwException = true;
+
+                Assert.AreEqual(UNKNOWN_CATEGORY, exception.Category, "Wrong unknown category");
+            }
+
+            Assert.IsTrue(threwException, "Failed to throw OrderCategoryNotFoundException");
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

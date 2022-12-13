@@ -194,4 +194,24 @@ namespace NpcGenerator
 
         public string SortCriteria { get; private set; }
     }
+
+    public class OrderCategoryNotFoundException : FormatException
+    {
+        public OrderCategoryNotFoundException(string category)
+        {
+            Category = category;
+        }
+
+        public string Category { get; private set; }
+    }
+
+    public class OrderCategoryDuplicateException : FormatException
+    {
+        public OrderCategoryDuplicateException(string category)
+        {
+            Category = category;
+        }
+
+        public string Category { get; private set; }
+    }
 }

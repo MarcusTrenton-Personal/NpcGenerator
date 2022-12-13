@@ -31,6 +31,14 @@ namespace NpcGenerator
             m_replacements.Add(replacement);
         }
 
+        public void Set(IReadOnlyList<string> categoryOrder)
+        {
+            if (categoryOrder != null && categoryOrder.Count > 0)
+            {
+                m_categoryOrder = new List<string>(categoryOrder);
+            }
+        }
+
         public IReadOnlyList<TraitCategory> GetTraitCategories()
         {
             return m_categories;
@@ -39,6 +47,11 @@ namespace NpcGenerator
         public IReadOnlyList<ReplacementSearch> GetReplacementSearches()
         {
             return m_replacements;
+        }
+
+        public IReadOnlyList<string> GetCategoryOrder()
+        {
+            return m_categoryOrder;
         }
 
         public bool HasTrait(TraitId traitId)
@@ -226,5 +239,6 @@ namespace NpcGenerator
 
         private readonly List<TraitCategory> m_categories = new List<TraitCategory>();
         private readonly List<ReplacementSearch> m_replacements = new List<ReplacementSearch>();
+        private List<string> m_categoryOrder = null;
     }
 }

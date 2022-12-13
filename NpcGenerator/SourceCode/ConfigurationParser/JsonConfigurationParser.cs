@@ -55,6 +55,7 @@ namespace NpcGenerator
             DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
             DetectTooFewTraitsInCategory(protoTraitSchema.trait_categories);
             TraitSchema traitSchema = ParseInternal(protoTraitSchema);
+            DetectInvalidCategoryOrder(traitSchema);
             DetectCircularRequirements(traitSchema);
             DetectConflictingCategoryVisibility(traitSchema.GetTraitCategories());
             return traitSchema;
@@ -155,6 +156,45 @@ namespace NpcGenerator
             }
         }
 
+        private static void DetectInvalidCategoryOrder(TraitSchema schema)
+        {
+            DetectUnknownCategoryOrder(schema);
+            DetectDuplicateCategoryOrder(schema);
+        }
+
+        private static void DetectUnknownCategoryOrder(TraitSchema schema)
+        {
+            IReadOnlyList<TraitCategory> schemaCategories = schema.GetTraitCategories();
+            IReadOnlyList<string> order = schema.GetCategoryOrder();
+            if (order != null)
+            {
+                foreach (string orderCategory in order)
+                {
+                    TraitCategory category = ListUtil.Find(schemaCategories, category => category.OutputName == orderCategory);
+                    if (category is null)
+                    {
+                        throw new OrderCategoryNotFoundException(orderCategory);
+                    }
+                }
+            }
+        }
+
+        private static void DetectDuplicateCategoryOrder(TraitSchema schema)
+        {
+            IReadOnlyList<string> order = schema.GetCategoryOrder();
+            if (order != null)
+            {
+                foreach (string orderCategory in order)
+                {
+                    string duplicate = ListUtil.Find(order, category => category == orderCategory);
+                    if (string.IsNullOrEmpty(duplicate))
+                    {
+                        throw new OrderCategoryDuplicateException(orderCategory);
+                    }
+                }
+            }
+        }
+
         private static void DetectCircularRequirements(TraitSchema schema)
         {
             bool isCircularRequirements = schema.HasCircularRequirements(out List<TraitSchema.Dependency> cycle);
@@ -170,6 +210,7 @@ namespace NpcGenerator
             ParseBonusSelections(protoTraitSchema, traitSchema);
             ParseRequirements(protoTraitSchema, traitSchema);
             ParseReplacements(protoTraitSchema.replacements, traitSchema);
+            traitSchema.Set(protoTraitSchema.category_order);
             return traitSchema;
         }
 
@@ -458,6 +499,7 @@ namespace NpcGenerator
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
             public List<ProtoReplacement> replacements;
+            public List<string> category_order;
             public List<ProtoTraitCategory> trait_categories;
         }
 
