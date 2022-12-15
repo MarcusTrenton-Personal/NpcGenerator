@@ -210,7 +210,7 @@ namespace NpcGenerator
             ParseBonusSelections(protoTraitSchema, traitSchema);
             ParseRequirements(protoTraitSchema, traitSchema);
             ParseReplacements(protoTraitSchema.replacements, traitSchema);
-            traitSchema.Set(protoTraitSchema.category_order);
+            traitSchema.SetCategoryOrder(protoTraitSchema.category_order);
             return traitSchema;
         }
 

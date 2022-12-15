@@ -31,7 +31,7 @@ namespace NpcGenerator
             m_replacements.Add(replacement);
         }
 
-        public void Set(IReadOnlyList<string> categoryOrder)
+        public void SetCategoryOrder(IReadOnlyList<string> categoryOrder)
         {
             if (categoryOrder != null && categoryOrder.Count > 0)
             {

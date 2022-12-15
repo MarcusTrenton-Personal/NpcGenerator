@@ -1271,6 +1271,146 @@ namespace Tests.NpcFactoryTests.Create
             Assert.IsTrue(npc.HasTrait(new TraitId(SHARED_OUTPUT_CATEGORY_NAME, TRAIT1)), "Npc has the wrong trait");
         }
 
+        [TestMethod]
+        public void CategoryOrderNone()
+        {
+            const string CATEGORY0_NAME = "Animal";
+            const string CATEGORY1_NAME = "Colour";
+            TraitCategory category0 = new TraitCategory(CATEGORY0_NAME);
+            category0.Add(new Trait("Bear"));
+            TraitCategory category1 = new TraitCategory(CATEGORY1_NAME);
+            category1.Add(new Trait("Blue"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(2, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
+
+            Assert.AreEqual(CATEGORY0_NAME, npcGroup.GetTraitCategoryNameAtIndex(0), "Wrong category order");
+            Assert.AreEqual(CATEGORY1_NAME, npcGroup.GetTraitCategoryNameAtIndex(1), "Wrong category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderPartial()
+        {
+            const string CATEGORY0_NAME = "Animal";
+            const string CATEGORY1_NAME = "Colour";
+            TraitCategory category0 = new TraitCategory(CATEGORY0_NAME);
+            category0.Add(new Trait("Bear"));
+            TraitCategory category1 = new TraitCategory(CATEGORY1_NAME);
+            category1.Add(new Trait("Blue"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY1_NAME });
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(2, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
+
+            Assert.AreEqual(CATEGORY1_NAME, npcGroup.GetTraitCategoryNameAtIndex(0), "Wrong category order");
+            Assert.AreEqual(CATEGORY0_NAME, npcGroup.GetTraitCategoryNameAtIndex(1), "Wrong category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderComplete()
+        {
+            const string CATEGORY0_NAME = "Animal";
+            const string CATEGORY1_NAME = "Colour";
+            const string CATEGORY2_NAME = "Location";
+            TraitCategory category0 = new TraitCategory(CATEGORY0_NAME);
+            category0.Add(new Trait("Bear"));
+            TraitCategory category1 = new TraitCategory(CATEGORY1_NAME);
+            category1.Add(new Trait("Blue"));
+            TraitCategory category2 = new TraitCategory(CATEGORY2_NAME);
+            category2.Add(new Trait("Bridge"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY1_NAME, CATEGORY2_NAME, CATEGORY0_NAME });
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(3, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
+
+            Assert.AreEqual(CATEGORY1_NAME, npcGroup.GetTraitCategoryNameAtIndex(0), "Wrong category order");
+            Assert.AreEqual(CATEGORY2_NAME, npcGroup.GetTraitCategoryNameAtIndex(1), "Wrong category order");
+            Assert.AreEqual(CATEGORY0_NAME, npcGroup.GetTraitCategoryNameAtIndex(2), "Wrong category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderCompleteOutputNames()
+        {
+            const string CATEGORY0_NAME = "Animal";
+            const string CATEGORY1_NAME = "Colour";
+            const string CATEGORY1_OUTPUT_NAME = "Shade";
+            const string CATEGORY2_NAME = "Location";
+            const string CATEGORY2_OUTPUT_NAME = "Position";
+            TraitCategory category0 = new TraitCategory(CATEGORY0_NAME);
+            category0.Add(new Trait("Bear"));
+            TraitCategory category1 = new TraitCategory(CATEGORY1_NAME, CATEGORY1_OUTPUT_NAME, 1);
+            category1.Add(new Trait("Blue"));
+            TraitCategory category2 = new TraitCategory(CATEGORY2_NAME, CATEGORY2_OUTPUT_NAME, 1);
+            category2.Add(new Trait("Bridge"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY1_OUTPUT_NAME, CATEGORY2_OUTPUT_NAME, CATEGORY0_NAME });
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(3, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
+
+            Assert.AreEqual(CATEGORY1_OUTPUT_NAME, npcGroup.GetTraitCategoryNameAtIndex(0), "Wrong category order");
+            Assert.AreEqual(CATEGORY2_OUTPUT_NAME, npcGroup.GetTraitCategoryNameAtIndex(1), "Wrong category order");
+            Assert.AreEqual(CATEGORY0_NAME, npcGroup.GetTraitCategoryNameAtIndex(2), "Wrong category order");
+        }
+
+        [TestMethod]
+        public void CategoryOrderPartialSharedOutputNames()
+        {
+            const string CATEGORY0_NAME = "Animal";
+            const string CATEGORY1_NAME = "Colour";
+            const string SHARED_OUTPUT_NAME = "Shade";
+            const string CATEGORY2_NAME = "Location";
+            TraitCategory category0 = new TraitCategory(CATEGORY0_NAME);
+            category0.Add(new Trait("Bear"));
+            TraitCategory category1 = new TraitCategory(CATEGORY1_NAME, SHARED_OUTPUT_NAME, 1);
+            category1.Add(new Trait("Blue"));
+            TraitCategory category2 = new TraitCategory(CATEGORY2_NAME, SHARED_OUTPUT_NAME, 1);
+            category2.Add(new Trait("Bridge"));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { SHARED_OUTPUT_NAME });
+
+            NpcGroup npcGroup = NpcFactory.Create(schema, 1, new List<Replacement>(), m_random);
+
+            Assert.IsNotNull(npcGroup, "Failed to create an npc using a valid schema");
+            Assert.AreEqual(2, npcGroup.VisibleCategoryOrder.Count, "Wrong number of visible categories");
+
+            Assert.AreEqual(SHARED_OUTPUT_NAME, npcGroup.GetTraitCategoryNameAtIndex(0), "Wrong category order");
+            Assert.AreEqual(CATEGORY0_NAME, npcGroup.GetTraitCategoryNameAtIndex(1), "Wrong category order");
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

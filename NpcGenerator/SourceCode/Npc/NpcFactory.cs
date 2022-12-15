@@ -26,26 +26,55 @@ namespace NpcGenerator
             ParamUtil.VerifyNotNull(nameof(traitSchema), traitSchema);
             ParamUtil.VerifyElementsAreNotNull(nameof(replacements), replacements);
             ParamUtil.VerifyWholeNumber(nameof(npcCount), npcCount);
-            
-            List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
-            List<NpcGroup.Category> outputCategoryNames = categoriesWithReplacements.ConvertAll(category =>
-            {
-                return new NpcGroup.Category(category.OutputName, category.IsHidden);
-            });
-            List<NpcGroup.Category> distinctOutputCategoryNames = ListUtil.DistinctPreserveOrder(outputCategoryNames);
-            NpcGroup group = new NpcGroup(distinctOutputCategoryNames);
 
-            IReadOnlyList<string> categoryNameOrder = traitSchema.CalculateTraversalOrder();
-            IReadOnlyList<TraitCategory> categoryOrder = 
-                ListUtil.ConvertAll(categoryNameOrder, name => categoriesWithReplacements.Find(category => category.Name == name));
+            List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
+
+            IReadOnlyList<NpcGroup.Category> outputCategoryOrder = GetOutputCategoryOrder(traitSchema, categoriesWithReplacements);
+            NpcGroup group = new NpcGroup(outputCategoryOrder);
+
+            IReadOnlyList<string> categoryNameEvaluationOrder = traitSchema.CalculateTraversalOrder();
+            IReadOnlyList<TraitCategory> categoryEvaluationOrder = 
+                ListUtil.ConvertAll(categoryNameEvaluationOrder, name => categoriesWithReplacements.Find(category => category.Name == name));
 
             for (int i = 0; i < npcCount; ++i)
             {
-                Npc npc = CreateNpc(categoryOrder, random);
+                Npc npc = CreateNpc(categoryEvaluationOrder, random);
                 group.Add(npc);
             }
 
             return group;
+        }
+
+        private static IReadOnlyList<NpcGroup.Category> GetOutputCategoryOrder(TraitSchema traitSchema, 
+            List<TraitCategory> categoriesWithReplacements)
+        {
+            List<NpcGroup.Category> outputCategoryNames = categoriesWithReplacements.ConvertAll(category =>
+            {
+                return new NpcGroup.Category(category.OutputName, category.IsHidden);
+            });
+            List<NpcGroup.Category> naturalCategoryOrder = ListUtil.DistinctPreserveOrder(outputCategoryNames);
+            IReadOnlyList<string> specifiedCategoriePartialOrder = traitSchema.GetCategoryOrder();
+
+            //Specified categories come first. Otherwise, use natural order.
+            List<NpcGroup.Category> outputCategoryOrder = new List<NpcGroup.Category>(naturalCategoryOrder.Count);
+            if (specifiedCategoriePartialOrder != null)
+            {
+                foreach (string specifiedCategory in specifiedCategoriePartialOrder)
+                {
+                    NpcGroup.Category category = naturalCategoryOrder.Find(category => category.Name == specifiedCategory);
+                    outputCategoryOrder.Add(category);
+                }
+            }
+            foreach (NpcGroup.Category naturalCategory in naturalCategoryOrder)
+            {
+                NpcGroup.Category outputCategory = outputCategoryOrder.Find(category => category.Name == naturalCategory.Name);
+                if (outputCategory == null)
+                {
+                    outputCategoryOrder.Add(naturalCategory);
+                }
+            }
+
+            return outputCategoryOrder;
         }
 
         private static List<TraitCategory> GetReplacementCategories(TraitSchema schema, IReadOnlyList<Replacement> replacements)
