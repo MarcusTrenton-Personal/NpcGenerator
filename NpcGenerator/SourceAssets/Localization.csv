@@ -56,3 +56,5 @@ self_requiring_trait	User error message pop-up for npc json configuration file.	
 too_few_traits_pass_requirements	User error message pop-up for npc json configuration file.	BEBEBE	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	
 conflicting_output_category_visibility	User error message pop-up for npc json configuration file. Followed by a list.	BFBFBF	Categories with same output_name have conflicting value for ‘hidden’.	Categories with same output_name have conflicting value for ‘hidden’.	
 conflicting_output_category_visibility_element	User error message pop-up for npc json configuration file.	BGBGBG	Category {0}, output_name {1}, hidden {2}	Category {0}, output_name {1}, hidden {2}	
+duplicate_order_category	User error message pop-up for npc json configuration file.	BHBHBH	Duplicate {0} in category_order	Duplicate {0} in category_order	
+order_category_not_found	User error message pop-up for npc json configuration file.	BIBIBI	Category {0} not found in category_order	Category {0} not found in category_order	

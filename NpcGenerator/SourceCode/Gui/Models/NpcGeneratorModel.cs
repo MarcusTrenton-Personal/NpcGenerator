@@ -611,6 +611,14 @@ namespace NpcGenerator
                 {
                     ShowLocalizedErrorMessageIfAllowed("unknown_sort_criteria", exception.SortCriteria);
                 }
+                catch (OrderCategoryDuplicateException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("duplicate_order_category", exception.Category);
+                }
+                catch (OrderCategoryNotFoundException exception)
+                {
+                    ShowLocalizedErrorMessageIfAllowed("order_category_not_found", exception.Category);
+                }
                 catch (IOException exception)
                 {
                     ShowMessageIfAllowed(exception);

@@ -730,7 +730,29 @@ namespace Tests
             GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
-        //GenerateFromConfigurationCatchesUnknownSortException
+        [TestMethod]
+        public void GenerateFromConfigurationCatchesOrderCategoryDuplicateException()
+        {
+            static OrderCategoryDuplicateException CreateCallback()
+            {
+                return new OrderCategoryDuplicateException("Animal");
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateFromConfigurationCatches(CreateCallback, method);
+        }
+
+        [TestMethod]
+        public void GenerateFromConfigurationCatchesOrderCategoryNotFoundException()
+        {
+            static OrderCategoryNotFoundException CreateCallback()
+            {
+                return new OrderCategoryNotFoundException("Animal");
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateFromConfigurationCatches(CreateCallback, method);
+        }
 
         private void GenerateFromConfigurationCatches<T>(Func<T> createException, string fileName) where T : Exception
         {
