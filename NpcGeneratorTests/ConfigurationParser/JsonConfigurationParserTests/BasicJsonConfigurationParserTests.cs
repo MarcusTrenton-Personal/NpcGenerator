@@ -1139,6 +1139,46 @@ namespace Tests.JsonConfigurationParserTests
             parser.Parse(text);
         }
 
+        [TestMethod, ExpectedException(typeof(OrderCategoryDuplicateException))]
+        public void CategoryOrderingDuplicateNoSchema()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+
+            string text = $@"{{
+                'category_order': [
+                    '{CATEGORY1}',
+                    '{CATEGORY1}',
+                ],
+                'trait_categories' : [
+                    {{
+                        'name' : '{CATEGORY0}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Bear', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }},
+                    {{
+                        'name' : '{CATEGORY1}',
+                        'selections' : 1,
+                        'traits' : [
+                            {{ 
+                                'name' : 'Blue', 
+                                'weight' : 1
+                            }}
+                        ]
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(schemaPath: null);
+
+            parser.Parse(text);
+        }
+
         [TestMethod]
         public void CategoryOrderingUnknown()
         {

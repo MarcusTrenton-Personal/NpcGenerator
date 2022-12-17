@@ -186,8 +186,8 @@ namespace NpcGenerator
             {
                 foreach (string orderCategory in order)
                 {
-                    string duplicate = ListUtil.Find(order, category => category == orderCategory);
-                    if (string.IsNullOrEmpty(duplicate))
+                    string duplicate = ListUtil.Find(order, category => category == orderCategory && !ReferenceEquals(category, orderCategory));
+                    if (!string.IsNullOrEmpty(duplicate))
                     {
                         throw new OrderCategoryDuplicateException(orderCategory);
                     }
