@@ -1459,7 +1459,7 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
             bool areValid = NpcFactory.AreNpcsValid(
                 npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
 
-            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
             Assert.AreEqual(1, violationCollection.categoryViolations.Count, "Wrong number of violations");
             NpcSchemaViolation incorrectlyHiddenCategoryViolation = violationCollection.categoryViolations.Find(
                 violation => violation.Category == CATEGORY &&
@@ -1492,7 +1492,7 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
             bool areValid = NpcFactory.AreNpcsValid(
                 npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
 
-            Assert.IsFalse(areValid, "Npc is incorrectly invalid");
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
             Assert.AreEqual(1, violationCollection.categoryViolations.Count, "Wrong number of violations");
             NpcSchemaViolation incorrectlyHiddenCategoryViolation = violationCollection.categoryViolations.Find(
                 violation => violation.Category == CATEGORY &&
@@ -1502,6 +1502,278 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
 
             List<NpcSchemaViolation> violations = violationCollection.violationsByNpc[npc];
             Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidEmptyCategoryOrder()
+        {
+            const string CATEGORY = "Animal";
+            const string TRAIT = "Bear";
+
+            Trait trait = new Trait(TRAIT);
+            TraitCategory category = new TraitCategory(CATEGORY);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            schema.SetCategoryOrder(null);
+
+            Npc npc = new Npc();
+            npc.Add(CATEGORY, new Npc.Trait[] { new Npc.Trait(TRAIT, CATEGORY) });
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { new NpcGroup.Category(CATEGORY, isHidden: false) });
+            npcGroup.Add(npc);
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
+            List<NpcSchemaViolation> violations = violationCollection.violationsByNpc[npc];
+            Assert.AreEqual(0, violations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidPartialCategoryOrderIsFollowed()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            Trait trait0 = new Trait("Bear");
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            category0.Add(trait0);
+
+            Trait trait1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(trait1);
+
+            Trait trait2 = new Trait("Bridge");
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            category2.Add(trait2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY2, CATEGORY1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { 
+                new NpcGroup.Category(CATEGORY2, isHidden: false),
+                new NpcGroup.Category(CATEGORY1, isHidden: false),
+                new NpcGroup.Category(CATEGORY0, isHidden: false),
+            });
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void PartialCategoryOrderWithMissingNpcCategoriesIsFollowed()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            Trait trait0 = new Trait("Bear");
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            category0.Add(trait0);
+
+            Trait trait1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(trait1);
+
+            Trait trait2 = new Trait("Bridge");
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            category2.Add(trait2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY2, CATEGORY1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(CATEGORY1, isHidden: false),
+            });
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationPartialCategoryOrderIsNotFollowed()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            Trait trait0 = new Trait("Bear");
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            category0.Add(trait0);
+
+            Trait trait1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(trait1);
+
+            Trait trait2 = new Trait("Bridge");
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            category2.Add(trait2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY2, CATEGORY1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(CATEGORY1, isHidden: false),
+                new NpcGroup.Category(CATEGORY2, isHidden: false),
+            });
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violationCollection.categoryViolations.Count, "Wrong number of violations");
+            NpcSchemaViolation incorrectlyCategoryOrderViolation = violationCollection.categoryViolations.Find(
+                violation => violation.Category == CATEGORY2 &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.CategoryOrderIncorrect);
+            Assert.IsNotNull(incorrectlyCategoryOrderViolation, "CategoryOrderIncorrect violation not detected");
+        }
+
+        [TestMethod]
+        public void AreNpcsValidViolationPartialCategoryOrderWithMissingNpcCategoriesIsNotFollowed()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            Trait trait0 = new Trait("Bear");
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            category0.Add(trait0);
+
+            Trait trait1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(trait1);
+
+            Trait trait2 = new Trait("Bridge");
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            category2.Add(trait2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY2, CATEGORY1 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(CATEGORY0, isHidden: false),
+                new NpcGroup.Category(CATEGORY2, isHidden: false),
+            });
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsFalse(areValid, "Npc is incorrectly valid");
+            Assert.AreEqual(1, violationCollection.categoryViolations.Count, "Wrong number of violations");
+            NpcSchemaViolation incorrectlyCategoryOrderViolation = violationCollection.categoryViolations.Find(
+                violation => violation.Category == CATEGORY2 &&
+                violation.Trait is null &&
+                violation.Violation == NpcSchemaViolation.Reason.CategoryOrderIncorrect);
+            Assert.IsNotNull(incorrectlyCategoryOrderViolation, "CategoryOrderIncorrect violation not detected");
+        }
+
+
+        //CompleteCategoryOrderIsFollowed
+        //CompleteCategoryOrderWithMissingNpcCategoriesIsFollowed
+
+        [TestMethod]
+        public void CompleteCategoryOrderIsFollowed()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            Trait trait0 = new Trait("Bear");
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            category0.Add(trait0);
+
+            Trait trait1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(trait1);
+
+            Trait trait2 = new Trait("Bridge");
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            category2.Add(trait2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY2, CATEGORY1, CATEGORY0 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(CATEGORY2, isHidden: false),
+                new NpcGroup.Category(CATEGORY1, isHidden: false),
+                new NpcGroup.Category(CATEGORY0, isHidden: false),
+            });
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
+        }
+
+        [TestMethod]
+        public void CompleteCategoryOrderWithMissingNpcCategoriesIsFollowed()
+        {
+            const string CATEGORY0 = "Animal";
+            const string CATEGORY1 = "Colour";
+            const string CATEGORY2 = "Location";
+
+            Trait trait0 = new Trait("Bear");
+            TraitCategory category0 = new TraitCategory(CATEGORY0);
+            category0.Add(trait0);
+
+            Trait trait1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory(CATEGORY1);
+            category1.Add(trait1);
+
+            Trait trait2 = new Trait("Bridge");
+            TraitCategory category2 = new TraitCategory(CATEGORY2);
+            category2.Add(trait2);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+            schema.Add(category2);
+
+            schema.SetCategoryOrder(new List<string> { CATEGORY2, CATEGORY1, CATEGORY0 });
+
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> {
+                new NpcGroup.Category(CATEGORY1, isHidden: false),
+                new NpcGroup.Category(CATEGORY0, isHidden: false),
+            });
+
+            bool areValid = NpcFactory.AreNpcsValid(
+                npcGroup, schema, new List<Replacement>(), out NpcSchemaViolationCollection violationCollection);
+
+            Assert.IsTrue(areValid, "Npc is incorrectly invalid");
+            Assert.AreEqual(0, violationCollection.categoryViolations.Count, "Wrong number of violations");
         }
     }
 }

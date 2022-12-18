@@ -232,6 +232,7 @@ namespace NpcGenerator
         private static bool IsNpcGroupValid(in NpcGroup npcGroup, in TraitSchema schema, List<NpcSchemaViolation> violations)
         {
             AddIncorrectCategoryIsHiddenViolations(npcGroup, schema, violations);
+            AddIncorrectCategoryOrderingViolations(npcGroup, schema, violations);
             return violations.Count == 0;
         }
 
@@ -248,6 +249,29 @@ namespace NpcGenerator
                     NpcSchemaViolation.Reason reason = npcCategory.IsHidden ? NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden :
                         NpcSchemaViolation.Reason.CategoryIsIncorrectlyNotHidden;
                     violations.Add(new NpcSchemaViolation(npcCategory.Name, reason));
+                }
+            }
+        }
+
+        private static void AddIncorrectCategoryOrderingViolations(in NpcGroup npcGroup, in TraitSchema schema,
+            List<NpcSchemaViolation> violations)
+        {
+            IReadOnlyList<string> schemaPartialOrder = schema.GetCategoryOrder();
+            if (schemaPartialOrder != null)
+            {
+                int expectedIndex = 0;
+                foreach (string schemaCategory in schemaPartialOrder)
+                {
+                    int foundIndex = ListUtil.IndexOf(npcGroup.VisibleCategoryOrder, npcGroupCategory => npcGroupCategory == schemaCategory);
+                    if (foundIndex != -1)
+                    {
+                        if (foundIndex != expectedIndex)
+                        {
+                            violations.Add(new NpcSchemaViolation(schemaCategory, NpcSchemaViolation.Reason.CategoryOrderIncorrect));
+                            return;
+                        }
+                        expectedIndex++;
+                    }
                 }
             }
         }
@@ -489,7 +513,8 @@ namespace NpcGenerator
             TraitIsIncorrectlyNotHidden,
             CategoryIsIncorrectlyHidden,
             CategoryIsIncorrectlyNotHidden,
-            UnusedReplacement
+            UnusedReplacement,
+            CategoryOrderIncorrect
         }
     }
 

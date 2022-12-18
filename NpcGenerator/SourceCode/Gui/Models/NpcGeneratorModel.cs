@@ -340,6 +340,8 @@ namespace NpcGenerator
                     m_localization.GetText("npc_error_category_incorrectly_not_hidden", violation.Category),
                 NpcSchemaViolation.Reason.UnusedReplacement =>
                     m_localization.GetText("npc_error_unused_replacement", violation.Category, violation.Trait),
+                NpcSchemaViolation.Reason.CategoryOrderIncorrect =>
+                    m_localization.GetText("npc_error_category_order_wrong", violation.Category),
                 _ => throw new ArgumentException("Unknown violation type " + violation.Violation.ToString()),
             };
             text.AppendLine(errorMessage);
