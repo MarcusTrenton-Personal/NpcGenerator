@@ -51,6 +51,7 @@ namespace NpcGenerator
             ValidateJson(json, m_schema);
 
             ProtoTraitSchema protoTraitSchema = json.ToObject<ProtoTraitSchema>();
+            ExtractFileCategoryIntoSchemaCategories(protoTraitSchema);
             DetectDuplicateCategoryNames(protoTraitSchema.trait_categories);
             DetectDuplicateTraitNamesInASingleCategory(protoTraitSchema.trait_categories);
             DetectTooFewTraitsInCategory(protoTraitSchema.trait_categories);
@@ -59,6 +60,73 @@ namespace NpcGenerator
             DetectCircularRequirements(traitSchema);
             DetectConflictingCategoryVisibility(traitSchema.GetTraitCategories());
             return traitSchema;
+        }
+
+        private static void ExtractFileCategoryIntoSchemaCategories(ProtoTraitSchema protoTraitSchema)
+        {
+            Dictionary<string, TraitSchema> subSchemas = ParseRelativePathsIntoSubSchemas(protoTraitSchema);
+            foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
+            {
+                if (protoCategory.traits_from_file != null)
+                {
+                    string relativeFilePath = protoCategory.traits_from_file.csv_file;
+                    TraitSchema subSchema = subSchemas[relativeFilePath];
+                    IReadOnlyList<TraitCategory> subSchemaCategories = subSchema.GetTraitCategories();
+                    string subSchemaCategoryName = protoCategory.traits_from_file.category_name_in_file;
+                    TraitCategory subSchemaCategory = ListUtil.Find(subSchemaCategories, category => category.Name == subSchemaCategoryName);
+                    if (subSchemaCategory != null)
+                    {
+                        if (protoCategory.traits == null)
+                        {
+                            protoCategory.traits = new List<ProtoTrait>();
+                        }
+                        foreach (Trait trait in subSchemaCategory.GetTraits())
+                        {
+                            //If a CSV category can ever have more than a name and weight then the whole parsing order will need to change.
+                            //An existing TraitSchema (not a ProtoTraitSchema) will need to be passed in so Traits are combined, not ProtoTraits.
+                            //After combining subschemas into the TraitSchema, new checks for duplicate categories and traits will be needed.
+                            ProtoTrait protoTrait = new ProtoTrait() { 
+                                Name = trait.Name,
+                                Weight = trait.Weight,
+                            };
+                            
+                            protoCategory.traits.Add(protoTrait);
+                        }
+                    }
+                    else
+                    {
+                        throw new SubSchemaCategoryNotFoundException(relativeFilePath, subSchemaCategoryName);
+                    }
+                }
+            }
+        }
+
+        private static Dictionary<string, TraitSchema> ParseRelativePathsIntoSubSchemas(ProtoTraitSchema protoTraitSchema)
+        {
+            Dictionary<string, TraitSchema> relativePathsToSubSchemas = new Dictionary<string, TraitSchema>();
+            CsvConfigurationParser csvParser = new CsvConfigurationParser();
+            foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
+            {
+                if (protoCategory.traits_from_file != null)
+                {
+                    string relativeFilePath = protoCategory.traits_from_file.csv_file;
+                    if (!relativePathsToSubSchemas.ContainsKey(relativeFilePath))
+                    {
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), relativeFilePath);
+                        if (File.Exists(path))
+                        {
+                            string text = File.ReadAllText(relativeFilePath);
+                            TraitSchema subSchema = csvParser.Parse(text);
+                            relativePathsToSubSchemas[relativeFilePath] = subSchema;
+                        }
+                        else
+                        {
+                            throw new SubSchemaNotFoundException(relativeFilePath);
+                        }
+                    }
+                }
+            }
+            return relativePathsToSubSchemas;
         }
 
         private static void ValidateJson(JToken json, JSchema m_schema)
@@ -511,6 +579,7 @@ namespace NpcGenerator
             public bool Hidden { get; set; }
             public ProtoLogicalExpression requirements;
             public List<ProtoTrait> traits;
+            public ProtoFileTraits traits_from_file;
         }
 
         private class ProtoTrait
@@ -522,6 +591,12 @@ namespace NpcGenerator
             //Deliberately breaking with the normal naming scheme.
             //The variables must be named exactly like json varaibles (ignoring case) for the convenient deserialization.
             public ProtoBonusSelection bonus_selection { get; set; }
+        }
+
+        private class ProtoFileTraits
+        {
+            public string csv_file { get; set; }
+            public string category_name_in_file { get; set; }
         }
 
         private class ProtoBonusSelection

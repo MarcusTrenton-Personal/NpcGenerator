@@ -214,4 +214,26 @@ namespace NpcGenerator
 
         public string Category { get; private set; }
     }
+
+    public class SubSchemaNotFoundException : IOException
+    {
+        public SubSchemaNotFoundException(string relativePath)
+        {
+            RelativePath = relativePath;
+        }
+
+        public string RelativePath { get; private set; }
+    }
+
+    public class SubSchemaCategoryNotFoundException : FormatException
+    {
+        public SubSchemaCategoryNotFoundException(string relativePath, string category)
+        {
+            RelativePath = relativePath;
+            Category = category;
+        }
+
+        public string RelativePath { get; private set; }
+        public string Category { get; private set; }
+    }
 }

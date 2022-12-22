@@ -60,10 +60,27 @@
 					"items": { "$ref": "#/$defs/trait"},
 					"minItems": 1,
 					"uniqueItems": true
+				},
+				"traits_from_file": {
+					"description": "List of all traits in one category. By default an NPC can only have 1 trait from a category. The traits are in another csv file. That file is formatted as a csv configuration file. See Sample Configurations.",
+					"type": "object",
+					"properties": {
+						"csv_file": {
+							"description": "The filename of the csv. The path is relative to the folder of json configuration file.",
+							"type": "string",
+						},
+						"category_name_in_file": {
+							"description": "The name of the category of desired traits in the csv file. For example a json configuration has a category for Noble names that refers to a csv file and it's category of Medieval English Surnames.",
+							"type": "string",
+						}
+					},
+					"additionalProperties": false,
+					"required": ["csv_file", "category_name_in_file"]
 				}
 			},
 			"additionalProperties": false,
-			"required": ["name", "selections", "traits"]
+			"required": ["name", "selections"],
+			"anyOf": [ {"required": ["traits"] }, {"required": ["traits_from_file"] } ]
 		},
 		"trait": {
 			"description": "An Npc trait, with a name and weight.",

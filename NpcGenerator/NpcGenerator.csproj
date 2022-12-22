@@ -96,9 +96,9 @@
     <Copy SourceFiles="@(AppSettings)" DestinationFolder="$(OutDir)\Settings" />
     <Message Text="Copying Sample Configurations folder $(OutDir)Sample Configurations" Importance="high" />
     <ItemGroup>
-      <Sample Include="..\Sample Configurations\*.csv;..\Sample Configurations\*.json" />
+      <Sample Include="..\Sample Configurations\**\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(Sample)" DestinationFolder="$(OutDir)Sample Configurations" />
+    <Copy SourceFiles="@(Sample)" DestinationFolder="$(OutDir)Sample Configurations\%(RecursiveDir)" />
   </Target>
 
   <!-- ######## Publish Events ######## -->  

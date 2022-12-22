@@ -176,6 +176,11 @@ namespace NpcGenerator
             return names;
         }
 
+        public IReadOnlyList<Trait> GetTraits()
+        {
+            return m_traits;
+        }
+
         public HashSet<string> BonusSelectionCategoryNames()
         {
             HashSet<string> categories = new HashSet<string>();

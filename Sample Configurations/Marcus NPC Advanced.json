@@ -302,42 +302,22 @@
 		{
 			"name": "American Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "American"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"James"},	{"name":"Robert"},	{"name":"John"},	{"name":"Michael"},	{"name":"David"}, 	{"name":"William"},	{"name":"Richard"},	{"name":"Joseph"},	{"name":"Thomas"},	{"name":"Charles"},
-				{"name":"Chris"},	{"name":"Daniel"},	{"name":"Matthew"},	{"name":"Anthony"},	{"name":"Mark"},	{"name":"Donald"},	{"name":"Steven"},	{"name":"Paul"},	{"name":"Andrew"},	{"name":"Joshua"},
-				{"name":"Kenneth"},	{"name":"Kevin"},	{"name":"Brian"},	{"name":"George"},	{"name":"Timothy"},	{"name":"Ronald"},	{"name":"Edward"},	{"name":"Jason"},	{"name":"Jeffrey"},	{"name":"Ryan"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "American Male" }
 		},
 		{
 			"name": "American Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "American"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Mary"},	{"name":"Patricia"},	{"name":"Jennifer"},	{"name":"Linda"},		{"name":"Elizabeth"}, 	{"name":"Barbara"},		{"name":"Susan"},		{"name":"Jessica"},	{"name":"Sarah"},	{"name":"Karen"},
-				{"name":"Lisa"},	{"name":"Nancy"},		{"name":"Betty"},		{"name":"Margaret"},	{"name":"Sandra"},		{"name":"Ashley"},		{"name":"Kimberly"},	{"name":"Emily"},	{"name":"Donna"},	{"name":"Michelle"},
-				{"name":"Carol"},	{"name":"Amanda"},		{"name":"Dorothy"},		{"name":"Melissa"},		{"name":"Deborah"},		{"name":"Stephanie"},	{"name":"Rebecca"},		{"name":"Sharon"},	{"name":"Laura"},	{"name":"Cynthia"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "American Female" }
 		},
 		{
 			"name": "American Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "American"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Valentine"},	{"name":"Whitley"},	{"name":"Camden"},	{"name":"Tanner"},	{"name":"Flynn"},	{"name":"Harlowe"},	{"name":"Beck"},	{"name":"Ali"},		{"name":"Brooks"},	{"name":"Carter"},
-				{"name":"Channing"},	{"name":"Ramsey"},	{"name":"Remy"},	{"name":"Max"},		{"name":"Jesse"},	{"name":"Casey"},	{"name":"Nicki"},	{"name":"Blake"},	{"name":"Morgan"},	{"name":"Dylan"},
-				{"name":"Tai"},			{"name":"Eli"},		{"name":"Merritt"},	{"name":"Reese"},	{"name":"Aubrey"},	{"name":"Colin"},	{"name":"Hollis"},	{"name":"Wynn"},	{"name":"Jo"},		{"name":"Ash"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "American Unisex" }
 		},
 		{
 			"name": "American Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "American"},
-			"traits" :
-			[
-				{"name":"Smith"},		{"name":"Johnson"},	{"name":"Williams"},	{"name":"Brown"},	{"name":"Jones"},	{"name":"Taylor"},		{"name":"Miller"},	{"name":"Davis"},	{"name":"Wilson"},	{"name":"Anderson"},
-				{"name":"Thomas"},		{"name":"Moore"},	{"name":"Jackson"},		{"name":"Lee"},		{"name":"Perez"},	{"name":"Thompson"},	{"name":"White"},	{"name":"Harris"},	{"name":"Clark"},	{"name":"Lewis"},
-				{"name":"Robinson"},	{"name":"Walker"},	{"name":"Young"},		{"name":"Allen"},	{"name":"King"},	{"name":"Wright"},		{"name":"Scott"},	{"name":"Torres"},	{"name":"Hill"},	{"name":"Green"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "American Surname" }
 		},
 		{
 			"name": "Canadian Male Given Name", "output_name": "Given Name", "selections": 1, 
