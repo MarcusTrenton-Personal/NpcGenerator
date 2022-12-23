@@ -931,5 +931,58 @@ namespace Tests
             Assert.AreEqual(BEAR, sortedTraits[1], "Traits sorted incorrectly");
             Assert.AreEqual(CHICKEN, sortedTraits[2], "Traits sorted incorrectly");
         }
+
+        [TestMethod]
+        public void GetTraitsEmpty()
+        {
+            TraitCategory category = new TraitCategory("Animal");
+
+            IReadOnlyList<Trait> traits = category.GetTraits();
+
+            Assert.AreEqual(0, traits.Count, "Wrong number of traits");
+        }
+
+        [TestMethod]
+        public void GetTraitsNonEmpty()
+        {
+            TraitCategory category = new TraitCategory("Animal");
+            Trait trait0 = new Trait("Bear", 1, isHidden: true);
+            Trait trait1 = new Trait("Rhino", 5, isHidden: false);
+            category.Add(trait0);
+            category.Add(trait1);
+
+            IReadOnlyList<Trait> traits = category.GetTraits();
+
+            Assert.AreEqual(2, traits.Count, "Wrong number of traits");
+            Trait foundTrait0 = ListUtil.Find(traits, trait => trait == trait0);
+            Assert.IsNotNull(foundTrait0, "Trait not found");
+            Trait foundTrait1 = ListUtil.Find(traits, trait => trait == trait1);
+            Assert.IsNotNull(foundTrait1, "Trait not found");
+        }
+
+        [TestMethod]
+        public void GetTraitsBeforeAndAfterAddingTraits()
+        {
+            TraitCategory category = new TraitCategory("Animal");
+            Trait trait0 = new Trait("Bear", 1, isHidden: true);
+            Trait trait1 = new Trait("Rhino", 5, isHidden: false);
+            category.Add(trait0);
+
+            IReadOnlyList<Trait> traits0 = category.GetTraits();
+
+            Assert.AreEqual(1, traits0.Count, "Wrong number of traits");
+            Trait foundTrait0inList0 = ListUtil.Find(traits0, trait => trait == trait0);
+            Assert.IsNotNull(foundTrait0inList0, "Trait not found");
+
+            category.Add(trait1);
+
+            IReadOnlyList<Trait> traits1 = category.GetTraits();
+
+            Assert.AreEqual(2, traits1.Count, "Wrong number of traits");
+            Trait foundTrait0inList1 = ListUtil.Find(traits1, trait => trait == trait0);
+            Assert.IsNotNull(foundTrait0inList1, "Trait not found");
+            Trait foundTrait1inList1 = ListUtil.Find(traits1, trait => trait == trait1);
+            Assert.IsNotNull(foundTrait1inList1, "Trait not found");
+        }
     }
 }
