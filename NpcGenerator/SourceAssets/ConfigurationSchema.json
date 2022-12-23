@@ -66,11 +66,11 @@
 					"type": "object",
 					"properties": {
 						"csv_file": {
-							"description": "The filename of the csv. The path is relative to the folder of json configuration file.",
+							"description": "The filename of the csv. The path is relative to NpcGenerator.exe.",
 							"type": "string",
 						},
 						"category_name_in_file": {
-							"description": "The name of the category of desired traits in the csv file. For example a json configuration has a category for Noble names that refers to a csv file and it's category of Medieval English Surnames.",
+							"description": "The name of the category of desired traits in the csv file. For example a json configuration has a category for Noble names that refers to a csv file and its category of Medieval English Surnames.",
 							"type": "string",
 						}
 					},

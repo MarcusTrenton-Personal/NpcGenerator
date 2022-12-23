@@ -34,6 +34,15 @@
     <ProjectReference Include="..\TestUtils\TestUtils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="InvalidSubschema.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ValidSubschema.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Target Name="CopyDataFilesAfterBuild" AfterTargets="Build">
     <ItemGroup>
       <JsonSchema Include="..\NpcGenerator\SourceAssets\ConfigurationSchema.json" />
