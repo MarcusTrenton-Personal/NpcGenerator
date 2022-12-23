@@ -59,3 +59,5 @@ conflicting_output_category_visibility	User error message pop-up for npc json co
 conflicting_output_category_visibility_element	User error message pop-up for npc json configuration file.	BHBHBH	Category {0}, output_name {1}, hidden {2}	Category {0}, output_name {1}, hidden {2}	
 duplicate_order_category	User error message pop-up for npc json configuration file.	BIBIBI	Duplicate {0} in category_order	Duplicate {0} in category_order	
 order_category_not_found	User error message pop-up for npc json configuration file.	BJBJBJ	Category {0} not found in category_order	Category {0} not found in category_order	
+subschema_not_found	User error message pop-up for npc json configuration file.	BKBKBK	Could not find subschema file at {0}	Could not find subschema file at {0}	
+subschema_category_not_found	User error message pop-up for npc json configuration file.	BLBLBL	Category {0} not found in subschema at {1}	Category {0} not found in subschema at {1}	

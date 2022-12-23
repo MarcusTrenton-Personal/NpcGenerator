@@ -754,6 +754,30 @@ namespace Tests
             GenerateFromConfigurationCatches(CreateCallback, method);
         }
 
+        [TestMethod]
+        public void GenerateFromConfigurationCatchesSubSchemaNotFoundException()
+        {
+            static SubSchemaNotFoundException CreateCallback()
+            {
+                return new SubSchemaNotFoundException("Animal");
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateFromConfigurationCatches(CreateCallback, method);
+        }
+
+        [TestMethod]
+        public void GenerateFromConfigurationCatchesSubSchemaCategoryNotFoundException()
+        {
+            static SubSchemaCategoryNotFoundException CreateCallback()
+            {
+                return new SubSchemaCategoryNotFoundException("Animal", "NotFound.csv");
+            }
+
+            string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            GenerateFromConfigurationCatches(CreateCallback, method);
+        }
+
         private void GenerateFromConfigurationCatches<T>(Func<T> createException, string fileName) where T : Exception
         {
             StubUserSettings userSettings = UserSettingsWithFakeInputFile(fileName);

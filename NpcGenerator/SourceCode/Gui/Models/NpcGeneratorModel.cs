@@ -621,6 +621,16 @@ namespace NpcGenerator
                 {
                     ShowLocalizedErrorMessageIfAllowed("order_category_not_found", exception.Category);
                 }
+                catch (SubSchemaNotFoundException exception)
+                {
+                    string absolutePath = PathHelper.FullPathOf(exception.RelativePath);
+                    ShowLocalizedErrorMessageIfAllowed("subschema_not_found", absolutePath);
+                }
+                catch (SubSchemaCategoryNotFoundException exception)
+                {
+                    string absolutePath = PathHelper.FullPathOf(exception.RelativePath);
+                    ShowLocalizedErrorMessageIfAllowed("subschema_category_not_found", exception.Category, absolutePath);
+                }
                 catch (IOException exception)
                 {
                     ShowMessageIfAllowed(exception);
