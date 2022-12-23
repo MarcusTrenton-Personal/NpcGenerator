@@ -238,5 +238,110 @@ namespace Tests.JsonConfigurationParserTests
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
             parser.Parse(text);
         }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void TraitsFromFileInvalidType()
+        {
+            const string SCHEMA_CATEGORY = "Colour";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{SCHEMA_CATEGORY}',
+                        'selections': 1,
+                        'traits_from_file' : 'Nope'
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            parser.Parse(text);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void CsvFileMissing()
+        {
+            const string SCHEMA_CATEGORY = "Colour";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{SCHEMA_CATEGORY}',
+                        'selections': 1,
+                        'traits_from_file' : {{
+                            'category_name_in_file' : '{SUBSCHEMA_CATEGORY0}' 
+                        }}
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            parser.Parse(text);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void CsvFileInvalid()
+        {
+            const string SCHEMA_CATEGORY = "Colour";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{SCHEMA_CATEGORY}',
+                        'selections': 1,
+                        'traits_from_file' : {{
+                            'csv_file' : 0, 
+                            'category_name_in_file' : '{SUBSCHEMA_CATEGORY0}' 
+                        }}
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            parser.Parse(text);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void CategoryNameInFileMissing()
+        {
+            const string SCHEMA_CATEGORY = "Colour";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{SCHEMA_CATEGORY}',
+                        'selections': 1,
+                        'traits_from_file' : {{
+                            'csv_file' : '{VALID_SUBSCHEMA_RELATIVE_PATH}', 
+                        }}
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            parser.Parse(text);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
+        public void CategoryNameInFileInvalid()
+        {
+            const string SCHEMA_CATEGORY = "Colour";
+
+            string text = $@"{{
+                'trait_categories' : [
+                    {{
+                        'name' : '{SCHEMA_CATEGORY}',
+                        'selections': 1,
+                        'traits_from_file' : {{
+                            'csv_file' : '{VALID_SUBSCHEMA_RELATIVE_PATH}', 
+                            'category_name_in_file' : 5
+                        }}
+                    }}
+                ]
+            }}";
+
+            JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
+            parser.Parse(text);
+        }
     }
 }
