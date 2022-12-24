@@ -322,82 +322,42 @@
 		{
 			"name": "Canadian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Canadian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Jackson"},	{"name":"Noah"},	{"name":"Liam"},	{"name":"Lucas"},	{"name":"Benjamin"}, 	{"name":"Oliver"},	{"name":"Ethan"},	{"name":"Jacob"},	{"name":"Leo"},		{"name":"Logan"},
-				{"name":"William"},	{"name":"Grayson"},	{"name":"Jack"},	{"name":"James"},	{"name":"Aiden"},		{"name":"Lincoln"},	{"name":"Theo"},	{"name":"Thomas"},	{"name":"Mateo"},	{"name":"Hudson"},
-				{"name":"Gabriel"},	{"name":"Mason"},	{"name":"Owen"},	{"name":"Kayden"},	{"name":"Alexander"},	{"name":"Luca"},	{"name":"Jayden"},	{"name":"Nathan"},	{"name":"Hunter"},	{"name":"Theodore"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Canadian Male" }
 		},
 		{
 			"name": "Canadian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Canadian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Sophia"},		{"name":"Olivia"},		{"name":"Emma"},	{"name":"Amelia"},	{"name":"Aria"}, 	{"name":"Charlotte"},	{"name":"Ava"},		{"name":"Mia"},		{"name":"Mila"},	{"name":"Chloe"},
-				{"name":"Isabella"},	{"name":"Zoe"},			{"name":"Abigail"},	{"name":"Riley"},	{"name":"Lily"},	{"name":"Everly"},		{"name":"Layla"},	{"name":"Ella"},	{"name":"Maya"},	{"name":"Nora"},
-				{"name":"Hannah"},		{"name":"Scarlett"},	{"name":"Harper"},	{"name":"Avery"},	{"name":"Isla"},	{"name":"Alice"},		{"name":"Hailey"},	{"name":"Emily"},	{"name":"Charlie"},	{"name":"Sophie"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Canadian Female" }
 		},
 		{
 			"name": "Canadian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Canadian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Addison"},	{"name":"Ainsley"},	{"name":"Ash"},		{"name":"Aubrey"},	{"name":"Bailey"},	{"name":"Bobbie"},	{"name":"Brett"},	{"name":"Brook"},	{"name":"Charlie"},	{"name":"Corey"},
-				{"name":"Dakota"},	{"name":"Daryl"},	{"name":"Eli"},		{"name":"Frankie"},	{"name":"Gray"},	{"name":"Harper"},	{"name":"Hayden"},	{"name":"Jamie"},	{"name":"Jesse"},	{"name":"Kennedy"},
-				{"name":"Morgan"},	{"name":"Peyton"},	{"name":"River"},	{"name":"Rudy"},	{"name":"Stevie"},	{"name":"Tanner"},	{"name":"Taylor"},	{"name":"Tyler"},	{"name":"West"},	{"name":"Winter"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Canadian Unisex" }
 		},
 		{
 			"name": "Canadian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Canadian"},
-			"traits" :
-			[
-				{"name":"Smith"},	{"name":"Brown"},		{"name":"Tremblay"},	{"name":"Martin"},	{"name":"Roy"},			{"name":"Gagnon"},	{"name":"Lee"},			{"name":"Wilson"},		{"name":"Johnson"},		{"name":"MacDonald"},
-				{"name":"Taylor"},	{"name":"Campbell"},	{"name":"Anderson"},	{"name":"Jones"},	{"name":"Leblanc"},		{"name":"Cote"},	{"name":"Williams"},	{"name":"Miller"},		{"name":"Thompson"},	{"name":"Gauthier"},
-				{"name":"White"},	{"name":"Morin"},		{"name":"Wong"},		{"name":"Young"},	{"name":"Bouchard"},	{"name":"Scott"},	{"name":"Stewart"},		{"name":"Pelletier"},	{"name":"Lavoie"},		{"name":"Robinson"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Canadian Surname" }
 		},
 		{
 			"name": "Québécois Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Thomas"},	{"name":"William"},	{"name":"Jacob"},	{"name":"Liam"}, 	{"name":"Felix"},	{"name":"Nathan"},	{"name":"Samuel"},	{"name":"Logan"},		{"name":"Alexis"},	{"name":"Noah"},
-				{"name":"Olivier"},	{"name":"Raphael"},	{"name":"Gabriel"},	{"name":"Emile"},	{"name":"Leo"},		{"name":"Charles"},	{"name":"Antoine"},	{"name":"Benjamin"},	{"name":"Adam"},	{"name":"Edouard"},
-				{"name":"Adrián"},	{"name":"André"},	{"name":"Bastien"},	{"name":"Benoit"},	{"name":"Cédric"},	{"name":"Édouard"},	{"name":"Étienne"},	{"name":"Jérémie"},		{"name":"Jérôme"},	{"name":"Xavier"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Québécois Male" }
 		},
 		{
 			"name": "Québécois Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Emma"},	{"name":"Léa"},			{"name":"Olivia"},		{"name":"Alice"},		{"name":"Florence"},	{"name":"Zoe"},			{"name":"Chloe"},	{"name":"Béatrice"},	{"name":"Charlotte"},	{"name":"Rosalie"},
-				{"name":"Eva"},		{"name":"Juliette"},	{"name":"Sofia"},		{"name":"Jade"},		{"name":"Camille"},		{"name":"Victoria"},	{"name":"Mia"},		{"name":"Charlie"},		{"name":"Romy"},		{"name":"Laurence"},
-				{"name":"Adèle"},	{"name":"Amélie"},		{"name":"Clémentine"},	{"name":"Éleanore"},	{"name":"Émilie"},		{"name":"Frédérique"},	{"name":"Genavié"},	{"name":"Maélie"},		{"name":"Pénélope"},	{"name":"Renée"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Québécois Female" }
 		},
 		{
 			"name": "Québécois Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Québécois"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Alix"},	{"name":"Ariel"},	{"name":"Ashley"},	{"name":"Charlie"},	{"name":"Claude"},	{"name":"Dominique"},	{"name":"Eden"},		{"name":"Kim"},		{"name":"Lindsay"},	{"name":"Lou"},
-				{"name":"Noa"},		{"name":"Sacha"},	{"name":"Sandy"},	{"name":"Sasha"},	{"name":"Jean"},	{"name":"Mackenson"},	{"name":"Robenson"},	{"name":"Wilner"},	{"name":"Camille"},	{"name":"Yannik"},
-				{"name":"Cyrille"},	{"name":"Elie"},	{"name":"Micka"},	{"name":"Dani"},	{"name":"Rachel"},	{"name":"Christel"},	{"name":"Edwige"},		{"name":"Dany"},	{"name":"Gael"},	{"name":"Jackie"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Québécois Unisex" }
 		},
 		{
 			"name": "Québécois Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Québécois"},
-			"traits" :
-			[
-				{"name":"Tremblay"},	{"name":"Gagnon"},		{"name":"Roy"},			{"name":"Cote"},	{"name":"Gauthier"},	{"name":"Morin"},	{"name":"Belanger"},	{"name":"Bouchard"},	{"name":"Pelletier"},	{"name":"Gagne"},
-				{"name":"Lavoie"},		{"name":"Fortin"},		{"name":"Levesque"},	{"name":"Boucher"},	{"name":"Bergeron"},	{"name":"Caron"},	{"name":"LeBlanc"},		{"name":"Girard"},		{"name":"Simard"},		{"name":"LeFebvre"},
-				{"name":"Ouellet"},		{"name":"Fournier"},	{"name":"Cloutier"},	{"name":"LeClerc"},	{"name":"Martin"},		{"name":"Poirier"},	{"name":"Poulin"},		{"name":"Thibault"},	{"name":"Beaulieu"},	{"name":"Martel"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Québécois Surname" }
 		},
 		{
 			"name": "Hispanic Male Given Name", "output_name": "Given Name", "selections": 1, 
