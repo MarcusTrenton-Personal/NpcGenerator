@@ -1,31 +1,31 @@
-American Male,Weight,American Female,Weight,American Unisex,Weight,American Surname,Weight,Canadian Male,Weight,Canadian Female,Weight,Canadian Unisex,Weight,Canadian Surname,Weight,Québécois Male,Weight,Québécois Female,Weight,Québécois Unisex,Weight,Québécois Surname,Weight
-James,1,Mary,1,Valentine,1,Smith,1,Jackson,1,Sophia,1,Addison,1,Smith,1,Thomas,1,Emma,1,Alix,1,Tremblay,1
-Robert,1,Patricia,1,Whitley,1,Johnson,1,Noah,1,Olivia,1,Ainsley,1,Brown,1,William,1,Léa,1,Ariel,1,Gagnon,1
-John,1,Jennifer,1,Camden,1,Williams,1,Liam,1,Emma,1,Ash,1,Tremblay,1,Jacob,1,Olivia,1,Ashley,1,Roy,1
-Michael,1,Linda,1,Tanner,1,Brown,1,Lucas,1,Amelia,1,Aubrey,1,Martin,1,Liam,1,Alice,1,Charlie,1,Cote,1
-David,1,Elizabeth,1,Flynn,1,Jones,1,Benjamin,1,Aria,1,Bailey,1,Roy,1,Felix,1,Florence,1,Claude,1,Gauthier,1
-William,1,Barbara,1,Harlowe,1,Taylor,1,Oliver,1,Charlotte,1,Bobbie,1,Gagnon,1,Nathan,1,Zoe,1,Dominique,1,Morin,1
-Richard,1,Susan,1,Beck,1,Miller,1,Ethan,1,Ava,1,Brett,1,Lee,1,Samuel,1,Chloe,1,Eden,1,Belanger,1
-Joseph,1,Jessica,1,Ali,1,Davis,1,Jacob,1,Mia,1,Brook,1,Wilson,1,Logan,1,Béatrice,1,Kim,1,Bouchard,1
-Thomas,1,Sarah,1,Brooks,1,Wilson,1,Leo,1,Mila,1,Charlie,1,Johnson,1,Alexis,1,Charlotte,1,Lindsay,1,Pelletier,1
-Charles,1,Karen,1,Carter,1,Anderson,1,Logan,1,Chloe,1,Corey,1,MacDonald,1,Noah,1,Rosalie,1,Lou,1,Gagne,1
-Chris,1,Lisa,1,Channing,1,Thomas,1,William,1,Isabella,1,Dakota,1,Taylor,1,Olivier,1,Eva,1,Noa,1,Lavoie,1
-Daniel,1,Nancy,1,Ramsey,1,Moore,1,Grayson,1,Zoe,1,Daryl,1,Campbell,1,Raphael,1,Juliette,1,Sacha,1,Fortin,1
-Matthew,1,Betty,1,Remy,1,Jackson,1,Jack,1,Abigail,1,Eli,1,Anderson,1,Gabriel,1,Sofia,1,Sandy,1,Levesque,1
-Anthony,1,Margaret,1,Max,1,Lee,1,James,1,Riley,1,Frankie,1,Jones,1,Emile,1,Jade,1,Sasha,1,Boucher,1
-Mark,1,Sandra,1,Jesse,1,Perez,1,Aiden,1,Lily,1,Gray,1,LeBlanc,1,Leo,1,Camille,1,Jean,1,Bergeron,1
-Donald,1,Ashley,1,Casey,1,Thompson,1,Lincoln,1,Everly,1,Harper,1,Cote,1,Charles,1,Victoria,1,Mackenson,1,Caron,1
-Steven,1,Kimberly,1,Nicki,1,White,1,Theo,1,Layla,1,Hayden,1,Williams,1,Antoine,1,Mia,1,Robenson,1,LeBlanc,1
-Paul,1,Emily,1,Blake,1,Harris,1,Thomas,1,Ella,1,Jamie,1,Miller,1,Benjamin,1,Charlie,1,Wilner,1,Girard,1
-Andrew,1,Donna,1,Morgan,1,Clark,1,Mateo,1,Maya,1,Jesse,1,Thompson,1,Adam,1,Romy,1,Camille,1,Simard,1
-Joshua,1,Michelle,1,Dylan,1,Lewis,1,Hudson,1,Nora,1,Kennedy,1,Gauthier,1,Edouard,1,Laurence,1,Yannik,1,LeFebvre,1
-Kenneth,1,Carol,1,Tai,1,Robinson,1,Gabriel,1,Hannah,1,Morgan,1,White,1,Adrián,1,Adèle,1,Cyrille,1,Ouellet,1
-Kevin,1,Amanda,1,Eli,1,Walker,1,Mason,1,Scarlett,1,Peyton,1,Morin,1,André,1,Amélie,1,Elie,1,Fournier,1
-Brian,1,Dorothy,1,Merritt,1,Young,1,Owen,1,Harper,1,River,1,Wong,1,Bastien,1,Clémentine,1,Micka,1,Cloutier,1
-George,1,Melissa,1,Reese,1,Allen,1,Kayden,1,Avery,1,Rudy,1,Young,1,Benoit,1,Éleanore,1,Dani,1,LeClerc,1
-Timothy,1,Deborah,1,Aubrey,1,King,1,Alexander,1,Isla,1,Stevie,1,Bouchard,1,Cédric,1,Émilie,1,Rachel,1,Martin,1
-Ronald,1,Stephanie,1,Colin,1,Wright,1,Luca,1,Alice,1,Tanner,1,Scott,1,Édouard,1,Frédérique,1,Christel,1,Poirier,1
-Edward,1,Rebecca,1,Hollis,1,Scott,1,Jayden,1,Hailey,1,Taylor,1,Stewart,1,Étienne,1,Genavié,1,Edwige,1,Poulin,1
-Jason,1,Sharon,1,Wynn,1,Torres,1,Nathan,1,Emily,1,Tyler,1,Pelletier,1,Jérémie,1,Maélie,1,Dany,1,Thibault,1
-Jeffrey,1,Laura,1,Jo,1,Hill,1,Hunter,1,Charlie,1,West,1,Lavoie,1,Jérôme,1,Pénélope,1,Gael,1,Beaulieu,1
-Ryan,1,Cynthia,1,Ash,1,Green,1,Theodore,1,Sophie,1,Winter,1,Robinson,1,Xavier,1,Renée,1,Jackie,1,Martel,1
+American Male,Weight,American Female,Weight,American Unisex,Weight,American Surname,Weight,Canadian Male,Weight,Canadian Female,Weight,Canadian Unisex,Weight,Canadian Surname,Weight,Québécois Male,Weight,Québécois Female,Weight,Québécois Unisex,Weight,Québécois Surname,Weight,Hispanic Male,Weight,Hispanic Female,Weight,Hispanic Unisex,Weight,Hispanic Surname,Weight,Brazilian Male,Weight,Brazilian Female,Weight,Brazilian Unisex,Weight,Brazilian Surname,Weight,North American Native Male,Weight,North American Native Female,Weight,North American Native Unisex,Weight,North American Native Surname,Weight,Meso American Native Male,Weight,Meso American Native Female,Weight,Meso American Native Unisex,Weight,Meso American Native Surname,Weight
+James,1,Mary,1,Valentine,1,Smith,1,Jackson,1,Sophia,1,Addison,1,Smith,1,Thomas,1,Emma,1,Alix,1,Tremblay,1,José,1,Sofía,1,Aguilar,1,Hernández,1,José,1,Maria,1,Araci,1,da Silva,1,Shweabe,1,Kavusiya,1,Tahoma,1,Cornfield,1,Atl,1,Ajaniame,1,Erendirani,1,Aca,1
+Robert,1,Patricia,1,Whitley,1,Johnson,1,Noah,1,Olivia,1,Ainsley,1,Brown,1,William,1,Léa,1,Ariel,1,Gagnon,1,Luis,1,Valentina,1,Amadis,1,García,1,João,1,Ana,1,Jaci,1,dos Santos,1,Xelas,1,Matika,1,Cherokee,1,Deere,1,Atlahua,1,Anam,1,Hasen,1,Acxotlan,1
+John,1,Jennifer,1,Camden,1,Williams,1,Liam,1,Emma,1,Ash,1,Tremblay,1,Jacob,1,Olivia,1,Ashley,1,Roy,1,Carlos,1,Isabella,1,Amor,1,Martínez,1,Antônio,1,Francisca,1,Darci,1,de Oliveira,1,Chayton,1,Olahl,1,Dakota,1,Denton,1,Canneo,1,Ariché,1,Iktan,1,Chapul,1
+Michael,1,Linda,1,Tanner,1,Brown,1,Lucas,1,Amelia,1,Aubrey,1,Martin,1,Liam,1,Alice,1,Charlie,1,Cote,1,Juan,1,Camila,1,Angel,1,González,1,Francisco,1,Antônia,1,René,1,Souza,1,Cochise,1,Sholeetsa,1,Elan,1,Hensley,1,Danaá,1,Axochitl,1,Itzamatul,1,Colexcua,1
+David,1,Elizabeth,1,Flynn,1,Jones,1,Benjamin,1,Aria,1,Bailey,1,Roy,1,Felix,1,Florence,1,Claude,1,Gauthier,1,Jorge,1,Valeria,1,Ariel,1,López,1,Carlos,1,Adriana,1,Amarilis,1,Rodrigues,1,Dohasan,1,Ticwtkwa,1,Kai,1,Kipp,1,Hedía,1,Bimorí,1,Naran,1,Cuahutenco,1
+William,1,Barbara,1,Harlowe,1,Taylor,1,Oliver,1,Charlotte,1,Bobbie,1,Gagnon,1,Nathan,1,Zoe,1,Dominique,1,Morin,1,Pedro,1,Mariana,1,Ávila,1,Rodríguez,1,Paulo,1,Juliana,1,Cris,1,Ferreira,1,Goyathlay,1,Aponi,1,Opa,1,Maize,1,Ikal,1,Citlali,1,Nima,1,Ehecatl,1
+Richard,1,Susan,1,Beck,1,Miller,1,Ethan,1,Ava,1,Brett,1,Lee,1,Samuel,1,Chloe,1,Eden,1,Belanger,1,Jesús,1,Gabriela,1,Azul,1,Pérez,1,Pedro,1,Márcia,1,Alison,1,Alves,1,Hiawatha,1,Chenoa,1,Shawnee,1,Arrow,1,Irepani,1,Inda Jani,1,Seti,1,Huitle,1
+Joseph,1,Jessica,1,Ali,1,Davis,1,Jacob,1,Mia,1,Brook,1,Wilson,1,Logan,1,Béatrice,1,Kim,1,Bouchard,1,Manuel,1,Sara,1,Belén,1,Fredrick,1,Lucas,1,Fernanda,1,Juraci,1,Pereira,1,Holata,1,Cheyenne,1,Tyee,1,Blackrock,1,Kabil,1,Itan de hüi,1,Shanarani,1,Itzcua,1
+Thomas,1,Sarah,1,Brooks,1,Wilson,1,Leo,1,Mila,1,Charlie,1,Johnson,1,Alexis,1,Charlotte,1,Lindsay,1,Pelletier,1,Santiago,1,Daniella,1,Camille,1,Fernández,1,Luiz,1,Patrícia,1,Lucimar,1,Lima,1,Kele,1,Dyani,1,Elu,1,Bravebird,1,Kasakir,1,Ix Chel,1,Suré,1,Maxil,1
+Charles,1,Karen,1,Carter,1,Anderson,1,Logan,1,Chloe,1,Corey,1,MacDonald,1,Noah,1,Rosalie,1,Lou,1,Gagne,1,Sebastián,1,María José,1,Castel,1,Álvarez,1,Marcos,1,Aline,1,Céu,1,Gomes,1,Keokuk,1,Hialeah,1,Hosa,1,Chubbuck,1,Maatiaak,1,Ix Kaknab,1,Taiyari,1,Naxi,1
+Chris,1,Lisa,1,Channing,1,Thomas,1,William,1,Isabella,1,Dakota,1,Taylor,1,Olivier,1,Eva,1,Noa,1,Lavoie,1,Matías,1,Victoria,1,Claude,1,Reyes,1,Luís,1,Sandra,1,Dias,1,Costa,1,Lúta,1,Kaya,1,Lakota,1,Countryman,1,Masawa,1,Kantyi,1,Aapo,1,Ocotoxtle,1
+Daniel,1,Nancy,1,Ramsey,1,Moore,1,Grayson,1,Zoe,1,Daryl,1,Campbell,1,Raphael,1,Juliette,1,Sacha,1,Fortin,1,Nicolás,1,Martina,1,Dani,1,Sánchez,1,Gabriel,1,Camila,1,Ivani,1,Ribeiro,1,Mato,1,Koko,1,Mika,1,Huaman,1,Polo,1,Malinalli,1,Dacey,1,Papaqui,1
+Matthew,1,Betty,1,Remy,1,Jackson,1,Jack,1,Abigail,1,Eli,1,Anderson,1,Gabriel,1,Sofia,1,Sandy,1,Levesque,1,Samuel,1,Luciana,1,Desi,1,Díaz,1,Rafael,1,Amanda,1,Marcia,1,Martins,1,Nashoba,1,Kiona,1,Nova,1,Summerhill,1,Rahui,1,Nakawé,1,Atl,1,Quitl,1
+Anthony,1,Margaret,1,Max,1,Lee,1,James,1,Riley,1,Frankie,1,Jones,1,Emile,1,Jade,1,Sasha,1,Boucher,1,Alejandro,1,Ximena,1,Elia,1,Peña,1,Daniel,1,Bruna,1,Patricia,1,Carvalho,1,Onacona,1,Lulu,1,Sequoia,1,Swiftwater,1,Semeel jak,1,Sesasi,1,Aztec,1,Teotl,1
+Mark,1,Sandra,1,Jesse,1,Perez,1,Aiden,1,Lily,1,Gray,1,LeBlanc,1,Leo,1,Camille,1,Jean,1,Bergeron,1,Mateo,1,María,1,Fran,1,Jiménez,1,Marcelo,1,Jéssica,1,Sandra,1,Almeida,1,Powhatan,1,Mika,1,Shoshone,1,Thunderhawk,1,Séneca,1,Soona,1,Coyote,1,Tlachi,1
+Donald,1,Ashley,1,Casey,1,Thompson,1,Lincoln,1,Everly,1,Harper,1,Cote,1,Charles,1,Victoria,1,Mackenson,1,Caron,1,Diego,1,Lucía,1,Gabi,1,Ramírez,1,Bruno,1,Letícia,1,Luciana,1,Lopes,1,Sahale,1,Malia,1,Simi,1,Warcloud,1,Surem,1,Xochimitl,1,Cualli,1,Xicale,1
+Steven,1,Kimberly,1,Nicki,1,White,1,Theo,1,Layla,1,Hayden,1,Williams,1,Antoine,1,Mia,1,Robenson,1,LeBlanc,1,Benjamín,1,Natalia,1,Ginez,1,Rosario,1,Eduardo,1,Julia,1,Rita,1,Soares,1,Seattle,1,Moana,1,Weayaya,1,Achothley,1,Tanok,1,Yamanik,1,Eztli,1,Xique,1
+Paul,1,Emily,1,Blake,1,Harris,1,Thomas,1,Ella,1,Jamie,1,Miller,1,Benjamin,1,Charlie,1,Wilner,1,Girard,1,Daniel,1,Catalina,1,Jules,1,Santana,1,Felipe,1,Luciana,1,Vera,1,Fernandes,1,Sequoyah,1,Mona,1,Ameyalli,1,Adakai,1,Tlayolotl,1,Sequoyah,1,Ichtaca,1,Zepahua,1
+Andrew,1,Donna,1,Morgan,1,Clark,1,Mateo,1,Maya,1,Jesse,1,Thompson,1,Adam,1,Romy,1,Camille,1,Simard,1,Joaquín,1,Mía,1,Lani,1,Rivera,1,Raimundo,1,Vanessa,1,Sonia,1,Vieira,1,Tahoma,1,Nina,1,Awena,1,Begay,1,Tsijiari,1,Yatzil,1,Ichnoyotl,1,Zitlal,1
+Joshua,1,Michelle,1,Dylan,1,Lewis,1,Hudson,1,Nora,1,Kennedy,1,Gauthier,1,Edouard,1,Laurence,1,Yannik,1,LeFebvre,1,Tomás,1,Fernanda,1,Lyn,1,Narvaez,1,Rodrigo,1,Mariana,1,Renata,1,Barbosa,1,Tecumseh,1,Nita,1,Chardon,1,Benally,1,Yooko,1,Yej susen,1,Ihuicatl,1,Cuachayo,1
+Kenneth,1,Carol,1,Tai,1,Robinson,1,Gabriel,1,Hannah,1,Morgan,1,White,1,Adrián,1,Adèle,1,Cyrille,1,Ouellet,1,Gabriel,1,Nicole,1,Jesus,1,Burgos,1,Ademir,1,Alandra,1,Lucia,1,Rocha,1,Tokala,1,Nokomis,1,Chetan,1,Altaha,1,Aapo,1,Itzel,1,Itotia,1,Cuatzo,1
+Kevin,1,Amanda,1,Eli,1,Walker,1,Mason,1,Scarlett,1,Peyton,1,Morin,1,André,1,Amélie,1,Elie,1,Fournier,1,Lucas,1,Julieta,1,Guadalupe,1,Colón,1,Anastacio,1,Manuella,1,Regina,1,Dias,1,Yuma,1,Odina,1,Chimalus,1,Apache,1,Babajide,1,Akna,1,Ixtli,1,Tlahuex,1
+Brian,1,Dorothy,1,Merritt,1,Young,1,Owen,1,Harper,1,River,1,Wong,1,Bastien,1,Clémentine,1,Micka,1,Cloutier,1,Martín,1,Abril,1,Carmen,1,Vázquez,1,Bernardo,1,Augustinha,1,Silvana,1,Nascimento,1,Bodaway,1,Oneida,1,Esadowa,1,Cosay,1,Cadmael,1,Sacniete,1,Izel,1,Ahuatl,1
+George,1,Melissa,1,Reese,1,Allen,1,Kayden,1,Avery,1,Rudy,1,Young,1,Benoit,1,Éleanore,1,Dani,1,LeClerc,1,Emmanuel,1,Samantha,1,Isabel,1,Ramos,1,Cipriano,1,Benigna,1,Solange,1,Andrade,1,Comanche,1,Pocahontas,1,Kabecka,1,Ethelbah,1,Dacey,1,Xoc,1,Mazatl,1,Cuahuizo,1
+Timothy,1,Deborah,1,Aubrey,1,King,1,Alexander,1,Isla,1,Stevie,1,Bouchard,1,Cédric,1,Émilie,1,Rachel,1,Martin,1,Alexander,1,Andrea,1,Concepcion,1,Morales,1,Davi,1,Teressa,1,Silvia,1,Moreira,1,Dustu,1,Poloma,1,Kansas,1,Mescal,1,Eadrich,1,Zac-Kuk,1,Meztli,1,Huexotl,1
+Ronald,1,Stephanie,1,Colin,1,Wright,1,Luca,1,Alice,1,Tanner,1,Scott,1,Édouard,1,Frédérique,1,Christel,1,Poirier,1,David,1,Antonella,1,Felix,1,De León,1,Jaren,1,Clara,1,Marta,1,Nunes,1,Enapay,1,Tala,1,Kishil,1,Anoki,1,Enapay,1,Chimalmat,1,Nahuatl,1,Piantzi,1
+Edward,1,Rebecca,1,Hollis,1,Scott,1,Jayden,1,Hailey,1,Taylor,1,Stewart,1,Étienne,1,Genavié,1,Edwige,1,Poulin,1,Emiliano,1,Emily,1,Rosario,1,Castillo,1,Keyton,1,Diolinda,1,Sueli,1,Marques,1,Jacy,1,Tallulah,1,Pala,1,Canowicakte,1,Fabio,1,Ixazaluoh,1,Patli,1,Tecpa,1
+Jason,1,Sharon,1,Wynn,1,Torres,1,Nathan,1,Emily,1,Tyler,1,Pelletier,1,Jérémie,1,Maélie,1,Dany,1,Thibault,1,Juan José,1,Emilia,1,Dolores,1,Estrada,1,Ligongo,1,Isabella,1,Monica,1,Machado,1,Wiyot,1,Winona,1,Teneca,1,Cetanwakuwa,1,Gabor,1,Xmucane,1,Xipil,1,Tlapalama,1
+Jeffrey,1,Laura,1,Jo,1,Hill,1,Hunter,1,Charlie,1,West,1,Lavoie,1,Jérôme,1,Pénélope,1,Gael,1,Beaulieu,1,Andrés,1,Paula,1,Socorro,1,Marroquín,1,Neymar,1,Giovanna,1,Rosana,1,Mendes,1,Waban,1,Aiyana,1,Seneca,1,Kadoka,1,Hadwin,1,Xpiayoc,1,Yaotl,1,Xoampil,1
+Ryan,1,Cynthia,1,Ash,1,Green,1,Theodore,1,Sophie,1,Winter,1,Robinson,1,Xavier,1,Renée,1,Jackie,1,Martel,1,Felipe,1,Alessandra,1,Santos,1,Gómez,1,Miguel,1,Yara,1,Valeria,1,Freitas,1,Wicasa,1,Sauk,1,Shayan,1,Maka,1,Sachihiro,1,Colel,1,Zuma,1,Zontlimatzi,1

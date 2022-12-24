@@ -362,162 +362,82 @@
 		{
 			"name": "Hispanic Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"José"},	{"name":"Luis"},	{"name":"Carlos"},	{"name":"Juan"}, 		{"name":"Jorge"},		{"name":"Pedro"},	{"name":"Jesús"},		{"name":"Manuel"},		{"name":"Santiago"},	{"name":"Sebastián"},
-				{"name":"Matías"},	{"name":"Nicolás"},	{"name":"Samuel"},	{"name":"Alejandro"},	{"name":"Mateo"},		{"name":"Diego"},	{"name":"Benjamín"},	{"name":"Daniel"},		{"name":"Joaquín"},		{"name":"Tomás"},
-				{"name":"Gabriel"},	{"name":"Lucas"},	{"name":"Martín"},	{"name":"Emmanuel"},	{"name":"Alexander"},	{"name":"David"},	{"name":"Emiliano"},	{"name":"Juan José"},	{"name":"Andrés"},		{"name":"Felipe"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Hispanic Male" }
 		},
 		{
 			"name": "Hispanic Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Sofía"},		{"name":"Valentina"},	{"name":"Isabella"},	{"name":"Camila"},		{"name":"Valeria"},	{"name":"Mariana"},		{"name":"Gabriela"},	{"name":"Sara"},		{"name":"Daniella"},	{"name":"María José"},
-				{"name":"Victoria"},	{"name":"Martina"},		{"name":"Luciana"},		{"name":"Ximena"},		{"name":"María"},	{"name":"Lucía"},		{"name":"Natalia"},		{"name":"Catalina"},	{"name":"Mía"},			{"name":"Fernanda"},
-				{"name":"Nicole"},		{"name":"Julieta"},		{"name":"Abril"},		{"name":"Samantha"},	{"name":"Andrea"},	{"name":"Antonella"},	{"name":"Emily"},		{"name":"Emilia"},		{"name":"Paula"},		{"name":"Alessandra"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Hispanic Female" }
 		},
 		{
 			"name": "Hispanic Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hispanic"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Aguilar"},	{"name":"Amadis"},		{"name":"Amor"},	{"name":"Angel"},	{"name":"Ariel"},		{"name":"Ávila"},	{"name":"Azul"},	{"name":"Belén"},	{"name":"Camille"},	{"name":"Castel"},
-				{"name":"Claude"},	{"name":"Dani"},		{"name":"Desi"},	{"name":"Elia"},	{"name":"Fran"},		{"name":"Gabi"},	{"name":"Ginez"},	{"name":"Jules"},	{"name":"Lani"},	{"name":"Lyn"},
-				{"name":"Jesus"},	{"name":"Guadalupe"},	{"name":"Carmen"},	{"name":"Isabel"},	{"name":"Concepcion"},	{"name":"Felix"},	{"name":"Rosario"},	{"name":"Dolores"},	{"name":"Socorro"},	{"name":"Santos"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Hispanic Unisex" }
 		},
 		{
 			"name": "Hispanic Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Hispanic"},
-			"traits" :
-			[
-				{"name":"Hernández"},	{"name":"García"},	{"name":"Martínez"},	{"name":"González"},	{"name":"López"},	{"name":"Rodríguez"},	{"name":"Pérez"},		{"name":"Fredrick"},	{"name":"Fernández"},	{"name":"Álvarez"},
-				{"name":"Reyes"},		{"name":"Sánchez"},	{"name":"Díaz"},		{"name":"Peña"},		{"name":"Jiménez"},	{"name":"Ramírez"},		{"name":"Rosario"},		{"name":"Santana"},		{"name":"Rivera"},		{"name":"Narvaez"},
-				{"name":"Burgos"},		{"name":"Colón"},	{"name":"Vázquez"},		{"name":"Ramos"},		{"name":"Morales"},	{"name":"De León"},		{"name":"Castillo"},	{"name":"Estrada"},		{"name":"Marroquín"},	{"name":"Gómez"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Hispanic Surname" }
 		},
 		{
 			"name": "Brazilian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"José"},	{"name":"João"},		{"name":"Antônio"},		{"name":"Francisco"}, 	{"name":"Carlos"},	{"name":"Paulo"},	{"name":"Pedro"},	{"name":"Lucas"},	{"name":"Luiz"},		{"name":"Marcos"},
-				{"name":"Luís"},	{"name":"Gabriel"},		{"name":"Rafael"},		{"name":"Daniel"},		{"name":"Marcelo"},	{"name":"Bruno"},	{"name":"Eduardo"},	{"name":"Felipe"},	{"name":"Raimundo"},	{"name":"Rodrigo"},
-				{"name":"Ademir"},	{"name":"Anastacio"},	{"name":"Bernardo"},	{"name":"Cipriano"},	{"name":"Davi"},	{"name":"Jaren"},	{"name":"Keyton"},	{"name":"Ligongo"},	{"name":"Neymar"},		{"name":"Miguel"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Brazilian Male" }
 		},
 		{
 			"name": "Brazilian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Maria"},	{"name":"Ana"},			{"name":"Francisca"},	{"name":"Antônia"},	{"name":"Adriana"},	{"name":"Juliana"},	{"name":"Márcia"},		{"name":"Fernanda"},	{"name":"Patrícia"},	{"name":"Aline"},
-				{"name":"Sandra"},	{"name":"Camila"},		{"name":"Amanda"},		{"name":"Bruna"},	{"name":"Jéssica"},	{"name":"Letícia"},	{"name":"Julia"},		{"name":"Luciana"},		{"name":"Vanessa"},		{"name":"Mariana"},
-				{"name":"Alandra"},	{"name":"Manuella"},	{"name":"Augustinha"},	{"name":"Benigna"},	{"name":"Teressa"},	{"name":"Clara"},	{"name":"Diolinda"},	{"name":"Isabella"},	{"name":"Giovanna"},	{"name":"Yara"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Brazilian Female" }
 		},
 		{
 			"name": "Brazilian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Brazilian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Araci"},	{"name":"Jaci"},	{"name":"Darci"},	{"name":"René"},		{"name":"Amarilis"},	{"name":"Cris"},	{"name":"Alison"},	{"name":"Juraci"},	{"name":"Lucimar"},	{"name":"Céu"},
-				{"name":"Dias"},	{"name":"Ivani"},	{"name":"Marcia"},	{"name":"Patricia"},	{"name":"Sandra"},		{"name":"Luciana"},	{"name":"Rita"},	{"name":"Vera"},	{"name":"Sonia"},	{"name":"Renata"},
-				{"name":"Lucia"},	{"name":"Regina"},	{"name":"Silvana"},	{"name":"Solange"},		{"name":"Silvia"},		{"name":"Marta"},	{"name":"Sueli"},	{"name":"Monica"},	{"name":"Rosana"},	{"name":"Valeria"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Brazilian Unisex" }
 		},
 		{
 			"name": "Brazilian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Brazilian"},
-			"traits" :
-			[
-				{"name":"da Silva"},	{"name":"dos Santos"},	{"name":"de Oliveira"},	{"name":"Souza"},		{"name":"Rodrigues"},	{"name":"Ferreira"},	{"name":"Alves"},	{"name":"Pereira"},		{"name":"Lima"},	{"name":"Gomes"},
-				{"name":"Costa"},		{"name":"Ribeiro"},		{"name":"Martins"},		{"name":"Carvalho"},	{"name":"Almeida"},		{"name":"Lopes"},		{"name":"Soares"},	{"name":"Fernandes"},	{"name":"Vieira"},	{"name":"Barbosa"},
-				{"name":"Rocha"},		{"name":"Dias"},		{"name":"Nascimento"},	{"name":"Andrade"},		{"name":"Moreira"},		{"name":"Nunes"},		{"name":"Marques"},	{"name":"Machado"},		{"name":"Mendes"},	{"name":"Freitas"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Brazilian Surname" }
 		},
 		{
 			"name": "North American Native Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "North American Native"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Shweabe"},	{"name":"Xelas"},	{"name":"Chayton"},	{"name":"Cochise"}, 	{"name":"Dohasan"},		{"name":"Goyathlay"},	{"name":"Hiawatha"},	{"name":"Holata"},		{"name":"Kele"},	{"name":"Keokuk"},
-				{"name":"Lúta"},	{"name":"Mato"},	{"name":"Nashoba"},	{"name":"Onacona"},		{"name":"Powhatan"},	{"name":"Sahale"},		{"name":"Seattle"},		{"name":"Sequoyah"},	{"name":"Tahoma"},	{"name":"Tecumseh"},
-				{"name":"Tokala"},	{"name":"Yuma"},	{"name":"Bodaway"},	{"name":"Comanche"},	{"name":"Dustu"},		{"name":"Enapay"},		{"name":"Jacy"},		{"name":"Wiyot"},		{"name":"Waban"},	{"name":"Wicasa"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "North American Native Male" }
 		},
 		{
 			"name": "North American Native Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "North American Native"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Kavusiya"},	{"name":"Matika"},	{"name":"Olahl"},	{"name":"Sholeetsa"},	{"name":"Ticwtkwa"},	{"name":"Aponi"},	{"name":"Chenoa"},		{"name":"Cheyenne"},	{"name":"Dyani"},	{"name":"Hialeah"},
-				{"name":"Kaya"},		{"name":"Koko"},	{"name":"Kiona"},	{"name":"Lulu"},		{"name":"Mika"},		{"name":"Malia"},	{"name":"Moana"},		{"name":"Mona"},		{"name":"Nina"},	{"name":"Nita"},
-				{"name":"Nokomis"},		{"name":"Odina"},	{"name":"Oneida"},	{"name":"Pocahontas"},	{"name":"Poloma"},		{"name":"Tala"},	{"name":"Tallulah"},	{"name":"Winona"},		{"name":"Aiyana "},	{"name":"Sauk"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "North American Native Female" }
 		},
 		{
 			"name": "North American Native Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "North American Native"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Tahoma"},	{"name":"Cherokee"},	{"name":"Dakota"},	{"name":"Elan"},	{"name":"Kai"},			{"name":"Opa"},		{"name":"Shawnee"},	{"name":"Tyee"},		{"name":"Elu"},		{"name":"Hosa"},
-				{"name":"Lakota"},	{"name":"Mika"},		{"name":"Nova"},	{"name":"Sequoia"},	{"name":"Shoshone"},	{"name":"Simi"},	{"name":"Weayaya"},	{"name":"Ameyalli"},	{"name":"Awena"},	{"name":"Chardon"},
-				{"name":"Chetan"},	{"name":"Chimalus"},	{"name":"Esadowa"},	{"name":"Kabecka"},	{"name":"Kansas"},		{"name":"Kishil"},	{"name":"Pala"},	{"name":"Teneca"},		{"name":"Seneca"},	{"name":"Shayan"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "North American Native Unisex" }
 		},
 		{
 			"name": "North American Native Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "North American Native"},
-			"traits" :
-			[
-				{"name":"Cornfield"},	{"name":"Deere"},	{"name":"Denton"},		{"name":"Hensley"},		{"name":"Kipp"},		{"name":"Maize"},		{"name":"Arrow"},		{"name":"Blackrock"},	{"name":"Bravebird"},	{"name":"Chubbuck"},
-				{"name":"Countryman"},	{"name":"Huaman"},	{"name":"Summerhill"},	{"name":"Swiftwater"},	{"name":"Thunderhawk"},	{"name":"Warcloud"},	{"name":"Achothley"},	{"name":"Adakai"},		{"name":"Begay"},		{"name":"Benally"},
-				{"name":"Altaha"},		{"name":"Apache"},	{"name":"Cosay"},		{"name":"Ethelbah"},	{"name":"Mescal"},		{"name":"Anoki"},		{"name":"Canowicakte"},	{"name":"Cetanwakuwa"},	{"name":"Kadoka"},		{"name":"Maka"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "North American Native Surname" }
 		},
 		{
 			"name": "Meso American Native Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Meso American Native"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Atl"},		{"name":"Atlahua"},		{"name":"Canneo"},	{"name":"Danaá"}, 		{"name":"Hedía"},	{"name":"Ikal"},	{"name":"Irepani"},	{"name":"Kabil"},		{"name":"Kasakir"},		{"name":"Maatiaak"},
-				{"name":"Masawa"},	{"name":"Polo"},		{"name":"Rahui"},	{"name":"Semeel jak"},	{"name":"Séneca"},	{"name":"Surem"},	{"name":"Tanok"},	{"name":"Tlayolotl"},	{"name":"Tsijiari"},	{"name":"Yooko"},
-				{"name":"Aapo"},	{"name":"Babajide"},	{"name":"Cadmael"},	{"name":"Dacey"},		{"name":"Eadrich"},	{"name":"Enapay"},	{"name":"Fabio"},	{"name":"Gabor"},		{"name":"Hadwin"},		{"name":"Sachihiro"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Meso American Native Male" }
 		},
 		{
 			"name": "Meso American Native Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Meso American Native"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Ajaniame"},	{"name":"Anam"},		{"name":"Ariché"},		{"name":"Axochitl"},	{"name":"Bimorí"},	{"name":"Citlali"},		{"name":"Inda Jani"},	{"name":"Itan de hüi"},	{"name":"Ix Chel"},	{"name":"Ix Kaknab"},
-				{"name":"Kantyi"},		{"name":"Malinalli"},	{"name":"Nakawé"},		{"name":"Sesasi"},		{"name":"Soona'"},	{"name":"Xochimitl"},	{"name":"Yamanik"},		{"name":"Sequoyah"},	{"name":"Yatzil"},	{"name":"Yej susen"},
-				{"name":"Itzel"},		{"name":"Akna"},		{"name":"Sacniete"},	{"name":"Xoc"},			{"name":"Zac-Kuk"},	{"name":"Chimalmat"},	{"name":"Ixazaluoh"},	{"name":"Xmucane"},		{"name":"Xpiayoc"},	{"name":"Colel"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Meso American Native Female" }
 		},
 		{
 			"name": "Meso American Native Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Meso American Native"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Erendirani"},	{"name":"Hasen"},	{"name":"Iktan"},	{"name":"Itzamatul"},	{"name":"Naran"},	{"name":"Nima"},	{"name":"Seti"},	{"name":"Shanarani"},	{"name":"Suré"},		{"name":"Taiyari"},
-				{"name":"Aapo"},		{"name":"Dacey"},	{"name":"Atl"},		{"name":"Aztec"},		{"name":"Coyote"},	{"name":"Cualli"},	{"name":"Eztli"},	{"name":"Ichtaca"},		{"name":"Ichnoyotl"},	{"name":"Ihuicatl"},
-				{"name":"Itotia"},		{"name":"Ixtli"},	{"name":"Izel"},	{"name":"Mazatl"},		{"name":"Meztli"},	{"name":"Nahuatl"},	{"name":"Patli"},	{"name":"Xipil"},		{"name":"Yaotl"},		{"name":"Zuma"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Meso American Native Unisex" }
 		},
 		{
 			"name": "Meso American Native Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Meso American Native"},
-			"traits" :
-			[
-				{"name":"Aca"},			{"name":"Acxotlan"},	{"name":"Chapul"},	{"name":"Colexcua"},	{"name":"Cuahutenco"},	{"name":"Ehecatl"},	{"name":"Huitle"},	{"name":"Itzcua"},		{"name":"Maxil"},	{"name":"Naxi"},
-				{"name":"Ocotoxtle"},	{"name":"Papaqui"},		{"name":"Quitl"},	{"name":"Teotl"},		{"name":"Tlachi"},		{"name":"Xicale"},	{"name":"Xique"},	{"name":"Zepahua"},		{"name":"Zitlal "},	{"name":"Cuachayo"},
-				{"name":"Cuatzo"},		{"name":"Tlahuex"},		{"name":"Ahuatl"},	{"name":"Cuahuizo"},	{"name":"Huexotl"},		{"name":"Piantzi"},	{"name":"Tecpa"},	{"name":"Tlapalama"},	{"name":"Xoampil"},	{"name":"Zontlimatzi"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\North and South American Names.csv", "category_name_in_file" : "Meso American Native Surname" }
 		},
 		{
 			"name": "British Male Given Name", "output_name": "Given Name", "selections": 1, 
