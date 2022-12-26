@@ -442,122 +442,62 @@
 		{
 			"name": "British Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "British"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Noah"},		{"name":"Oliver"},	{"name":"George"},	{"name":"Arthur"}, 	{"name":"Muhammad"},	{"name":"Leo"},		{"name":"Harry"},		{"name":"Oscar"},	{"name":"Archie"},	{"name":"Henry"},
-				{"name":"Theodore"},	{"name":"Freddie"},	{"name":"Jack"},	{"name":"Charlie"},	{"name":"Theo"},		{"name":"Alfie"},	{"name":"Jacob"},		{"name":"Thomas"},	{"name":"Finley"},	{"name":"Arlo"},
-				{"name":"William"},		{"name":"Lucas"},	{"name":"Roman"},	{"name":"Tommy"},	{"name":"Isaac"},		{"name":"Teddy"},	{"name":"Alexander"},	{"name":"Luca"},	{"name":"Edward"},	{"name":"James"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "British Male" }
 		},
 		{
 			"name": "British Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "British"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Olivia"},	{"name":"Amelia"},	{"name":"Isla"},		{"name":"Ava"},		{"name":"Ivy"},			{"name":"Freya"},	{"name":"Lily"},	{"name":"Florence"},	{"name":"Mia"},		{"name":"Willow"},
-				{"name":"Rosie"},	{"name":"Sophia"},	{"name":"Isabella"},	{"name":"Grace"},	{"name":"Daisy"},		{"name":"Sienna"},	{"name":"Poppy"},	{"name":"Elsie"},		{"name":"Emily"},	{"name":"Ella"},
-				{"name":"Evelyn"},	{"name":"Phoebe"},	{"name":"Sofia"},		{"name":"Evie"},	{"name":"Charlotte"},	{"name":"Harper"},	{"name":"Millie"},	{"name":"Matilda"},		{"name":"Maya"},	{"name":"Sophie"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "British Female" }
 		},
 		{
 			"name": "British Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "British"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Frankie"},	{"name":"River"},	{"name":"Remi"},	{"name":"Harley"},	{"name":"Eden"},	{"name":"Riley"},	{"name":"Quinn"},	{"name":"Rowan"},	{"name":"Avery"},	{"name":"Blake"},
-				{"name":"Bobbie"},	{"name":"Harlow"},	{"name":"Charlie"},	{"name":"Aubrey"},	{"name":"Parker"},	{"name":"Casey"},	{"name":"Addison"},	{"name":"Harper"},	{"name":"Ellis"},	{"name":"Ezra"},
-				{"name":"Bowie"},	{"name":"Cassidy"},	{"name":"Dakota"},	{"name":"Alex"},	{"name":"Drew"},	{"name":"Wren"},	{"name":"Zephyr"},	{"name":"Toni"},	{"name":"Terry"},	{"name":"Shay"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "British Unisex" }
 		},
 		{
 			"name": "British Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "British"},
-			"traits" :
-			[
-				{"name":"Smith"},	{"name":"Jones"},		{"name":"Taylor"},	{"name":"Brown"},	{"name":"Williams"},	{"name":"Wilson"},	{"name":"Johnson"},	{"name":"Davies"},	{"name":"Patel"},	{"name":"Robinson"},
-				{"name":"Wright"},	{"name":"Thompson"},	{"name":"Evans"},	{"name":"Walker"},	{"name":"White"},		{"name":"Roberts"},	{"name":"Green"},	{"name":"Hall"},	{"name":"Thomas "},	{"name":"Clarke"},
-				{"name":"Jackson"},	{"name":"Wood"},		{"name":"Harris"},	{"name":"Edwards"},	{"name":"Turner"},		{"name":"Martin"},	{"name":"Cooper"},	{"name":"Hill"},	{"name":"Ward"},	{"name":"Hughes"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "British Surname" }
 		},
 		{
 			"name": "French Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "French"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Gabriel"},	{"name":"Raphaël"},	{"name":"Léo"},			{"name":"Louis"}, 	{"name":"Lucas"},		{"name":"Adam"},	{"name":"Arthur"},	{"name":"Hugo"},	{"name":"Jules"},		{"name":"Maël"},
-				{"name":"Liam"},	{"name":"Ethan"},	{"name":"Paul"},		{"name":"Gabin"},	{"name":"Nathan"},		{"name":"Sacha"},	{"name":"Noah"},	{"name":"Tom"},		{"name":"Mohamed"},		{"name":"Aaron"},
-				{"name":"Antoine"},	{"name":"Charles"},	{"name":"François"},	{"name":"Georges"},	{"name":"Guillaume"},	{"name":"Henri"},	{"name":"Jean"},	{"name":"Nicolas"},	{"name":"Matthieu"},	{"name":"Sébastien"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "French Male" }
 		},
 		{
 			"name": "French Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "French"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Emma"},		{"name":"Jade"},	{"name":"Louise"},		{"name":"Alice"},		{"name":"Chloé"},		{"name":"Lina"},		{"name":"Rose"},	{"name":"Léa"},		{"name":"Anna"},	{"name":"Mila"},
-				{"name":"Mia"},			{"name":"Inès"},	{"name":"Ambre"},		{"name":"Julia"},		{"name":"Lou"},			{"name":"Juliette"},	{"name":"Agathe"},	{"name":"Léna"},	{"name":"Iris"},	{"name":"Jeanne"},
-				{"name":"Marianne"},	{"name":"Aurélie"},	{"name":"Caroline"},	{"name":"Charlotte"},	{"name":"Delphine"},	{"name":"Hélène"},		{"name":"Pauline"},	{"name":"Marine"},	{"name":"Laure"},	{"name":"Valérie"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "French Female" }
 		},
 		{
 			"name": "French Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "French"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Adel"},		{"name":"Ames"},	{"name":"Aramis"},	{"name":"Avignon"},	{"name":"Axel"},	{"name":"Beau"},	{"name":"Celestine"},	{"name":"Chandell"},	{"name":"Coty"},	{"name":"Cress"},
-				{"name":"Elie"},		{"name":"Gene"},	{"name":"Jade"},	{"name":"Jeryn"},	{"name":"Jules"},	{"name":"Lavern"},	{"name":"Simone"},		{"name":"Belot"},		{"name":"Candide"},	{"name":"Chandler"},
-				{"name":"Clarence"},	{"name":"Darel"},	{"name":"Dior"},	{"name":"Gabriel"},	{"name":"Izod"},	{"name":"Jocelin"},	{"name":"Marquette"},	{"name":"Monet"},		{"name":"Noel"},	{"name":"Zuri"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "French Unisex" }
 		},
 		{
 			"name": "French Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "French"},
-			"traits" :
-			[
-				{"name":"Martin"},	{"name":"Bernard"},	{"name":"Robert"},	{"name":"Richard"},	{"name":"Durand"},		{"name":"Dubois"},	{"name":"Moreau"},	{"name":"Simon"},		{"name":"Laurent"},		{"name":"Michel"},
-				{"name":"Garcia"},	{"name":"Thomas"},	{"name":"Leroy"},	{"name":"David"},	{"name":"Morel"},		{"name":"Roux"},	{"name":"Girard"},	{"name":"Fournier"},	{"name":"Lambert "},	{"name":"Lefebvre"},
-				{"name":"Mercier"},	{"name":"Blanc"},	{"name":"Dupont"},	{"name":"Faure"},	{"name":"Bertrand"},	{"name":"Morin"},	{"name":"Garnier"},	{"name":"Nicolas"},		{"name":"Marie"},		{"name":"Rousseau"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "French Surname" }
 		},
 		{
 			"name": "Spanish Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Spanish"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Liam"},	{"name":"Lucas"},	{"name":"Warenfried"},	{"name":"Alexander"}, 	{"name":"Timothé"},	{"name":"Elias"},	{"name":"Oliver"},	{"name":"Lilio"},	{"name":"Eyden"},	{"name":"Mateo"},
-				{"name":"Nahel"},	{"name":"Samuel"},	{"name":"Nicolás"},		{"name":"Adrián"},		{"name":"Thélio"},	{"name":"Max"},		{"name":"David"},	{"name":"Emil"},	{"name":"Jack"},	{"name":"Isaac"},
-				{"name":"Paul"},	{"name":"Mathis"},	{"name":"Benjamin"},	{"name":"Levi"},		{"name":"Hugo"},	{"name":"Timaé"},	{"name":"Lean"},	{"name":"Caylean"},	{"name":"Hjarnar"},	{"name":"Ezio"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Spanish Male" }
 		},
 		{
 			"name": "Spanish Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Spanish"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Raphaëlla"},	{"name":"Mía"},		{"name":"Sofía"},		{"name":"Emma"},	{"name":"Karlin"},	{"name":"Olivia"},	{"name":"Émilia"},		{"name":"Maëlys"},	{"name":"Aryanna"},		{"name":"Keyla"},
-				{"name":"Lily"},		{"name":"Sophie"},	{"name":"Ellianna"},	{"name":"Lïa"},		{"name":"Abigaël"},	{"name":"Hannah"},	{"name":"Isabella"},	{"name":"Julia"},	{"name":"Zoé"},			{"name":"Mila"},
-				{"name":"Yaëlle,"},		{"name":"Emily"},	{"name":"Eva"},			{"name":"Cecilia"},	{"name":"Kayla"},	{"name":"Amelia"},	{"name":"Luna"},		{"name":"Lylia"},	{"name":"Stéphanie"},	{"name":"Ella"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Spanish Female" }
 		},
 		{
 			"name": "Spanish Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Spanish"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Noah"},	{"name":"Luca"},	{"name":"Élia"},	{"name":"Sam"},		{"name":"Leo"},		{"name":"Tyler"},	{"name":"Aria"},	{"name":"Hunter"},	{"name":"Eyke"},	{"name":"Jesse"},
-				{"name":"Sidney"},	{"name":"Kai"},		{"name":"Ryan"},	{"name":"Sandy"},	{"name":"Noam"},	{"name":"Sammie"},	{"name":"Avery"},	{"name":"Skylar"},	{"name":"Aylan"},	{"name":"Viv"},
-				{"name":"Lyan"},	{"name":"Sunny"},	{"name":"Yanick"},	{"name":"Noel"},	{"name":"Aydan"},	{"name":"Taylor"},	{"name":"Devin"},	{"name":"Uli"},		{"name":"Jamie"},	{"name":"Thale"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Spanish Unisex" }
 		},
 		{
 			"name": "Spanish Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Spanish"},
-			"traits" :
-			[
-				{"name":"García"},	{"name":"Fernández"},	{"name":"González"},	{"name":"Rodríguez"},	{"name":"López"},	{"name":"Martínez"},	{"name":"Sánchez"},	{"name":"Pérez"},	{"name":"Martín"},		{"name":"Gómez"},
-				{"name":"Ruiz"},	{"name":"Hernández"},	{"name":"Jiménez"},		{"name":"Díaz"},		{"name":"Álvarez"},	{"name":"Moreno"},		{"name":"Muñoz"},	{"name":"Alonso"},	{"name":"Gutiérrez "},	{"name":"Romero"},
-				{"name":"Navarro"},	{"name":"Torres"},		{"name":"Domínguez"},	{"name":"Gil"},			{"name":"Vázquez"},	{"name":"Serrano "},	{"name":"Garnier"},	{"name":"Ramos"},	{"name":"Blanco"},		{"name":"Sanz"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Spanish Surname" }
 		},
 		{
 			"name": "Italian Male Given Name", "output_name": "Given Name", "selections": 1, 
