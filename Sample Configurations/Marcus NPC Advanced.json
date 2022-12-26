@@ -502,235 +502,117 @@
 		{
 			"name": "Italian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Italian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Leonardo"},	{"name":"Francesco"},	{"name":"Lorenzo"},	{"name":"Alessandro"}, 	{"name":"Andrea"},		{"name":"Mattia"},	{"name":"Gabriele"},	{"name":"Tommaso"},		{"name":"Riccardo"},	{"name":"Edoardo"},
-				{"name":"Matteo"},		{"name":"Giuseppe"},	{"name":"Niccolò"},	{"name":"Antonio"},		{"name":"Federico"},	{"name":"Marco"},	{"name":"Flavio"},		{"name":"Luca"},		{"name":"Giovanni"},	{"name":"Roberto"},
-				{"name":"Pietro"},		{"name":"Stefano"},		{"name":"Angelo"},	{"name":"Mario"},		{"name":"Luigi"},		{"name":"Alberto"},	{"name":"Enzo"},		{"name":"Cristiano"},	{"name":"Orlando"},		{"name":"Valentino"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Italian Male" }
 		},
 		{
 			"name": "Italian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Italian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Anna"},		{"name":"Maria"},		{"name":"Sara"},		{"name":"Laura"},	{"name":"Aurora"},		{"name":"Valentina"},	{"name":"Giulia"},		{"name":"Rosa"},		{"name":"Gianna"},	{"name":"Giuseppina"},
-				{"name":"Angela"},		{"name":"Giovanna"},	{"name":"Sofia"},		{"name":"Stella"},	{"name":"Adriana"},		{"name":"Greta"},		{"name":"Cristiana"},	{"name":"Fabrizia"},	{"name":"Alice"},	{"name":"Isabella"},
-				{"name":"Lucrezia,"},	{"name":"Gaia"},		{"name":"Diletta"},		{"name":"Olivia"},	{"name":"Nicoletta"},	{"name":"Azzura"},		{"name":"Zita"},		{"name":"Agnese"},		{"name":"Irene"},	{"name":"Noemi"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Italian Female" }
 		},
 		{
 			"name": "Italian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Italian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Adri"},	{"name":"Adrian"},		{"name":"Ale"},	{"name":"Andrea"},		{"name":"Ari"},		{"name":"Cesare"},	{"name":"Dani"},	{"name":"Daniele"},	{"name":"Elio"},	{"name":"Fede"},
-				{"name":"France"},	{"name":"Gabriele"},	{"name":"Gioele"},	{"name":"Leone"},	{"name":"Luca"},	{"name":"Lupo"},	{"name":"Mattia"},	{"name":"Miche"},	{"name":"Michi"},	{"name":"Nico"},
-				{"name":"Nicola"},	{"name":"Remo"},		{"name":"Simo"},	{"name":"Vale"},	{"name":"Vieri"},	{"name":"Vitto"},	{"name":"Aquila"},	{"name":"Inizio"},	{"name":"Vita"},	{"name":"Valente"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Italian Unisex" }
 		},
 		{
 			"name": "Italian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Italian"},
-			"traits" :
-			[
-				{"name":"Rossi"},		{"name":"Russo"},	{"name":"Ferrari"},		{"name":"Esposito"},	{"name":"Bianchi"},	{"name":"Romano"},	{"name":"Colombo"},		{"name":"Ricci"},	{"name":"Marino"},		{"name":"Greco"},
-				{"name":"Bruno"},		{"name":"Gallo"},	{"name":"Conti"},		{"name":"De Luca"},		{"name":"Mancini"},	{"name":"Costa"},	{"name":"Giordano"},	{"name":"Rizzo"},	{"name":"Lombardi"},	{"name":"Moretti"},
-				{"name":"Alighieri"},	{"name":"Capone"},	{"name":"Endrizzi"},	{"name":"Gatto"},		{"name":"Izzo"},	{"name":"Lo Duca"},	{"name":"Napoli"},		{"name":"Pisano"},	{"name":"Santucci"},	{"name":"Valachi"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Italian Surname" }
 		},
 		{
 			"name": "German Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "German"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Jonas"},	{"name":"Ben"},		{"name":"Linus"},	{"name":"Elias"}, 	{"name":"Emil"},	{"name":"Jonah"},	{"name":"Matz"},	{"name":"Felix"},	{"name":"Finn"},		{"name":"Anton"},
-				{"name":"Julian"},	{"name":"Mathis"},	{"name":"Jakob"},	{"name":"Henry"},	{"name":"Levi"},	{"name":"Liam"},	{"name":"Oskar"},	{"name":"Theo"},	{"name":"Maximilian"},	{"name":"Moritz"},
-				{"name":"Leon"},	{"name":"Milo"},	{"name":"Yannis"},	{"name":"Jonatan"},	{"name":"Julius"},	{"name":"Milan"},	{"name":"Till"},	{"name":"Lewin"},	{"name":"Konstantin"},	{"name":"Lennard"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "German Male" }
 		},
 		{
 			"name": "German Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "German"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Emma"},	{"name":"Mila"},	{"name":"Lina"},	{"name":"Emilia"},	{"name":"Amelie"},		{"name":"Hannah"},	{"name":"Matilda"},	{"name":"Leah"},	{"name":"Leni"},	{"name":"Greta"},
-				{"name":"Ella"},	{"name":"Lena"},	{"name":"Marie"},	{"name":"Luisa"},	{"name":"Klara"},		{"name":"Lotte"},	{"name":"Nora"},	{"name":"Mara"},	{"name":"Nele"},	{"name":"Carlotta"},
-				{"name":"Ida,"},	{"name":"Lilly"},	{"name":"Frida"},	{"name":"Johanna"},	{"name":"Isabella"},	{"name":"Maya"},	{"name":"Elina"},	{"name":"Mira"},	{"name":"Tilda"},	{"name":"Madita"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "German Female" }
 		},
 		{
 			"name": "German Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "German"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Noah"},	{"name":"Luka"},	{"name":"Jona"},	{"name":"Romy"},	{"name":"Merle"},	{"name":"Sam"},		{"name":"Jule"},	{"name":"Charlie"},	{"name":"Janis"},	{"name":"Alexis"},
-				{"name":"Kim"},		{"name":"Robin"},	{"name":"Jann"},	{"name":"Mika"},	{"name":"Yannik"},	{"name":"Sina"},	{"name":"Maxi"},	{"name":"Til"},		{"name":"Nino"},	{"name":"Mo"},
-				{"name":"Lilian"},	{"name":"Jasmin"},	{"name":"Nicky"},	{"name":"Noel"},	{"name":"Sky"},		{"name":"Nicola"},	{"name":"Dylan"},	{"name":"Chris"},	{"name":"Dana"},	{"name":"Vivian"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "German Unisex" }
 		},
 		{
 			"name": "German Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "German"},
-			"traits" :
-			[
-				{"name":"Müller"},	{"name":"Schmidt"},	{"name":"Schneider"},	{"name":"Fischer"},		{"name":"Weber"},	{"name":"Meyer"},	{"name":"Wagner"},		{"name":"Becker"},	{"name":"Schulz"},	{"name":"Hoffmann"},
-				{"name":"Schäfer"},	{"name":"Koch"},	{"name":"Bauer"},		{"name":"Richter"},		{"name":"Klein"},	{"name":"Wolf"},	{"name":"Schröder"},	{"name":"Neumann"},	{"name":"Schwarz"},	{"name":"Zimmermann"},
-				{"name":"Braun"},	{"name":"Krüger"},	{"name":"Hofmann"},		{"name":"Hartmann"},	{"name":"Lange"},	{"name":"Werner"},	{"name":"Krause"},		{"name":"Meier"},	{"name":"Lehmann"},	{"name":"Schulze"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "German Surname" }
 		},
 		{
 			"name": "Hungarian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hungarian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"László"},	{"name":"István"},		{"name":"József"},	{"name":"János"}, 	{"name":"Zoltán"},	{"name":"András"},	{"name":"Attila"},	{"name":"Béla"},	{"name":"Csaba"},	{"name":"Géza"},
-				{"name":"György"},	{"name":"Imre"},		{"name":"Károly"},	{"name":"Lajos"},	{"name":"Rókus"},	{"name":"Lőrinc"},	{"name":"Márk"},	{"name":"Márton"},	{"name":"Mátyás"},	{"name":"Sándor"},
-				{"name":"Tamás"},	{"name":"Zsigmond"},	{"name":"Balasz"},	{"name":"Levente"},	{"name":"Gaspar"},	{"name":"Dominik"},	{"name":"Mojzesz"},	{"name":"Salaman"},	{"name":"Toncse"},	{"name":"Zako"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Hungarian Male" }
 		},
 		{
 			"name": "Hungarian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hungarian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Boglárka"},	{"name":"Csilla"},	{"name":"Enikő"},	{"name":"Erzsébet"},	{"name":"Eszter"},	{"name":"Ildikó"},	{"name":"Katalin"},		{"name":"Margit"},	{"name":"Mária"},	{"name":"Melinda"},
-				{"name":"Orsolya"},		{"name":"Piroska"},	{"name":"Ráhel"},	{"name":"Réka"},		{"name":"Tünde"},	{"name":"Zsófia"},	{"name":"Zsuzsanna"},	{"name":"Hanna"},	{"name":"Zoé"},		{"name":"Anna"},
-				{"name":"Léna,"},		{"name":"Luca"},	{"name":"Emma"},	{"name":"Lili"},		{"name":"Lilien"},	{"name":"Lara"},	{"name":"Laura"},		{"name":"Mira"},	{"name":"Sára"},	{"name":"Olívia"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Hungarian Female" }
 		},
 		{
 			"name": "Hungarian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Hungarian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Bence"},	{"name":"Lorand"},	{"name":"Lorant"},	{"name":"Hunor"},		{"name":"Kitti"},	{"name":"Luca"},	{"name":"Fridrik"},	{"name":"Marcell"},	{"name":"Ili"},			{"name":"Laci"},
-				{"name":"Kinga"},	{"name":"Sami"},	{"name":"Mali"},	{"name":"Alexandra"},	{"name":"Tomi"},	{"name":"Rudi"},	{"name":"Vida"},	{"name":"Margit"},	{"name":"Demeter"},		{"name":"Valeria"},
-				{"name":"Sara"},	{"name":"Adrienn"},	{"name":"Kato"},	{"name":"Edit"},		{"name":"Vili"},	{"name":"Kati"},	{"name":"Malika"},	{"name":"Otto"},	{"name":"Margarita"},	{"name":"Frici"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Hungarian Unisex" }
 		},
 		{
 			"name": "Hungarian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Hungarian"},
-			"traits" :
-			[
-				{"name":"Nagy"},	{"name":"Kovács"},	{"name":"Tóth"},	{"name":"Szabó"},	{"name":"Horváth"},	{"name":"Varga"},		{"name":"Kiss"},	{"name":"Molnár"},	{"name":"Németh"},	{"name":"Farkas"},
-				{"name":"Balogh"},	{"name":"Papp"},	{"name":"Takács"},	{"name":"Juhász"},	{"name":"Lakatos"},	{"name":"Mészáros"},	{"name":"Oláh"},	{"name":"Simon"},	{"name":"Rácz"},	{"name":"Fekete"},
-				{"name":"Almassy"},	{"name":"Bathory"},	{"name":"Csonka"},	{"name":"Erdos"},	{"name":"Garai"},	{"name":"Halasz"},		{"name":"Kerekes"},	{"name":"Nemes"},	{"name":"Solyom"},	{"name":"Vadas"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Hungarian Surname" }
 		},
 		{
 			"name": "Greek Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Greek"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Georgios"},	{"name":"Dimitrios"},	{"name":"Ioannis"},		{"name":"Nikolaos"}, 	{"name":"Konstantin"},	{"name":"Christos"},{"name":"Panagiotis"},	{"name":"Vasileios"},	{"name":"Konstantinos"},{"name":"Athanasios"},
-				{"name":"Michail"},		{"name":"Evangelos"},	{"name":"Antonios"},	{"name":"Emmanouil"},	{"name":"Theodoros"},	{"name":"Spyridon"},{"name":"Anastasios"},	{"name":"Andreas"},		{"name":"Ilias"},		{"name":"Charalampos"},
-				{"name":"Alexandros"},	{"name":"Stavros"},		{"name":"Apostolos"},	{"name":"Petros"},		{"name":"Stylianos"},	{"name":"Sotirios"},{"name":"Georg"},		{"name":"Thomas"},		{"name":"Stefanos"},	{"name":"Ioan"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Greek Male" }
 		},
 		{
 			"name": "Greek Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Greek"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Maria"},		{"name":"Eleni"},		{"name":"Aikaterini"},	{"name":"Vasiliki"},	{"name":"Sofia"},		{"name":"Anastasia"},	{"name":"Georgia"},		{"name":"Evangelia"},	{"name":"Eirini"},		{"name":"Anna"},
-				{"name":"Angeliki"},	{"name":"Dimitra"},		{"name":"Ioanna"},		{"name":"Panagiota"},	{"name":"Despoina"},	{"name":"Christina"},	{"name":"Foteini"},		{"name":"Paraskevi"},	{"name":"Kalliopi"},	{"name":"Alexandra"},
-				{"name":"Kyriaki,"},	{"name":"Stavroula"},	{"name":"Chrysoula"},	{"name":"Theodora"},	{"name":"Athina"},		{"name":"Eleftheria"},	{"name":"Athanasia"},	{"name":"Olga"},		{"name":"Styliani"},	{"name":"Evgenia"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Greek Female" }
 		},
 		{
 			"name": "Greek Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Greek"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Agoran"},	{"name":"Calais"},	{"name":"Cyn"},		{"name":"Cyrille"},	{"name":"Diamanto"},	{"name":"Ellery"},	{"name":"Eridian"},	{"name":"Eurythmia"},	{"name":"Galen"},	{"name":"Gene"},
-				{"name":"Jayce"},	{"name":"Jaycee"},	{"name":"Jayson"},	{"name":"Leka"},	{"name":"Memphis"},		{"name":"Neko"},	{"name":"Nicolae"},	{"name":"Nika"},		{"name":"Nikeiza"},	{"name":"Ocean"},
-				{"name":"Ojal"},	{"name":"Pasi"},	{"name":"Pyralis"},	{"name":"Sandi"},	{"name":"Sasha"},		{"name":"Sonja"},	{"name":"Sonya"},	{"name":"Stefanie"},	{"name":"Thea"},	{"name":"Trina"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Greek Unisex" }
 		},
 		{
 			"name": "Greek Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Greek"},
-			"traits" :
-			[
-				{"name":"Papadopoulos"},{"name":"Papadopoulou"},	{"name":"Papageorgiou"},	{"name":"Oikonomou"},		{"name":"Papadimitriou"},	
-				{"name":"Georgiou"},	{"name":"Papaioannou"},		{"name":"Pappas"},			{"name":"Vasileiou"},		{"name":"Nikolaou"},
-				{"name":"Karagiannis"},	{"name":"Vlachos"},			{"name":"Antoniou"},		{"name":"Makris"},			{"name":"Papanikolaou"},
-				{"name":"Dimitriou"},	{"name":"Ioannidis"},		{"name":"Georgiadis"},		{"name":"Triantafyllou"},	{"name":"Papadakis"},
-				{"name":"Athanasiou"},	{"name":"Konstantinidis"},	{"name":"Ioannou"},			{"name":"Alexiou"},			{"name":"Christodoulou"},	
-				{"name":"Theodorou"},	{"name":"Giannopoulos"},	{"name":"Aetós"},			{"name":"Drakos"},			{"name":"Metaxas"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Greek Surname" }
 		},
 		{
 			"name": "Swedish Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Anshelm"},	{"name":"Elay"},	{"name":"Ray"},		{"name":"Lucas"}, 	{"name":"Liam"},	{"name":"Caesar"},	{"name":"Elias"},	{"name":"Levi"},	{"name":"Valentin"},	{"name":"Julián"},
-				{"name":"Jake"},	{"name":"Ilja"},	{"name":"Cedrik"},	{"name":"Leonel"},	{"name":"Theo"},	{"name":"Ión"},		{"name":"William"},	{"name":"Matteo"},	{"name":"León"},		{"name":"Thorvald"},
-				{"name":"Thélio"},	{"name":"Birk"},	{"name":"Oliver"},	{"name":"Nick"},	{"name":"Maëlan"},	{"name":"Milo"},	{"name":"Leonard"},	{"name":"Vincent"},	{"name":"Aston"},		{"name":"Oskar"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Swedish Male" }
 		},
 		{
 			"name": "Swedish Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Aischa"},	{"name":"Ottilia"},	{"name":"Lillie"},	{"name":"Rachel"},		{"name":"Jazmine"},	{"name":"Anastasia"},	{"name":"Freya"},	{"name":"Natalía"},	{"name":"Ellie"},	{"name":"Loélia"},
-				{"name":"Lucía"},	{"name":"Mila"},	{"name":"Élea"},	{"name":"Ayleen"},		{"name":"Roxie"},	{"name":"Lissi"},		{"name":"Leah"},	{"name":"Lía"},		{"name":"Cléo"},	{"name":"Emilia"},
-				{"name":"Alicia,"},	{"name":"Desiree"},	{"name":"Kellie"},	{"name":"Anabelle"},	{"name":"Luna"},	{"name":"Vera"},		{"name":"Amilia"},	{"name":"Alia"},	{"name":"Valeria"},	{"name":"Klara"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Swedish Female" }
 		},
 		{
 			"name": "Swedish Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Swedish"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Aischa"},	{"name":"Ottilia"},	{"name":"Lilly"},	{"name":"Jazmine"},		{"name":"Mandy"},	{"name":"Natália"},		{"name":"Ellie"},	{"name":"Loélia"},	{"name":"Rachel"},	{"name":"Freya"},
-				{"name":"Lucía"},	{"name":"Mila"},	{"name":"Eléa"},	{"name":"Ayleen"},		{"name":"Roxie"},	{"name":"Lissie"},		{"name":"Leah"},	{"name":"Lía"},		{"name":"Cléo"},	{"name":"Emilia"},
-				{"name":"Alicia"},	{"name":"Desiree"},	{"name":"Kellie"},	{"name":"Anabelle"},	{"name":"Luna"},	{"name":"Vera"},		{"name":"Amilia"},	{"name":"Alia"},	{"name":"Valeria"},	{"name":"Anastasia"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Swedish Unisex" }
 		},
 		{
 			"name": "Swedish Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Swedish"},
-			"traits" :
-			[
-				{"name":"Andersson"},	{"name":"Johansson"},	{"name":"Karlsson"},	{"name":"Nilsson"},		{"name":"Eriksson"},	{"name":"Larsson"},		{"name":"Olsson"},		{"name":"Persson"},		{"name":"Svensson"},	{"name":"Gustafsson"},
-				{"name":"Pettersson"},	{"name":"Jonsson"},		{"name":"Jansson"},		{"name":"Hansson"},		{"name":"Bengtsson"},	{"name":"Jönsson"},		{"name":"Lindberg"},	{"name":"Jakobsson"},	{"name":"Magnusson"},	{"name":"Olofsson"},
-				{"name":"Lindström"},	{"name":"Lindqvist"},	{"name":"Lindgren"},	{"name":"Axelsson"},	{"name":"Berg"},		{"name":"Bergström"},	{"name":"Lundberg"},	{"name":"Lundgren"},	{"name":"Lind"},		{"name":"Lundqvist"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Swedish Surname" }
 		},
 		{
 			"name": "Russian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Sergey"},	{"name":"Aleksandr"},	{"name":"Andrey"},		{"name":"Dmitriy"}, {"name":"Vladimir"},	{"name":"Aleksey"},	{"name":"Maksim"},	{"name":"Ivan"},	{"name":"Evgeniy"},	{"name":"Alexander"},
-				{"name":"Nikolay"},	{"name":"Mikhail"},		{"name":"Denis"},		{"name":"Roman"},	{"name":"Pavel"},		{"name":"Igor"},	{"name":"Anton"},	{"name":"Nikita"},	{"name":"Oleg"},	{"name":"Ilya"},
-				{"name":"Viktor"},	{"name":"Alexey"},		{"name":"Konstantin"},	{"name":"Artyom"},	{"name":"Kirill"},		{"name":"Yuriy"},	{"name":"Dmitry"},	{"name":"Ruslan"},	{"name":"Vadim"},	{"name":"Vitaliy"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Russian Male" }
 		},
 		{
 			"name": "Russian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Elena"},		{"name":"Tatyana"},	{"name":"Olga"},	{"name":"Natalya"},		{"name":"Ekaterina"},	{"name":"Irina"},		{"name":"Svetlana"},	{"name":"Anastasiya"},	{"name":"Anna"},		{"name":"Marina"},
-				{"name":"Mariya"},		{"name":"Yuliya"},	{"name":"Darya"},	{"name":"Nadezhda"},	{"name":"Viktoriya"},	{"name":"Lyudmila"},	{"name":"Galina"},		{"name":"Kristina"},	{"name":"Alina"},		{"name":"Kseniya"},
-				{"name":"Valentina,"},	{"name":"Lyubov"},	{"name":"Alyona"},	{"name":"Aleksandra"},	{"name":"Oksana"},		{"name":"Evgeniya"},	{"name":"Anastasia"},	{"name":"Yulia"},		{"name":"Elizaveta"},	{"name":"Anya"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Russian Female" }
 		},
 		{
 			"name": "Russian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Angel"},	{"name":"Sema"},	{"name":"Alishka"},	{"name":"Zu"},		{"name":"Danka"},	{"name":"Mister"},		{"name":"Artysh"},	{"name":"Aydys"},	{"name":"Mika"},	{"name":"Leska"},
-				{"name":"Maret"},	{"name":"Kesha"},	{"name":"Khadi"},	{"name":"Kris"},	{"name":"Iman"},	{"name":"Sima"},		{"name":"Tosha"},	{"name":"Gera"},	{"name":"Aza"},		{"name":"Mina"},
-				{"name":"Asiat"},	{"name":"Ayshat"},	{"name":"Senya"},	{"name":"Raisa"},	{"name":"Aynur"},	{"name":"Adel"},		{"name":"Mata"},	{"name":"Marem"},	{"name":"Khazan"},	{"name":"Mira"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Russian Unisex" }
 		},
 		{
 			"name": "Russian Masculine Surname", "output_name": "Surname", "selections": 1, 
@@ -747,22 +629,12 @@
 					}
 				]
 			},
-			"traits" :
-			[
-				{"name":"Ivanov"},		{"name":"Kuznetsov"},	{"name":"Petrov"},		{"name":"Magomedov"},	{"name":"Smirnov"},		{"name":"Popov"},		{"name":"Volkov"},	{"name":"Shevchenko"},	{"name":"Vasilev"},		{"name":"Novikov"},
-				{"name":"Morozov"},		{"name":"Pavlov"},		{"name":"Sokolov"},		{"name":"Aliev"},		{"name":"Mikhaylov"},	{"name":"Romanov"},		{"name":"Makarov"},	{"name":"Egorov"},		{"name":"Kozlov"},		{"name":"Nikolaev"},
-				{"name":"Stepanov"},	{"name":"Andreev"},		{"name":"Zakharov"},	{"name":"Kovalenko"},	{"name":"Sergeev"},		{"name":"Bondarenko"},	{"name":"Nikitin"},	{"name":"Zaytsev"},		{"name":"Medvedev"},	{"name":"Orlov"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Russian Masculine Surname" }
 		},
 		{
 			"name": "Russian Feminine Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Russian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Ivanova"},		{"name":"Kuznetsova"},	{"name":"Smirnova"},	{"name":"Petrova"},		{"name":"Popova"},		{"name":"Volkova"},		{"name":"Novikova"},	{"name":"Morozova"},	{"name":"Sokolova"},	{"name":"Pavlova"},
-				{"name":"Romanova"},	{"name":"Andreeva"},	{"name":"Vasileva"},	{"name":"Mikhaylova"},	{"name":"Makarova"},	{"name":"Sergeeva"},	{"name":"Zaytseva"},	{"name":"Nikolaeva"},	{"name":"Zakharova"},	{"name":"Stepanova"},
-				{"name":"Lebedeva"},	{"name":"Kozlova"},		{"name":"Nikitina"},	{"name":"Egorova"},		{"name":"Yakovleva"},	{"name":"Frolova"},		{"name":"Orlova"},		{"name":"Ibragimova"},	{"name":"Kotova"},		{"name":"Belova"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\European Names.csv", "category_name_in_file" : "Russian Feminine Surname" }
 		},
 		{
 			"name": "Arab Male Given Name", "output_name": "Given Name", "selections": 1, 
