@@ -699,122 +699,62 @@
 		{
 			"name": "Nigerian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Nigerian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Musa"},	{"name":"Ibrahim"},	{"name":"Abubakar"},	{"name":"Sani"},	{"name":"Abdullahi"},	{"name":"Mohammed"},	{"name":"Sunday"},	{"name":"Umar"},	{"name":"Emmanuel"},	{"name":"Adamu"},
-				{"name":"Usman"},	{"name":"Aliyu"},	{"name":"Joseph"},		{"name":"John"},	{"name":"Aminu"},		{"name":"Yusuf"},		{"name":"Ali"},		{"name":"Samuel"},	{"name":"Hassan"},		{"name":"Haruna"},
-				{"name":"Salisu"},	{"name":"Peter"},	{"name":"Bello"},		{"name":"Garba"},	{"name":"Kabiru"},		{"name":"Isa"},			{"name":"Idris"},	{"name":"Isah"},	{"name":"Yahaya"},		{"name":"David"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Nigerian Male" }
 		},
 		{
 			"name": "Nigerian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Nigerian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Blessing"},	{"name":"Aisha"},		{"name":"Fatima"},	{"name":"Mary"},	{"name":"Esther"},	{"name":"Grace"},	{"name":"Amina"},		{"name":"Zainab"},		{"name":"Maryam"},		{"name":"Joy"},
-				{"name":"Victoria"},	{"name":"Elizabeth"},	{"name":"Hadiza"},	{"name":"Mercy"},	{"name":"Hauwa"},	{"name":"Ngozi"},	{"name":"Patience"},	{"name":"Comfort"},		{"name":"Christiana"},	{"name":"Aishatu"},
-				{"name":"Florence,"},	{"name":"Halima"},		{"name":"Felicia"},	{"name":"Rose"},	{"name":"Helen"},	{"name":"Ruth"},	{"name":"Charity"},		{"name":"Chinyere"},	{"name":"Janet"},		{"name":"Glory"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Nigerian Female" }
 		},
 		{
 			"name": "Nigerian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Nigerian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Taiwo"},	{"name":"Kehinde"},		{"name":"Chinedu"},		{"name":"Rabi"},	{"name":"Abiodun"},	{"name":"Muhammadu"},	{"name":"Uche"},		{"name":"Christian"},	{"name":"Toyin"},		{"name":"Chika"},
-				{"name":"Idowu"},	{"name":"Uchenna"},		{"name":"Temitope"},	{"name":"Gift"},	{"name":"Audu"},	{"name":"Favour"},		{"name":"Bukola"},		{"name":"Lucky"},		{"name":"Precious"},	{"name":"Opeyemi"},
-				{"name":"Gambo"},	{"name":"Oluwaseun"},	{"name":"Bright"},		{"name":"Kelechi"},	{"name":"Amadu"},	{"name":"Ugochukwu"},	{"name":"Onyekachi"},	{"name":"Dan"},			{"name":"Adama"},		{"name":"Abu"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Nigerian Unisex" }
 		},
 		{
 			"name": "Nigerian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Nigerian"},
-			"traits" :
-			[
-				{"name":"Ibrahim"},	{"name":"Musa"},	{"name":"Abubakar"},	{"name":"Abdullahi"},	{"name":"Mohammed"},	{"name":"Sani"},	{"name":"Adamu"},	{"name":"Usman"},	{"name":"Umar"},	{"name":"Aliyu"},
-				{"name":"Yusuf"},	{"name":"Ali"},		{"name":"Garba"},		{"name":"Bello"},		{"name":"Haruna"},		{"name":"Hassan"},	{"name":"Lawal"},	{"name":"Aminu"},	{"name":"Yakubu"},	{"name":"Isah"},
-				{"name":"John"},	{"name":"Idris"},	{"name":"Eze"},			{"name":"Yahaya"},		{"name":"Salisu"},		{"name":"Ahmed"},	{"name":"Sunday"},	{"name":"Akpan"},	{"name":"Isa"},		{"name":"Shehu"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Nigerian Surname" }
 		},
 		{
 			"name": "Ethiopian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Ethiopian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Kebede"},	{"name":"Abebe"},		{"name":"Mekonnen"},	{"name":"Ahmed"},	{"name":"Alemu"},	{"name":"Ali"},		{"name":"Tesfaye"},	{"name":"Beyene"},		{"name":"Tefera"},		{"name":"Mamo"},
-				{"name":"Asfaw"},	{"name":"Getachew"},	{"name":"Hassen"},		{"name":"Seid"},	{"name":"Mohamed"},	{"name":"Tilahun"},	{"name":"Yimer"},	{"name":"Teshome"},		{"name":"Adem"},		{"name":"Mulugeta"},
-				{"name":"Negash"},	{"name":"Assefa"},		{"name":"Solomon"},		{"name":"Hussen"},	{"name":"Tsegaye"},	{"name":"Ayalew"},	{"name":"Jemal"},	{"name":"Mengesha"},	{"name":"Shiferaw"},	{"name":"Mesfin"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Ethiopian Male" }
 		},
 		{
 			"name": "Ethiopian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Ethiopian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Kassa"},	{"name":"Desta"},	{"name":"Lemma"},	{"name":"Lema"},	{"name":"Tekle"},	{"name":"Balcha"},	{"name":"Kasa"},	{"name":"Geleta"},	{"name":"Reta"},	{"name":"Shifa"},
-				{"name":"Demise"},	{"name":"Dagne"},	{"name":"Zenebe"},	{"name":"Maru"},	{"name":"Ayana"},	{"name":"Dessie"},	{"name":"Guta"},	{"name":"Wordofa"},	{"name":"Fanta"},	{"name":"Gebrie"},
-				{"name":"Alene"},	{"name":"Adera"},	{"name":"Leta"},	{"name":"Ayano"},	{"name":"Helen"},	{"name":"Nur"},		{"name":"Belaye"},	{"name":"Telila"},	{"name":"Merga"},	{"name":"Meseret"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Ethiopian Male" }
 		},
 		{
 			"name": "Ethiopian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Ethiopian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Bekele"},	{"name":"Tadesse"},		{"name":"Ayele"},	{"name":"Belay"},	{"name":"Abera"},	{"name":"Hailu"},	{"name":"Asefa"},	{"name":"Zeleke"},	{"name":"Berhe"},	{"name":"Alemayehu"},
-				{"name":"Belete"},	{"name":"Mengistu"},	{"name":"Abate"},	{"name":"Sisay"},	{"name":"Girma"},	{"name":"Melese"},	{"name":"Taye"},	{"name":"Legesse"},	{"name":"Kedir"},	{"name":"Getahun"},
-				{"name":"Feleke"},	{"name":"Hagos"},		{"name":"Teka"},	{"name":"Nega"},	{"name":"Tadese"},	{"name":"Amare"},	{"name":"Eshete"},	{"name":"Tulu"},	{"name":"Gudeta"},	{"name":"Debele"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Ethiopian Unisex" }
 		},
 		{
 			"name": "Ethiopian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Ethiopian"},
-			"traits" :
-			[
-				{"name":"Tesfaye"},		{"name":"Mohammed"},	{"name":"Getachew"},	{"name":"Abebe"},	{"name":"Girma"},	{"name":"Tadesse"},	{"name":"Solomon"},		{"name":"Kebede"},	{"name":"Bekele"},	{"name":"Hailu"},
-				{"name":"Alemayehu"},	{"name":"Ahmed"},		{"name":"Alemu"},		{"name":"Almaz"},	{"name":"Mulu"},	{"name":"Teshome"},	{"name":"Mekonnen"},	{"name":"Genet"},	{"name":"Abera"},	{"name":"Mulugeta"},
-				{"name":"Tilahun"},		{"name":"Worku"},		{"name":"Tsegaye"},		{"name":"Ali"},		{"name":"Tsehay"},	{"name":"Asefa"},	{"name":"Abebech"},		{"name":"Jemal"},	{"name":"Assefa"},	{"name":"Desta"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "Ethiopian Surname" }
 		},
 		{
 			"name": "South African Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "South African"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Johannes"},	{"name":"David"},	{"name":"John"},		{"name":"Michael"},		{"name":"Sipho"},	{"name":"Joseph"},	{"name":"Bongani"},	{"name":"Jan"},		{"name":"Daniel"},	{"name":"Sibusiso"},
-				{"name":"Petrus"},		{"name":"Patrick"},	{"name":"Peter"},		{"name":"Simon"},		{"name":"Willem"},	{"name":"Jacobus"},	{"name":"Samuel"},	{"name":"William"},	{"name":"Hendrik"},	{"name":"Pieter"},
-				{"name":"Thomas"},		{"name":"Richard"},	{"name":"Nkosinathi"},	{"name":"Jabulani"},	{"name":"Thulani"},	{"name":"Xolani"},	{"name":"Johan"},	{"name":"Andries"},	{"name":"Robert"},	{"name":"George"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "South African Male" }
 		},
 		{
 			"name": "South African Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "South African"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Maria"},		{"name":"Elizabeth"},	{"name":"Anna"},		{"name":"Johanna"},		{"name":"Lindiwe"},		{"name":"Martha"},	{"name":"Busisiwe"},	{"name":"Patricia"},	{"name":"Nonhlanhla"},	{"name":"Sarah"},
-				{"name":"Nokuthula"},	{"name":"Joyce"},		{"name":"Margaret"},	{"name":"Cynthia"},		{"name":"Nompumelelo"},	{"name":"Nomsa"},	{"name":"Christina"},	{"name":"Bongiwe"},		{"name":"Nomusa"},		{"name":"Mary"},
-				{"name":"Susanna"},	{"name":"Eunice"},		{"name":"Elsie"},		{"name":"Ntombifuthi"},	{"name":"Sylvia"},		{"name":"Zodwa"},	{"name":"Thandiwe"},	{"name":"Amanda"},		{"name":"Nelisiwe"},	{"name":"Hester"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "South African Female" }
 		},
 		{
 			"name": "South African Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "South African"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Sibongile"},	{"name":"Mpho"},		{"name":"Themba"},		{"name":"Zanele"},	{"name":"Tebogo"},		{"name":"Linda"},		{"name":"Zandile"},	{"name":"Thandi"},		{"name":"Sello"},		{"name":"Fikile"},
-				{"name":"Lucky"},		{"name":"Siphiwe"},		{"name":"Thembinkosi"},	{"name":"Matome"},	{"name":"Sandile"},		{"name":"Phumzile"},	{"name":"Thembi"},	{"name":"Phindile"},	{"name":"Tshepo"},		{"name":"Simphiwe"},
-				{"name":"Andile"},		{"name":"Thokozani"},	{"name":"Thembisile"},	{"name":"Lerato"},	{"name":"Dimakatso"},	{"name":"Mokgadi"},		{"name":"Lungile"},	{"name":"Thabiso"},		{"name":"Lebogang"},	{"name":"Ayanda"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "South African Unisex" }
 		},
 		{
 			"name": "South African Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "South African"},
-			"traits" :
-			[
-				{"name":"Dlamini"},	{"name":"Nkosi"},	{"name":"Ndlovu"},	{"name":"Khumalo"},		{"name":"Sithole"},	{"name":"Mahlangu"},	{"name":"Mokoena"},	{"name":"Mkhize"},	{"name":"Mthembu"},		{"name":"Zulu"},
-				{"name":"Ngcobo"},	{"name":"Gumede"},	{"name":"Naidoo"},	{"name":"Buthelezi"},	{"name":"Khoza"},	{"name":"Mathebula"},	{"name":"Sibiya"},	{"name":"Jacobs"},	{"name":"Govender"},	{"name":"Mofokeng"},
-				{"name":"Botha"},	{"name":"Mhlongo"},	{"name":"Smith"},	{"name":"Baloyi"},		{"name":"Mbatha"},	{"name":"Pillay"},		{"name":"Radebe"},	{"name":"Ntuli"},	{"name":"Zwane"},		{"name":"Mazibuko"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\African Names.csv", "category_name_in_file" : "South African Surname" }
 		},
 		{
 			"name": "Turk Male Given Name", "output_name": "Given Name", "selections": 1, 
