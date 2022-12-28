@@ -639,122 +639,62 @@
 		{
 			"name": "Arab Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Arab"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Zayn"},		{"name":"Muhammad"},	{"name":"Idris"},	{"name":"Hamza"}, 		{"name":"Malik"},	{"name":"Samir"},	{"name":"Zayd"},	{"name":"Rayan"},	{"name":"Rafi"},	{"name":"Mustafa"},
-				{"name":"Omar"},		{"name":"Amir"},		{"name":"Zahir"},	{"name":"Shaquille"},	{"name":"Yasir"},	{"name":"Ara"},		{"name":"Jed"},		{"name":"Kanan"},	{"name":"Eyad"},	{"name":"Vega"},
-				{"name":"Zinedine"},	{"name":"Yusuf"},		{"name":"Ali"},		{"name":"Khalil"},		{"name":"Yahir"},	{"name":"Zavier"},	{"name":"Barack"},	{"name":"Kahlil"},	{"name":"Amael"},	{"name":"Osman"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Arab Male" }
 		},
 		{
 			"name": "Arab Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Arab"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Aaliyah"},	{"name":"Akilah"},	{"name":"Djamila"},	{"name":"Elham"},	{"name":"Farah"},	{"name":"Fatima"},	{"name":"Gamila"},	{"name":"Ishtar"},	{"name":"Jamila"},	{"name":"Kamaria"},
-				{"name":"Khadija"},	{"name":"Layla"},	{"name":"Lina"},	{"name":"Malika"},	{"name":"Nabila"},	{"name":"Nashwa"},	{"name":"Nawra"},	{"name":"Niesha"},	{"name":"Nura"},	{"name":"Oma"},
-				{"name":"Qadira,"},	{"name":"Rihanna"},	{"name":"Sabah"},	{"name":"Sahar"},	{"name":"Shakira"},	{"name":"Takisha"},	{"name":"Thana"},	{"name":"Yadira"},	{"name":"Zahra"},	{"name":"Zaina"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Arab Female" }
 		},
 		{
 			"name": "Arab Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Arab"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Zain"},	{"name":"Ilhan"},	{"name":"Dara"},	{"name":"Isa"},		{"name":"Nour"},	{"name":"Ula"},		{"name":"Fuzail"},	{"name":"Aamirah"},	{"name":"Dina"},	{"name":"Farwah"},
-				{"name":"Imaan"},	{"name":"Zaha"},	{"name":"Azize"},	{"name":"Badr"},	{"name":"Deneb"},	{"name":"Duha"},	{"name":"Elam"},	{"name":"Gulzar"},	{"name":"Hikmat"},	{"name":"Ishtar"},
-				{"name":"Jahlia"},	{"name":"Khayrat"},	{"name":"Lunis"},	{"name":"Malak"},	{"name":"Nazar"},	{"name":"Youssef"},	{"name":"Rahat"},	{"name":"Sabri"},	{"name":"Shahnaz"},	{"name":"Taifa"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Arab Unisex" }
 		},
 		{
 			"name": "Arab Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Arab"},
-			"traits" :
-			[
-				{"name":"Rajab"},	{"name":"Bilal"},	{"name":"Hashim"},		{"name":"Ebeid"},	{"name":"Habib"},	{"name":"Qureshi"},		{"name":"Aziz"},		{"name":"Irfan"},	{"name":"Mughrabi"},	{"name":"Ibrahim"},
-				{"name":"Abadi"},	{"name":"Kassab"},	{"name":"Osman"},		{"name":"Jameel"},	{"name":"Jaziri"},	{"name":"Wahid"},		{"name":"Yasin"},		{"name":"Dawoud"},	{"name":"Shariq"},		{"name":"Ghulam"},
-				{"name":"Ramzan"},	{"name":"Al-Amin"},	{"name":"Al-Harbi"},	{"name":"Bashar"},	{"name":"Taleb"},	{"name":"Al-Fasih"},	{"name":"Al-Najjar"},	{"name":"Khalid"},	{"name":"Maloof"},		{"name":"Nahdi"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Arab Surname" }
 		},
 		{
 			"name": "Israeli Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Israeli"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Yosef"},		{"name":"David"},	{"name":"Moshe"},	{"name":"Avraham"}, {"name":"Yaakv"},		{"name":"Muhammad"},	{"name":"Isaac"},		{"name":"Miykhael"},	{"name":"Haim"},	{"name":"Shlomo"},
-				{"name":"Aleksander"},	{"name":"Ahmad"},	{"name":"Samuel"},	{"name":"Eliyahu"},	{"name":"Yisrael"},		{"name":"Meiyr"},		{"name":"Mardkhay"},	{"name":"Shimon"},		{"name":"Yhudah"},	{"name":"Amiyr"},
-				{"name":"Roy"},			{"name":"Mahmood"},	{"name":"Raphael"},	{"name":"Guy"},		{"name":"Binyamiyn"},	{"name":"Tzviy"},		{"name":"Eyal"},		{"name":"Abed"},		{"name":"Shalom"},	{"name":"Boris"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Israeli Male" }
 		},
 		{
 			"name": "Israeli Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Israeli"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Rachel"},		{"name":"Ester"},	{"name":"Sarah"},	{"name":"Miriam"},	{"name":"Chanah"},	{"name":"Rebecca"},	{"name":"Miykhal"},	{"name":"Yael"},	{"name":"Leah"},	{"name":"Shoshanah"},
-				{"name":"Rut"},			{"name":"Chayah"},	{"name":"Anah"},	{"name":"Yhudiyt"},	{"name":"Yelena"},	{"name":"Irina"},	{"name":"Malkah"},	{"name":"Karen"},	{"name":"Anat"},	{"name":"Deborah"},
-				{"name":"Iylanah,"},	{"name":"Eleh"},	{"name":"Fatma"},	{"name":"Tatiana"},	{"name":"Mazal"},	{"name":"Olga"},	{"name":"Hilah"},	{"name":"Zipora"},	{"name":"Diynah"},	{"name":"Shiyrah"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Israeli Female" }
 		},
 		{
 			"name": "Israeli Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Israeli"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Daniyel"},	{"name":"Tal"},		{"name":"Adiy"},	{"name":"Tamar"},	{"name":"Liyor"},	{"name":"Shay"},	{"name":"Uriy"},	{"name":"Omer"},	{"name":"Yuval"},	{"name":"Amiyt"},
-				{"name":"Noam"},	{"name":"Sharon"},	{"name":"Or"},		{"name":"Noah"},	{"name":"Eden"},	{"name":"Gal"},		{"name":"Hen"},		{"name":"Shahar"},	{"name":"Meriy"},	{"name":"Tomer"},
-				{"name":"Rony"},	{"name":"Ariyel"},	{"name":"Yafeh"},	{"name":"Rinah"},	{"name":"Oren"},	{"name":"Simchah"},	{"name":"Ron"},		{"name":"Idan"},	{"name":"Rotem"},	{"name":"Ronen"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Israeli Unisex" }
 		},
 		{
 			"name": "Israeli Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Israeli"},
-			"traits" :
-			[
-				{"name":"Cohen"},	{"name":"Levy"},	{"name":"Mizrahi"},	{"name":"Peretz"},		{"name":"Bitton"},	{"name":"Dahan"},	{"name":"Agbaria"},	{"name":"Avraham"},		{"name":"Friedman"},	{"name":"Katz"},
-				{"name":"Yosef"},	{"name":"Omer"},	{"name":"Mhamid"},	{"name":"Schwartz"},	{"name":"David"},	{"name":"Azulay"},	{"name":"Malkah"},	{"name":"Zoabi"},		{"name":"Jabarin"},		{"name":"Weiss"},
-				{"name":"Gaby"},	{"name":"Shapiro"},	{"name":"Chided"},	{"name":"Ohayon"},		{"name":"Reuben"},	{"name":"Lavyan"},	{"name":"Mahagna"},	{"name":"Masarweh"},	{"name":"Vaknin"},		{"name":"Khatib"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Israeli Surname" }
 		},
 		{
 			"name": "Iranian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Iranian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Mohammad"},	{"name":"Ali"},		{"name":"Hossein"},	{"name":"Mahdi"},	{"name":"Reza"},	{"name":"Hassan"},	{"name":"Ahmad"},	{"name":"Saeed"},	{"name":"Alireza"},	{"name":"Mohsen"},
-				{"name":"Hamid"},		{"name":"Amir"},	{"name":"Majid"},	{"name":"Abbas"},	{"name":"Morteza"},	{"name":"Ebrahim"},	{"name":"Mostafa"},	{"name":"Javad"},	{"name":"Mahmoud"},	{"name":"Mohammad Reza"},
-				{"name":"Mojtaba"},		{"name":"Hadi"},	{"name":"Masoud"},	{"name":"Vahid"},	{"name":"Esmaeil"},	{"name":"Akbar"},	{"name":"Hamed"},	{"name":"Nasser"},	{"name":"Davood"},	{"name":"Gholam Reza"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Iranian Male" }
 		},
 		{
 			"name": "Iranian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Iranian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Fatemeh"},	{"name":"Zahra"},	{"name":"Masoumeh"},	{"name":"Leila"},		{"name":"Zeynab"},	{"name":"Marzieh"},	{"name":"Seyyedeh"},	{"name":"Rogheyeh"},	{"name":"Sakineh"},	{"name":"Khadijeh"},
-				{"name":"Tahereh"},	{"name":"Zohreh"},	{"name":"Kobra"},		{"name":"Sedigheh"},	{"name":"Samira"},	{"name":"Fariba"},	{"name":"Farzaneh"},	{"name":"Mahboubeh"},	{"name":"Nasrin"},	{"name":"Mina"},
-				{"name":"Mahnaz,"},	{"name":"Sarah"},	{"name":"Fereshteh"},	{"name":"Razieh"},		{"name":"Mazal"},	{"name":"Tayebeh"},	{"name":"Farideh"},		{"name":"Afsaneh"},		{"name":"Sahar"},	{"name":"Elaheh"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Iranian Female" }
 		},
 		{
 			"name": "Iranian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Iranian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Seyyed"},	{"name":"Somayeh"},	{"name":"Elham"},	{"name":"Rasool"},	{"name":"Ehsan"},	{"name":"Narges"},	{"name":"Omid"},	{"name":"Rooh"},	{"name":"Soheila"},	{"name":"Hojjat"},
-				{"name":"Nahid"},	{"name":"Samaneh"},	{"name":"Vale"},	{"name":"Mahin"},	{"name":"Peyman"},	{"name":"Batol"},	{"name":"Gol"},		{"name":"Behzad"},	{"name":"Mahsa"},	{"name":"Mehran"},
-				{"name":"Kazem"},	{"name":"Isa"},		{"name":"Ramin"},	{"name":"Marjan"},	{"name":"Nemat"},	{"name":"Shahin"},	{"name":"Nusrat"},	{"name":"Yaqoub"},	{"name":"Bey"},		{"name":"Ezzat"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Iranian Unisex" }
 		},
 		{
 			"name": "Iranian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Iranian"},
-			"traits" :
-			[
-				{"name":"Mohammadi"},	{"name":"Hosseini"},	{"name":"Ahmadi"},	{"name":"Ali"},			{"name":"Moradi"},	{"name":"Heydari"},	{"name":"Karimi"},	{"name":"Mousavi"},	{"name":"Jafari"},	{"name":"Mohammad"},
-				{"name":"Pour"},		{"name":"Ghasemi"},		{"name":"Rahimi"},	{"name":"Ebrahimi"},	{"name":"Sadeghi"},	{"name":"Abbasi"},	{"name":"Gholami"},	{"name":"Akbari"},	{"name":"Asadi"},	{"name":"Zare"},
-				{"name":"Mahmoudi"},	{"name":"Ghorbani"},	{"name":"Bagheri"},	{"name":"Amiri"},		{"name":"Kazemi"},	{"name":"Zarei"},	{"name":"Haji"},	{"name":"Hashemi"},	{"name":"Nouri"},	{"name":"Yousefi"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Iranian Surname" }
 		},
 		{
 			"name": "Nigerian Male Given Name", "output_name": "Given Name", "selections": 1, 
@@ -879,42 +819,22 @@
 		{
 			"name": "Turk Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Turk"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Mehmet"},	{"name":"Mustafa"},	{"name":"Ahmet"},	{"name":"Ali"},		{"name":"Hasan"},		{"name":"Hüseyin"},		{"name":"Ibrahim"},	{"name":"Murat"},	{"name":"Ismail"},	{"name":"Ömer"},
-				{"name":"Osman"},	{"name":"Ramazan"},	{"name":"Halil"},	{"name":"Yusuf"},	{"name":"Abdullah"},	{"name":"Süleyman"},	{"name":"Fatih"},	{"name":"Mahmut"},	{"name":"Recep"},	{"name":"Hakan"},
-				{"name":"Adem"},	{"name":"Metin"},	{"name":"Kemal"},	{"name":"Kadir"},	{"name":"Salih"},		{"name":"Orhan"},		{"name":"Serkan"},	{"name":"Gökhan"},	{"name":"Bayram"},	{"name":"Uğur"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Turk Male" }
 		},
 		{
 			"name": "Turk Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Turk"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Fatma"},	{"name":"Ayşe"},	{"name":"Emine"},		{"name":"Hatice"},	{"name":"Zeynep"},	{"name":"Elif"},	{"name":"Meryem"},	{"name":"Özlem"},	{"name":"Nonhlanhla"},	{"name":"Hülya"},
-				{"name":"Yasemin"},	{"name":"Sevim"},	{"name":"Margaret"},	{"name":"Şerife"},	{"name":"Dilek"},	{"name":"Aysel"},	{"name":"Fadime"},	{"name":"Leyla"},	{"name":"Zehra"},		{"name":"Hacer"},
-				{"name":"Hanife"},	{"name":"Havva"},	{"name":"Songül"},		{"name":"Esra"},	{"name":"Aynur"},	{"name":"Zeliha"},	{"name":"Merve"},	{"name":"Filiz"},	{"name":"Melek"},		{"name":"Cemile"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Turk Female" }
 		},
 		{
 			"name": "Turk Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Turk"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Sultan"},	{"name":"Yaşar"},	{"name":"Derya"},	{"name":"Ayhan"},	{"name":"Yüksel"},	{"name":"Ismet"},	{"name":"Ümit"},	{"name":"Dursun"},	{"name":"Deniz"},	{"name":"Muzaffer"},
-				{"name":"Canan"},	{"name":"Hikmet"},	{"name":"Özgür"},	{"name":"Ilhan"},	{"name":"Ihsan"},	{"name":"Irfan"},	{"name":"Nuri"},	{"name":"Zafer"},	{"name":"Özcan"},	{"name":"Cihan"},
-				{"name":"Hilal"},	{"name":"Tuncay"},	{"name":"Nimet"},	{"name":"Fikret"},	{"name":"Muammer"},	{"name":"Reyhan"},	{"name":"Nevzat"},	{"name":"Ersin"},	{"name":"Suat"},	{"name":"Sati"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Turk Unisex" }
 		},
 		{
 			"name": "Turk Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Turk"},
-			"traits" :
-			[
-				{"name":"Yılmaz"},	{"name":"Kaya"},	{"name":"Demir"},	{"name":"Çelik"},	{"name":"Şahin"},	{"name":"Yıldız"},	{"name":"Yıldırım"},	{"name":"Öztürk"},	{"name":"Aydın"},	{"name":"Özdemir"},
-				{"name":"Arslan"},	{"name":"Doğan"},	{"name":"Kılıç"},	{"name":"Aslan"},	{"name":"Çetin"},	{"name":"Kara"},	{"name":"Koç"},			{"name":"Kurt"},	{"name":"Özkan"},	{"name":"Acar"},
-				{"name":"Polat"},	{"name":"Şimşek"},	{"name":"Korkmaz"},	{"name":"Özcan"},	{"name":"Erdoğan"},	{"name":"Çakir"},	{"name":"Yavuz"},		{"name":"Can"},		{"name":"Şen"},		{"name":"Yalçın"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Middle Eastern Names.csv", "category_name_in_file" : "Turk Surname" }
 		},
 		{
 			"name": "Indian Male Given Name", "output_name": "Given Name", "selections": 1, 
