@@ -779,72 +779,37 @@
 		{
 			"name": "Indian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Indian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Mohammed"},	{"name":"Sanjay"},	{"name":"Sunil"},	{"name":"Rajesh"},		{"name":"Ramesh"},	{"name":"Ashok"},	{"name":"Manoj"},	{"name":"Anil"},	{"name":"Suresh"},		{"name":"Vijay"},
-				{"name":"Mo"},			{"name":"Abdul"},	{"name":"Vinod"},	{"name":"Rajendra"},	{"name":"Dinesh"},	{"name":"Rakesh"},	{"name":"Dilip"},	{"name":"Ajay"},	{"name":"Mukesh"},		{"name":"Amit"},
-				{"name":"Shankar"},		{"name":"Mohan"},	{"name":"Ravi"},	{"name":"Ganesh"},		{"name":"Gopal"},	{"name":"Arun"},	{"name":"Rahul"},	{"name":"Mahesh"},	{"name":"Jitendra"},	{"name":"Prakash"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Indian Male" }
 		},
 		{
 			"name": "Indian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Indian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Sunita"},	{"name":"Anita"},	{"name":"Gita"},	{"name":"Rekha"},	{"name":"Manju"},	{"name":"Shanti"},	{"name":"Usha"},	{"name":"Asha"},	{"name":"Mina"},	{"name":"Pushpa"},
-				{"name":"Laxmi"},	{"name":"Urmila"},	{"name":"Rita"},	{"name":"Sushila"},	{"name":"Lalita"},	{"name":"Sima"},	{"name":"Sangita"},	{"name":"Savitri"},	{"name":"Rani"},	{"name":"Munni"},
-				{"name":"Sumitra"},	{"name":"Nirmala"},	{"name":"Rina"},	{"name":"Savita"},	{"name":"Maya"},	{"name":"Sarita"},	{"name":"Jyoti"},	{"name":"Kavita"},	{"name":"Mamta"},	{"name":"Mira"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Indian Female" }
 		},
 		{
 			"name": "Indian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Indian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Ram"},		{"name":"Sri"},		{"name":"Santosh"},	{"name":"Lakshmi"},	{"name":"Raju"},	{"name":"Suman"},	{"name":"Raj"},		{"name":"Krishna"},	{"name":"Kiran"},	{"name":"Sita"},
-				{"name":"Radha"},	{"name":"Rama"},	{"name":"Shiv"},	{"name":"Kamal"},	{"name":"Saroj"},	{"name":"Pa"},		{"name":"Prem"},	{"name":"Uma"},		{"name":"A"},		{"name":"Shyam"},
-				{"name":"Ka"},		{"name":"Kailash"},	{"name":"Ca"},		{"name":"Durga"},	{"name":"Raja"},	{"name":"Chandra"},	{"name":"Vijaya"},	{"name":"Kanchan"},	{"name":"Ganga"},	{"name":"Pavan"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Indian Unisex" }
 		},
 		{
 			"name": "Indian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Indian"},
-			"traits" :
-			[
-				{"name":"Devi"},	{"name":"Singh"},	{"name":"Kumar"},	{"name":"Das"},		{"name":"Kaur"},	{"name":"Ram"},		{"name":"Yadav"},	{"name":"Kumari"},	{"name":"Lal"},		{"name":"Bai"},
-				{"name":"Khatun"},	{"name":"Mandal"},	{"name":"Ali"},		{"name":"Sharma"},	{"name":"Ray"},		{"name":"Mondal"},	{"name":"Khan"},	{"name":"Sah"},		{"name":"Patel"},	{"name":"Prasad"},
-				{"name":"Patil"},	{"name":"Ghosh"},	{"name":"Pal"},		{"name":"Sahu"},	{"name":"Gupta"},	{"name":"Shaikh"},	{"name":"Bibi"},	{"name":"Sekh"},	{"name":"Begam"},	{"name":"Biswas"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Indian Surname" }
 		},
 		{
 			"name": "Kazak Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Sergey"},	{"name":"Vladimir"},	{"name":"Aleksandr"},	{"name":"Ruslan"},	{"name":"Andrey"},	{"name":"Azamat"},	{"name":"Viktor"},	{"name":"Talgat"},	{"name":"Nikolay"},	{"name":"Serik"},
-				{"name":"Dmitriy"},	{"name":"Nursultan"},	{"name":"Denis"},		{"name":"Ivan"},	{"name":"Erzhan"},	{"name":"Arman"},	{"name":"Timur"},	{"name":"Nurlan"},	{"name":"Alexey"},	{"name":"Igor"},
-				{"name":"Erlan"},	{"name":"Kanat"},		{"name":"Evgeniy"},		{"name":"Mikhail"},	{"name":"Pavel"},	{"name":"Oleg"},	{"name":"Roman"},	{"name":"Dauren"},	{"name":"Maksim"},	{"name":"Dmitry"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Kazak Male" }
 		},
 		{
 			"name": "Kazak Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Elena"},	{"name":"Natalya"},	{"name":"Tatyana"},		{"name":"Olga"},	{"name":"Irina"},		{"name":"Svetlana"},	{"name":"Nadezhda"},	{"name":"Aygerim"},		{"name":"Ekaterina"},	{"name":"Galina"},
-				{"name":"Marina"},	{"name":"Dinara"},	{"name":"Anastasiya"},	{"name":"Madina"},	{"name":"Alina"},		{"name":"Anna"},		{"name":"Lyudmila"},	{"name":"Akmaral"},		{"name":"Valentina"},	{"name":"Asel"},
-				{"name":"Aydana"},	{"name":"Diana"},	{"name":"Lyubov"},		{"name":"Gulmira"},	{"name":"Saltanat"},	{"name":"Oleg"},		{"name":"Mariya"},		{"name":"Kristina"},	{"name":"Aida"},		{"name":"Aygul"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Kazak Female" }
 		},
 		{
 			"name": "Kazak Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Marat"},	{"name":"Kuanysh"},	{"name":"Bakhytzhan"},	{"name":"Nurzhan"},	{"name":"Orken"},	{"name":"Askar"},		{"name":"Murat"},	{"name":"Inkar"},	{"name":"Bekzat"},	{"name":"Aruzhan"},
-				{"name":"Symbat"},	{"name":"Ramazan"},	{"name":"Didar"},		{"name":"Madi"},	{"name":"Bagdat"},	{"name":"Bakytzhan"},	{"name":"Zhanat"},	{"name":"Raisa"},	{"name":"Aa"},		{"name":"Na"},
-				{"name":"Ardak"},	{"name":"Amir"},	{"name":"Nazym"},		{"name":"Ayan"},	{"name":"Baglan"},	{"name":"Beka"},		{"name":"Rauan"},	{"name":"Salamat"},	{"name":"Aydyn"},	{"name":"Bayan"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Kazak Unisex" }
 		},
 		{
 			"name": "Kazak Masculine Surname", "output_name": "Surname", "selections": 1, 
@@ -861,62 +826,32 @@
 					}
 				]
 			},
-			"traits" :
-			[
-				{"name":"Kenes"},		{"name":"Omarov"},	{"name":"Sultanov"},	{"name":"Barat"},		{"name":"Akhmetov"},	{"name":"Umarov"},	{"name":"Belgibaev"},	{"name":"Kemelov"},		{"name":"Bolatbek"},	{"name":"Ivanov"},
-				{"name":"Kambarov"},	{"name":"Boyko"},	{"name":"Smagulov"},	{"name":"Aliev"},		{"name":"Ospanov"},		{"name":"Serikov"},	{"name":"Tsoy"},		{"name":"Suleymenov"},	{"name":"Karimov"},		{"name":"Ibragimov"},
-				{"name":"Bondarenko"},	{"name":"Eleusiz"},	{"name":"Kaliev"},		{"name":"Nigmashev"},	{"name":"Shevchenko"},	{"name":"Popov"},	{"name":"Muratov"},		{"name":"Romanyuk"},	{"name":"Asanov"},		{"name":"Ibraev"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Kazak Masculine Surname" }
 		},
 		{
 			"name": "Kazak Feminine Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Kazak"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Kenes"},		{"name":"Alieva"},	{"name":"Barat"},		{"name":"Akhmetova"},	{"name":"Bolatbek"},	{"name":"Ivanova"},		{"name":"Iskakova"},	{"name":"Boyko"},		{"name":"Omarova"},		{"name":"Ospanova"},
-				{"name":"Smagulova"},	{"name":"Eleusiz"},	{"name":"Sultanova"},	{"name":"Asanova"},		{"name":"Petrova"},		{"name":"Valieva"},		{"name":"Suleymenova"},	{"name":"Romanyuk"},	{"name":"Ibraeva"},		{"name":"Sarbalin"},
-				{"name":"Popova"},		{"name":"Musin"},	{"name":"Sadykova"},	{"name":"Muratova"},	{"name":"Aubakirova"},	{"name":"Kuznetsova"},	{"name":"Nurdulla"},	{"name":"Ibragimova"},	{"name":"Amangeldi"},	{"name":"Kusainova"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Kazak Feminine Surname" }
 		},
 		{
 			"name": "Chinese Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Chinese"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Yìchén"},		{"name":"Yǔxuān"},	{"name":"Hàoyǔ"},		{"name":"Shí Lěi"}, {"name":"Yǔchén"},	{"name":"Zǐmò"},	{"name":"Yǔháng"},		{"name":"Hàorán"},		{"name":"Zǐháo"},	{"name":"Zhì Péng"},
-				{"name":"Míng Tāo"},	{"name":"Hào Rán"},	{"name":"Jùn Jié"},		{"name":"Zǐ Hán"},	{"name":"Huì Fēn"},	{"name":"Jiā Lì"},	{"name":"Jiā Háo"},		{"name":"Zǐ Ruì"},		{"name":"Bó Wén"},	{"name":"Yī Míng"},
-				{"name":"Jùn Dé"},		{"name":"Hào Yǔ"},	{"name":"Hào Yáng"},	{"name":"Jiā Wěi"},	{"name":"Yǒng Lè"},	{"name":"Yǔ Zé"},	{"name":"Xiǎo Dān"},	{"name":"Wěi Guó"},		{"name":"Míng Yù"},	{"name":"Zǐ Xīn"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Chinese Male" }
 		},
 		{
 			"name": "Chinese Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Chinese"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Yī Nuò"},		{"name":"Xīn Yí"},		{"name":"Zǐ Hán"},		{"name":"Měi Qí"},		{"name":"Xīn Yán"},		{"name":"Kě Xīn"},		{"name":"Yǔ Xī"},		{"name":"Yǔ Tóng"},		{"name":"Mèng Yáo"},{"name":"Chán Juān"},
-				{"name":"Chūn Huá"},	{"name":"Dōng Méi"},	{"name":"Huì Yǐng"},	{"name":"Huì Fēn"},		{"name":"Jiā Lì"},		{"name":"Jiā Yí"},		{"name":"Jiā Huì"},		{"name":"Lán Fēn"},		{"name":"Lì Huá"},	{"name":"Lì Méi"},
-				{"name":"Lì Nà"},		{"name":"Měi Lián"},	{"name":"Míng Xiá"},	{"name":"Éleanore"},	{"name":"Míng Zhū"},	{"name":"Qiǎo Huì"},	{"name":"Xiǎo Dān"},	{"name":"Xiǎo Huì"},	{"name":"Yù Míng"},	{"name":"Shī Yún"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Chinese Female" }
 		},
 		{
 			"name": "Chinese Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Chinese"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Huì"},		{"name":"An"},		{"name":"Chén"},	{"name":"Chūn"},	{"name":"Liǔ"},	{"name":"Jiāng"},	{"name":"Míng"},	{"name":"Píng"},	{"name":"Shàn"},	{"name":"Zǐhán"},
-				{"name":"Héng"},	{"name":"Guāng"},	{"name":"Huān"},	{"name":"Bō"},		{"name":"Qiū"},	{"name":"Bǎo"},		{"name":"Lín"},		{"name":"Meilin"},	{"name":"Cōng"},	{"name":"Líng"},
-				{"name":"Wén"},		{"name":"Nuò"},		{"name":"Xīn"},		{"name":"Yáng"},	{"name":"Fen"},	{"name":"Xiáng"},	{"name":"Yīng"},	{"name":"Jīng"},	{"name":"Xī"},		{"name":"Chàng"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Chinese Unisex" }
 		},
 		{
 			"name": "Chinese Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Chinese"},
-			"traits" :
-			[
-				{"name":"Wang"},	{"name":"Li"},	{"name":"Zhang"},	{"name":"Liu"},		{"name":"Chen"},	{"name":"Yang"},	{"name":"Huang"},	{"name":"Wu"},	{"name":"Xu"},	{"name":"Zhao"},
-				{"name":"Zhou"},	{"name":"Lu"},	{"name":"Zhu"},		{"name":"Sun"},		{"name":"He"},		{"name":"Ma"},		{"name":"Yu"},		{"name":"Hu"},	{"name":"Lin"},	{"name":"Jiang"},
-				{"name":"Guo"},		{"name":"Luo"},	{"name":"Gao"},		{"name":"Zheng"},	{"name":"Liang"},	{"name":"Tang"},	{"name":"Wei"},		{"name":"Shi"},	{"name":"Xie"},	{"name":"Song"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Asian Names.csv", "category_name_in_file" : "Chinese Surname" }
 		},
 		{
 			"name": "Japanese Male Given Name", "output_name": "Given Name", "selections": 1, 
