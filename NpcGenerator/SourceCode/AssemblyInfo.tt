@@ -12,7 +12,7 @@ using System.Reflection;
 <#+
 
  int Major = 1;
- int Minor = 17;
+ int Minor = 18;
  
  static DateTime AnchorDate = new DateTime(year: 2020, month: 1, day: 1);
  int DaysSinceProjectStarted = (int)((DateTime.UtcNow - AnchorDate).TotalDays);
