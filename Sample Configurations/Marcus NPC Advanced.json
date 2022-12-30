@@ -956,122 +956,62 @@
 		{
 			"name": "Australian Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Australian"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"David"},	{"name":"John"},		{"name":"Peter"},		{"name":"Michael"}, {"name":"Paul"},		{"name":"Andrew"},	{"name":"Mark"},	{"name":"Robert"},	{"name":"Ian"},		{"name":"Chris"},
-				{"name":"Aiden"},	{"name":"Muhammad"},	{"name":"Ashton"},		{"name":"Beau"},	{"name":"Caleb"},		{"name":"Marcus"},	{"name":"Darwin"},	{"name":"Elijah"},	{"name":"Felix"},	{"name":"Lachlan"},
-				{"name":"Liam"},	{"name":"Levi"},		{"name":"Theodore"},	{"name":"William"},	{"name":"Lucas"},		{"name":"Leo"},		{"name":"Henry"},	{"name":"Jack"},	{"name":"Noah"},	{"name":"Oliver"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Australian Male" }
 		},
 		{
 			"name": "Australian Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Australian"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Julie"},	{"name":"Karen"},	{"name":"Michelle"},	{"name":"Helen"},	{"name":"Sue"},		{"name":"Elizabeth"},	{"name":"Sarah"},		{"name":"Lisa"},		{"name":"Kate"},		{"name":"Jane"},
-				{"name":"Anika"},	{"name":"Ariana"},	{"name":"Aurora"},		{"name":"Bridie"},	{"name":"Eden"},	{"name":"Freya"},		{"name":"Hallie"},		{"name":"Heidi"},		{"name":"Ivy"},			{"name":"Luella"},
-				{"name":"Ella"},	{"name":"Matilda"},	{"name":"Chloe"},		{"name":"Grace"},	{"name":"Mia"},		{"name":"Ava"},			{"name":"Isla"},		{"name":"Charlotte"},	{"name":"Amelia"},		{"name":"Olivia"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Australian Female" }
 		},
 		{
 			"name": "Australian Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Australian"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Addison"},	{"name":"Ali"},		{"name":"Bodhi"},		{"name":"Bronte"},	{"name":"Charlie"},	{"name":"Darcy"},	{"name":"Frankie"},		{"name":"Harlow"},	{"name":"Harper"},		{"name":"Indiana"},
-				{"name":"Indie"},	{"name":"James"},	{"name":"Jayden"},		{"name":"Jett"},	{"name":"Jordan"},	{"name":"Kai"},		{"name":"Mackenzie"},	{"name":"Noah"},	{"name":"Peyton"},		{"name":"Quinn"},
-				{"name":"Remi"},	{"name":"Riley"},	{"name":"River"},		{"name":"Val"},		{"name":"Alex"},	{"name":"Noel"},	{"name":"Jessie"},		{"name":"Kris"},	{"name":"Courtney"},	{"name":"Leigh"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Australian Unisex" }
 		},
 		{
 			"name": "Australian Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Australian"},
-			"traits" :
-			[
-				{"name":"Smith"},	{"name":"Jones"},	{"name":"Williams"},	{"name":"Brown"},	{"name":"Wilson"},	{"name":"Taylor"},		{"name":"Anderson"},	{"name":"Johnson"},	{"name":"White"},		{"name":"Thompson"},
-				{"name":"Lee"},		{"name":"Martin"},	{"name":"Thomas"},		{"name":"Walker"},	{"name":"Kelly"},	{"name":"Young"},		{"name":"Harris"},		{"name":"King"},	{"name":"Ryan"},		{"name":"Roberts"},
-				{"name":"Hall"},	{"name":"Evans"},	{"name":"Davis"},		{"name":"Wright"},	{"name":"Baker"},	{"name":"Campbell"},	{"name":"Edwards"},		{"name":"Clark"},	{"name":"Robinson"},	{"name":"McDonald"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Australian Surname" }
 		},
 		{
 			"name": "Aboriginal Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Aboriginal"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Allambee"},	{"name":"Bambam"},	{"name":"Bouddi"},		{"name":"Ces"}, 	{"name":"Dainen"},		{"name":"Daymion"},		{"name":"Dimity"},		{"name":"Dural"},		{"name":"Gef"},		{"name":"Gie"},
-				{"name":"Gurumarra"},	{"name":"Huon"},	{"name":"Irabinna"},	{"name":"Jabiru"},	{"name":"Julij"},		{"name":"Kudnarto"},	{"name":"Lowan"},		{"name":"Mawukura"},	{"name":"Monti"},	{"name":"Nullah"},
-				{"name":"Omeo"},		{"name":"Rashtin"},	{"name":"Talei"},		{"name":"Tau"},		{"name":"Warragul"},	{"name":"Warriya"},		{"name":"Yannathan"},	{"name":"Yileen"},		{"name":"Monaro"},	{"name":"Jindalee"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Male" }
 		},
 		{
 			"name": "Aboriginal Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Aboriginal"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Aaina"},	{"name":"Aalaa"},	{"name":"Aase"},	{"name":"Abaigael"},	{"name":"Abigael"},		{"name":"Adaliya"},		{"name":"Adeena"},	{"name":"Alinta"},		{"name":"Allora"},	{"name":"Anele"},
-				{"name":"Arika"},	{"name":"Bahia"},	{"name":"Basima"},	{"name":"Callanna"},	{"name":"Collerina"},	{"name":"Ellin"},		{"name":"Jarrah"},	{"name":"Kareela"},		{"name":"Killara"},	{"name":"Kylie"},
-				{"name":"Lowanna"},	{"name":"Medika"},	{"name":"Narelle"},	{"name":"Talia"},		{"name":"Waratah"},		{"name":"Victoria"},	{"name":"Rianna"},	{"name":"Orana"},		{"name":"Ngarra"},	{"name":"Myaree"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Female" }
 		},
 		{
 			"name": "Aboriginal Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Aboriginal"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Bili"},		{"name":"Aabroo"},	{"name":"Aarzoo"},		{"name":"Bayan"},	{"name":"Ciji"},	{"name":"Mirri"},	{"name":"Jannali"},	{"name":"Kaiya"},	{"name":"Maali"},	{"name":"Marli"},
-				{"name":"Maroochy"},	{"name":"Merri"},	{"name":"Pengana"},		{"name":"Sydney"},	{"name":"Tidam"},	{"name":"Waru"},	{"name":"Watorea"},	{"name":"Yarran"},	{"name":"Yindi"},	{"name":"Alinta"},
-				{"name":"Allyra"},		{"name":"Arika"},	{"name":"Bindi"},		{"name":"Coen"},	{"name":"Daku"},	{"name":"Ellin"},	{"name":"Jarli"},	{"name":"Jarrah"},	{"name":"Medika"},	{"name":"Ngarra"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Unisex" }
 		},
 		{
 			"name": "Aboriginal Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Aboriginal"},
-			"traits" :
-			[
-				{"name":"Ah Chee"},	{"name":"Ah Matt"},	{"name":"Baymarrwangga"},	{"name":"Bulunbulun"},	{"name":"Corowa"},		{"name":"Dhurrkay"},	{"name":"Djilangya"},	{"name":"Garimara"},	{"name":"Gurruwiwi"},	{"name":"Jungarai"},
-				{"name":"Kerinaiua"},{"name":"Kulitja"},{"name":"Lanhupuy"},		{"name":"Mawurndjul"},	{"name":"Minyintiri"},	{"name":"Mudjidell"},	{"name":"Mununggurr"},	{"name":"Nakamarra"},	{"name":"Nannup"},		{"name":"Napangardi"},
-				{"name":"Ngale"},	{"name":"Noonuccal"},{"name":"Ofanengaue"},		{"name":"Petyarre"},	{"name":"Rubuntja"},	{"name":"Sampi"},		{"name":"Tipiloura"},	{"name":"Ulungura"},	{"name":"Wapau"},		{"name":"Yagmoor"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Surname" }
 		},
 		{
 			"name": "Māori Male Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Māori"}, {"category_name" : "Gender", "trait_name" : "Male"}]},
-			"traits" :
-			[
-				{"name":"Nikau"},	{"name":"Ari"},	{"name":"Niko"},		{"name":"Koa"}, 	{"name":"Mateo"},		{"name":"Keanu"},		{"name":"Mikaere"},		{"name":"Manaia"},		{"name":"Kairo"},		{"name":"Kiwa"},
-				{"name":"Manu"},	{"name":"Teina"},	{"name":"Hawaiki"},	{"name":"Tane"},	{"name":"Tama"},		{"name":"Ariki"},	{"name":"Anaru"},		{"name":"Wiremu"},	{"name":"Tangaroa"},	{"name":"Nikora"},
-				{"name":"Kai"},		{"name":"Kahurangi"},	{"name":"Tai"},		{"name":"Hemi"},		{"name":"Rawiri"},	{"name":"Ihaia"},		{"name":"Tawhiri"},	{"name":"Te Ariki"},		{"name":"Rui"},	{"name":"Kauri"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Male" }
 		},
 		{
 			"name": "Māori Female Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Māori"}, {"category_name" : "Gender", "trait_name" : "Female"}]},
-			"traits" :
-			[
-				{"name":"Mia"},	{"name":"Aria"},	{"name":"Maia"},		{"name":"Aurora"}, 	{"name":"Amaia"},		{"name":"Kaiara"},		{"name":"Kaia"},		{"name":"Amara"},		{"name":"Kora"},		{"name":"Maria"},
-				{"name":"Ariana"},	{"name":"Manaia"},	{"name":"Anahera"},	{"name":"Hana"},	{"name":"Aroha"},	{"name":"Ataahua"},		{"name":"Tia"},	{"name":"Ria"},		{"name":"Tui"},	{"name":"Kaea"},
-				{"name":"Kara"},	{"name":"Te Ao"},	{"name":"Marekiura"},	{"name":"Miru"},		{"name":"Kahurangi"},		{"name":"Marama"},	{"name":"Moana"},	{"name":"Huia"},		{"name":"Tiare"},	{"name":"Koa"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Female" }
 		},
 		{
 			"name": "Māori Unisex Given Name", "output_name": "Given Name", "selections": 1, 
 			"requirements" : { "operator" : "All", "operands" : [ {"category_name" : "Ancestry", "trait_name" : "Māori"}, {"category_name" : "Gender", "trait_name" : "Nonbinary"}]},
-			"traits" :
-			[
-				{"name":"Kahurangi"},	{"name":"Kaea"},	{"name":"Manaia"},		{"name":"Koa"},	{"name":"Atawhai"},		{"name":"Harata"},	{"name":"Hau"},			{"name":"Hunapo"},	{"name":"Hunu"},	{"name":"Ikaroa"},
-				{"name":"Iorangi"},		{"name":"Iraia"},	{"name":"Irirangi"},	{"name":"Iwi"},	{"name":"Kaihautu"},	{"name":"Kamaka"},	{"name":"Makareta"},	{"name":"Rongo"},	{"name":"Tia"},		{"name":"Tui"},
-				{"name":"Aiali’i"},		{"name":"Amara"},	{"name":"Mere"},		{"name":"Kai"},	{"name":"Koraka"},		{"name":"Aroha"},	{"name":"Nyree"},		{"name":"Moana"},	{"name":"Rangi"},	{"name":"Aperahama"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Unisex" }
 		},
 		{
 			"name": "Māori Surname", "output_name": "Surname", "selections": 1, 
 			"requirements" : {"category_name" : "Ancestry", "trait_name" : "Māori"},
-			"traits" :
-			[
-				{"name":"Henare"},	{"name":"Kaaka"},	{"name":"Kahinu"},		{"name":"Moana"},		{"name":"Ngata"},	{"name":"Ngatai"},		{"name":"Opetaia"},	{"name":"Paewai"},	{"name":"Parata"},		{"name":"Rameka-waapu"},
-				{"name":"Rangihau"},{"name":"Tenadii"},	{"name":"Wero"},		{"name":"Winiata"},		{"name":"Hira"},	{"name":"Pewhairangi"},	{"name":"Rewi"},	{"name":"Taumata"},	{"name":"Te Wiata"},	{"name":"Turei"},
-				{"name":"Waerea"},	{"name":"Waititi"},	{"name":"Vaatuitui"},	{"name":"Searancke"},	{"name":"Otimi"},	{"name":"Ngatoko"},		{"name":"Lecca"},	{"name":"Kaponga"},	{"name":"Aranui"},		{"name":"Birro"},
-			]
+			"traits_from_file" : { "csv_file" : "Sample Configurations\\Names\\Oceania Names.csv", "category_name_in_file" : "Aboriginal Surname" }
 		},
 		{
 			"name": "Motivation",
