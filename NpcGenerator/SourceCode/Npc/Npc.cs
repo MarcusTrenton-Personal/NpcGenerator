@@ -82,7 +82,7 @@ namespace NpcGenerator
                 return false;
             }
 
-            Trait trait = HashSetUtil.Find(traits, trait => trait.Name == traitId.TraitName);
+            Trait trait = CollectionUtil.Find(traits, trait => trait.Name == traitId.TraitName);
             return trait != null;
         }
 

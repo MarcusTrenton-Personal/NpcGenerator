@@ -21,18 +21,18 @@ using System.Collections.Generic;
 namespace Tests
 {
     [TestClass]
-    public class HashSetUtilTests
+    public class CollectionUtilTests
     {
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void FindWithNullList()
         {
-            HashSetUtil.Find<int>(set: null, test: x => x > 0);
+            CollectionUtil.Find<int>(set: null, test: x => x > 0);
         }
 
         [TestMethod]
         public void FindWithEmptyIntList()
         {
-            int result = HashSetUtil.Find(new HashSet<int>(), x => x > 0);
+            int result = CollectionUtil.Find(new HashSet<int>(), x => x > 0);
 
             Assert.AreEqual(0, result, "Wrong result when no element is found. Is not the default.");
         }
@@ -40,7 +40,7 @@ namespace Tests
         [TestMethod]
         public void FindWithEmptyObjectList()
         {
-            object result = HashSetUtil.Find(new HashSet<object>(), x => x != null);
+            object result = CollectionUtil.Find(new HashSet<object>(), x => x != null);
 
             Assert.AreEqual(null, result, "Wrong result when no element is found. Is not the default.");
         }
@@ -49,7 +49,7 @@ namespace Tests
         public void FindOneElementFound()
         {
             HashSet<int> list = new HashSet<int>() { -1, -2, 9, -3, -4 };
-            int result = HashSetUtil.Find(list, x => x > 0);
+            int result = CollectionUtil.Find(list, x => x > 0);
 
             Assert.AreEqual(9, result, "Wrong result returned from the search.");
         }
@@ -58,7 +58,7 @@ namespace Tests
         public void FindNotFound()
         {
             HashSet<int> list = new HashSet<int>() { -1, -2, -6, -3, -4 };
-            int result = HashSetUtil.Find(list, x => x > 0);
+            int result = CollectionUtil.Find(list, x => x > 0);
 
             Assert.AreEqual(0, result, "Wrong result returned from the search.");
         }
@@ -67,7 +67,7 @@ namespace Tests
         public void FindOneofTwoElements()
         {
             HashSet<int> list = new HashSet<int>() { -1, 2, -6, 3, -4 };
-            int result = HashSetUtil.Find(list, x => x > 0);
+            int result = CollectionUtil.Find(list, x => x > 0);
             bool findSuccessful = result == 2 || result == 3;
 
             Assert.IsTrue(findSuccessful, "Wrong result returned from the search.");
@@ -77,7 +77,7 @@ namespace Tests
         public void FindWithNullTest()
         {
             HashSet<int> list = new HashSet<int>() { -1, 2, -6, 3, -4 };
-            HashSetUtil.Find(list, test: null);
+            CollectionUtil.Find(list, test: null);
         }
     }
 }

@@ -18,9 +18,9 @@ using System.Collections.Generic;
 
 namespace Services
 {
-    public static class HashSetUtil
+    public static class CollectionUtil
     {
-        public static T Find<T>(HashSet<T> set, Predicate<T> test) where T : notnull
+        public static T Find<T>(in IReadOnlyCollection<T> set, Predicate<T> test) where T : notnull
         {
             if (set is null)
             {
