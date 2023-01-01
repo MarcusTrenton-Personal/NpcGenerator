@@ -20,12 +20,9 @@ namespace Services
 {
     public class Digraph<T> where T : notnull
     {
-        public bool AddNode(T node)
+        public bool AddNode(in T node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
+            ParamUtil.VerifyNotNull(nameof(node), node);
 
             if (m_nodeEdges.ContainsKey(node))
             {
@@ -36,25 +33,16 @@ namespace Services
             return true;
         }
 
-        public bool AddEdge(T start, T end)
+        public bool AddEdge(in T start, in T end)
         {
             return AddEdge(start, end, 1);
         }
 
-        public bool AddEdge(T start, T end, int weight)
+        public bool AddEdge(in T start, in T end, int weight)
         {
-            if (start is null)
-            {
-                throw new ArgumentNullException(nameof(start));
-            }
-            if (end is null)
-            {
-                throw new ArgumentNullException(nameof(end));
-            }
-            if (weight <= 0)
-            {
-                throw new ArgumentException(nameof(weight) + " must be greater than 0");
-            }
+            ParamUtil.VerifyNotNull(nameof(start), start);
+            ParamUtil.VerifyNotNull(nameof(end), end);
+            ParamUtil.VerifyWholeNumber(nameof(weight), weight);
 
             AddNodeIfNotAlreadyContained(start);
             AddNodeIfNotAlreadyContained(end);
@@ -113,7 +101,7 @@ namespace Services
             return false;
         }
 
-        private bool FindCycle(T startingNode, Dictionary<T, CycleMarker> markers)
+        private bool FindCycle(in T startingNode, in Dictionary<T, CycleMarker> markers)
         {
             CycleMarker marker = markers[startingNode];
             if (!marker.Visited)

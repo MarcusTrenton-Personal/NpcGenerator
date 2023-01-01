@@ -19,7 +19,7 @@ namespace Services
 {
     public interface ILogicalOperator : ILogicalExpression
     {
-        void Add(ILogicalExpression expression);
+        void Add(in ILogicalExpression expression);
         IReadOnlyList<ILogicalExpression> SubExpressions { get; }
     }
 }

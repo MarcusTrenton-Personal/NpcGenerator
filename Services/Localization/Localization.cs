@@ -74,14 +74,7 @@ namespace Services
 
         public string GetText(string textId, params object[] formatParameters)
         {
-            if (textId is null)
-            {
-                throw new ArgumentNullException(nameof(textId));
-            }
-            if (string.Empty == textId)
-            {
-                throw new ArgumentException(nameof(textId) + " is empty");
-            }
+            ParamUtil.VerifyHasContent(nameof(textId), textId);
 
             int textIdHash = textId.GetHashCode();
             int hashKey = Hash(textIdHash: textIdHash, languageCodeHash: m_currentLanguageCodeHash);
@@ -95,14 +88,7 @@ namespace Services
 
         private static void ParseCsv(string localizationText, out Dictionary<int, string> localization, out string[] languageCodes)
         {
-            if (localizationText is null)
-            {
-                throw new ArgumentNullException(nameof(localizationText));
-            }
-            if (localizationText == string.Empty)
-            {
-                throw new ArgumentException(nameof(localizationText) + " is empty");
-            }
+            ParamUtil.VerifyHasContent(nameof(localizationText), localizationText);
 
             string[] lines = localizationText.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             string[] elements = lines[0].Split('\t');

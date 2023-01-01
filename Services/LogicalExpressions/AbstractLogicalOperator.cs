@@ -20,12 +20,9 @@ namespace Services
 {
     public abstract class AbstractLogicalOperator : ILogicalOperator
     {
-        public void Add(ILogicalExpression expression)
+        public void Add(in ILogicalExpression expression)
         {
-            if (expression is null)
-            {
-                throw new ArgumentNullException("Cannot add null ILogicalExpression as it cannot be evaluated", nameof(expression));
-            }
+            ParamUtil.VerifyNotNull(nameof(expression), expression);
             if (expression == this)
             {
                 throw new ArgumentException(GetType().Name + " cannot add self as it causes an infinite loop during evaluation", 
