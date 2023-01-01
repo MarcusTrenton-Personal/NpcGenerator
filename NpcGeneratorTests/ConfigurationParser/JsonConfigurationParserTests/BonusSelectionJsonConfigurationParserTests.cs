@@ -66,7 +66,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsTrue(threwException, "Failed to throw a MismatchedBonusSelectionException");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void BonusSelectionWithMissingTraitName()
         {
             string text = $@"{{
@@ -87,20 +87,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void BonusSelectionWithMissingSelection()
         {
             string text = $@"{{
@@ -121,20 +111,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void BonusSelectionWithNegativeSelection()
         {
             string text = $@"{{
@@ -155,20 +135,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void BonusSelectionWithFractionSelection()
         {
             string text = $@"{{
@@ -189,20 +159,10 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(JsonFormatException))]
         public void BonusSelectionWithTextSelection()
         {
             string text = $@"{{
@@ -223,17 +183,7 @@ namespace Tests.JsonConfigurationParserTests
 
             JsonConfigurationParser parser = new JsonConfigurationParser(SCHEMA_PATH);
 
-            bool threwException = false;
-            try
-            {
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (JsonFormatException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Failed to throw a JsonFormatException");
+            parser.Parse(text);
         }
 
         [TestMethod]

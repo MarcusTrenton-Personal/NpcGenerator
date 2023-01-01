@@ -24,38 +24,16 @@ namespace Tests
     [TestClass]
     public class RequirementTests
     {
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void ConstructWithNullLogicalExpression()
         {
-            
-            bool threwException = false;
-            try
-            {
-                Requirement req = new Requirement(logicalExpression: null, new NpcHolder());
-            }
-            catch(ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Did not throw ArgumentNullException for null LogicalExpression in constructor.");
+            new Requirement(logicalExpression: null, new NpcHolder());
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void ConstructWithNullNpcHolder()
         {
-
-            bool threwException = false;
-            try
-            {
-                Requirement req = new Requirement(new AlwaysTrue(), npcHolder: null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Did not throw ArgumentNullException for null NpcHolder in constructor.");
+            new Requirement(new AlwaysTrue(), npcHolder: null);
         }
 
         [TestMethod]
@@ -94,22 +72,12 @@ namespace Tests
             Assert.IsTrue(isUnlocked, "Did not evaluate logical expresssion correctly.");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void IsUnlockedForNullNpc()
         {
             Requirement req = new Requirement(new AlwaysTrue(), new NpcHolder());
 
-            bool threwException = false;
-            try
-            {
-                bool isUnlocked = req.IsUnlockedFor(null);
-            }
-            catch(ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Did not throw ArgumentNullException for null npc is IsUnlockedFor.");
+            req.IsUnlockedFor(null);
         }
 
         [TestMethod]

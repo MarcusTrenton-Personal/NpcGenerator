@@ -166,46 +166,26 @@ namespace Tests
             Assert.AreEqual(noParameterTextId, text, "Null localization didn't return the parameter id as the result text");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void EmptyValues()
         {
-            bool causedException = false;
-            try
-            {
-                object[] values = {};
-                string text = (string)m_converter.Convert(
-                    values: values,
-                    targetType: values.GetType(),
-                    parameter: noParameterTextId,
-                    culture: CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "Empty values didn't cause an exception");
+            object[] values = { };
+            m_converter.Convert(
+                values: values,
+                targetType: values.GetType(),
+                parameter: noParameterTextId,
+                culture: CultureInfo.InvariantCulture);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(NotImplementedException))]
         public void ConvertBackNotImplemented()
         {
-            bool causedException = false;
-            try
-            {
-                Type[] targetTypes = { causedException.GetType() };
-                object[] originals = m_converter.ConvertBack(
-                    value: noParameterText,
-                    targetTypes: targetTypes,
-                    parameter: noParameterTextId,
-                    culture: CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                causedException = true;
-            }
-
-            Assert.IsTrue(causedException, "ConvertBack stub didn't cause an exception");
+            Type[] targetTypes = { typeof(bool) };
+            m_converter.ConvertBack(
+                value: noParameterText,
+                targetTypes: targetTypes,
+                parameter: noParameterTextId,
+                culture: CultureInfo.InvariantCulture);
         }
     }
 }

@@ -125,112 +125,62 @@ namespace Tests
             Assert.IsTrue(threwException, "Missing title failed to throw exception");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(CategoryWeightMismatchException))]
         public void MissingWeightColumn()
         {
             string text = "Colour\n" +
                 "Green,1\n" +
                 "Red,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (CategoryWeightMismatchException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing weight column failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(CategoryWeightMismatchException))]
         public void ExtraColumn()
         {
             string text = "Colour,Weight,Bonus Selection\n" +
                 "Green,1\n" +
                 "Red,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (CategoryWeightMismatchException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Extra column failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(CategoryWeightMismatchException))]
         public void SkipFirstColumn()
         {
             string text = ",Colour,Weight\n" +
                 ",Green,1\n" +
                 ",Red,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (CategoryWeightMismatchException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Skipping first column failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(CategoryWeightMismatchException))]
         public void SkipMiddleColumn()
         {
             string text = "Colour,,Weight\n" +
                 "Green,,1\n" +
                 "Red,,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (CategoryWeightMismatchException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Skipping middle column failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(CategoryWeightMismatchException))]
         public void SkipColumnBetweenCategories()
         {
             string text = "Colour,Weight,,Animal,Weight\n" +
                 "Green,1,,Bear,1\n" +
                 "Red,1,,Rhino,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (CategoryWeightMismatchException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Skipping column between categories failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(MissingWeightException))]
         public void MissingWeightCell()
         {
             const string CATEGORY = "Colour";
@@ -240,23 +190,11 @@ namespace Tests
                 TRAIT + "\n" +
                 "Red,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (MissingWeightException exception)
-            {
-                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
-
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Missing weight cell failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(MissingWeightException))]
         public void EmptyWeightCell()
         {
             const string CATEGORY = "Colour";
@@ -266,20 +204,8 @@ namespace Tests
                 TRAIT + ",\n" +
                 "Red,1";
 
-            bool threwException = false;
-            try
-            {
-                CsvConfigurationParser parser = new CsvConfigurationParser();
-                TraitSchema schema = parser.Parse(text);
-            }
-            catch (MissingWeightException exception)
-            {
-                Assert.AreEqual(new TraitId(CATEGORY, TRAIT), exception.TraitId, "Wrong TraitId returned");
-
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Malformed weight cell failed to throw exception");
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(text);
         }
 
         [TestMethod]

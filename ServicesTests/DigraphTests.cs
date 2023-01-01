@@ -69,58 +69,28 @@ namespace Tests
             Assert.IsFalse(success, "Incorrectly added redundant node");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AddNullNode()
         {
             Digraph<StringBuilder> graph = new Digraph<StringBuilder>();
 
-            bool threwExcepion = false;
-            try
-            {
-                bool success = graph.AddNode(null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwExcepion = true;
-            }
-
-            Assert.IsTrue(threwExcepion, "Failed to throw ArgumentNullException");
+            graph.AddNode(null);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AddEdgeNullStart()
         {
             Digraph<string> graph = new Digraph<string>();
 
-            bool threwExcepion = false;
-            try
-            {
-                bool success = graph.AddEdge(start: null, end: "Dinosaur");
-            }
-            catch (ArgumentNullException)
-            {
-                threwExcepion = true;
-            }
-
-            Assert.IsTrue(threwExcepion, "Failed to throw ArgumentNullException");
+            graph.AddEdge(start: null, end: "Dinosaur");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AddEdgeNullEnd()
         {
             Digraph<string> graph = new Digraph<string>();
 
-            bool threwExcepion = false;
-            try
-            {
-                bool success = graph.AddEdge(start: "World", end: null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwExcepion = true;
-            }
-
-            Assert.IsTrue(threwExcepion, "Failed to throw ArgumentNullException");
+            graph.AddEdge(start: "World", end: null);
         }
 
         [TestMethod]
@@ -624,8 +594,12 @@ namespace Tests
         private struct TestObject
         {
 #pragma warning disable CS0169 // Field is never used. Don't care as it's a test object. 
+#pragma warning disable IDE0044 // ReadOnly suggestion ignored
+#pragma warning disable IDE0051 // Field is never used
             int x;
             string y;
+#pragma warning restore IDE0051 // Field is never used
+#pragma warning restore IDE0044 // ReadOnly suggestion ignored
 #pragma warning restore CS0169 // Field is never used
         }
     }

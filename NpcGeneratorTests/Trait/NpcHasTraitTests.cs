@@ -51,55 +51,25 @@ namespace Tests
             m_npcProvider = new StubNpcProvider(m_npcWithTrait);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullTraitId()
         {
-            bool threwException = false;
-            try
-            {
-                NpcHasTrait expression = new NpcHasTrait(traitId: null, npcProvider: m_npcProvider);
-            }
-            catch(ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Creating a NpcHasTrait with a null TraitId should throw an ArgumentNullException");
+            new NpcHasTrait(traitId: null, npcProvider: m_npcProvider);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullNpcProvider()
         {
-            bool threwException = false;
-            try
-            {
-                NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "Creating a NpcHasTrait with a null npcProvider should throw an ArgumentNullException");
+            new NpcHasTrait(traitId: m_foundTraitId, npcProvider: null);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
         public void NullNpcProvidedDuringEvaluate()
         {
             StubNpcProvider npcProvider = new StubNpcProvider(npc: null);
             NpcHasTrait expression = new NpcHasTrait(traitId: m_foundTraitId, npcProvider: npcProvider);
 
-            bool threwException = false;
-            try
-            {
-                bool found = expression.Evaluate();
-            }
-            catch (InvalidOperationException)
-            {
-                threwException = true;
-            }
-
-            Assert.IsTrue(threwException, "NpcHasTrait with a null Npc during Evaluate did not throw an InvalidOperationException");
+            expression.Evaluate();
         }
 
         [TestMethod]

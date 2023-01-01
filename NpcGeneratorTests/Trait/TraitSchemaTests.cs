@@ -113,22 +113,12 @@ namespace Tests
             Assert.AreEqual(replacement1, replacements[1], "Altered ReplacementSearch was stored");
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void HasTraitNull()
         {
             TraitSchema traitSchema = new TraitSchema();
 
-            bool threwException = false;
-            try
-            {
-                bool isFound = traitSchema.HasTrait(null);
-            }
-            catch (ArgumentNullException)
-            {
-                threwException = true;
-            }
-            
-            Assert.IsTrue(threwException, "Failed to throw an ArgumentNullException for a null parameter");
+            traitSchema.HasTrait(null);
         }
 
         [TestMethod]
