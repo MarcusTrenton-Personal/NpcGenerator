@@ -79,5 +79,64 @@ namespace Tests
             HashSet<int> list = new HashSet<int>() { -1, 2, -6, 3, -4 };
             CollectionUtil.Find(list, test: null);
         }
+
+        private struct TestStruct
+        {
+            public TestStruct(int x, object y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public int x;
+            public object y;
+        }
+
+        [TestMethod]
+        public void FindFailElementWithParameterizedConstructor()
+        {
+            TestStruct defaultObject = default;
+
+            List<TestStruct> list = new List<TestStruct>();
+            TestStruct result = CollectionUtil.Find(list, i => i.x > 0);
+
+            Assert.AreEqual(defaultObject, result, "Failed find did not return default value");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithNull()
+        {
+            List<int> nullList = null;
+            bool isNullOrEmpty = CollectionUtil.IsNullOrEmpty(nullList);
+
+            Assert.IsTrue(isNullOrEmpty, "IsNullOrEmpty should be true");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithEmpty()
+        {
+            List<int> emptyList = new List<int>();
+            bool isNullOrEmpty = CollectionUtil.IsNullOrEmpty(emptyList);
+
+            Assert.IsTrue(isNullOrEmpty, "IsNullOrEmpty should be true");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithSingleElement()
+        {
+            List<int> singleElementList = new List<int>() { 3 };
+            bool isNullOrEmpty = CollectionUtil.IsNullOrEmpty(singleElementList);
+
+            Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
+        }
+
+        [TestMethod]
+        public void IsNullOrEmptyWithMultipleElements()
+        {
+            List<int> multipleElementList = new List<int>() { 3, 4, 5 };
+            bool isNullOrEmpty = CollectionUtil.IsNullOrEmpty(multipleElementList);
+
+            Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
+        }
     }
 }

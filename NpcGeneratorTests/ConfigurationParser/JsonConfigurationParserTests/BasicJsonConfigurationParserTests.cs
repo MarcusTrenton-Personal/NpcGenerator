@@ -656,10 +656,10 @@ namespace Tests.JsonConfigurationParserTests
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
 
             Assert.AreEqual(2, categories.Count, "Wrong number of categories");
-            TraitCategory category0 = ListUtil.Find(categories, category => category.Name == CATEGORY0);
+            TraitCategory category0 = CollectionUtil.Find(categories, category => category.Name == CATEGORY0);
             Assert.IsNotNull(category0, "Category is missing");
             Assert.AreEqual(CATEGORY0_IS_HIDDEN, category0.IsHidden, "Wrong IsHidden value");
-            TraitCategory category1 = ListUtil.Find(categories, category => category.Name == CATEGORY1);
+            TraitCategory category1 = CollectionUtil.Find(categories, category => category.Name == CATEGORY1);
             Assert.IsNotNull(category1, "Category is missing");
             Assert.AreEqual(CATEGORY1_IS_HIDDEN, category1.IsHidden, "Wrong IsHidden value");
         }
@@ -741,10 +741,10 @@ namespace Tests.JsonConfigurationParserTests
 
                 Assert.AreEqual(2, exception.ConflictingCategories.Count, "Wrong number of conflicting categories");
 
-                TraitCategory category0 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY0);
+                TraitCategory category0 = CollectionUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY0);
                 Assert.IsNotNull(category0, "Wrong category in exception");
 
-                TraitCategory category1 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY1);
+                TraitCategory category1 = CollectionUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY1);
                 Assert.IsNotNull(category1, "Wrong category in exception");
             }
 
@@ -827,13 +827,13 @@ namespace Tests.JsonConfigurationParserTests
 
                 Assert.AreEqual(3, exception.ConflictingCategories.Count, "Wrong number of conflicting categories");
 
-                TraitCategory category0 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY0);
+                TraitCategory category0 = CollectionUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY0);
                 Assert.IsNotNull(category0, "Wrong category in exception");
 
-                TraitCategory category1 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY1);
+                TraitCategory category1 = CollectionUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY1);
                 Assert.IsNotNull(category1, "Wrong category in exception");
 
-                TraitCategory category2 = ListUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY2);
+                TraitCategory category2 = CollectionUtil.Find(exception.ConflictingCategories, category => category.Name == CATEGORY2);
                 Assert.IsNotNull(category2, "Wrong category in exception");
             }
 

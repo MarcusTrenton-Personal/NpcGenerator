@@ -954,9 +954,9 @@ namespace Tests
             IReadOnlyList<Trait> traits = category.GetTraits();
 
             Assert.AreEqual(2, traits.Count, "Wrong number of traits");
-            Trait foundTrait0 = ListUtil.Find(traits, trait => trait == trait0);
+            Trait foundTrait0 = CollectionUtil.Find(traits, trait => trait == trait0);
             Assert.IsNotNull(foundTrait0, "Trait not found");
-            Trait foundTrait1 = ListUtil.Find(traits, trait => trait == trait1);
+            Trait foundTrait1 = CollectionUtil.Find(traits, trait => trait == trait1);
             Assert.IsNotNull(foundTrait1, "Trait not found");
         }
 
@@ -971,7 +971,7 @@ namespace Tests
             IReadOnlyList<Trait> traits0 = category.GetTraits();
 
             Assert.AreEqual(1, traits0.Count, "Wrong number of traits");
-            Trait foundTrait0inList0 = ListUtil.Find(traits0, trait => trait == trait0);
+            Trait foundTrait0inList0 = CollectionUtil.Find(traits0, trait => trait == trait0);
             Assert.IsNotNull(foundTrait0inList0, "Trait not found");
 
             category.Add(trait1);
@@ -979,9 +979,9 @@ namespace Tests
             IReadOnlyList<Trait> traits1 = category.GetTraits();
 
             Assert.AreEqual(2, traits1.Count, "Wrong number of traits");
-            Trait foundTrait0inList1 = ListUtil.Find(traits1, trait => trait == trait0);
+            Trait foundTrait0inList1 = CollectionUtil.Find(traits1, trait => trait == trait0);
             Assert.IsNotNull(foundTrait0inList1, "Trait not found");
-            Trait foundTrait1inList1 = ListUtil.Find(traits1, trait => trait == trait1);
+            Trait foundTrait1inList1 = CollectionUtil.Find(traits1, trait => trait == trait1);
             Assert.IsNotNull(foundTrait1inList1, "Trait not found");
         }
     }

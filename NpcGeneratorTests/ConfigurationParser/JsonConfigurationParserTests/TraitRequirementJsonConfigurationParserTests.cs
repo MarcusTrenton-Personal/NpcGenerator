@@ -67,7 +67,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory categoryOfGuardedTrait = ListUtil.Find(
+            TraitCategory categoryOfGuardedTrait = CollectionUtil.Find(
                 schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
             Trait guardedTrait = categoryOfGuardedTrait.GetTrait(GUARDED_TRAIT);
             HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
@@ -146,7 +146,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory categoryOfGuardTrait = ListUtil.Find(
+            TraitCategory categoryOfGuardTrait = CollectionUtil.Find(
                 schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
             Trait guardedTrait = categoryOfGuardTrait.GetTrait(GUARDED_TRAIT);
             HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
@@ -242,7 +242,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+            TraitCategory guardedCategory = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
             Trait guardedTrait = guardedCategory.GetTrait(GUARDED_TRAIT);
             HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
@@ -338,7 +338,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(schema, "Schema is null");
 
             TraitCategory categoryOfGuardedTrait = 
-                ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+                CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
             Trait guardedTrait = categoryOfGuardedTrait.GetTrait(GUARDED_TRAIT);
             HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
@@ -439,7 +439,7 @@ namespace Tests.JsonConfigurationParserTests
             Assert.IsNotNull(schema, "Schema is null");
 
             TraitCategory categoryOfGuardedTrait = 
-                ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
+                CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY_OF_GUARDED_TRAIT);
             Trait guardedTrait = categoryOfGuardedTrait.GetTrait(GUARDED_TRAIT);
             HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
@@ -792,7 +792,7 @@ namespace Tests.JsonConfigurationParserTests
             TraitSchema schema = parser.Parse(text);
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY);
+            TraitCategory category = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY);
             Trait guardedTrait = category.GetTrait(GUARDED_TRAIT);
             HashSet<string> dependentCategoryNames = guardedTrait.DependentCategoryNames();
             Assert.AreEqual(1, dependentCategoryNames.Count, "Wrong number of dependencies");
@@ -1385,7 +1385,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY);
+            TraitCategory category = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == CATEGORY);
             HashSet<string> dependentCategoryNames = category.DependentCategoryNames();
             Assert.AreEqual(0, dependentCategoryNames.Count, "Wrong number of dependencies");
 

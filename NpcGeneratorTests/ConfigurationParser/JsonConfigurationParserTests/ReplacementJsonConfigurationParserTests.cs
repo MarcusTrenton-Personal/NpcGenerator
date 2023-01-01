@@ -124,11 +124,11 @@ namespace Tests.JsonConfigurationParserTests
             IReadOnlyList<ReplacementSearch> replacements = schema.GetReplacementSearches();
             Assert.AreEqual(2, replacements.Count, "Wrong number of replacements found.");
 
-            ReplacementSearch replacement0 = ListUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY0);
+            ReplacementSearch replacement0 = CollectionUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY0);
             Assert.AreEqual(REPLACEMENT_CATEGORY0, replacement0.Category.Name, "Wrong replacement category");
             Assert.AreEqual(REPLACEMENT_TRAIT0, replacement0.Trait.Name, "Wrong replacement trait");
 
-            ReplacementSearch replacement1 = ListUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY1);
+            ReplacementSearch replacement1 = CollectionUtil.Find(replacements, replacement => replacement.Category.Name == REPLACEMENT_CATEGORY1);
             Assert.AreEqual(REPLACEMENT_CATEGORY1, replacement1.Category.Name, "Wrong replacement category");
             Assert.AreEqual(REPLACEMENT_TRAIT1, replacement1.Trait.Name, "Wrong replacement trait");
         }

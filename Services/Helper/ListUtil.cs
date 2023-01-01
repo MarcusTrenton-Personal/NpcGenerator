@@ -20,44 +20,12 @@ namespace Services
 {
     public static class ListUtil
     {
-        public static T Find<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
-        {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-            if (test is null)
-            {
-                throw new ArgumentNullException(nameof(test));
-            }
-
-            foreach (T item in list)
-            {
-                if (test(item))
-                {
-                    return item;
-                }
-            }
-            return default;
-        }
-
-        public static bool IsNullOrEmpty<T>(IReadOnlyList<T> list) where T : notnull
-        {
-            return list is null || list.Count == 0;
-        }
-
-        public static IReadOnlyList<T> ConvertAll<T,U>(IReadOnlyList<U> list, Func<U, T> converter) 
+        public static IReadOnlyList<T> ConvertAll<T,U>(in IReadOnlyList<U> list, in Func<U, T> converter) 
             where T : notnull 
             where U : notnull
         {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-            if (converter is null)
-            {
-                throw new ArgumentNullException(nameof(converter));
-            }
+            ParamUtil.VerifyNotNull(nameof(list), list);
+            ParamUtil.VerifyNotNull(nameof(converter), converter);
 
             List<T> result = new List<T>();
             foreach(U item in list)
@@ -68,16 +36,10 @@ namespace Services
         }
 
         public const int INDEX_NOT_FOUND = -1;
-        public static int IndexOf<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
+        public static int IndexOf<T>(in IReadOnlyList<T> list, in Predicate<T> test) where T : notnull
         {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-            if (test is null)
-            {
-                throw new ArgumentNullException(nameof(test));
-            }
+            ParamUtil.VerifyNotNull(nameof(list), list);
+            ParamUtil.VerifyNotNull(nameof(test), test);
 
             for (int i = 0; i < list.Count; ++i)
             {
@@ -90,19 +52,9 @@ namespace Services
             return INDEX_NOT_FOUND;
         }
 
-        public static List<T> DistinctPreserveOrder<T>(IReadOnlyList<T> list) where T : notnull
+        public static List<T> DistinctPreserveOrder<T>(in IReadOnlyList<T> list) where T : notnull
         {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-            foreach (T element in list)
-            {
-                if (element is null)
-                {
-                    throw new ArgumentException("Null element in " + nameof(list));
-                }
-            }
+            ParamUtil.VerifyElementsAreNotNull(nameof(list), list);
 
             List<T> result = new List<T>();
             bool[] processed = new bool[list.Count];
@@ -129,16 +81,10 @@ namespace Services
             return result;
         }
 
-        public static List<T> FindAll<T>(IReadOnlyList<T> list, Predicate<T> test) where T : notnull
+        public static List<T> FindAll<T>(in IReadOnlyList<T> list, in Predicate<T> test) where T : notnull
         {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-            if (test is null)
-            {
-                throw new ArgumentNullException(nameof(test));
-            }
+            ParamUtil.VerifyNotNull(nameof(list), list);
+            ParamUtil.VerifyNotNull(nameof(test), test);
 
             List<T> result = new List<T>();
             foreach (T element in list)

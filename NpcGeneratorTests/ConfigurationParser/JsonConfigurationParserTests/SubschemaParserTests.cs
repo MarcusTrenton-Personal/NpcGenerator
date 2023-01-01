@@ -73,13 +73,13 @@ namespace Tests.JsonConfigurationParserTests
             IReadOnlyList<Trait> traits = category.GetTraits();
             Assert.AreEqual(2, traits.Count, "Wrong trait count");
 
-            Trait foundTrait0 = ListUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T0_NAME && 
+            Trait foundTrait0 = CollectionUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T0_NAME && 
                 trait.Weight == SUBSCHEMA_C0T0_WEIGHT && 
                 trait.IsHidden == false && 
                 trait.BonusSelection == null);
             Assert.IsNotNull(foundTrait0, "Did not find a required trait");
 
-            Trait foundTrait1 = ListUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T1_NAME &&
+            Trait foundTrait1 = CollectionUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T1_NAME &&
                 trait.Weight == SUBSCHEMA_C0T1_WEIGHT &&
                 trait.IsHidden == false &&
                 trait.BonusSelection == null);
@@ -192,19 +192,19 @@ namespace Tests.JsonConfigurationParserTests
             IReadOnlyList<Trait> traits = category.GetTraits();
             Assert.AreEqual(3, traits.Count, "Wrong trait count");
 
-            Trait foundTrait0 = ListUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T0_NAME &&
+            Trait foundTrait0 = CollectionUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T0_NAME &&
                 trait.Weight == SUBSCHEMA_C0T0_WEIGHT &&
                 trait.IsHidden == false &&
                 trait.BonusSelection == null);
             Assert.IsNotNull(foundTrait0, "Did not find a required trait");
 
-            Trait foundTrait1 = ListUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T1_NAME &&
+            Trait foundTrait1 = CollectionUtil.Find(traits, trait => trait.Name == SUBSCHEMA_C0T1_NAME &&
                 trait.Weight == SUBSCHEMA_C0T1_WEIGHT &&
                 trait.IsHidden == false &&
                 trait.BonusSelection == null);
             Assert.IsNotNull(foundTrait1, "Did not find a required trait");
 
-            Trait foundTrait2 = ListUtil.Find(traits, trait => trait.Name == LOCAL_C0T0_NAME &&
+            Trait foundTrait2 = CollectionUtil.Find(traits, trait => trait.Name == LOCAL_C0T0_NAME &&
                 trait.Weight == LOCAL_C0T0_WEIGHT &&
                 trait.IsHidden == false &&
                 trait.BonusSelection == null);

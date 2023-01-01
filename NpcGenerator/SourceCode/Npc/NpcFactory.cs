@@ -191,7 +191,7 @@ namespace NpcGenerator
         {
             foreach (BonusSelection bonusSelection in bonusSelections)
             {
-                TraitCategory cat = ListUtil.Find(categories, category => category.Name == bonusSelection.CategoryName);
+                TraitCategory cat = CollectionUtil.Find(categories, category => category.Name == bonusSelection.CategoryName);
                 if (cat is null)
                 {
                     throw new MissingBonusSelectionCategory(bonusSelection.CategoryName);
@@ -243,7 +243,7 @@ namespace NpcGenerator
 
             foreach (NpcGroup.Category npcCategory in npcGroup.CategoryOrder)
             {
-                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.OutputName == npcCategory.Name);
+                TraitCategory schemaCategory = CollectionUtil.Find(schemaCategories, category => category.OutputName == npcCategory.Name);
                 if (schemaCategory != null && schemaCategory.IsHidden != npcCategory.IsHidden)
                 {
                     NpcSchemaViolation.Reason reason = npcCategory.IsHidden ? NpcSchemaViolation.Reason.CategoryIsIncorrectlyHidden :
@@ -296,7 +296,7 @@ namespace NpcGenerator
             {
                 foreach (Npc.Trait npcTrait in npc.GetTraitsOfCategory(npcCategory))
                 {
-                    TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcTrait.OriginalCategory);
+                    TraitCategory schemaCategory = CollectionUtil.Find(schemaCategories, category => category.Name == npcTrait.OriginalCategory);
                     if (schemaCategory is null)
                     {
                         violations.Add(new NpcSchemaViolation(npcTrait.OriginalCategory, NpcSchemaViolation.Reason.CategoryNotFoundInSchema));
@@ -338,7 +338,7 @@ namespace NpcGenerator
                 bool didNameChange = replacement.OriginalTrait.Name != replacement.ReplacementTraitName;
                 if (didNameChange)
                 {
-                    string npcCategoryWithReplacement = ListUtil.Find(npcCategories, category => category == replacement.Category.Name);
+                    string npcCategoryWithReplacement = CollectionUtil.Find(npcCategories, category => category == replacement.Category.Name);
                     if (!string.IsNullOrEmpty(npcCategoryWithReplacement))
                     {
                         Npc.Trait[] traits = npc.GetTraitsOfCategory(npcCategoryWithReplacement);
@@ -362,7 +362,7 @@ namespace NpcGenerator
 
             foreach (string npcCategory in npcCategories)
             {
-                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                TraitCategory schemaCategory = CollectionUtil.Find(schemaCategories, category => category.Name == npcCategory);
                 if (schemaCategory != null)
                 {
                     Npc.Trait[] npcTraits = npc.GetTraitsOfCategory(npcCategory);
@@ -401,7 +401,7 @@ namespace NpcGenerator
             {
                 int foundTraitCount = npc.GetTraitsOfCategory(npcCategory).Length;
 
-                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                TraitCategory schemaCategory = CollectionUtil.Find(schemaCategories, category => category.Name == npcCategory);
                 if (schemaCategory != null)
                 {
                     int justifiedTraitCount = schemaCategory.DefaultSelectionCount + bonusSelectionIntoCount[npcCategory];
@@ -427,7 +427,7 @@ namespace NpcGenerator
 
             foreach (string npcCategory in npc.GetCategories())
             {
-                TraitCategory schemaCategory = ListUtil.Find(schemaCategories, category => category.Name == npcCategory);
+                TraitCategory schemaCategory = CollectionUtil.Find(schemaCategories, category => category.Name == npcCategory);
                 if (schemaCategory != null)
                 {
                     foreach (Npc.Trait npcTrait in npc.GetTraitsOfCategory(npcCategory))

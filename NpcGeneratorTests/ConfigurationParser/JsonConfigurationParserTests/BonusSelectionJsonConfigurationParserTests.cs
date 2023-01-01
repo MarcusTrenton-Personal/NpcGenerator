@@ -299,7 +299,7 @@ namespace Tests.JsonConfigurationParserTests
             TraitSchema schema = parser.Parse(text);
 
             IReadOnlyList<TraitCategory> categories = schema.GetTraitCategories();
-            TraitCategory category = ListUtil.Find(categories, category => category.Name == SOURCE_CATEGORY);
+            TraitCategory category = CollectionUtil.Find(categories, category => category.Name == SOURCE_CATEGORY);
             Trait trait = category.GetTrait(TRAIT);
             BonusSelection bonusSelection = trait.BonusSelection;
 

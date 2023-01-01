@@ -71,7 +71,7 @@ namespace NpcGenerator
 
         private static string ReplacementNameForTrait(IReadOnlyList<Replacement> replacements, Trait trait)
         {
-            Replacement replacement = ListUtil.Find(replacements, replacement => replacement.OriginalTrait == trait);
+            Replacement replacement = CollectionUtil.Find(replacements, replacement => replacement.OriginalTrait == trait);
             return replacement is null ? trait.Name : replacement.ReplacementTraitName;
         }
 

@@ -290,9 +290,9 @@ namespace Tests
             IReadOnlyList<string> categories = npc.GetCategories();
 
             Assert.AreEqual(2, categories.Count, "Wrong number of categories");
-            string category0 = ListUtil.Find(categories, category => category == CATEGORY0);
+            string category0 = CollectionUtil.Find(categories, category => category == CATEGORY0);
             Assert.AreEqual(CATEGORY0, category0, "Wrong category name");
-            string category1 = ListUtil.Find(categories, category => category == CATEGORY1);
+            string category1 = CollectionUtil.Find(categories, category => category == CATEGORY1);
             Assert.AreEqual(CATEGORY1, category1, "Wrong category name");
         }
 
@@ -308,7 +308,7 @@ namespace Tests
             IReadOnlyList<string> categories = npc.GetCategories();
 
             Assert.AreEqual(1, categories.Count, "Wrong number of categories");
-            string category = ListUtil.Find(categories, category => category == CATEGORY);
+            string category = CollectionUtil.Find(categories, category => category == CATEGORY);
             Assert.AreEqual(CATEGORY, category, "Wrong category name");
 
             Npc.Trait[] traits = npc.GetTraitsOfCategory(CATEGORY);

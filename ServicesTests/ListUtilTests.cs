@@ -25,122 +25,6 @@ namespace Tests
     public class ListUtilTests
     {
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void FindWithNullList()
-        {
-            ListUtil.Find<int>(list: null, test: x => x > 0);
-        }
-
-        [TestMethod]
-        public void FindWithEmptyIntList()
-        {
-            int result = ListUtil.Find(new List<int>(), x => x > 0);
-
-            Assert.AreEqual(0, result, "Wrong result when no element is found. Is not the default.");
-        }
-
-        [TestMethod]
-        public void FindWithEmptyObjectList()
-        {
-            object result = ListUtil.Find(new List<object>(), x => x != null);
-
-            Assert.AreEqual(null, result, "Wrong result when no element is found. Is not the default.");
-        }
-
-        [TestMethod]
-        public void FindOneElementFound()
-        {
-            List<int> list = new List<int>() { -1, -2, 9, -3, -4 };
-            int result = ListUtil.Find(list, x => x > 0);
-
-            Assert.AreEqual(9, result, "Wrong result returned from the search.");
-        }
-
-        [TestMethod]
-        public void FindNotFound()
-        {
-            List<int> list = new List<int>() { -1, -2, -6, -3, -4 };
-            int result = ListUtil.Find(list, x => x > 0);
-
-            Assert.AreEqual(0, result, "Wrong result returned from the search.");
-        }
-
-        [TestMethod]
-        public void FindOneofTwoElements()
-        {
-            List<int> list = new List<int>() { -1, 2, -6, 3, -4 };
-            int result = ListUtil.Find(list, x => x > 0);
-            bool findSuccessful = result == 2 || result == 3;
-
-            Assert.IsTrue(findSuccessful, "Wrong result returned from the search.");
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void FindWithNullTest()
-        {
-            List<int> list = new List<int>() { -1, 2, -6, 3, -4 };
-            ListUtil.Find(list, test: null);
-        }
-
-        [TestMethod]
-        public void IsNullOrEmptyWithNull()
-        {
-            List<int> nullList = null;
-            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(nullList);
-
-            Assert.IsTrue(isNullOrEmpty, "IsNullOrEmpty should be true");
-        }
-
-        [TestMethod]
-        public void IsNullOrEmptyWithEmpty()
-        {
-            List<int> emptyList = new List<int>();
-            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(emptyList);
-
-            Assert.IsTrue(isNullOrEmpty, "IsNullOrEmpty should be true");
-        }
-
-        [TestMethod]
-        public void IsNullOrEmptyWithSingleElement()
-        {
-            List<int> singleElementList = new List<int>() { 3 };
-            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(singleElementList);
-
-            Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
-        }
-
-        [TestMethod]
-        public void IsNullOrEmptyWithMultipleElements()
-        {
-            List<int> multipleElementList = new List<int>() { 3, 4, 5 };
-            bool isNullOrEmpty = ListUtil.IsNullOrEmpty(multipleElementList);
-
-            Assert.IsFalse(isNullOrEmpty, "IsNullOrEmpty should be false");
-        }
-
-        private struct TestStruct
-        {
-            public TestStruct(int x, object y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
-            public int x;
-            public object y;
-        }
-
-        [TestMethod]
-        public void FindFailElementWithParameterizedConstructor()
-        {
-            TestStruct defaultObject = default;
-
-            List<TestStruct> list = new List<TestStruct>();
-            TestStruct result = ListUtil.Find(list, i => i.x > 0);
-
-            Assert.AreEqual(defaultObject, result, "Failed find did not return default value");
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void ConvertAllWithNullList()
         {
             IReadOnlyList<string> result = ListUtil.ConvertAll<string, int>(list: null, converter: number => number.ToString());
@@ -304,6 +188,18 @@ namespace Tests
 
             Assert.AreEqual(1, result.Count, "Wrong number of elements in list");
             Assert.AreEqual(E0, result[0], "Wrong element in list");
+        }
+
+        private struct TestStruct
+        {
+            public TestStruct(int x, object y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public int x;
+            public object y;
         }
 
         [TestMethod]

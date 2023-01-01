@@ -142,7 +142,7 @@ namespace NpcGenerator
         private void ValidateSystemLanguage()
         {
             CultureInfo[] allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            CultureInfo culture = ListUtil.Find(allCultures, culture => culture.ToString() == SystemLanguage);
+            CultureInfo culture = CollectionUtil.Find(allCultures, culture => culture.ToString() == SystemLanguage);
             if (culture is null)
             {
                 SystemLanguage = GetSystemLanguage();

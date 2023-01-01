@@ -498,8 +498,8 @@ namespace Tests
             IReadOnlyList<string> order = schema.CalculateTraversalOrder();
 
             Assert.AreEqual(2, order.Count, "Order has wrong number of elements");
-            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY0), "Order did not contain " + CATEGORY0);
-            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY1), "Order did not contain " + CATEGORY1);
+            Assert.IsNotNull(CollectionUtil.Find(order, element => element == CATEGORY0), "Order did not contain " + CATEGORY0);
+            Assert.IsNotNull(CollectionUtil.Find(order, element => element == CATEGORY1), "Order did not contain " + CATEGORY1);
         }
 
         [TestMethod]
@@ -535,8 +535,8 @@ namespace Tests
             IReadOnlyList<string> order = traitSchema.CalculateTraversalOrder();
 
             Assert.AreEqual(2, order.Count, "Order has wrong number of elements");
-            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY0), "Order did not contain " + CATEGORY0);
-            Assert.IsNotNull(ListUtil.Find(order, element => element == CATEGORY1), "Order did not contain " + CATEGORY1);
+            Assert.IsNotNull(CollectionUtil.Find(order, element => element == CATEGORY0), "Order did not contain " + CATEGORY0);
+            Assert.IsNotNull(CollectionUtil.Find(order, element => element == CATEGORY1), "Order did not contain " + CATEGORY1);
         }
 
         [TestMethod]

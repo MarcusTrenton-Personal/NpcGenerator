@@ -20,16 +20,10 @@ namespace Services
 {
     public static class CollectionUtil
     {
-        public static T Find<T>(in IReadOnlyCollection<T> set, Predicate<T> test) where T : notnull
+        public static T Find<T>(in IReadOnlyCollection<T> set, in Predicate<T> test) where T : notnull
         {
-            if (set is null)
-            {
-                throw new ArgumentNullException(nameof(set));
-            }
-            if (test is null)
-            {
-                throw new ArgumentNullException(nameof(test));
-            }
+            ParamUtil.VerifyNotNull(nameof(set), set);
+            ParamUtil.VerifyNotNull(nameof(test), test);
 
             foreach (T item in set)
             {
@@ -39,6 +33,11 @@ namespace Services
                 }
             }
             return default;
+        }
+
+        public static bool IsNullOrEmpty<T>(in IReadOnlyCollection<T> collection) where T : notnull
+        {
+            return collection is null || collection.Count == 0;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
             
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            TraitCategory guardedCategory = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
             HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
             Assert.AreEqual(1, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY), "Wrong dependency");
@@ -142,7 +142,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            TraitCategory guardedCategory = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
             HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY0), "Wrong dependency");
@@ -235,7 +235,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            TraitCategory guardedCategory = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
             HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY0), "Wrong dependency");
@@ -328,7 +328,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            TraitCategory guardedCategory = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
             HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY0), "Wrong dependency");
@@ -427,7 +427,7 @@ namespace Tests.JsonConfigurationParserTests
 
             Assert.IsNotNull(schema, "Schema is null");
 
-            TraitCategory guardedCategory = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
+            TraitCategory guardedCategory = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == GUARDED_CATEGORY);
             HashSet<string> dependentCategoryNames = guardedCategory.DependentCategoryNames();
             Assert.AreEqual(2, dependentCategoryNames.Count, "Wrong number of dependencies");
             Assert.IsTrue(dependentCategoryNames.Contains(REQUIREMENT_CATEGORY), "Wrong dependency");

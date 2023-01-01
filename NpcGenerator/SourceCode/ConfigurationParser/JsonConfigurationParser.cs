@@ -73,7 +73,7 @@ namespace NpcGenerator
                     TraitSchema subSchema = subSchemas[relativeFilePath];
                     IReadOnlyList<TraitCategory> subSchemaCategories = subSchema.GetTraitCategories();
                     string subSchemaCategoryName = protoCategory.traits_from_file.category_name_in_file;
-                    TraitCategory subSchemaCategory = ListUtil.Find(subSchemaCategories, category => category.Name == subSchemaCategoryName);
+                    TraitCategory subSchemaCategory = CollectionUtil.Find(subSchemaCategories, category => category.Name == subSchemaCategoryName);
                     if (subSchemaCategory != null)
                     {
                         if (protoCategory.traits == null)
@@ -215,7 +215,7 @@ namespace NpcGenerator
                 {
                     bool originalIsHidden = categoriesOfSameOutputName[0].IsHidden;
                     TraitCategory conflictingCategory = 
-                        ListUtil.Find(categoriesOfSameOutputName, category => category.IsHidden != originalIsHidden);
+                        CollectionUtil.Find(categoriesOfSameOutputName, category => category.IsHidden != originalIsHidden);
                     if (conflictingCategory != null)
                     {
                         throw new ConflictingCategoryVisibilityException(categoriesOfSameOutputName);
@@ -238,7 +238,7 @@ namespace NpcGenerator
             {
                 foreach (string orderCategory in order)
                 {
-                    TraitCategory category = ListUtil.Find(schemaCategories, category => category.OutputName == orderCategory);
+                    TraitCategory category = CollectionUtil.Find(schemaCategories, category => category.OutputName == orderCategory);
                     if (category is null)
                     {
                         throw new OrderCategoryNotFoundException(orderCategory);
@@ -254,7 +254,7 @@ namespace NpcGenerator
             {
                 foreach (string orderCategory in order)
                 {
-                    string duplicate = ListUtil.Find(order, category => category == orderCategory && !ReferenceEquals(category, orderCategory));
+                    string duplicate = CollectionUtil.Find(order, category => category == orderCategory && !ReferenceEquals(category, orderCategory));
                     if (!string.IsNullOrEmpty(duplicate))
                     {
                         throw new OrderCategoryDuplicateException(orderCategory);
@@ -310,10 +310,10 @@ namespace NpcGenerator
                     ProtoBonusSelection protoBonusSelection = protoTrait.bonus_selection;
                     if (protoBonusSelection != null)
                     {
-                        TraitCategory originalCategory = ListUtil.Find(categories, category => category.Name == protoCategory.Name);
+                        TraitCategory originalCategory = CollectionUtil.Find(categories, category => category.Name == protoCategory.Name);
                         Trait trait = originalCategory.GetTrait(protoTrait.Name);
 
-                        TraitCategory targetCategory = ListUtil.Find(categories, category => category.Name == protoBonusSelection.trait_category_name);
+                        TraitCategory targetCategory = CollectionUtil.Find(categories, category => category.Name == protoBonusSelection.trait_category_name);
                         if (targetCategory is null)
                         {
                             throw new MismatchedBonusSelectionException(notFoundCategory: protoBonusSelection.trait_category_name,
@@ -337,7 +337,7 @@ namespace NpcGenerator
         {
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
-                TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
+                TraitCategory category = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
 
                 bool selfRequiringCategory = RequiresCategory(protoCategory.requirements, category);
                 if (selfRequiringCategory)
@@ -354,7 +354,7 @@ namespace NpcGenerator
         {
             foreach (ProtoTraitCategory protoCategory in protoTraitSchema.trait_categories)
             {
-                TraitCategory category = ListUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
+                TraitCategory category = CollectionUtil.Find(schema.GetTraitCategories(), category => category.Name == protoCategory.Name);
 
                 foreach (ProtoTrait protoTrait in protoCategory.traits)
                 {
@@ -521,7 +521,7 @@ namespace NpcGenerator
                 foreach (ProtoReplacement protoReplacement in protoReplacements)
                 {
                     IReadOnlyList<TraitCategory> categories = traitSchema.GetTraitCategories();
-                    TraitCategory category = ListUtil.Find(categories, category => category.Name == protoReplacement.category_name);
+                    TraitCategory category = CollectionUtil.Find(categories, category => category.Name == protoReplacement.category_name);
                     if (category is null)
                     {
                         throw new MissingReplacementCategoryException(
