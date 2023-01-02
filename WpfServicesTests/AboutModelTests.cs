@@ -22,10 +22,37 @@ namespace Tests
     [TestClass]
     public class AboutModelTests
     {
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullWebsite()
+        {
+            new AboutModel(website: null, donation: new Uri("https://www.fake.com"), supportEmail: "abc@fake.com");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullDonation()
+        {
+            new AboutModel(website: new Uri("https://www.fake.com"), donation: null, supportEmail: "abc@fake.com");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullSupportEmail()
+        {
+            new AboutModel(website: new Uri("https://www.fake.com"), donation: new Uri("https://www.fake.com"), supportEmail: null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptySupportEmail()
+        {
+            new AboutModel(website: new Uri("https://www.fake.com"), donation: new Uri("https://www.fake.com"), supportEmail: "");
+        }
+
         [TestMethod]
         public void VersionText()
         {
-            string version = m_model.Version;
+            AboutModel model = new AboutModel(website: new Uri("https://www.fake.com"), 
+                donation: new Uri("https://www.fake.com"), 
+                supportEmail: "abc@fake.com");
+            string version = model.Version;
 
             string[] parts = version.Split('.');
             Assert.IsTrue(parts.Length == 3 || parts.Length == 4, "Version should be 3 or 4 parts separated by .");
@@ -39,19 +66,21 @@ namespace Tests
         [TestMethod]
         public void BadUriRejected()
         {
-            bool canExecute = m_model.OpenBrowserToUri.CanExecute("This is not a Uri");
+            AboutModel model = new AboutModel(website: new Uri("https://www.fake.com"),
+                donation: new Uri("https://www.fake.com"),
+                supportEmail: "abc@fake.com");
+            bool canExecute = model.OpenBrowserToUri.CanExecute("This is not a Uri");
             Assert.IsFalse(canExecute, "Bad uri is accepted for OpenBrowserToUri");
         }
 
         [TestMethod]
         public void GoodUriAccepted()
         {
-            bool canExecute = m_model.OpenBrowserToUri.CanExecute(new Uri("https://www.fake.com"));
+            AboutModel model = new AboutModel(website: new Uri("https://www.fake.com"),
+                donation: new Uri("https://www.fake.com"),
+                supportEmail: "abc@fake.com");
+            bool canExecute = model.OpenBrowserToUri.CanExecute(new Uri("https://www.fake.com"));
             Assert.IsTrue(canExecute, "Good uri is rejected from OpenBrowserToUri");
         }
-
-        private readonly AboutModel m_model = new AboutModel(website: null, donation: null, supportEmail: null);
     }
-
-
 }

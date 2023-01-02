@@ -25,6 +25,10 @@ namespace WpfServices
     {
         public AboutModel(Uri website, Uri donation, string supportEmail)
         {
+            ParamUtil.VerifyNotNull(nameof(website), website);
+            ParamUtil.VerifyNotNull(nameof(donation), donation);
+            ParamUtil.VerifyHasContent(nameof(supportEmail), supportEmail);
+
             Website = website;
             Donation = donation;
             SupportEmail = supportEmail;
