@@ -45,7 +45,10 @@ namespace NpcGenerator
             IUserSettings userSettings, 
             bool dryRunValidation)
         {
-            m_appSettings = appSettings;
+            m_appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+            ParamUtil.VerifyNotNull(nameof(trackingProfile), trackingProfile);
+            ParamUtil.VerifyNotNull(nameof(messager), messager);
+            ParamUtil.VerifyNotNull(nameof(userSettings), userSettings);
             m_dryRunValidation = dryRunValidation;
 
             m_messageGenerator = new GoogleAnalyticsMessageGenerator(trackingProfile, messager, userSettings, TrackEvent);
