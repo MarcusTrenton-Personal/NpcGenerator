@@ -56,6 +56,58 @@ namespace Tests
         }
 #pragma warning restore IDE1006 // Naming rule violation 
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullTrackingProfile()
+        {
+            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
+                trackingProfile: null,
+                new StubMessager(),
+                new StubUserSettings(),
+                Callback);
+
+            void Callback(string messageBody)
+            {
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullMessager()
+        {
+            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
+                new StubTrackingProfile(),
+                messager: null,
+                new StubUserSettings(),
+                Callback);
+
+            void Callback(string messageBody)
+            {
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullUserSettings()
+        {
+            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
+                new StubTrackingProfile(),
+                new StubMessager(),
+                userSettings: null,
+                Callback);
+
+            void Callback(string messageBody)
+            {
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullMessageCallback()
+        {
+            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
+                new StubTrackingProfile(),
+                new StubMessager(),
+                new StubUserSettings(),
+                messageCallback: null);
+        }
+
         [TestMethod]
         public void EmptyUserSettings()
         {

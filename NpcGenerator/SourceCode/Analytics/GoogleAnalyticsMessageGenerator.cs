@@ -30,10 +30,10 @@ namespace NpcGenerator
             IUserSettings userSettings,
             Action<string> messageCallback)
         {
-            m_trackingProfile = trackingProfile;
-            m_messager = messager;
-            m_userSettings = userSettings;
-            m_messageCallback = messageCallback;
+            m_trackingProfile = trackingProfile ?? throw new ArgumentNullException(nameof(trackingProfile));
+            m_messager = messager ?? throw new ArgumentNullException(nameof(messager));
+            m_userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+            m_messageCallback = messageCallback ?? throw new ArgumentNullException(nameof(messageCallback));
 
             //Each Google Analytics event must have a name 40 characters or less: 
             //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
