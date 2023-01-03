@@ -24,49 +24,39 @@ namespace WpfServices
     public class LocalizationModel : BaseModel, ILocalizationModel
     {
         public LocalizationModel(
-            ILocalization localization, 
-            ReadOnlyCollection<string> hiddenLanguageCodes, 
-            ILanguageCodeProvider currentLanguageProvider, 
-            IMessager messager)
+            in ILocalization localization, 
+            in ReadOnlyCollection<string> hiddenLanguageCodes, 
+            in ILanguageCodeProvider currentLanguageProvider, 
+            in IMessager messager)
         {
-            if (localization is null)
-            {
-                throw new ArgumentNullException(nameof(localization));
-            }
-            if (hiddenLanguageCodes is null)
-            {
-                throw new ArgumentNullException(nameof(hiddenLanguageCodes));
-            }
-            if (currentLanguageProvider is null)
-            {
-                throw new ArgumentNullException(nameof(currentLanguageProvider));
-            }
-            if (messager is null)
-            {
-                throw new ArgumentNullException(nameof(messager));
-            }
+            ParamUtil.VerifyNotNull(nameof(hiddenLanguageCodes), hiddenLanguageCodes); //Later, there are specific tests needed for elements.
+            m_messager = messager ?? throw new ArgumentNullException(nameof(messager));
+            m_currentLanguageProvider = currentLanguageProvider ?? throw new ArgumentNullException(nameof(currentLanguageProvider));
 
-            m_localization = localization;
-            if (currentLanguageProvider != null && !string.IsNullOrEmpty(currentLanguageProvider.LanguageCode))
+            m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
+            if (!string.IsNullOrEmpty(currentLanguageProvider.LanguageCode))
             {
                 m_localization.CurrentLanguageCode = currentLanguageProvider.LanguageCode;
             }
-            m_currentLanguageProvider = currentLanguageProvider;
             m_currentLanguageProvider.LanguageCode = m_localization.CurrentLanguageCode;
-            m_messager = messager;
 
-            List<string> lowerCaseHiddenLanguageCodes = new List<string>(hiddenLanguageCodes);
-            for(int i = 0; i < lowerCaseHiddenLanguageCodes.Count; i++)
+            m_hiddenLanguageCodes = ToLowerCase(hiddenLanguageCodes);
+
+            ValidateHiddenLanguages();
+        }
+
+        private List<string> ToLowerCase(IReadOnlyCollection<string> strings)
+        {
+            List<string> results = new List<string>(strings.Count);
+            foreach (string s in strings)
             {
-                if (lowerCaseHiddenLanguageCodes[i] is null)
+                if (s is null)
                 {
                     throw new HiddenLanguageNotFound(null);
                 }
-                lowerCaseHiddenLanguageCodes[i] = lowerCaseHiddenLanguageCodes[i].ToLower();
+                results.Add(s.ToLower());
             }
-            m_hiddenLanguageCodes = new ReadOnlyCollection<string>(lowerCaseHiddenLanguageCodes);
-
-            ValidateHiddenLanguages();
+            return results;
         }
 
         private void ValidateHiddenLanguages()
@@ -131,7 +121,7 @@ namespace WpfServices
         }
 
         private readonly ILocalization m_localization;
-        private readonly ReadOnlyCollection<string> m_hiddenLanguageCodes;
+        private readonly List<string> m_hiddenLanguageCodes;
         private readonly ILanguageCodeProvider m_currentLanguageProvider;
         private readonly IMessager m_messager;
     }
