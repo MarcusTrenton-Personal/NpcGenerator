@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Services;
+using System;
 
 namespace WpfServices
 {
@@ -21,7 +22,7 @@ namespace WpfServices
     {
         public TrackingModel(IAnalyticsConsentProvider consentProvider)
         {
-            m_consentProvider = consentProvider;
+            m_consentProvider = consentProvider ?? throw new ArgumentNullException(nameof(consentProvider));
         }
 
         public bool TrackingConsent 

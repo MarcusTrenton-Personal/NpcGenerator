@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Services;
+using System;
 using WpfServices;
 
 namespace Tests
@@ -39,6 +40,12 @@ namespace Tests
 
             trackingModel.TrackingConsent = true;
             Assert.IsTrue(trackingModel.TrackingConsent, "UserSettings doesn't match TrackingModel.TrackingConsent");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void UserSettingsIsNull()
+        {
+            new TrackingModel(null);
         }
     }
 }
