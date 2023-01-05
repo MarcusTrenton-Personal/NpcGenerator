@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,6 +24,8 @@ namespace NpcGenerator
     {
         public ConfigurationParser(IEnumerable<FormatParser> parsers)
         {
+            ParamUtil.VerifyElementsAreNotNull(nameof(parsers), parsers);
+
             IEnumerator<FormatParser> enumerator = parsers.GetEnumerator();
             while (enumerator.MoveNext())
             {
@@ -33,6 +36,8 @@ namespace NpcGenerator
 
         public TraitSchema Parse(string path)
         {
+            ParamUtil.VerifyHasContent(nameof(path), path);
+
             string fileType = Path.GetExtension(path);
             bool isFound = m_parsers.TryGetValue(fileType, out IFormatConfigurationParser parser);
             if (isFound)
@@ -63,8 +68,10 @@ namespace NpcGenerator
     {
         public FormatParser(string fileExtensionWithDot, IFormatConfigurationParser parser)
         {
+            ParamUtil.VerifyStringMatchesPattern(nameof(fileExtensionWithDot), fileExtensionWithDot, @"^\.\S+$");
+
             FileExtensionWithDot = fileExtensionWithDot;
-            Parser = parser;
+            Parser = parser ?? throw new ArgumentNullException(nameof(parser));
         }
 
         public string FileExtensionWithDot { get; private set; }

@@ -36,8 +36,9 @@ namespace NpcGenerator
         //Adapted from https://stackoverflow.com/questions/577634/how-to-get-the-friendly-os-version-name
         private static string GetOsName()
         {
-            string productName = OSHelper.HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName");
-            string csdVersion = OSHelper.HKLM_GetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CSDVersion");
+            const string WINDOWS_PATH = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion";
+            string productName = OSHelper.HKLM_GetString(WINDOWS_PATH, "ProductName");
+            string csdVersion = OSHelper.HKLM_GetString(WINDOWS_PATH, "CSDVersion");
             if (!string.IsNullOrEmpty(productName))
             {
                 return (productName.StartsWith("Microsoft") ? "" : "Microsoft ") + productName +

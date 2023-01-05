@@ -118,5 +118,74 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullParserCollection()
+        {
+            new ConfigurationParser(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NullParserInCollection()
+        {
+            new ConfigurationParser(new List<FormatParser>() { null });
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ParseStringIsNull()
+        {
+            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
+            ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
+
+            parser.Parse(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ParseStringIsEmpty()
+        {
+            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
+            ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
+
+            parser.Parse(String.Empty);
+        }
+
+        [TestMethod, ExpectedException(typeof(FileNotFoundException))]
+        public void FileNotFound()
+        {
+            StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
+            ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
+
+            parser.Parse("FileNotFound.csv");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void FormatParserHasNullParser()
+        {
+            new FormatParser(".csv", null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void FormatParserHasNullExtension()
+        {
+            new FormatParser(null, new StubFormatConfigurationParser());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void FormatParserHasEmptyExtension()
+        {
+            new FormatParser(String.Empty, new StubFormatConfigurationParser());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void FormatParserHasMalformedExtension()
+        {
+            new FormatParser("abc", new StubFormatConfigurationParser());
+        }
+
+        [TestMethod]
+        public void FormatParserConstructedSuccessfully()
+        {
+            new FormatParser(".abc", new StubFormatConfigurationParser());
+        }
     }
 }
