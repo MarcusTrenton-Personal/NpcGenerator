@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Services
 {
@@ -76,6 +77,16 @@ namespace Services
             {
                 throw new ArgumentException(keyName + " was not found among the " + dictionaryName);
             }
+        }
+
+        public static void VerifyStringMatchesPattern(string name, string value, string pattern)
+        {
+            Regex regex = new Regex(pattern);
+            bool isMatch = regex.IsMatch(value);
+            if (!isMatch)
+            {
+                throw new ArgumentException("String does not match pattern", name);
+            }    
         }
     }
 }
