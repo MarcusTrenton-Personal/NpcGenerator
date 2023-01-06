@@ -79,13 +79,13 @@ namespace Services
             }
         }
 
-        public static void VerifyMatchesPattern(string name, string value, string pattern)
+        public static void VerifyMatchesPattern(string name, string value, string pattern, string errorMessage)
         {
             Regex regex = new Regex(pattern);
             bool isMatch = regex.IsMatch(value);
             if (!isMatch)
             {
-                throw new ArgumentException("String does not match pattern", name);
+                throw new ArgumentException(errorMessage);
             }    
         }
     }

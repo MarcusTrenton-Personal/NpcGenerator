@@ -16,6 +16,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tests
@@ -78,6 +80,62 @@ namespace Tests
             }
 
             File.Delete(originalFile);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructWithNull()
+        {
+            new LocalFileIO(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void CacheWithNullPath()
+        {
+            m_fileIO.CacheFile(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void CacheWithEmptyPath()
+        {
+            m_fileIO.CacheFile(String.Empty);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void CacheWithInvalidPath()
+        {
+            m_fileIO.CacheFile("not a path");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void SaveToPickedFileWithNullCollection()
+        {
+            m_fileIO.SaveToPickedFile(null, out _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void SaveToPickedFileWithNullGetContent()
+        {
+            FileContentProvider contentProvider = new FileContentProvider
+            {
+                FileExtensionWithoutDot = "abc",
+                GetContent = null
+            };
+            m_fileIO.SaveToPickedFile(new List<FileContentProvider>() { contentProvider }, out _);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void SaveToPickedFileWithInvalidFileExtension()
+        {
+            static string MockGetContent()
+            {
+                return "Mock";
+            }
+            FileContentProvider contentProvider = new FileContentProvider
+            {
+                FileExtensionWithoutDot = "sfds.abc",
+                GetContent = MockGetContent
+            };
+            m_fileIO.SaveToPickedFile(new List<FileContentProvider>() { contentProvider }, out _);
         }
 
         private LocalFileIO m_fileIO;

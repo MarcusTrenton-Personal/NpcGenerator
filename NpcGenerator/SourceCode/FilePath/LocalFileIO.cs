@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using CoupledServices;
 using Microsoft.Win32;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,15 +26,18 @@ namespace NpcGenerator
 {
     public class LocalFileIO : ILocalFileIO
     {
-        public LocalFileIO(IFilePathProvider filePathProvider)
+        public LocalFileIO(in IFilePathProvider filePathProvider)
         {
-            m_filePathProvider = filePathProvider;
+            m_filePathProvider = filePathProvider ?? throw new ArgumentNullException(nameof(filePathProvider));
         }
 
         //Cache a copy of a configuration file so it can already be open with a read/write lock at the same time 
         //it is read by this program.
         public string CacheFile(string originalPath)
         {
+            const string FILE_PATH = @"^(?:[\w]\:|\\)?(\\?[A-Za-z_\-\s0-9\.]+)+\.[A-Za-z0-9]+$";
+            ParamUtil.VerifyMatchesPattern(nameof(originalPath), originalPath, FILE_PATH, originalPath + " is not a file path");
+
             string fileName = Path.GetFileName(originalPath);
             string cachePath = Path.Combine(m_filePathProvider.AppDataFolderPath, CacheFolder, fileName);
 
@@ -44,8 +48,17 @@ namespace NpcGenerator
             return cachePath;
         }
 
-        public bool SaveToPickedFile(IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
+        public bool SaveToPickedFile(in IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
+            ParamUtil.VerifyElementsAreNotNull(nameof(contentProviders), contentProviders);
+            const string FILE_EXTENSION_WITHOUT_DOT = @"^[A-Za-z0-9]+$";
+            foreach (FileContentProvider contentProvider in contentProviders)
+            {
+                ParamUtil.VerifyMatchesPattern(nameof(contentProvider.FileExtensionWithoutDot), contentProvider.FileExtensionWithoutDot,
+                    FILE_EXTENSION_WITHOUT_DOT, contentProvider.FileExtensionWithoutDot + " is not a file extension with the dot");
+                ParamUtil.VerifyNotNull(nameof(contentProvider.GetContent), contentProvider.GetContent);
+            }
+
             pickedFileExtension = "";
 
             string filterString = "";
@@ -60,7 +73,6 @@ namespace NpcGenerator
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                
                 Filter = filterString,
                 RestoreDirectory = true
             };

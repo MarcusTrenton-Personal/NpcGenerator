@@ -30,6 +30,6 @@ namespace NpcGenerator
         //it is read by this program.
         public string CacheFile(string originalPath);
 
-        public bool SaveToPickedFile(IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension);
+        public bool SaveToPickedFile(in IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension);
     }
 }

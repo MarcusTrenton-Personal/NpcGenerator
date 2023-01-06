@@ -106,7 +106,7 @@ namespace Tests
             return originalPath;
         }
 
-        public bool SaveToPickedFile(IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
+        public bool SaveToPickedFile(in IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
             pickedFileExtension = null;
             SaveCalled = true;

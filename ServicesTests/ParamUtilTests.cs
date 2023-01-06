@@ -165,46 +165,46 @@ namespace Tests
         public void VerifyStringMatchesPatternNull()
         {
             string text = "abc";
-            ParamUtil.VerifyMatchesPattern(nameof(text), text, null);
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, pattern: null, "String does not match pattern");
         }
 
         [TestMethod]
         public void VerifyStringMatchesPatternEmpty()
         {
             string text = "abc";
-            ParamUtil.VerifyMatchesPattern(nameof(text), text, "");
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, pattern: "", "String does not match pattern");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyStringMatchesPatternValueNull()
         {
-            ParamUtil.VerifyMatchesPattern("text", null, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern("text",value: null, "[+-]?([0-9]*[.])?[0-9]+", "String does not match pattern");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void VerifyStringMatchesPatternValueEmpty()
         {
-            ParamUtil.VerifyMatchesPattern("text", String.Empty, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern("text", value: String.Empty, "[+-]?([0-9]*[.])?[0-9]+", "String does not match pattern");
         }
 
         [TestMethod]
         public void VerifyStringMatchesPatternValueEmptyPatternEmpty()
         {
-            ParamUtil.VerifyMatchesPattern("text", String.Empty, String.Empty);
+            ParamUtil.VerifyMatchesPattern("text", String.Empty, pattern: String.Empty, "String does not match pattern");
         }
 
         [TestMethod]
         public void VerifyStringMatchesPatternThatExists()
         {
             string text = "-1.3";
-            ParamUtil.VerifyMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+", "String does not match pattern");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void VerifyStringMatchesPatternThatDoesNotExist()
         {
             string text = "abc";
-            ParamUtil.VerifyMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+", "String does not match pattern");
         }
     }
 }
