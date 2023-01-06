@@ -49,14 +49,17 @@ namespace NpcGenerator
 
         ~GoogleAnalyticsMessageGenerator()
         {
-            m_messager.Unsubscribe<Services.Message.Login>(OnLogin);
-            m_messager.Unsubscribe<Services.Message.PageView>(OnPageView);
-            m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
-            m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
-            m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-            m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
-            m_messager.Unsubscribe<Message.InvalidNpcs>(OnInvalidNpcs);
+            if (m_messager != null)
+            {
+                m_messager.Unsubscribe<Services.Message.Login>(OnLogin);
+                m_messager.Unsubscribe<Services.Message.PageView>(OnPageView);
+                m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
+                m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
+                m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
+                m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
+                m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
+                m_messager.Unsubscribe<Message.InvalidNpcs>(OnInvalidNpcs);
+            }
         }
 
         private void WriteMessageBody(WriteGoogleEvent googleEvent)
