@@ -24,6 +24,20 @@ namespace Tests
     [TestClass]
     public class CsvConfigurationParserTests
     {
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullText()
+        {
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptyText()
+        {
+            CsvConfigurationParser parser = new CsvConfigurationParser();
+            parser.Parse(String.Empty);
+        }
+
         [TestMethod]
         public void GeneratesTraitSchema()
         {

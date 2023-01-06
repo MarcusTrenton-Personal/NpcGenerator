@@ -25,9 +25,9 @@ namespace NpcGenerator
 {
     public class GoogleAnalyticsMessageGenerator
     {
-        public GoogleAnalyticsMessageGenerator(ITrackingProfile trackingProfile,
-            IMessager messager,
-            IUserSettings userSettings,
+        public GoogleAnalyticsMessageGenerator(in ITrackingProfile trackingProfile,
+            in IMessager messager,
+            in IUserSettings userSettings,
             Action<string> messageCallback)
         {
             m_trackingProfile = trackingProfile ?? throw new ArgumentNullException(nameof(trackingProfile));

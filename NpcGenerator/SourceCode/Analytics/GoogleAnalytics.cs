@@ -39,10 +39,10 @@ namespace NpcGenerator
         }
 #pragma warning disable CS0649 //Field is never assigned. 
 
-        public GoogleAnalytics(IAppSettings appSettings, 
-            ITrackingProfile trackingProfile, 
-            IMessager messager, 
-            IUserSettings userSettings, 
+        public GoogleAnalytics(in IAppSettings appSettings, 
+            in ITrackingProfile trackingProfile, 
+            in IMessager messager, 
+            in IUserSettings userSettings, 
             bool dryRunValidation)
         {
             m_appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));

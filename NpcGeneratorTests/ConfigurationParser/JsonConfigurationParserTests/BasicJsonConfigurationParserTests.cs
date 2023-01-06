@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
 using Services;
+using System;
 using System.Collections.Generic;
 
 namespace Tests.JsonConfigurationParserTests
@@ -25,6 +26,20 @@ namespace Tests.JsonConfigurationParserTests
     public class BasicJsonConfigurationParserTests
     {
         const string SCHEMA_PATH = "ConfigurationSchema.json";
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullText()
+        {
+            JsonConfigurationParser parser = new JsonConfigurationParser(null);
+            parser.Parse(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptyText()
+        {
+            JsonConfigurationParser parser = new JsonConfigurationParser(null);
+            parser.Parse(String.Empty);
+        }
 
         [TestMethod]
         public void GeneratesTraitSchema()

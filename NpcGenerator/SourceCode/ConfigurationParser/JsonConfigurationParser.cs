@@ -39,6 +39,8 @@ namespace NpcGenerator
 
         public TraitSchema Parse(string text)
         {
+            ParamUtil.VerifyHasContent(nameof(text), text);
+
             JToken json;
             try
             {

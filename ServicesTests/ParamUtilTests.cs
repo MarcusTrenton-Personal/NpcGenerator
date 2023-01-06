@@ -165,46 +165,46 @@ namespace Tests
         public void VerifyStringMatchesPatternNull()
         {
             string text = "abc";
-            ParamUtil.VerifyStringMatchesPattern(nameof(text), text, null);
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, null);
         }
 
         [TestMethod]
         public void VerifyStringMatchesPatternEmpty()
         {
             string text = "abc";
-            ParamUtil.VerifyStringMatchesPattern(nameof(text), text, "");
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, "");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyStringMatchesPatternValueNull()
         {
-            ParamUtil.VerifyStringMatchesPattern("text", null, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern("text", null, "[+-]?([0-9]*[.])?[0-9]+");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void VerifyStringMatchesPatternValueEmpty()
         {
-            ParamUtil.VerifyStringMatchesPattern("text", String.Empty, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern("text", String.Empty, "[+-]?([0-9]*[.])?[0-9]+");
         }
 
         [TestMethod]
         public void VerifyStringMatchesPatternValueEmptyPatternEmpty()
         {
-            ParamUtil.VerifyStringMatchesPattern("text", String.Empty, String.Empty);
+            ParamUtil.VerifyMatchesPattern("text", String.Empty, String.Empty);
         }
 
         [TestMethod]
         public void VerifyStringMatchesPatternThatExists()
         {
             string text = "-1.3";
-            ParamUtil.VerifyStringMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void VerifyStringMatchesPatternThatDoesNotExist()
         {
             string text = "abc";
-            ParamUtil.VerifyStringMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+");
+            ParamUtil.VerifyMatchesPattern(nameof(text), text, "[+-]?([0-9]*[.])?[0-9]+");
         }
     }
 }

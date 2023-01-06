@@ -13,9 +13,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace NpcGenerator
 {
@@ -23,6 +23,8 @@ namespace NpcGenerator
     {
         public TraitSchema Parse(string text)
         {
+            ParamUtil.VerifyHasContent(nameof(text), text);
+
             string[] lines = text.Split('\n');
 
             TraitSchema traitSchema = ParseCategories(lines[0]);

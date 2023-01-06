@@ -79,7 +79,7 @@ namespace Services
             }
         }
 
-        public static void VerifyStringMatchesPattern(string name, string value, string pattern)
+        public static void VerifyMatchesPattern(string name, string value, string pattern)
         {
             Regex regex = new Regex(pattern);
             bool isMatch = regex.IsMatch(value);

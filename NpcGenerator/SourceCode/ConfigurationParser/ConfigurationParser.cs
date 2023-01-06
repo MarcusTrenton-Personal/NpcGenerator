@@ -22,7 +22,7 @@ namespace NpcGenerator
 {
     public class ConfigurationParser : IConfigurationParser
     {
-        public ConfigurationParser(IEnumerable<FormatParser> parsers)
+        public ConfigurationParser(in IEnumerable<FormatParser> parsers)
         {
             ParamUtil.VerifyElementsAreNotNull(nameof(parsers), parsers);
 
@@ -66,9 +66,9 @@ namespace NpcGenerator
 
     public class FormatParser
     {
-        public FormatParser(string fileExtensionWithDot, IFormatConfigurationParser parser)
+        public FormatParser(string fileExtensionWithDot, in IFormatConfigurationParser parser)
         {
-            ParamUtil.VerifyStringMatchesPattern(nameof(fileExtensionWithDot), fileExtensionWithDot, @"^\.\S+$");
+            ParamUtil.VerifyMatchesPattern(nameof(fileExtensionWithDot), fileExtensionWithDot, @"^\.\S+$");
 
             FileExtensionWithDot = fileExtensionWithDot;
             Parser = parser ?? throw new ArgumentNullException(nameof(parser));
