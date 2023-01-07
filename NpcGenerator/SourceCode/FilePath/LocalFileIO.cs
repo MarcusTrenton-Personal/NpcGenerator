@@ -35,8 +35,7 @@ namespace NpcGenerator
         //it is read by this program.
         public string CacheFile(string originalPath)
         {
-            const string FILE_PATH = @"^(?:[\w]\:|\\)?(\\?[A-Za-z_\-\s0-9\.]+)+\.[A-Za-z0-9]+$";
-            ParamUtil.VerifyMatchesPattern(nameof(originalPath), originalPath, FILE_PATH, originalPath + " is not a file path");
+            ParamUtil.VerifyMatchesPattern(nameof(originalPath), originalPath, RegexUtil.ANY_FILE_PATH, originalPath + " is not a file path");
 
             string fileName = Path.GetFileName(originalPath);
             string cachePath = Path.Combine(m_filePathProvider.AppDataFolderPath, CacheFolder, fileName);
@@ -51,11 +50,10 @@ namespace NpcGenerator
         public bool SaveToPickedFile(in IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
             ParamUtil.VerifyElementsAreNotNull(nameof(contentProviders), contentProviders);
-            const string FILE_EXTENSION_WITHOUT_DOT = @"^[A-Za-z0-9]+$";
             foreach (FileContentProvider contentProvider in contentProviders)
             {
                 ParamUtil.VerifyMatchesPattern(nameof(contentProvider.FileExtensionWithoutDot), contentProvider.FileExtensionWithoutDot,
-                    FILE_EXTENSION_WITHOUT_DOT, contentProvider.FileExtensionWithoutDot + " is not a file extension with the dot");
+                    RegexUtil.FILE_EXTENSION_WITHOUT_DOT, contentProvider.FileExtensionWithoutDot + " is not a file extension with the dot");
                 ParamUtil.VerifyNotNull(nameof(contentProvider.GetContent), contentProvider.GetContent);
             }
 

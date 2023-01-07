@@ -68,7 +68,7 @@ namespace NpcGenerator
     {
         public FormatParser(string fileExtensionWithDot, in IFormatConfigurationParser parser)
         {
-            ParamUtil.VerifyMatchesPattern(nameof(fileExtensionWithDot), fileExtensionWithDot, @"^\.[A-Za-z0-9]+$",
+            ParamUtil.VerifyMatchesPattern(nameof(fileExtensionWithDot), fileExtensionWithDot, RegexUtil.FILE_EXTENSION_WITH_DOT,
                 fileExtensionWithDot + " is not a file extension");
 
             FileExtensionWithDot = fileExtensionWithDot;

@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 
 namespace Services
 {
-    public class ParamUtil
+    public static class ParamUtil
     {
         public static void VerifyHasContent(string name, string value)
         {
@@ -85,8 +85,17 @@ namespace Services
             bool isMatch = regex.IsMatch(value);
             if (!isMatch)
             {
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException(errorMessage, name);
             }    
+        }
+
+        public static void VerifyMatchesPattern(string name, string value, Regex regex, string errorMessage)
+        {
+            bool isMatch = regex.IsMatch(value);
+            if (!isMatch)
+            {
+                throw new ArgumentException(errorMessage, name);
+            }
         }
     }
 }
