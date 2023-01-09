@@ -129,7 +129,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void VerifyInternalDictionaryKeyExistsElementFound()
+        public void VerifyDictionaryKeyExistsElementFound()
         {
             Dictionary<int, string> dictionary = new Dictionary<int, string>
             {
@@ -137,11 +137,11 @@ namespace Tests
             };
 
             int key = 1;
-            ParamUtil.VerifyInternalDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+            ParamUtil.VerifyDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void VerifyInternalDictionaryKeyExistsElementMissing()
+        public void VerifyDictionaryKeyExistsElementMissing()
         {
             Dictionary<int, string> dictionary = new Dictionary<int, string>
             {
@@ -149,16 +149,43 @@ namespace Tests
             };
 
             int key = 2;
-            ParamUtil.VerifyInternalDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+            ParamUtil.VerifyDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
-        public void VerifyInternalDictionaryKeyExistsDictionaryIsNull()
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyDictionaryKeyExistsDictionaryIsNull()
         {
             Dictionary<int, string> dictionary = null;
 
             int key = 1;
-            ParamUtil.VerifyInternalDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+            ParamUtil.VerifyDictionaryKeyExists(nameof(dictionary), dictionary, nameof(key), key);
+        }
+
+        [TestMethod]
+        public void VerifyDictionaryValuesNotNullWhenNotNull()
+        {
+            Dictionary<string, object> dictionary = new Dictionary<string, object>
+            {
+                ["Rhino"] = new object()
+            };
+            ParamUtil.VerifyDictionaryValuesNotNull(nameof(dictionary), dictionary);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyDictionaryValuesNotNullWhenDictionaryIsNull()
+        {
+            Dictionary<object, string> dictionary = null;
+            ParamUtil.VerifyDictionaryValuesNotNull(nameof(dictionary), dictionary);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VerifyDictionaryValuesNotNullWhenValueIsNull()
+        {
+            Dictionary<string, object> dictionary = new Dictionary<string, object>
+            {
+                ["Rhino"] = null
+            };
+            ParamUtil.VerifyDictionaryValuesNotNull(nameof(dictionary), dictionary);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]

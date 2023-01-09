@@ -64,18 +64,38 @@ namespace Services
             }
         }
 
-        public static void VerifyInternalDictionaryKeyExists<T,U>(string dictionaryName, in IDictionary<T,U> dictionary, string keyName, T key)
+        public static void VerifyDictionaryKeyExists<T,U>(string dictionaryName, in IDictionary<T,U> dictionary, string keyName, T key)
         {
-            bool dictionaryExists = dictionary != null;
-            if (!dictionaryExists)
+            if (dictionary is null)
             {
-                throw new InvalidOperationException(dictionaryName + " not initialized");
+                throw new ArgumentNullException(dictionaryName);
             }
 
             bool elementExists = dictionary.ContainsKey(key);
             if (!elementExists)
             {
                 throw new ArgumentException(keyName + " was not found among the " + dictionaryName);
+            }
+        }
+
+        public static void VerifyDictionaryValuesNotNull<T, U>(string dictionaryName, in IDictionary<T, U> dictionary)
+        {
+            if (dictionary is null)
+            {
+                throw new ArgumentNullException(dictionaryName);
+            }
+
+            foreach (var keyValuePair in dictionary)
+            {
+                if (keyValuePair.Key is null)
+                {
+                    throw new ArgumentException("Null key in " + dictionaryName);
+                }
+
+                if (keyValuePair.Value is null)
+                {
+                    throw new ArgumentException("Null value in " + dictionaryName);
+                }
             }
         }
 

@@ -26,6 +26,166 @@ namespace Tests
     [TestClass]
     public class NpcGeneratorModelTests : FileCreatingTests
     {
+        //public NpcGeneratorModel(
+        //    in IUserSettings userSettings,
+        //    in IAppSettings appSettings,
+        //    in IMessager messager,
+        //    in ILocalFileIO fileIo,
+        //    in IConfigurationParser parser,
+        //    in Dictionary<string, INpcExport> npcExporters,
+        //    in ILocalization localization,
+        //    in IRandom random,
+        //    bool showErrorMessages,
+        //    bool forceFailNpcGeneration)
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullUserSettings()
+        {
+            new NpcGeneratorModel(
+                userSettings: null,
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullAppSettings()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                appSettings: null,
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullMessager()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                messager: null,
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullFileIO()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                new StubMessager(),
+                fileIo: null,
+                new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullParser()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                parser: null,
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullExporterDictionary()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                npcExporters: null,
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NullExporterDictionaryElement()
+        {
+            Dictionary<string, INpcExport> exporters = new Dictionary<string, INpcExport>
+            {
+                { "x", null }
+            };
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                npcExporters: exporters,
+                new StubLocalization(),
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullLocalization()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                localization: null,
+                new MockRandom(),
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullRandom()
+        {
+            new NpcGeneratorModel(
+                new StubUserSettings(),
+                new StubAppSettings(),
+                new StubMessager(),
+                new StubLocalFileIo(),
+                new MockCsvConfigurationParser(),
+                new Dictionary<string, INpcExport>(),
+                new StubLocalization(),
+                random: null,
+                showErrorMessages: false,
+                forceFailNpcGeneration: false);
+        }
+
         [TestMethod]
         public void ConfigurationPathReflectsAppAndUserSettings()
         {

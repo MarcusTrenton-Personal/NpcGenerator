@@ -24,7 +24,7 @@ namespace NpcGenerator
     public class NavigationModel : BaseModel, INavigationModel
     {
         //Navigating to any place in the app requires potentially any service, so store them all.
-        public NavigationModel(ServiceCentre serviceCentre)
+        public NavigationModel(in ServiceCentre serviceCentre)
         {
             m_serviceCentre = serviceCentre;
         }
@@ -39,12 +39,12 @@ namespace NpcGenerator
             }
         }
 
-        private static bool CanExecuteGoToPrivacyPolicy(object _)
+        private static bool CanExecuteGoToPrivacyPolicy(in object _)
         {
             return true;
         }
 
-        private void ExecuteGoToPrivacyPolicy(object parameter)
+        private void ExecuteGoToPrivacyPolicy(in object parameter)
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.
@@ -68,12 +68,12 @@ namespace NpcGenerator
             }
         }
 
-        private static bool CanExecuteGoToLicense(object _)
+        private static bool CanExecuteGoToLicense(in object _)
         {
             return true;
         }
 
-        private void ExecuteGoToLicense(object parameter)
+        private void ExecuteGoToLicense(in object parameter)
         {
             //Lazily create the data as it's unlikely that this button will be clicked. 
             //It's almost unheard of that anyone would click it twice.

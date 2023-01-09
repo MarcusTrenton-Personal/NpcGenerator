@@ -30,34 +30,34 @@ namespace NpcGenerator
     public class NpcGeneratorModel : BaseModel, INpcGeneratorModel
     {
         public NpcGeneratorModel(
-            IUserSettings userSettings,
-            IAppSettings appSettings,
-            IMessager messager,
-            ILocalFileIO fileIo,
-            IConfigurationParser parser,
-            Dictionary<string, INpcExport> npcExporters,
-            ILocalization localization,
-            IRandom random,
+            in IUserSettings userSettings,
+            in IAppSettings appSettings,
+            in IMessager messager,
+            in ILocalFileIO fileIo,
+            in IConfigurationParser parser,
+            in Dictionary<string, INpcExport> npcExporters,
+            in ILocalization localization,
+            in IRandom random,
             bool showErrorMessages,
             bool forceFailNpcGeneration)
         {
-            m_userSettings = userSettings;
-            m_appSettings = appSettings;
-            m_messager = messager;
-            m_fileIo = fileIo;
-            m_parser = parser;
+            m_userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+            m_appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+            m_messager = messager ?? throw new ArgumentNullException(nameof(messager));
+            m_fileIo = fileIo ?? throw new ArgumentNullException(nameof(fileIo));
+            m_parser = parser ?? throw new ArgumentNullException(nameof(parser));
+            ParamUtil.VerifyDictionaryValuesNotNull(nameof(npcExporters), npcExporters);
             m_npcExporters = npcExporters;
-            m_localization = localization;
-            m_random = random;
+            m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
+            m_random = random ?? throw new ArgumentNullException(nameof(random));
             m_showErrorMessages = showErrorMessages;
             m_forceFailNpcGeneration = forceFailNpcGeneration;
-            m_configurationHasError = false;
 
             UpdateUserSettingsWithDefaults();
 
             CreateFileWatcher();
 
-            //Deliberately do parse the initial schema, as there is no way to show an error message during boot-up.
+            //Deliberately do not parse the initial schema, as there is no way to show an error message during boot-up.
             //Instead evaluate lazily.
         }
 
@@ -92,10 +92,14 @@ namespace NpcGenerator
 
         private void TearDownFileWatcher()
         {
-            m_configurationFileWatcher.Deleted -= OnConfigurationChanged;
-            m_configurationFileWatcher.Renamed -= OnConfigurationRenamed;
-            m_configurationFileWatcher.Created -= OnConfigurationChanged;
-            m_configurationFileWatcher.Changed -= OnConfigurationChanged;
+            if (m_configurationFileWatcher != null)
+            {
+                m_configurationFileWatcher.Deleted -= OnConfigurationChanged;
+                m_configurationFileWatcher.Renamed -= OnConfigurationRenamed;
+                m_configurationFileWatcher.Created -= OnConfigurationChanged;
+                m_configurationFileWatcher.Changed -= OnConfigurationChanged;
+
+            }
         }
 
         private void LazyParseTraitSchema()
