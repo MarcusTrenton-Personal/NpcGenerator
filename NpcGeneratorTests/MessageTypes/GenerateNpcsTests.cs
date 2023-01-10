@@ -1,4 +1,4 @@
-/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
+﻿/*Copyright(C) 2022 Marcus Trenton, marcus.trenton@gmail.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,19 +13,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
-using Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NpcGenerator.Message;
+using System;
 
-namespace NpcGenerator.Message
+namespace Tests
 {
-    public class GenerateNpcs
+    [TestClass]
+    public class GenerateNpcsTests
     {
-        public GenerateNpcs(int quantity)
+        [TestMethod]
+        public void PositiveNumber()
         {
-            ParamUtil.VerifyWholeNumber(nameof(quantity), quantity);
-
-            Quantity = quantity;
+            new GenerateNpcs(5);
         }
 
-        public int Quantity { get; private set; }
+        [TestMethod]
+        public void Zero()
+        {
+            new GenerateNpcs(0);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NegativeNumber()
+        {
+            new GenerateNpcs(-5);
+        }
     }
 }
