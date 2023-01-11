@@ -2,7 +2,7 @@
   "profiles": {
     "Placeholder Language": {
       "commandName": "Project",
-      "commandLineArgs": "-language Placeholder"
+      "commandLineArgs": "-language fa-ke"
     },
     "Analytics Dry Run": {
       "commandName": "Project",

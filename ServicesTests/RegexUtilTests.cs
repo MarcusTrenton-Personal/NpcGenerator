@@ -164,5 +164,31 @@ namespace Tests
             bool isMatch = RegexUtil.FILE_EXTENSION_WITHOUT_DOT.IsMatch(pattern);
             Assert.IsFalse(isMatch);
         }
+
+        [DataTestMethod]
+        [DataRow(@"en-ca")]
+        [DataRow(@"EN-CA")]
+        [DataRow(@"En-Ca")]
+        public void LanguageCodeRegexPasses(string pattern)
+        {
+            bool isMatch = RegexUtil.LANGUAGE_CODE.IsMatch(pattern);
+            Assert.IsTrue(isMatch);
+        }
+
+        [DataTestMethod]
+        [DataRow("", DisplayName = "Empty")]
+        [DataRow("\n", DisplayName = "New line only")]
+        [DataRow("en")]
+        [DataRow("en-usa")]
+        [DataRow("english")]
+        [DataRow("e2-ca")]
+        [DataRow("en-c2")]
+        [DataRow(@"en.ca")]
+        [DataRow(@"en ca")]
+        public void LanguageCodeRegexFails(string pattern)
+        {
+            bool isMatch = RegexUtil.LANGUAGE_CODE.IsMatch(pattern);
+            Assert.IsFalse(isMatch);
+        }
     }
 }

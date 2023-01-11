@@ -21,12 +21,15 @@ namespace Services
 {
     public class Localization : ILocalization
     {
-        //The localization file must have tab-separated format:
+        //The localization file must have tab-separated format. Language codes must be in the form aa-aa:
         //ID        Context LanguageCode1   LanguageCode2   ...
         //text_id   context text            text
         //...
         public Localization(string localizationText, string defaultLanguageCode)
         {
+            ParamUtil.VerifyHasContent(nameof(localizationText), localizationText);
+            ParamUtil.VerifyHasContent(nameof(defaultLanguageCode), defaultLanguageCode);
+
             ParseCsv(localizationText, out m_localizedText, out string[] supportedLanguages);
             SupportedLanguageCodes = supportedLanguages;
 
@@ -102,7 +105,16 @@ namespace Services
             languageCodes = new string[languageCount];
             for (int i = 0; i < languageCount; ++i)
             {
-                languageCodes[i] = elements[i + startingNonLanguageColumns].ToLower();
+                string languageCode = elements[i + startingNonLanguageColumns].ToLower();
+                if (string.IsNullOrEmpty(languageCode))
+                {
+                    throw new ArgumentException("Empty language code");
+                }
+                if (!RegexUtil.LANGUAGE_CODE.IsMatch(languageCode))
+                {
+                    throw new LanguageCodeMalformedException(languageCode, RegexUtil.LANGUAGE_CODE.ToString());
+                }
+                languageCodes[i] = languageCode;
             }
 
             List<string[]> translations = new List<string[]>();
@@ -175,5 +187,17 @@ namespace Services
         }
 
         public string Language { get; private set; }
+    }
+
+    public class LanguageCodeMalformedException : FormatException
+    {
+        public LanguageCodeMalformedException(string languageCode, string pattern)
+        {
+            LanguageCode = languageCode;
+            Pattern = pattern;
+        }
+
+        public string LanguageCode { get; private set; }
+        public string Pattern { get; private set; }
     }
 }

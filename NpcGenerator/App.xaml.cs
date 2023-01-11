@@ -65,6 +65,13 @@ namespace NpcGenerator
                 ExitAppAfterPopupClosed(message);
                 return;
             }
+            catch (LanguageCodeMalformedException exception) //App broken. Abort. Abort.
+            {
+                string message = PathHelper.FullPathOf(filePathProvider.LocalizationPath) + " localization file has LanguageCode " + 
+                    exception.LanguageCode + " that does not fit pattern " + exception.Pattern + ". " + REPAIR_ACTION;
+                ExitAppAfterPopupClosed(message);
+                return;
+            }
 
             AppParameters parameters = ReadAppParameters();
             m_serviceCentre = CreateServices(parameters, appSettings, filePathProvider, fileIo, localization);

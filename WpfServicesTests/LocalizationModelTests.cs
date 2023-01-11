@@ -25,8 +25,9 @@ namespace Tests
     [TestClass]
     public class LocalizationModelTests
     {
-        public const string MartianLanguageCode = "martian"; //Deliberately test mixed cases for language codes
-        public const string AtlanteanLanguageCode = "Atlantean";
+        //Must be valid language codes as they are regex checked.
+        public const string MartianLanguageCode = "en-ma"; //Deliberately test mixed cases for language codes
+        public const string AtlanteanLanguageCode = "EN-AT";
         public const string MartianText = "Invasion";
         public const string AtlanteanText = "Ancient";
 

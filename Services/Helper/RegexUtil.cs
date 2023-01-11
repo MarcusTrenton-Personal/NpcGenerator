@@ -31,5 +31,6 @@ namespace Services
         public static readonly Regex ANY_FILE_PATH = new Regex(ABSOLUTE_FILE_PATH_PATTERN + "|" + RELATIVE_FILE_PATH_PATTERN);
         public static readonly Regex FILE_EXTENSION_WITH_DOT = new Regex(@"^\.[A-Za-z0-9]+$");
         public static readonly Regex FILE_EXTENSION_WITHOUT_DOT = new Regex(@"^[A-Za-z0-9]+$");
+        public static readonly Regex LANGUAGE_CODE = new Regex(@"^[A-Za-z]{2}-[A-Za-z]{2}$");
     }
 }

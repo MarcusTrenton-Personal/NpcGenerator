@@ -1,4 +1,4 @@
-ID	Context	Placeholder	en-CA	en-US	fr-FR
+ID	Context	fa-ke	en-CA	En-US	fr-FR
 main_window_title		AAAAAA	NPC Generator	NPC Generator	Générateur de PNJ
 choose_configuration_file_label	Left of choose_configuration_file_button	BBBBBB	Configuration File	Configuration File	Fichier de configuration
 choose_configuration_file_button	Right of choose_configuration_file_label	CCCCCC	Choose	Choose	Choisit
@@ -35,8 +35,8 @@ unknown_sort_criteria	User error message pop-up for npc json configuration file.
 npcs_generated_incorrectly	Application error when npcs violate their own configuration schema.	AIAIAIAI	Npcs violate their own schema.	Npcs violate their own schema.	
 npc_error_trait_incorrectly_hidden	Application error when npcs violate their own configuration schema.	AJAJAJ	Category {0} trait {1} should be not hidden but is hidden.	Category {0} trait {1} should be hidden but is not.	
 npc_error_trait_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AKAKAK	Category {0} trait {1} should be hidden but is not.	Category {0} trait {1} should be not hidden but is hidden.	
-npc_error_category_incorrectly_hidden	Application error when npcs violate their own configuration schema.	ALALAL	Category {0} should not be hidden but is hidden		
-npc_error_category_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AMAMAM	Category {0} should be hidden but is not		
+npc_error_category_incorrectly_hidden	Application error when npcs violate their own configuration schema.	ALALAL	Category {0} should not be hidden but is hidden	Category {0} should not be hidden but is hidden	
+npc_error_category_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AMAMAM	Category {0} should be hidden but is not	Category {0} should be hidden but is not	
 npc_error_trait_in_locked_category	Application error when npcs violate their own configuration schema.	ANANAN	Category {0} should not have trait {1} since category requirements are not met.	Category {0} should not have trait {1} since category requirements are not met.	
 npc_error_too_few_traits_in_category	Application error when npcs violate their own configuration schema.	AOAOAO	Category {0} has too few traits.	Category {0} has too few traits.	
 npc_error_too_many_traits_in_category	Application error when npcs violate their own configuration schema.	APAPAP	Category {0} has too many traits.	Category {0} has too many traits.	

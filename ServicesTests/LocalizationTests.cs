@@ -26,7 +26,7 @@ namespace Tests
         [TestMethod]
         public void ReadSingleLanguage()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string languageCodeLowerCase = languageCode.ToLower();
             
             string textId = "window_title";
@@ -48,9 +48,9 @@ namespace Tests
         [TestMethod]
         public void ReadMultipleLanguages()
         {
-            string defaultLanguageCode = "Martian";
+            string defaultLanguageCode = "en-MA";
             string defaultLanguageCodeLowerCase = defaultLanguageCode.ToLower();
-            string languageCode2 = "Dwarvish";
+            string languageCode2 = "en-DW";
             string languageCode2LowerCase = languageCode2.ToLower();
             
             string textId = "window_title";
@@ -80,7 +80,7 @@ namespace Tests
         [TestMethod]
         public void LargeLanguageFile()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string languageCodeLowerCase = languageCode.ToLower();
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -116,7 +116,7 @@ namespace Tests
         public void UseUnsupportedLanguage()
         {
             const string LANGUAGE_NOT_FOUND = "NotFoundLanguage";
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -144,7 +144,7 @@ namespace Tests
         public void InvalidDefaultLanguage()
         {
             const string LANGUAGE_NOT_FOUND = "NotFoundLanguage";
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -168,7 +168,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void InvalidTextSeparator()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -181,7 +181,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void DuplicateTextId()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -192,33 +192,22 @@ namespace Tests
             new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod]
+        [TestMethod, ExpectedException(typeof(Services.LanguageCodeMalformedException))]
         public void MissingTitleRow()
         {
-            const string LANGUAGE_CODE = "Martian";
+            const string LANGUAGE_CODE = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
             string sourceText = textId + "\t\t" + text;
 
-            bool threwException = false;
-            try
-            {
-                new Services.Localization(sourceText, LANGUAGE_CODE);
-            }
-            catch (Services.LanguageNotFoundException exception)
-            {
-                threwException = true;
-                Assert.AreEqual(LANGUAGE_CODE, exception.Language, "Wrong language");
-            }
-            
-            Assert.IsTrue(threwException, "Failed to throw a LanguageNotFoundException");
+            new Services.Localization(sourceText, LANGUAGE_CODE);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void MissingInputColumns()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -228,10 +217,10 @@ namespace Tests
             new Services.Localization(sourceText, languageCode);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod, ExpectedException(typeof(Services.LanguageCodeMalformedException))]
         public void ExtraInputColumns()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -245,7 +234,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void OneLanguageNotFullyTranslated()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
 
             string sourceText = "ID\tContext\t" + languageCode + "\n" +
@@ -257,7 +246,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void NoLanguages()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
 
             string sourceText = "ID\tContext\t\n" +
@@ -271,7 +260,7 @@ namespace Tests
         {
             const string MISSING_TEXT_ID = "MissingStringId";
 
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -294,10 +283,23 @@ namespace Tests
             Assert.IsTrue(threwException, "Failed to throw LocalizedTextNotFoundException");
         }
 
+        [TestMethod, ExpectedException(typeof(Services.LanguageCodeMalformedException))]
+        public void LanguageCodeMalformed()
+        {
+            string languageCode = "martian";
+            string textId = "ufo_sightings";
+            string text = "Spotted {0} ufos";
+
+            string sourceText = "ID\tContext\t" + languageCode + "\n" +
+                textId + "\t\t" + text;
+
+            new Services.Localization(sourceText, languageCode);
+        }
+
         [TestMethod]
         public void Format1Param()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
@@ -315,7 +317,7 @@ namespace Tests
         [TestMethod]
         public void Format2Params()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
@@ -334,7 +336,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(FormatException))]
         public void Format0InsteadOf1Params()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
@@ -349,7 +351,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(FormatException))]
         public void Format1InsteadOf2Params()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "stars_travelled_and_goal";
             string text = "Visited {0} of {1} in range";
 
@@ -365,7 +367,7 @@ namespace Tests
         [TestMethod]
         public void Format1InsteadOf0Params()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "window_title";
             string text = "Test Window";
 
@@ -380,7 +382,7 @@ namespace Tests
         [TestMethod]
         public void Format2InsteadOf1Params()
         {
-            string languageCode = "Martian";
+            string languageCode = "en-MA";
             string textId = "ufo_sightings";
             string text = "Spotted {0} ufos";
 
@@ -398,13 +400,15 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullText()
         {
-            new Services.Localization(localizationText: null, "martian");
+            new Services.Localization(localizationText: null, "en-MA");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void EmptyText()
         {
-            new Services.Localization(localizationText: String.Empty, "martian");
+            new Services.Localization(localizationText: String.Empty, "en-MA");
         }
+
+
     }
 }

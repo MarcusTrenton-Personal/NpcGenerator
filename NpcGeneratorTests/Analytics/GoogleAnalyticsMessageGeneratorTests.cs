@@ -291,7 +291,7 @@ namespace Tests
                 new StubUserSettings(),
                 Callback);
 
-            const string LANGUAGE_CODE = "Martian";
+            const string LANGUAGE_CODE = "en-ma"; //Language code is regex-checked, so make it valid.
             messager.Send(this, new LanguageSelected(LANGUAGE_CODE));
 
             void Callback(string messageBody)
