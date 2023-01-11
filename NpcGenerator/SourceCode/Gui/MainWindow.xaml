@@ -160,9 +160,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/> .-->
                           ItemsSource="{Binding Path=ResultNpcs}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="100,20,0,0">
-                <TextBlock VerticalAlignment="Center">
-                    <Hyperlink NavigateUri="https://www.fantasynamegenerators.com/" RequestNavigate="OpenBrowserToUri">Name Generator</Hyperlink>
-                </TextBlock>
                 <Button x:Name="saveNpcsButton" Margin="10" VerticalAlignment="Center"
                         DataContext="{Binding Path=NpcGeneratorModel, ElementName=ThisWindow}"
                         Command="{Binding Path=SaveNpcs}">
