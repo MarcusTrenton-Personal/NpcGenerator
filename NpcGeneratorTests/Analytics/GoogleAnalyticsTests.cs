@@ -16,9 +16,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
-using Tests;
 
-namespace NpcGeneratorTests.Analytics
+namespace Tests
 {
     [TestClass]
     public class GoogleAnalyticsTests
