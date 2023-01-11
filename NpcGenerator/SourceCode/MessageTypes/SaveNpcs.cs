@@ -13,12 +13,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
+
 namespace NpcGenerator.Message
 {
     public class SaveNpcs
     {
         public SaveNpcs(string format)
         {
+            ParamUtil.VerifyMatchesPattern(
+                nameof(format), format, RegexUtil.FILE_EXTENSION_WITHOUT_DOT, format + " is not a file extension without a dot.");
+
             Format = format;
         }
 

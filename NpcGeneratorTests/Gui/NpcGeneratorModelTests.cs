@@ -26,18 +26,6 @@ namespace Tests
     [TestClass]
     public class NpcGeneratorModelTests : FileCreatingTests
     {
-        //public NpcGeneratorModel(
-        //    in IUserSettings userSettings,
-        //    in IAppSettings appSettings,
-        //    in IMessager messager,
-        //    in ILocalFileIO fileIo,
-        //    in IConfigurationParser parser,
-        //    in Dictionary<string, INpcExport> npcExporters,
-        //    in ILocalization localization,
-        //    in IRandom random,
-        //    bool showErrorMessages,
-        //    bool forceFailNpcGeneration)
-
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullUserSettings()
         {

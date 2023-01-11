@@ -108,7 +108,7 @@ namespace Tests
 
         public bool SaveToPickedFile(in IReadOnlyList<FileContentProvider> contentProviders, out string pickedFileExtension)
         {
-            pickedFileExtension = null;
+            pickedFileExtension = "test"; //Must be an extension instead of blank.
             SaveCalled = true;
             return true;
         }
