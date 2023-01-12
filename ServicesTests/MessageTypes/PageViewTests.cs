@@ -20,33 +20,27 @@ using System;
 namespace Tests
 {
     [TestClass]
-    public class LanguageSelectedTests
+    public class PageViewTests
     {
         [TestMethod]
-        public void LanguageCodeIsValid()
+        public void ValidPage()
         {
-            const string LANGUAGE_CODE = "en-ca";
-            LanguageSelected message = new LanguageSelected(LANGUAGE_CODE);
+            const string TITLE = "Main menu";
+            PageView message = new PageView(TITLE);
 
-            Assert.AreEqual(LANGUAGE_CODE, message.Language, "Wrong language code was stored");
+            Assert.AreEqual(TITLE, message.Title, "Wrong title was stored");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void LanguageCodeIsNull()
+        public void NullPage()
         {
-            new LanguageSelected(null);
+            new PageView(null);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void LanguageCodeIsEmpty()
+        public void EmptyPage()
         {
-            new LanguageSelected(String.Empty);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void LanguageCodeIsMalformed()
-        {
-            new LanguageSelected("en");
+            new PageView(string.Empty);
         }
     }
 }

@@ -19,6 +19,8 @@ namespace Services.Message
     {
         public PageView(string title)
         {
+            ParamUtil.VerifyHasContent(nameof(title), title);
+
             Title = title;
         }
 

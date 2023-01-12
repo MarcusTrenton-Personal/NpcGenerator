@@ -20,33 +20,24 @@ using System;
 namespace Tests
 {
     [TestClass]
-    public class LanguageSelectedTests
+    public class UserLanguageNotSupportedTests
     {
-        [TestMethod]
-        public void LanguageCodeIsValid()
+        [DataTestMethod]
+        [DataRow("", DisplayName = "Empty")]
+        [DataRow("en-ca")]
+        [DataRow("en")]
+        [DataRow("english")]
+        public void ProperLanguageCode(string languageCode)
         {
-            const string LANGUAGE_CODE = "en-ca";
-            LanguageSelected message = new LanguageSelected(LANGUAGE_CODE);
+            UserLanguageNotSupported message = new UserLanguageNotSupported(languageCode);
 
-            Assert.AreEqual(LANGUAGE_CODE, message.Language, "Wrong language code was stored");
+            Assert.AreEqual(languageCode, message.LanguageCode, "Wrong language code was stored");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void LanguageCodeIsNull()
+        public void NullLanguageCode()
         {
-            new LanguageSelected(null);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void LanguageCodeIsEmpty()
-        {
-            new LanguageSelected(String.Empty);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void LanguageCodeIsMalformed()
-        {
-            new LanguageSelected("en");
+            new UserLanguageNotSupported(null);
         }
     }
 }

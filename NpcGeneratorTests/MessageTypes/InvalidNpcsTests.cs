@@ -39,7 +39,9 @@ namespace Tests
                 }
             };
 
-            new InvalidNpcs(violations);
+            InvalidNpcs message = new InvalidNpcs(violations);
+
+            Assert.AreEqual(violations, message.Violations, "Wrong violations were store");
         }
 
         [TestMethod]
@@ -51,7 +53,9 @@ namespace Tests
                 violationsByNpc = new Dictionary<Npc, List<NpcSchemaViolation>>()
             };
 
-            new InvalidNpcs(violations);
+            InvalidNpcs message = new InvalidNpcs(violations);
+
+            Assert.AreEqual(violations, message.Violations, "Wrong violations were store");
         }
 
         [TestMethod]
@@ -66,7 +70,9 @@ namespace Tests
                 }
             };
 
-            new InvalidNpcs(violations);
+            InvalidNpcs message = new InvalidNpcs(violations);
+
+            Assert.AreEqual(violations, message.Violations, "Wrong violations were store");
         }
 
         [TestMethod]
@@ -81,7 +87,9 @@ namespace Tests
                 violationsByNpc = new Dictionary<Npc, List<NpcSchemaViolation>>()
             };
 
-            new InvalidNpcs(violations);
+            InvalidNpcs message = new InvalidNpcs(violations);
+
+            Assert.AreEqual(violations, message.Violations, "Wrong violations were store");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]

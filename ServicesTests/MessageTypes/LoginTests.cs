@@ -15,38 +15,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Services.Message;
-using System;
 
 namespace Tests
 {
     [TestClass]
-    public class LanguageSelectedTests
+    public class LoginTests
     {
         [TestMethod]
-        public void LanguageCodeIsValid()
+        public void LoginIsConstructed()
         {
-            const string LANGUAGE_CODE = "en-ca";
-            LanguageSelected message = new LanguageSelected(LANGUAGE_CODE);
+            Login message = new Login();
 
-            Assert.AreEqual(LANGUAGE_CODE, message.Language, "Wrong language code was stored");
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void LanguageCodeIsNull()
-        {
-            new LanguageSelected(null);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void LanguageCodeIsEmpty()
-        {
-            new LanguageSelected(String.Empty);
-        }
-
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void LanguageCodeIsMalformed()
-        {
-            new LanguageSelected("en");
+            Assert.IsNotNull(message, "Failed to construct Login Message");
         }
     }
 }

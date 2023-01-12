@@ -27,7 +27,10 @@ namespace Tests
         [TestMethod]
         public void FormatFileExtensionWithoutDot()
         {
-            new SaveNpcs("csv");
+            const string FILE_TYPE = "csv";
+            SaveNpcs message = new SaveNpcs(FILE_TYPE);
+
+            Assert.AreEqual(FILE_TYPE, message.Format, "Wrong Format was stored");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]

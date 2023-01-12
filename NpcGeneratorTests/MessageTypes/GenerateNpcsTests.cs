@@ -22,16 +22,14 @@ namespace Tests
     [TestClass]
     public class GenerateNpcsTests
     {
-        [TestMethod]
-        public void PositiveNumber()
+        [DataTestMethod]
+        [DataRow(5)]
+        [DataRow(0)]
+        public void ValidWholeNUmber(int quantity)
         {
-            new GenerateNpcs(5);
-        }
+            GenerateNpcs message = new GenerateNpcs(quantity);
 
-        [TestMethod]
-        public void Zero()
-        {
-            new GenerateNpcs(0);
+            Assert.AreEqual(quantity, message.Quantity, "Wrong quantity was stored");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]

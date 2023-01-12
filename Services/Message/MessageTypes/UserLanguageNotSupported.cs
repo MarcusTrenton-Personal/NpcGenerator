@@ -19,6 +19,9 @@ namespace Services.Message
     {
         public UserLanguageNotSupported(string languageCode)
         {
+            //Don't assume a missing language code will actually be formatted like a language code.
+            ParamUtil.VerifyNotNull(nameof(languageCode), languageCode);
+
             LanguageCode = languageCode;
         }
 
