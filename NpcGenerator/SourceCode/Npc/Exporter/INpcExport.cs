@@ -20,6 +20,6 @@ namespace NpcGenerator
     public interface INpcExport
     {
         string FileExtensionWithoutDot { get; }
-        string Export(NpcGroup group);
+        string Export(in NpcGroup group);
     }
 }

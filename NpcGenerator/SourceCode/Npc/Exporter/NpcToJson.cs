@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,9 +28,10 @@ namespace NpcGenerator
     {
         public NpcToJson(string schemaPath)
         {
-            bool hasSchemaPath = !string.IsNullOrEmpty(schemaPath);
-            if (hasSchemaPath)
+            if (schemaPath != null)
             {
+                ParamUtil.VerifyMatchesPattern(nameof(schemaPath), schemaPath, RegexUtil.ANY_FILE_PATH, schemaPath + " is not a filepath.");
+
                 string schemaText = File.ReadAllText(schemaPath);
                 m_schema = JSchema.Parse(schemaText);
             }
@@ -38,8 +40,10 @@ namespace NpcGenerator
         public const string FileExtensionWithoutDotStatic = "json";
         public string FileExtensionWithoutDot { get; } = FileExtensionWithoutDotStatic;
 
-        public string Export(NpcGroup group)
+        public string Export(in NpcGroup group)
         {
+            ParamUtil.VerifyNotNull(nameof(group), group);
+
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
             using (JsonWriter writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })

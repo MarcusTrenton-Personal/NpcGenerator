@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System;
 using System.Collections.Generic;
 
 namespace Tests
@@ -22,6 +23,24 @@ namespace Tests
     [TestClass]
     public class NpcToStringArrayTests
     {
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullNpc()
+        {
+            NpcToStringArray.Export(npc: null, new string[] { "Colour" });
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullCategoryOrder()
+        {
+            NpcToStringArray.Export(new Npc(), categoryOrder: null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NullElementInCategoryOrder()
+        {
+            NpcToStringArray.Export(new Npc(), new string[] { null });
+        }
+
         [TestMethod]
         public void SingleCategory()
         {

@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System;
 using System.Collections.Generic;
 
 namespace Tests
@@ -22,6 +23,13 @@ namespace Tests
     [TestClass]
     public class NpcToCsvTests
     {
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullGroup()
+        {
+            NpcToCsv npcToCsv = new NpcToCsv();
+            npcToCsv.Export(null);
+        }
+
         [TestMethod]
         public void SingleNpc()
         {

@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,8 +28,10 @@ namespace NpcGenerator
         public const char SEPARATOR = ',';
         public const string MULTI_TRAIT_SEPARATOR = ExportUtil.MULTI_TRAIT_SEPARATOR;
 
-        public string Export(NpcGroup group)
+        public string Export(in NpcGroup group)
         {
+            ParamUtil.VerifyNotNull(nameof(group), group);
+
             StringBuilder text = new StringBuilder();
 
             IReadOnlyList<string> visibleCategoryOrder = group.VisibleCategoryOrder;

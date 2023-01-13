@@ -24,6 +24,24 @@ namespace Tests
     [TestClass]
     public class ExportUtilTests
     {
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullTraits()
+        {
+            ExportUtil.CombineTraits(traits: null, new StringBuilder());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NullElementInTraits()
+        {
+            ExportUtil.CombineTraits(traits: new Npc.Trait[] { null }, new StringBuilder());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullStringBuilder()
+        {
+            ExportUtil.CombineTraits(Array.Empty<Npc.Trait>(), stringBuilder: null);
+        }
+
         [TestMethod]
         public void CombineZeroTraits()
         {

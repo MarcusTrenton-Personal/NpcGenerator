@@ -23,8 +23,11 @@ namespace NpcGenerator
     {
         public const string MULTI_TRAIT_SEPARATOR = " & ";
 
-        public static void CombineTraits(Npc.Trait[] traits, StringBuilder stringBuilder)
+        public static void CombineTraits(in Npc.Trait[] traits, in StringBuilder stringBuilder)
         {
+            ParamUtil.VerifyElementsAreNotNull(nameof(traits), traits);
+            ParamUtil.VerifyNotNull(nameof(stringBuilder), stringBuilder);
+
             HashSet<string> visibleDistinctTraits = VisibleDistinctTraits(traits);
 
             bool isFirstVisibleTrait = true;

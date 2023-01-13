@@ -15,9 +15,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using NpcGenerator;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -32,6 +31,31 @@ namespace Tests
     public class NpcToJsonTests
     {
         const string SCHEMA_PATH = "NpcGroupSchema.json";
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptySchema()
+        {
+            new NpcToJson(string.Empty);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptySchemaPathIsInvalid()
+        {
+            new NpcToJson("This is not a file path!");
+        }
+
+        [TestMethod, ExpectedException(typeof(FileNotFoundException))]
+        public void EmptySchemaPathIsNotFound()
+        {
+            new NpcToJson("NotFound.json");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullNpcGroup()
+        {
+            NpcToJson npcToJson = new NpcToJson(SCHEMA_PATH);
+            npcToJson.Export(null);
+        }
 
         [TestMethod]
         public void SingleNpc()

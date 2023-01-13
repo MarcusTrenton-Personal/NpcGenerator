@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,8 +23,11 @@ namespace NpcGenerator
     {
         public const string MULTI_TRAIT_SEPARATOR = ExportUtil.MULTI_TRAIT_SEPARATOR;
 
-        public static string[] Export(Npc npc, IReadOnlyList<string> categoryOrder)
+        public static string[] Export(in Npc npc, in IReadOnlyList<string> categoryOrder)
         {
+            ParamUtil.VerifyNotNull(nameof(npc), npc);
+            ParamUtil.VerifyElementsAreNotNull(nameof(categoryOrder), categoryOrder);
+
             StringBuilder stringBuilder = new StringBuilder();
             List<string> traitsPerCategory = new List<string>();
             for (int i = 0; i < categoryOrder.Count; ++i)
