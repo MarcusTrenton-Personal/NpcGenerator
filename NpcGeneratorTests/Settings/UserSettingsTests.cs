@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using NpcGenerator;
+using System;
 using System.IO;
 
 namespace Tests
@@ -95,6 +96,22 @@ namespace Tests
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
 
             UserSettings settings = UserSettings.Load(path);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void PathIsNull()
+        {
+            UserSettings settings = UserSettings.Load(null);
+
+            Assert.IsNotNull(settings, "Failed to generate default UserSettings");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void PathIsEmpty()
+        {
+            UserSettings settings = UserSettings.Load(string.Empty);
 
             Assert.IsNotNull(settings, "Failed to generate default UserSettings");
         }

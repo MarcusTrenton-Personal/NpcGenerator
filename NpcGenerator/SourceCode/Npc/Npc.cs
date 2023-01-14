@@ -25,14 +25,9 @@ namespace NpcGenerator
         public void Add(string category, Trait[] traits)
         {
             ParamUtil.VerifyHasContent(nameof(category), category);
-            ParamUtil.VerifyNotNull(nameof(traits), traits);
+            ParamUtil.VerifyElementsAreNotNull(nameof(traits), traits);
             foreach (Trait trait in traits)
             {
-                if (trait is null)
-                {
-                    throw new ArgumentException(nameof(traits) + " has a null element");
-                }
-
                 if (string.IsNullOrEmpty(trait.Name))
                 {
                     throw new ArgumentException("Array elements must not be null or have empty name");
@@ -59,6 +54,8 @@ namespace NpcGenerator
 
         public Trait[] GetTraitsOfCategory(string category)
         {
+            ParamUtil.VerifyNotNull(nameof(category), category);
+
             bool success = m_traitsByCategory.TryGetValue(category, out HashSet<Trait> traits);
             if (success)
             {

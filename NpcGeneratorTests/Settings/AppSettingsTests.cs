@@ -249,6 +249,18 @@ namespace Tests
             AppSettings.Create(json);
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullJsonString()
+        {
+            AppSettings.Create(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void EmptyJsonString()
+        {
+            AppSettings.Create(String.Empty);
+        }
+
         [TestMethod]
         public void EmptyJson()
         {

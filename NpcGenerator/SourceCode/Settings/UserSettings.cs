@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Newtonsoft.Json;
+using Services;
 using System;
 using System.IO;
 using System.Text;
@@ -79,6 +80,8 @@ namespace NpcGenerator
 
         public static UserSettings Load(string path)
         {
+            ParamUtil.VerifyHasContent(nameof(path), path);
+
             try
             {
                 string text = File.ReadAllText(path);

@@ -26,6 +26,7 @@ namespace NpcGenerator
             ParamUtil.VerifyNotNull(nameof(traitSchema), traitSchema);
             ParamUtil.VerifyElementsAreNotNull(nameof(replacements), replacements);
             ParamUtil.VerifyWholeNumber(nameof(npcCount), npcCount);
+            ParamUtil.VerifyNotNull(nameof(random), random);
 
             List<TraitCategory> categoriesWithReplacements = GetReplacementCategories(traitSchema, replacements);
 

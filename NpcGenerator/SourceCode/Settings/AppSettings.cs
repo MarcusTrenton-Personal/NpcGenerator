@@ -72,6 +72,8 @@ namespace NpcGenerator
 
         public static AppSettings Create(string json)
         {
+            ParamUtil.VerifyHasContent(nameof(json), json);
+
             AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(json);
             settings.Validate();
             return settings;

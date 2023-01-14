@@ -61,6 +61,16 @@ namespace Tests.NpcFactoryTests.AreNpcsValid
             NpcFactory.AreNpcsValid(npcGroup, schema, replacements: null, out NpcSchemaViolationCollection _);
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void AreNpcsValidNullReplacementsElement()
+        {
+            TraitSchema schema = new TraitSchema();
+            NpcGroup npcGroup = new NpcGroup(new List<NpcGroup.Category> { new NpcGroup.Category("Animal") });
+            npcGroup.Add(new Npc());
+
+            NpcFactory.AreNpcsValid(npcGroup, schema, replacements: new List<Replacement>() { null }, out NpcSchemaViolationCollection _);
+        }
+
         [TestMethod]
         public void AreNpcsValidEmpty()
         {

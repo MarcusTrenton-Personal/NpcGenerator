@@ -28,6 +28,42 @@ namespace Tests
     public class NpcTests
     {
         [TestMethod]
+        public void GetTraitsOfCategoryThatDoesNotExist()
+        {
+            Npc npc = new Npc();
+            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait("Blue", "Colour", isHidden: false) });
+
+            Npc.Trait[] traits = npc.GetTraitsOfCategory("Animal");
+
+            Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
+            Assert.AreEqual(0, traits.Length, "Wrong number of traits found.");
+        }
+
+        [TestMethod]
+        public void GetTraitsOfCategoryEmpty()
+        {
+            Npc npc = new Npc();
+            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait("Blue", "Colour", isHidden: false) });
+
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(String.Empty);
+
+            Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
+            Assert.AreEqual(0, traits.Length, "Wrong number of traits found.");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void GetTraitsOfCategoryNull()
+        {
+            Npc npc = new Npc();
+            npc.Add("Colour", new Npc.Trait[] { new Npc.Trait("Blue", "Colour", isHidden: false) });
+
+            Npc.Trait[] traits = npc.GetTraitsOfCategory(null);
+
+            Assert.IsNotNull(traits, "Returned array should never be null. At worst it is empty.");
+            Assert.AreEqual(0, traits.Length, "Wrong number of traits found.");
+        }
+
+        [TestMethod]
         public void AddSingle()
         {
             const string CATEGORY = "Colour";

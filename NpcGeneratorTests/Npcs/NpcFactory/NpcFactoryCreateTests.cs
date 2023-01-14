@@ -225,6 +225,34 @@ namespace Tests.NpcFactoryTests.Create
             NpcFactory.Create(schema, 1, null, m_random);
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NullReplacementElement()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            TraitCategory colourCategory = new TraitCategory(CATEGORY);
+            colourCategory.Add(new Trait(TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(colourCategory);
+
+            NpcFactory.Create(schema, 1, new List<Replacement>() { null }, m_random);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void NullRandom()
+        {
+            const string CATEGORY = "Colour";
+            const string TRAIT = "Blue";
+            TraitCategory colourCategory = new TraitCategory(CATEGORY);
+            colourCategory.Add(new Trait(TRAIT));
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(colourCategory);
+
+            NpcFactory.Create(schema, 1, new List<Replacement>(), random: null);
+        }
+
         [TestMethod]
         public void SchemaWithoutCategories()
         {
