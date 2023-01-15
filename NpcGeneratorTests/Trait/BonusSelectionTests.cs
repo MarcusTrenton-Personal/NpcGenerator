@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
+using System;
 
 namespace Tests
 {
@@ -24,12 +25,12 @@ namespace Tests
         [TestMethod]
         public void ValueConstructor()
         {
-            TraitCategory category = new TraitCategory("Colour");
+            const string CATEGORY = "Colour";
             const int SELECTION_COUNT = 1;
-            BonusSelection bonusSelection = new BonusSelection(category.Name, SELECTION_COUNT);
+            BonusSelection bonusSelection = new BonusSelection(CATEGORY, SELECTION_COUNT);
 
             Assert.AreEqual(SELECTION_COUNT, bonusSelection.SelectionCount, "Wrong SelectionCount was stored");
-            Assert.AreEqual(category.Name, bonusSelection.CategoryName, "Wrong TraitCategory was stored");
+            Assert.AreEqual(CATEGORY, bonusSelection.CategoryName, "Wrong TraitCategory was stored");
         }
 
         [TestMethod]
@@ -43,6 +44,35 @@ namespace Tests
             Assert.IsFalse(ReferenceEquals(original, copy), "Original and copy are the same object, which is not a copy");
             Assert.AreEqual(original.SelectionCount, copy.SelectionCount, "SelectionCount was not copied correctly.");
             Assert.AreEqual(original.CategoryName, copy.CategoryName, "TraitCategory was not copied correctly");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructWithNullCategory()
+        {
+            new BonusSelection(categoryName: null, 1);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ConstructWithEmptyCategory()
+        {
+            new BonusSelection(categoryName: String.Empty, 1);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ConstructWithNegativeSelectionCount()
+        {
+            new BonusSelection("Animal", selectionCount: -1);
+        }
+
+        [TestMethod]
+        public void ConstructWithZeroSelectionCount()
+        {
+            const string CATEGORY = "Colour";
+            const int SELECTION_COUNT = 0;
+            BonusSelection selection = new BonusSelection(CATEGORY, selectionCount: SELECTION_COUNT);
+
+            Assert.AreEqual(CATEGORY, selection.CategoryName, "Wrong categoryName");
+            Assert.AreEqual(SELECTION_COUNT, selection.SelectionCount, "Wrong selectionCount");
         }
     }
 }

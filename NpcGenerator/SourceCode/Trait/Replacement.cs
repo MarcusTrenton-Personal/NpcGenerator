@@ -13,12 +13,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
+
 namespace NpcGenerator
 {
     public class Replacement
     {
-        public Replacement(Trait originalTrait, string replacementTraitName, TraitCategory category)
+        public Replacement(in Trait originalTrait, string replacementTraitName, in TraitCategory category)
         {
+            ParamUtil.VerifyNotNull(nameof(originalTrait), originalTrait);
+            ParamUtil.VerifyHasContent(nameof(replacementTraitName), replacementTraitName);
+            ParamUtil.VerifyNotNull(nameof(category), category);
+
             OriginalTrait = originalTrait;
             ReplacementTraitName = replacementTraitName;
             Category = category;

@@ -13,12 +13,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
+
 namespace NpcGenerator
 {
     public class BonusSelection
     {
         public BonusSelection(string categoryName, int selectionCount)
         {
+            ParamUtil.VerifyHasContent(nameof(categoryName), categoryName);
+            ParamUtil.VerifyWholeNumber(nameof(selectionCount), selectionCount);
+
             CategoryName = categoryName;
             SelectionCount = selectionCount;
         }

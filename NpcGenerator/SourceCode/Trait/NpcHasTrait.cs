@@ -21,7 +21,7 @@ namespace NpcGenerator
 {
     public class NpcHasTrait : ILogicalExpression
     {
-        public NpcHasTrait(TraitId traitId, INpcProvider npcProvider)
+        public NpcHasTrait(in TraitId traitId, in INpcProvider npcProvider)
         {
             TraitId = traitId ?? throw new ArgumentNullException(nameof(traitId));
             m_npcProvider = npcProvider ?? throw new ArgumentNullException(nameof(npcProvider));

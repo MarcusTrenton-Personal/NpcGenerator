@@ -44,12 +44,12 @@ namespace NpcGenerator
             return copy;
         }
 
-        public void Set(Requirement requirement)
+        public void Set(in Requirement requirement)
         {
             m_requirement = requirement;
         }
 
-        public bool IsUnlockedFor(Npc npc)
+        public bool IsUnlockedFor(in Npc npc)
         {
             if (npc is null)
             {
