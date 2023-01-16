@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -30,6 +31,9 @@ namespace NpcGenerator
 
         public Trait(string name, int weight, bool isHidden)
         {
+            ParamUtil.VerifyHasContent(nameof(name), name);
+            ParamUtil.VerifyWholeNumber(nameof(weight), weight);
+
             Name = name;
             OriginalName = name;
             Weight = weight;
@@ -38,6 +42,8 @@ namespace NpcGenerator
 
         public Trait DeepCopyWithRename(string newName)
         {
+            ParamUtil.VerifyHasContent(nameof(newName), newName);
+
             Trait copy = (Trait) MemberwiseClone();
             copy.Name = newName;
             copy.BonusSelection = BonusSelection?.ShallowCopy();
@@ -51,10 +57,7 @@ namespace NpcGenerator
 
         public bool IsUnlockedFor(in Npc npc)
         {
-            if (npc is null)
-            {
-                throw new ArgumentNullException(nameof(npc));
-            }
+            ParamUtil.VerifyNotNull(nameof(npc), npc);
 
             bool isUnlocked = m_requirement is null || m_requirement.IsUnlockedFor(npc);
             return isUnlocked;

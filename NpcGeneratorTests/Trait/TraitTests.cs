@@ -38,6 +38,38 @@ namespace Tests
             Assert.IsNull(trait.BonusSelection, "BonusSelection is not null despite not be specified");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorNullName()
+        {
+            new Trait(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ConstructorEmptyName()
+        {
+            new Trait(String.Empty);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void ConstructorNegativeWeight()
+        {
+            new Trait("Blue", -4);
+        }
+
+        [TestMethod]
+        public void ConstructorZeroWeight()
+        {
+            const string NAME = "Blue";
+            const int WEIGHT = 0;
+
+            Trait trait = new Trait(NAME, WEIGHT);
+
+            Assert.AreEqual(NAME, trait.Name, "Wrong name was stored");
+            Assert.AreEqual(WEIGHT, trait.Weight, "Wrong weight was stored");
+            Assert.IsFalse(trait.IsHidden, "Wrong default IsHidden");
+            Assert.IsNull(trait.BonusSelection, "Wrong default BonusSelection");
+        }
+
         [TestMethod]
         public void DeepCopyWithRename()
         {
@@ -58,6 +90,22 @@ namespace Tests
                 "BonusSelection SelectionCount was not copied");
             Assert.AreEqual(original.BonusSelection.CategoryName, copy.BonusSelection.CategoryName, 
                 "BonusSelection TraitCategory was not copied");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void DeepCopyWithRenameWithNullNewName()
+        {
+            Trait original = new Trait("Blue");
+
+            original.DeepCopyWithRename(null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void DeepCopyWithRenameWithEmptyNewName()
+        {
+            Trait original = new Trait("Blue");
+
+            original.DeepCopyWithRename(String.Empty);
         }
 
         [TestMethod]

@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
+
 namespace NpcGenerator
 {
     public class ReplacementSearch
@@ -23,6 +25,9 @@ namespace NpcGenerator
 
         public ReplacementSearch(Trait trait, TraitCategory category, Sort sortCriteria)
         {
+            ParamUtil.VerifyNotNull(nameof(trait), trait);
+            ParamUtil.VerifyNotNull(nameof(category), category);
+
             Trait = trait;
             Category = category;
             SortCriteria = sortCriteria;

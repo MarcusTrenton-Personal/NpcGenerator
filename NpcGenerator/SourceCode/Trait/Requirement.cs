@@ -27,16 +27,9 @@ namespace NpcGenerator
             m_npcHolder = npcHolder ?? throw new ArgumentNullException(nameof(npcHolder));
         }
 
-        public bool IsUnlockedFor(Npc npc)
+        public bool IsUnlockedFor(in Npc npc)
         {
-            if (m_logicalExpression is null)
-            {
-                throw new InvalidOperationException(nameof(ILogicalExpression) + " is needed. Call Initalize() first.");
-            }
-            if (npc is null)
-            {
-                throw new ArgumentNullException(nameof(npc));
-            }
+            ParamUtil.VerifyNotNull(nameof(npc), npc);
 
             m_npcHolder.Npc = npc;
             bool result = m_logicalExpression.Evaluate();
@@ -63,7 +56,7 @@ namespace NpcGenerator
             return dependencies;
         }
 
-        private void AddDependencyTo(ILogicalExpression expression, HashSet<TraitId> dependencies)
+        private void AddDependencyTo(in ILogicalExpression expression, in HashSet<TraitId> dependencies)
         {
             if (expression is NpcHasTrait)
             {
