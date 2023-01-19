@@ -21,17 +21,21 @@ namespace NpcGenerator
 {
     public class TraitSchema
     {
-        public void Add(TraitCategory traitCategory)
+        public void Add(in TraitCategory traitCategory)
         {
+            ParamUtil.VerifyNotNull(nameof(traitCategory), traitCategory);
+
             m_categories.Add(traitCategory);
         }
 
-        public void Add(ReplacementSearch replacement)
+        public void Add(in ReplacementSearch replacement)
         {
+            ParamUtil.VerifyNotNull(nameof(replacement), replacement);
+
             m_replacements.Add(replacement);
         }
 
-        public void SetCategoryOrder(IReadOnlyList<string> categoryOrder)
+        public void SetCategoryOrder(in IReadOnlyList<string> categoryOrder)
         {
             if (categoryOrder != null && categoryOrder.Count > 0)
             {
@@ -56,10 +60,7 @@ namespace NpcGenerator
 
         public bool HasTrait(TraitId traitId)
         {
-            if (traitId is null)
-            {
-                throw new ArgumentNullException(nameof(traitId));
-            }
+            ParamUtil.VerifyNotNull(nameof(traitId), traitId);
 
             TraitCategory category = m_categories.Find(category => category.Name == traitId.CategoryName);
             if (category is null)
@@ -109,9 +110,9 @@ namespace NpcGenerator
                 //Indirect dependency via BonusSelection into a Required trait's category
 
                 //This is tricky, so let's walk through an example.
-                //If category A has a dependency on B and C has a bonus selection into B then A has a depenendcy on C too.
+                //If category A has a dependency on B and if C has a bonus selection into B then A has a depenendcy on C too.
                 //Not B has depedency on C.
-                //B and C can have bonus selections with each other without wrecking the trait selection algorithm.
+                //B and C can have bonus selections into each other without wrecking the trait selection algorithm.
                 //The algorithm can just repeats trait selection in B and C until all bonus selections are done.
                 //But, trait selection in A cannot happen until B and C are finished trait selection, thus A depends on C.
                 foreach (string dependency in dependencies)
@@ -123,7 +124,7 @@ namespace NpcGenerator
                     {
                         requirementGraph.AddEdge(bonusSelection, category.Name);
 
-                        //If the source has a requirement, those depedencies to this category's dependcies.
+                        //If the source has a requirement, add those depedencies to this category's dependcies.
                         TraitCategory bonusSource = m_categories.Find(category => category.Name == bonusSelection);
                         HashSet<string> bonusDependencies = bonusSource.DependentCategoryNames();
                         foreach (string bonusDependency in bonusDependencies)
@@ -138,7 +139,7 @@ namespace NpcGenerator
         }
 
         //Expand the cycle to clarify bonus selection dependencies.
-        //If category A requires category B and category C has a bonus selection into B then the digraph has A depend on C and B.
+        //If category A requires category B and if category C has a bonus selection into B then the digraph has A depend on C and B.
         //A cycle could contain ... -> C -> A -> ... hiding the relationship be A, B, and C.
         //This method detects such cases and makes them plain, so ... -> C -> B -> A -> ...
         //Resulting user-facing error messages will be much clearer.

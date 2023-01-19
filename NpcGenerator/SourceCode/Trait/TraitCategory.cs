@@ -46,7 +46,7 @@ namespace NpcGenerator
             IsHidden = isHidden;
         }
 
-        public TraitCategory DeepCopyWithReplacements(IReadOnlyList<Replacement> replacements)
+        public TraitCategory DeepCopyWithReplacements(in IReadOnlyList<Replacement> replacements)
         {
             ParamUtil.VerifyElementsAreNotNull(nameof(replacements), replacements);
 
@@ -88,14 +88,14 @@ namespace NpcGenerator
             return replacementsForThis;
         }
 
-        public void Add(Trait trait)
+        public void Add(in Trait trait)
         {
             ParamUtil.VerifyNotNull(nameof(trait), trait);
 
             m_traits.Add(trait);
         }
 
-        public TraitChooser CreateTraitChooser(IRandom random, Npc npc)
+        public TraitChooser CreateTraitChooser(in IRandom random, in Npc npc)
         {
             ParamUtil.VerifyNotNull(nameof(random), random);
             ParamUtil.VerifyNotNull(nameof(npc), npc);

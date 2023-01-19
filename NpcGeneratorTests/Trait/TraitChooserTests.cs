@@ -374,6 +374,33 @@ namespace Tests
             new TraitChooser(new List<Trait>(), "Animal", m_random, null);
         }
 
+        [TestMethod]
+        public void ZeroCount()
+        {
+            List<Trait> traits = new List<Trait>
+            {
+                new Trait(HEADS, 1)
+            };
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random, new Npc());
+
+            Npc.Trait[] selections = chooser.Choose(0, out IReadOnlyList<BonusSelection> bonusSelections);
+
+            Assert.AreEqual(0, selections.Length, "Wrong number of selections");
+            Assert.AreEqual(0, bonusSelections.Count, "Wrong number of bonusSelections");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void NegativeCount()
+        {
+            List<Trait> traits = new List<Trait>
+            {
+                new Trait(HEADS, 1)
+            };
+            TraitChooser chooser = new TraitChooser(traits, CATEGORY, m_random, new Npc());
+
+            chooser.Choose(-1, out _);
+        }
+
         private readonly MockRandom m_random = new MockRandom();
     }
 }

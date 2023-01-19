@@ -18,7 +18,6 @@ using NpcGenerator;
 using Services;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tests
 {
@@ -47,6 +46,14 @@ namespace Tests
             Assert.IsNotNull(categories, "Categories are somehow null.");
             Assert.AreEqual(1, categories.Count, "Categories count is incorrect");
             Assert.AreEqual(category, categories[0], "Wrong category stored");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void AddNullCategory()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            TraitCategory category = null;
+            traitSchema.Add(category);
         }
 
         [TestMethod]
@@ -111,6 +118,14 @@ namespace Tests
             Assert.AreEqual(2, replacements.Count, "Replacements are not empty");
             Assert.AreEqual(replacement0, replacements[0], "Altered ReplacementSearch was stored");
             Assert.AreEqual(replacement1, replacements[1], "Altered ReplacementSearch was stored");
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void AddNullReplacement()
+        {
+            TraitSchema traitSchema = new TraitSchema();
+            ReplacementSearch replacement0 = null;
+            traitSchema.Add(replacement0);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]

@@ -145,6 +145,13 @@ namespace Tests
             Assert.AreEqual(trait, category.GetTrait(TRAIT_NAME), TRAIT_NAME + " was not found in the copy");
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void AddNullTrait()
+        {
+            TraitCategory category = new TraitCategory("Colour");
+            category.Add(null);
+        }
+
         [TestMethod]
         public void GetTraitThatDoesNotExist()
         {

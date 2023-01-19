@@ -54,6 +54,8 @@ namespace NpcGenerator
 
         public Npc.Trait[] Choose(int count, out IReadOnlyList<BonusSelection> bonusSelectionsReadonly)
         {
+            ParamUtil.VerifyWholeNumber(nameof(count), count);
+
             List<BonusSelection> bonusSelections = new List<BonusSelection>();
             bonusSelectionsReadonly = bonusSelections.AsReadOnly();
             if (count == 0)
