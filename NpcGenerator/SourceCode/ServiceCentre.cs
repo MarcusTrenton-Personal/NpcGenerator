@@ -25,17 +25,17 @@ namespace NpcGenerator
     public class ServiceCentre
     {
         public ServiceCentre(
-            IAppSettings appSettings,
-            IFilePathProvider filePathProvider,
-            ILocalFileIO fileIo,
-            ILocalization localization,
-            IMessager messager, 
-            ITrackingProfile profile,
-            IUserSettings userSettings,
-            IConfigurationParser configurationParser,
-            Dictionary<string, INpcExport> npcExporters,
-            IRandom random,
-            Models models
+            in IAppSettings appSettings,
+            in IFilePathProvider filePathProvider,
+            in ILocalFileIO fileIo,
+            in ILocalization localization,
+            in IMessager messager, 
+            in ITrackingProfile profile,
+            in IUserSettings userSettings,
+            in IConfigurationParser configurationParser,
+            in Dictionary<string, INpcExport> npcExporters,
+            in IRandom random,
+            in Models models
             )
         {
             Profile = profile;

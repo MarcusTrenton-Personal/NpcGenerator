@@ -252,11 +252,13 @@ namespace Tests
         [TestMethod]
         public void LanguageCodeIsEmpty()
         {
-            new LocalizationModel(
+            LocalizationModel localizationModel = new LocalizationModel(
                 new MockLocalization(),
                 hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
                 new MockILanguageCode() { LanguageCode = string.Empty },
                 new MockMessager());
+
+            Assert.AreEqual(MartianLanguageCode, localizationModel.CurrentLanguage, "Wrong backup language used");
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -267,6 +269,27 @@ namespace Tests
                 hiddenLanguageCodes: Array.AsReadOnly(new string[1] { AtlanteanLanguageCode }),
                 new MockILanguageCode(),
                 null);
+        }
+
+        [TestMethod]
+        public void InvalidInitialLanguageDefaultsBack()
+        {
+            string sourceText = "ID\tContext\t" + MartianLanguageCode + "\n" +
+                "window_title\t\tTest Window";
+            Localization localization = new Localization(sourceText, MartianLanguageCode);
+
+            MockILanguageCode languageCode = new MockILanguageCode
+            {
+                LanguageCode = "NOT_FOUND"
+            };
+
+            LocalizationModel localizationModel = new LocalizationModel(
+                localization,
+                hiddenLanguageCodes: Array.AsReadOnly(Array.Empty<string>()),
+                languageCode,
+                new MockMessager());
+
+            Assert.AreEqual(MartianLanguageCode, localizationModel.CurrentLanguage, "Wrong backup language used");
         }
 
         private readonly ILocalization m_localization;

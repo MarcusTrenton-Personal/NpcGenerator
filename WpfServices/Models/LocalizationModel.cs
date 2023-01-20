@@ -34,7 +34,7 @@ namespace WpfServices
             m_currentLanguageProvider = currentLanguageProvider ?? throw new ArgumentNullException(nameof(currentLanguageProvider));
 
             m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
-            if (!string.IsNullOrEmpty(currentLanguageProvider.LanguageCode))
+            if (m_localization.IsLanguageCodeSupported(currentLanguageProvider.LanguageCode))
             {
                 m_localization.CurrentLanguageCode = currentLanguageProvider.LanguageCode;
             }

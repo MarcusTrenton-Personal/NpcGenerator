@@ -20,11 +20,11 @@ namespace NpcGenerator
     public class Models : IModels
     {
         public Models(
-            ILocalizationModel localization, 
-            IAboutModel about, 
-            INavigationModel navigation, 
-            ITrackingModel tracking,
-            INpcGeneratorModel npcGenerator)
+            in ILocalizationModel localization, 
+            in IAboutModel about, 
+            in INavigationModel navigation, 
+            in ITrackingModel tracking,
+            in INpcGeneratorModel npcGenerator)
         {
             Localization = localization;
             About = about;
