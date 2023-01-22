@@ -60,7 +60,15 @@ namespace Services
         {
             if (value < 0)
             {
-                throw new ArgumentException(name + " must 0 or greater");
+                throw new ArgumentException(name + " must be 0 or greater");
+            }
+        }
+
+        public static void VerifyPositiveNumber(string name, int value)
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentException(name + " must be greater than 0");
             }
         }
 
@@ -115,6 +123,14 @@ namespace Services
             if (!isMatch)
             {
                 throw new ArgumentException(errorMessage, name);
+            }
+        }
+
+        public static void VerifyInRange(string name, int value, int minInclusive, int maxInclusive)
+        {
+            if (value < minInclusive || value > maxInclusive)
+            {
+                throw new ArgumentException(name + "is not in the inclusive range " + minInclusive + " to " + maxInclusive);
             }
         }
     }
