@@ -128,6 +128,11 @@ namespace Services
 
         public static void VerifyInRange(string name, int value, int minInclusive, int maxInclusive)
         {
+            if (minInclusive > maxInclusive)
+            {
+                throw new ArgumentException("Invalid range where " + nameof(minInclusive) + " " + minInclusive + " > " + nameof(maxInclusive) + 
+                    " of " + maxInclusive);
+            }
             if (value < minInclusive || value > maxInclusive)
             {
                 throw new ArgumentException(name + "is not in the inclusive range " + minInclusive + " to " + maxInclusive);

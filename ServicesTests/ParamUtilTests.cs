@@ -128,6 +128,49 @@ namespace Tests
             ParamUtil.VerifyWholeNumber(nameof(x), x);
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VerifyPositiveNumberOf0()
+        {
+            int x = 0;
+            ParamUtil.VerifyPositiveNumber(nameof(x), x);
+        }
+
+        [TestMethod]
+        public void VerifyPositiveNumberOf1()
+        {
+            int x = 1;
+            ParamUtil.VerifyPositiveNumber(nameof(x), x);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void VerifyPositiveNumberOfNegative1()
+        {
+            int x = -1;
+            ParamUtil.VerifyPositiveNumber(nameof(x), x);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 0, 2)]
+        [DataRow(0, 0, 2)]
+        [DataRow(2, 0, 2)]
+        [DataRow(2, 2, 2, DisplayName = "Range of 0")]
+        [DataRow(-2, -2, 2)]
+        [DataRow(-22, -200, -20)]
+        [DataRow(1_000_000, 800_000, 1_200_000)]
+        public void VerifyInRangeSucceeds(int value, int minInclusive, int maxInclusive)
+        {
+            ParamUtil.VerifyInRange(nameof(value), value, minInclusive, maxInclusive);
+        }
+
+        [DataTestMethod, ExpectedException(typeof(ArgumentException))]
+        [DataRow(1, 2, 0, DisplayName = "Max greater than min")]
+        [DataRow(-1, 0, 2)]
+        [DataRow(3, 0, 2)]
+        public void VerifyInRangeFails(int value, int minInclusive, int maxInclusive)
+        {
+            ParamUtil.VerifyInRange(nameof(value), value, minInclusive, maxInclusive);
+        }
+
         [TestMethod]
         public void VerifyDictionaryKeyExistsElementFound()
         {
