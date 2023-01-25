@@ -69,9 +69,9 @@ namespace Tests
         [DataRow(-1, 31, "2147483647")] //Two's compliment
         [DataRow(0, 0, "0")]
         [DataRow(4, 1, "4")]
-        public void SetSingleBitFalse(int intialValue, int index, string expectedResult)
+        public void SetSingleBitFalse(int initialValue, int index, string expectedResult)
         {
-            BitField bitField = new BitField(intialValue);
+            BitField bitField = new BitField(initialValue);
             bitField.Set(index, false);
             Assert.AreEqual(expectedResult, bitField.ToString(), "Incorrect Set result");
         }
@@ -83,6 +83,46 @@ namespace Tests
         {
             BitField bitField = new BitField();
             bitField.Set(index, true);
+        }
+
+        [DataTestMethod]
+        [DataRow(0, 0, false)]
+        [DataRow(2, 0, false)]
+        [DataRow(1, 0, true)]
+        [DataRow(7, 2, true)]
+        [DataRow(7, 9, false)]
+        [DataRow(-1, 31, true)] //2's compliment
+        public void GetSingleBit(int initialValue, int index, bool expectedValue)
+        {
+            BitField bitField = new BitField(initialValue);
+            bool value = bitField.Get(index);
+            Assert.AreEqual(expectedValue, value, "Incorrect Get result");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(ArgumentException))]
+        [DataRow(-1)]
+        [DataRow(32)]
+        public void GetSingleInvalidBit(int index)
+        {
+            BitField bitField = new BitField();
+            bitField.Get(index);
+        }
+
+        [TestMethod]
+        public void SetThenGetBit()
+        {
+            const int INDEX = 5;
+            
+            BitField bitField = new BitField();
+            bool value = bitField.Get(INDEX);
+
+            Assert.IsFalse(value, "Retrieved value is wrong");
+
+            bitField.Set(INDEX, true);
+
+            bool value2 = bitField.Get(INDEX);
+
+            Assert.IsTrue(value2, "Retrieved value is wrong");
         }
     }
 }

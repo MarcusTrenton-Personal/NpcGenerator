@@ -54,9 +54,9 @@ namespace Services
         {
             ParamUtil.VerifyInRange(nameof(bitIndex), bitIndex, MIN_INDEX, MAX_INDEX);
 
-            int mask = ~(1 << bitIndex);
+            int mask = 1 << bitIndex;
             int resultInt = m_field & mask;
-            return resultInt > 0;
+            return resultInt != 0;
         }
 
         public int Get(int startBitIndex, int bitCount)
