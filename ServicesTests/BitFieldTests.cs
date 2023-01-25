@@ -31,16 +31,48 @@ namespace Tests
         }
 
         [DataTestMethod]
-        [DataRow(0, "1")]
-        [DataRow(1, "2")]
-        [DataRow(2, "4")]
-        [DataRow(3, "8")]
-        [DataRow(30, "1073741824")]
-        [DataRow(31, "-2147483648")] //The left-most bit determines signed 2s complement.
-        public void SetSingleBit(int index, string expectedResult)
+        [DataRow(0, "0")]
+        [DataRow(1, "1")]
+        [DataRow(3, "3")]
+        [DataRow(7, "7")]
+        [DataRow(-1, "-1")]
+        public void ParameterizedConstructorToString(int initialValue, string expectedResult)
         {
-            BitField bitField = new BitField();
+            BitField bitField = new BitField(initialValue);
+            Assert.AreEqual(expectedResult, bitField.ToString(), "Incorrect initial value");
+        }
+
+        [DataTestMethod]
+        [DataRow(0, 0, "1")]
+        [DataRow(0, 1, "2")]
+        [DataRow(0, 2, "4")]
+        [DataRow(0, 3, "8")]
+        [DataRow(0, 30, "1073741824")]
+        [DataRow(0, 31, "-2147483648")] //The left-most bit determines signed 2s complement.
+        [DataRow(1, 0, "1")]
+        [DataRow(4, 0, "5")]
+        [DataRow(7, 1, "7")]
+        [DataRow(10, 2, "14")]
+        public void SetSingleBitTrue(int intialValue, int index, string expectedResult)
+        {
+            BitField bitField = new BitField(intialValue);
             bitField.Set(index, true);
+            Assert.AreEqual(expectedResult, bitField.ToString(), "Incorrect Set result");
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 0, "0")]
+        [DataRow(3, 1, "1")]
+        [DataRow(15, 2, "11")]
+        [DataRow(-1, 0, "-2")] //Two's compliment
+        [DataRow(1073741824, 30, "0")]
+        [DataRow(-1, 31, "2147483647")] //Two's compliment
+        [DataRow(0, 0, "0")]
+        [DataRow(4, 1, "4")]
+        public void SetSingleBitFalse(int intialValue, int index, string expectedResult)
+        {
+            BitField bitField = new BitField(intialValue);
+            bitField.Set(index, false);
             Assert.AreEqual(expectedResult, bitField.ToString(), "Incorrect Set result");
         }
 
@@ -52,7 +84,5 @@ namespace Tests
             BitField bitField = new BitField();
             bitField.Set(index, true);
         }
-
-        //TODO add constructor that takes an int. Use that for testing sets to 0.
     }
 }

@@ -19,6 +19,11 @@ namespace Services
 {
     public struct BitField
     {
+        public BitField(int x)
+        {
+            m_field = x;
+        }
+
         public void Set(int bitIndex, bool value)
         {
             ParamUtil.VerifyInRange(nameof(bitIndex), bitIndex, MIN_INDEX, MAX_INDEX);
