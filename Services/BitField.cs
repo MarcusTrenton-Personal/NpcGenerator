@@ -19,7 +19,7 @@ namespace Services
 {
     public struct BitField
     {
-        public BitField(int x)
+        public BitField(int x) //Must take an int to CLI complaint, even though uint is a more natural fit.
         {
             m_field = x;
         }
@@ -43,6 +43,7 @@ namespace Services
         public void Set(int startBitIndex, int bitCount, int value)
         {
             VerifyBitRange(startBitIndex, bitCount);
+            VerifyValueFitInRange(bitCount, value);
 
             int setMask = BitMask(startBitIndex, bitCount);
             int clearMask = ~setMask;
@@ -64,17 +65,40 @@ namespace Services
             VerifyBitRange(startBitIndex, bitCount);
             int mask = BitMask(startBitIndex, bitCount);
             int shiftedValue = m_field & mask;
-            return shiftedValue >> startBitIndex;
+            int value = LogicalBitShiftRight(shiftedValue, startBitIndex); //Force bitshift with backfill of 0
+            return value; 
         }
 
         private void VerifyBitRange(int startBitIndex, int bitCount)
         {
             ParamUtil.VerifyInRange(nameof(startBitIndex), startBitIndex, MIN_INDEX, MAX_INDEX);
             ParamUtil.VerifyPositiveNumber(nameof(bitCount), bitCount);
-            if (startBitIndex + bitCount > MAX_INDEX)
+            if (startBitIndex + bitCount - 1 > MAX_INDEX)
             {
                 throw new ArgumentException("Bit range overflows container");
             }
+        }
+
+        private void VerifyValueFitInRange(int bitCount, int value)
+        {
+            int rangeShiftedOffTheEnd = LogicalBitShiftRight(value, bitCount);
+            if (rangeShiftedOffTheEnd != 0)
+            {
+                throw new ArgumentException("Value is too big for given bitCount");
+            }
+        }
+
+        private int LogicalBitShiftRight(int x, int count) //Force bitshift with backfill of 0
+        {
+            if (count >= 32) //I choose that bit shifting right by 32 shall yield 0, C# spec be ignored.
+            {
+                return 0;
+            }
+            
+            uint ux = (uint)x;
+            uint shiftedUx = ux >> count; 
+            int shiftedX = (int)shiftedUx;
+            return shiftedX; 
         }
 
         private int BitMask(int startBitIndex, int bitCount)
