@@ -185,5 +185,21 @@ namespace Tests
             BitField bitField = new BitField();
             bitField.Get(index, length);
         }
+
+        [TestMethod]
+        public void GetThenSetMultipleBits()
+        {
+            const int INDEX = 4;
+            const int LENGTH = 2;
+            const int VALUE = 3;
+            BitField bitField = new BitField();
+            bitField.Set(INDEX, LENGTH, VALUE);
+
+            Assert.AreEqual("48", bitField.ToString(), "Wrong bits stored");
+
+            int value = bitField.Get(INDEX, LENGTH);
+
+            Assert.AreEqual(VALUE, value, "Wrong bits retrieved");
+        }
     }
 }
