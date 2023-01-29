@@ -229,6 +229,51 @@ namespace Tests
         }
 
         [TestMethod]
+        public void HasRequirementTrue()
+        {
+            Trait trait = new Trait("Bear");
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId("Colour", "Green"), npcHolder);
+            Requirement requirement = new Requirement(hasTrait, npcHolder);
+            trait.Set(requirement);
+
+            bool hasRequirement = trait.HasRequirement();
+
+            Assert.IsTrue(hasRequirement, "Incorrectly said Trait does not have Requirement");
+        }
+
+        [TestMethod]
+        public void HasRequirementFalse()
+        {
+            Trait trait = new Trait("Bear");
+
+            bool hasRequirement = trait.HasRequirement();
+
+            Assert.IsFalse(hasRequirement, "Incorrectly said Trait does have Requirement");
+        }
+
+        [TestMethod]
+        public void HasRequirementTrueThenFalse()
+        {
+            Trait trait = new Trait("Bear");
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait hasTrait = new NpcHasTrait(new TraitId("Colour", "Green"), npcHolder);
+            Requirement initialRequirement = new Requirement(hasTrait, npcHolder);
+            trait.Set(initialRequirement);
+
+            bool initialHasRequirement = trait.HasRequirement();
+
+            Assert.IsTrue(initialHasRequirement, "Incorrectly said Trait does not have Requirement");
+
+            Requirement nextRequirement = null;
+            trait.Set(nextRequirement);
+
+            bool nextHasRequirement = trait.HasRequirement();
+
+            Assert.IsFalse(nextHasRequirement, "Incorrectly said Trait does have Requirement");
+        }
+
+        [TestMethod]
         public void DependentCategoryNamesEmpty()
         {
             Trait trait = new Trait("Bear");

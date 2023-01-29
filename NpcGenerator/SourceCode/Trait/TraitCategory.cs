@@ -200,6 +200,11 @@ namespace NpcGenerator
             m_requirement = requirement;
         }
 
+        public bool HasRequirement()
+        {
+            return m_requirement != null;
+        }
+
         public bool IsUnlockedFor(in Npc npc)
         {
             ParamUtil.VerifyNotNull(nameof(npc), npc);

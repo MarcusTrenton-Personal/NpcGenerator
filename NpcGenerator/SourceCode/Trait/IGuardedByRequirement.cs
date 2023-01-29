@@ -21,6 +21,7 @@ namespace NpcGenerator
     public interface IGuardedByRequirement
     {
         public void Set(in Requirement requirement);
+        public bool HasRequirement();
         public bool IsUnlockedFor(in Npc npc);
         public HashSet<string> DependentCategoryNames();
     }
