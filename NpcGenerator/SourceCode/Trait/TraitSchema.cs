@@ -218,6 +218,75 @@ namespace NpcGenerator
             return graph;
         }
 
+        [Flags]
+        public enum Features
+        {
+            None                = 0,
+            Weight              = 1 << 0,
+            MultipleSelection   = 1 << 1,
+            BonusSelection      = 1 << 2,
+            HiddenTrait         = 1 << 3,
+            HiddenCategory      = 1 << 4,
+            OutputCategoryName  = 1 << 5,
+            CategoryOrder       = 1 << 6,
+            Replacement         = 1 << 7,
+            CategoryRequirement = 1 << 8,
+            TraitRequirement    = 1 << 9,
+        }
+
+        public Features GetFeatures()
+        {
+            Features features = Features.None;
+            features |= GetCategoryFeatureFlags(m_categories);
+            features |= (m_categoryOrder != null && m_categoryOrder.Count > 0) ? Features.CategoryOrder : Features.None;
+            features |= (m_replacements != null && m_replacements.Count > 0) ? Features.Replacement : Features.None;
+
+            return features;
+        }
+
+        private Features GetCategoryFeatureFlags(List<TraitCategory> categories)
+        {
+            Features features = Features.None;
+            foreach (TraitCategory category in categories)
+            {
+                features |= GetCategoryFeatureFlags(category);
+            }
+            return features;
+        }
+
+        private Features GetCategoryFeatureFlags(TraitCategory category)
+        {
+            Features features = Features.None;
+
+            IReadOnlyList<Trait> traits = category.GetTraits();
+            features |= GetTraitFeatureFlags(traits);
+            features |= category.IsHidden ? Features.HiddenCategory : Features.None;
+            features |= category.DefaultSelectionCount != 1 ? Features.MultipleSelection : Features.None;
+            features |= category.OutputName != category.Name ? Features.OutputCategoryName : Features.None;
+            features |= category.HasRequirement() ? Features.CategoryRequirement : Features.None;
+            return features;
+        }
+
+        private Features GetTraitFeatureFlags(IReadOnlyList<Trait> traits)
+        {
+            Features features = Features.None;
+            foreach (Trait trait in traits)
+            {
+                features |= GetTraitFeatureFlags(trait);
+            }
+            return features;
+        }
+
+        private Features GetTraitFeatureFlags(Trait trait)
+        {
+            Features features = Features.None;
+            features |= trait.IsHidden ? Features.HiddenTrait : Features.None;
+            features |= trait.BonusSelection != null ? Features.BonusSelection : Features.None;
+            features |= trait.Weight != 1 ? Features.Weight : Features.None;
+            features |= trait.HasRequirement() ? Features.TraitRequirement : Features.None;
+            return features;
+        }
+
         public class Dependency
         {
             public enum Type
