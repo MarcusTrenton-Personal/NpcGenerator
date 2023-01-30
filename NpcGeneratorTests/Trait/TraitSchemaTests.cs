@@ -661,5 +661,102 @@ namespace Tests
 
             traitSchema.CalculateTraversalOrder();
         }
+
+        [TestMethod]
+        public void GetFeaturesEmptySchema()
+        {
+            TraitSchema schema = new TraitSchema();
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.None, features, "Wrong feature flags");
+        }
+
+        [TestMethod]
+        public void GetFeaturesNone()
+        {
+            Trait traitC0T0 = new Trait("Bear");
+            Trait traitC0T1 = new Trait("Rhino");
+            TraitCategory category0 = new TraitCategory("Animal");
+            category0.Add(traitC0T0);
+            category0.Add(traitC0T1);
+
+            Trait traitC1T0 = new Trait("Red");
+            Trait traitC1T1 = new Trait("Blue");
+            TraitCategory category1 = new TraitCategory("Colour");
+            category1.Add(traitC1T0);
+            category1.Add(traitC1T1);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category0);
+            schema.Add(category1);
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.None, features, "Wrong feature flags");
+        }
+
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(2)]
+        public void GetFeaturesWeight(int weight)
+        {
+            Trait trait = new Trait("Bear", weight);
+            TraitCategory category = new TraitCategory("Animal");
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.Weight, features, "Wrong feature flags");
+        }
+
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(2)]
+        public void GetFeaturesMultipleSelection(int selectionCount)
+        {
+            Trait trait = new Trait("Bear");
+            TraitCategory category = new TraitCategory("Animal", selectionCount);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.MultipleSelection, features, "Wrong feature flags");
+        }
+
+
+        public void GetFeaturesBonusSelection()
+        {
+            Trait trait = new Trait("Bear")
+            {
+                BonusSelection = new BonusSelection("Animal", 2)
+            };
+            TraitCategory category = new TraitCategory("Animal");
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.BonusSelection, features, "Wrong feature flags");
+        }
+
+        //GetFeaturesHiddenTrait
+        //GetFeaturesHiddenCategory
+        //GetFeaturesOutputCategoryName
+        //GetFeaturesCategoryOrder
+        //GetFeaturesReplacement
+        //GetFeaturesCategoryRequirement
+        //GetFeaturesTraitRequirement
+        //GetFeaturesHiddenCategoryAndTrait
+        //GetFeaturesUpdatesWithSchema
+        //GetFeaturesAll
     }
 }
