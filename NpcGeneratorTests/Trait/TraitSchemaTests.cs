@@ -868,8 +868,81 @@ namespace Tests
             Assert.AreEqual(TraitSchema.Features.TraitRequirement, features, "Wrong feature flags");
         }
 
-        //GetFeaturesHiddenCategoryAndTrait
-        //GetFeaturesUpdatesWithSchema
-        //GetFeaturesAll
+        [TestMethod]
+        public void GetFeaturesHiddenCategoryAndTrait()
+        {
+            const string CATEGORY = "Animal";
+            Trait trait = new Trait("Bear", 1, isHidden: true);
+            TraitCategory category = new TraitCategory(CATEGORY, CATEGORY, 1, isHidden: true);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.HiddenCategory | TraitSchema.Features.HiddenTrait, features, "Wrong feature flags");
+        }
+
+        [TestMethod]
+        public void GetFeaturesUpdatesWithSchema()
+        {
+            Trait trait = new Trait("Bear");
+            TraitCategory category = new TraitCategory("Animal", 2);
+            category.Add(trait);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.MultipleSelection, features, "Wrong feature flags");
+
+            Trait weightedTrait = new Trait("Rhino", 2);
+            category.Add(weightedTrait);
+
+            TraitSchema.Features features2 = schema.GetFeatures();
+
+            Assert.AreEqual(TraitSchema.Features.MultipleSelection | TraitSchema.Features.Weight, features2, "Wrong feature flags");
+        }
+
+        [TestMethod]
+        public void GetFeaturesAll()
+        {
+            const string CATEGORY = "Animal";
+
+            NpcHolder npcHolder = new NpcHolder();
+            NpcHasTrait npcHasTrait = new NpcHasTrait(new TraitId("Colour", "Green"), npcHolder);
+            Requirement requirement = new Requirement(npcHasTrait, npcHolder);
+
+            Trait trait = new Trait("Bear", 2, isHidden: true)
+            {
+                BonusSelection = new BonusSelection(CATEGORY, 1)
+            };
+            trait.Set(requirement);
+
+            TraitCategory category = new TraitCategory(CATEGORY, "Creature", 2, isHidden: true);
+            category.Add(trait);
+            category.Set(requirement);
+
+            TraitSchema schema = new TraitSchema();
+            schema.Add(category);
+            schema.SetCategoryOrder(new string[] { CATEGORY });
+            schema.Add(new ReplacementSearch(trait, category));
+
+            TraitSchema.Features features = schema.GetFeatures();
+
+            TraitSchema.Features allFeatures = TraitSchema.Features.Weight |
+                TraitSchema.Features.MultipleSelection |
+                TraitSchema.Features.BonusSelection |
+                TraitSchema.Features.HiddenTrait |
+                TraitSchema.Features.HiddenCategory |
+                TraitSchema.Features.OutputCategoryName |
+                TraitSchema.Features.CategoryOrder |
+                TraitSchema.Features.Replacement |
+                TraitSchema.Features.CategoryRequirement |
+                TraitSchema.Features.TraitRequirement;
+            Assert.AreEqual(allFeatures, features, "Wrong feature flags");
+        }
     }
 }
