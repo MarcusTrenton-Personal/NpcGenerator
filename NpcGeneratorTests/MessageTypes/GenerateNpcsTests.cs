@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NpcGenerator;
 using NpcGenerator.Message;
 using System;
 
@@ -27,7 +28,7 @@ namespace Tests
         [DataRow(0)]
         public void ValidWholeNUmber(int quantity)
         {
-            GenerateNpcs message = new GenerateNpcs(quantity);
+            GenerateNpcs message = new GenerateNpcs(quantity, TraitSchema.Features.None);
 
             Assert.AreEqual(quantity, message.Quantity, "Wrong quantity was stored");
         }
@@ -35,7 +36,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void NegativeNumber()
         {
-            new GenerateNpcs(-5);
+            new GenerateNpcs(-5, TraitSchema.Features.None);
         }
     }
 }

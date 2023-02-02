@@ -19,13 +19,15 @@ namespace NpcGenerator.Message
 {
     public class GenerateNpcs
     {
-        public GenerateNpcs(int quantity)
+        public GenerateNpcs(int quantity, TraitSchema.Features features)
         {
             ParamUtil.VerifyWholeNumber(nameof(quantity), quantity);
 
             Quantity = quantity;
+            Features = features;
         }
 
         public int Quantity { get; private set; }
+        public TraitSchema.Features Features { get; private set; }
     }
 }

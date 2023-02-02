@@ -65,7 +65,7 @@ namespace Tests
                 new StubUserSettings(),
                 Callback);
 
-            void Callback(string messageBody)
+            static void Callback(string messageBody)
             {
             }
         }
@@ -79,7 +79,7 @@ namespace Tests
                 new StubUserSettings(),
                 Callback);
 
-            void Callback(string messageBody)
+            static void Callback(string messageBody)
             {
             }
         }
@@ -93,7 +93,7 @@ namespace Tests
                 userSettings: null,
                 Callback);
 
-            void Callback(string messageBody)
+            static void Callback(string messageBody)
             {
             }
         }
@@ -101,7 +101,7 @@ namespace Tests
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullMessageCallback()
         {
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
+            new GoogleAnalyticsMessageGenerator(
                 new StubTrackingProfile(),
                 new StubMessager(),
                 new StubUserSettings(),
@@ -348,7 +348,7 @@ namespace Tests
                 Callback);
 
             const int QUANTITY = 10;
-            messager.Send(this, new GenerateNpcs(QUANTITY));
+            messager.Send(this, new GenerateNpcs(QUANTITY, TraitSchema.Features.None));
 
             void Callback(string messageBody)
             {

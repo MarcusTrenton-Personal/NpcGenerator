@@ -235,8 +235,8 @@ namespace NpcGenerator
 
                 UpdateNpcTable();
 
-                m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity));
-
+                SendGenerateNpcsMessage();
+                
                 ValidateNpcs(replacements);
             }
             catch(TooFewTraitsInCategoryException exception)
@@ -249,6 +249,12 @@ namespace NpcGenerator
                 ShowLocalizedErrorMessageIfAllowed(
                     "too_few_traits_pass_requirements", exception.Requested, exception.Category, exception.Available);
             }
+        }
+
+        private void SendGenerateNpcsMessage()
+        {
+            TraitSchema.Features features = m_traitSchema.GetFeatures();
+            m_messager.Send(sender: this, message: new Message.GenerateNpcs(m_userSettings.NpcQuantity, features));
         }
 
         private void UpdateNpcTable()
