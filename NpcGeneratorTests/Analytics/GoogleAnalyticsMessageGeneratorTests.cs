@@ -336,8 +336,30 @@ namespace Tests
             Assert.IsTrue(callbackCalled, "GoogleAnalyticsMessageGenerator callback not called");
         }
 
-        [TestMethod]
-        public void GenerateNpcs()
+        [DataTestMethod]
+        [DataRow(TraitSchema.Features.None)]
+        [DataRow(TraitSchema.Features.Weight)]
+        [DataRow(TraitSchema.Features.MultipleSelection)]
+        [DataRow(TraitSchema.Features.BonusSelection)]
+        [DataRow(TraitSchema.Features.HiddenTrait)]
+        [DataRow(TraitSchema.Features.HiddenCategory)]
+        [DataRow(TraitSchema.Features.OutputCategoryName)]
+        [DataRow(TraitSchema.Features.CategoryOrder)]
+        [DataRow(TraitSchema.Features.Replacement)]
+        [DataRow(TraitSchema.Features.CategoryRequirement)]
+        [DataRow(TraitSchema.Features.TraitRequirement)]
+        [DataRow(TraitSchema.Features.HiddenTrait | TraitSchema.Features.HiddenCategory)]
+        [DataRow(TraitSchema.Features.Weight |
+            TraitSchema.Features.MultipleSelection |
+            TraitSchema.Features.BonusSelection |
+            TraitSchema.Features.HiddenTrait |
+            TraitSchema.Features.HiddenCategory |
+            TraitSchema.Features.OutputCategoryName |
+            TraitSchema.Features.CategoryOrder |
+            TraitSchema.Features.Replacement |
+            TraitSchema.Features.CategoryRequirement |
+            TraitSchema.Features.TraitRequirement)]
+        public void GenerateNpcs(TraitSchema.Features schemaFeaturesUsed)
         {
             bool callbackCalled = false;
             Messager messager = new Messager();
@@ -348,7 +370,7 @@ namespace Tests
                 Callback);
 
             const int QUANTITY = 10;
-            messager.Send(this, new GenerateNpcs(QUANTITY, TraitSchema.Features.None));
+            messager.Send(this, new GenerateNpcs(QUANTITY, schemaFeaturesUsed));
 
             void Callback(string messageBody)
             {
@@ -357,8 +379,19 @@ namespace Tests
                 JsonBody body = JsonConvert.DeserializeObject<JsonBody>(messageBody);
                 Assert.AreEqual(1, body.events.Count, "Wrong number of events serialized");
                 Assert.AreEqual("generate_npcs", body.events[0].name, "Wrong event name");
-                Assert.AreEqual(1, body.events[0].@params.Count, "Wrong number of params");
+                int expectedParams = 1 + Enum.GetValues(typeof(TraitSchema.Features)).Length;
+                Assert.AreEqual(expectedParams, body.events[0].@params.Count, "Wrong number of params");
                 Assert.AreEqual(QUANTITY.ToString(), body.events[0].@params["quantity"], "Wrong parameter");
+
+                foreach (int featureValue in Enum.GetValues(typeof(TraitSchema.Features)))
+                {
+                    bool schemaHasFeature = (featureValue & (int)schemaFeaturesUsed) > 0;
+                    string featureName = Enum.GetName(typeof(TraitSchema.Features), featureValue);
+
+                    string jsonFeatureString = body.events[0].@params[featureName];
+                    string expectedJsonFeatureString = schemaHasFeature ? true.ToString().ToLower() : false.ToString().ToLower();
+                    Assert.AreEqual(expectedJsonFeatureString, jsonFeatureString, "Wrong schema feature value");
+                }
             }
 
             Assert.IsTrue(callbackCalled, "GoogleAnalyticsMessageGenerator callback not called");

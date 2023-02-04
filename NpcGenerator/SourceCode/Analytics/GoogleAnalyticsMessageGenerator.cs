@@ -203,11 +203,11 @@ namespace NpcGenerator
 
             void Callback(JsonWriter writer)
             {
-                WriteGenerateNpcsEvent(writer, generateNpcs.Quantity);
+                WriteGenerateNpcsEvent(writer, generateNpcs.Quantity, generateNpcs.Features);
             }
         }
 
-        private static void WriteGenerateNpcsEvent(JsonWriter writer, int quantity)
+        private static void WriteGenerateNpcsEvent(JsonWriter writer, int quantity, TraitSchema.Features features)
         {
             writer.WriteStartObject(); //Start of event object
 
@@ -220,9 +220,22 @@ namespace NpcGenerator
             writer.WritePropertyName("quantity");
             writer.WriteValue(quantity);
 
+            WriteSchemaFeatures(writer, features);
+
             writer.WriteEnd(); //End of params object
 
             writer.WriteEnd(); //End of event object
+        }
+
+        private static void WriteSchemaFeatures(JsonWriter writer, TraitSchema.Features features)
+        {
+            foreach (int featureValue in Enum.GetValues(typeof(TraitSchema.Features)))
+            {
+                bool hasFeature = (featureValue & (int)features) > 0;
+                string featureName = Enum.GetName(typeof(TraitSchema.Features), featureValue);
+                writer.WritePropertyName(featureName);
+                writer.WriteValue(hasFeature);
+            }
         }
 
         private void OnSaveNpcs(object sender, Message.SaveNpcs saveNpcs)
