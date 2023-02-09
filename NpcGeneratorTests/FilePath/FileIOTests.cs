@@ -51,7 +51,7 @@ namespace Tests
             string cacheFile = m_fileIO.CacheFile(originalFile);
             Assert.IsTrue(File.Exists(cacheFile), "Cache file doesn't exist: " + cacheFile);
 
-            string cacheText = File.ReadAllText(cacheFile);
+            string cacheText = File.ReadAllText(cacheFile, Constants.TEXT_ENCODING);
             Assert.AreEqual(ORIGINAL_CONTENT, cacheText, "Cache file text is different than original");
 
             File.Delete(cacheFile);

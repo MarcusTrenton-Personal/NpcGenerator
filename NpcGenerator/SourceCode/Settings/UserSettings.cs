@@ -84,7 +84,7 @@ namespace NpcGenerator
 
             try
             {
-                string text = File.ReadAllText(path);
+                string text = File.ReadAllText(path, Constants.TEXT_ENCODING);
                 UserSettings settings = JsonConvert.DeserializeObject<UserSettings>(text);
                 settings.Validate();
                 settings.m_savePath = path;

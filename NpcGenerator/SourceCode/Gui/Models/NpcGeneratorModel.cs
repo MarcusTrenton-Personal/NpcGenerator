@@ -367,7 +367,7 @@ namespace NpcGenerator
             actionBuilder.Append("?subject=" + m_localization.GetText("error_email_subject"));
             actionBuilder.Append("&body=");
 
-            string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath);
+            string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath, Constants.TEXT_ENCODING);
             bool isBodyTooLongForEmail = configurationText.Length >= MAX_CONFIGURATION_LENGTH;
             if (isBodyTooLongForEmail)
             {

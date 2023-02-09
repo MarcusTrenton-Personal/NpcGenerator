@@ -42,7 +42,7 @@ namespace NpcGenerator
             bool isFound = m_parsers.TryGetValue(fileType, out IFormatConfigurationParser parser);
             if (isFound)
             {
-                string text = File.ReadAllText(path);
+                string text = File.ReadAllText(path, Constants.TEXT_ENCODING);
                 bool isEmpty = string.IsNullOrWhiteSpace(text);
                 if (isEmpty)
                 {

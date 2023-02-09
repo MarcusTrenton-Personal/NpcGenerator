@@ -32,7 +32,7 @@ namespace NpcGenerator
             bool hasSchemaPath = !string.IsNullOrEmpty(schemaPath);
             if (hasSchemaPath)
             {
-                string schemaText = File.ReadAllText(schemaPath);
+                string schemaText = File.ReadAllText(schemaPath, Constants.TEXT_ENCODING);
                 m_schema = JSchema.Parse(schemaText);
             }
         }
@@ -117,7 +117,7 @@ namespace NpcGenerator
                         string path = Path.Combine(Directory.GetCurrentDirectory(), relativeFilePath);
                         if (File.Exists(path))
                         {
-                            string text = File.ReadAllText(relativeFilePath);
+                            string text = File.ReadAllText(relativeFilePath, Constants.TEXT_ENCODING);
                             TraitSchema subSchema = csvParser.Parse(text);
                             relativePathsToSubSchemas[relativeFilePath] = subSchema;
                         }

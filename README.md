@@ -59,7 +59,9 @@ Successful tests are automatically required before every publish. The publish ac
 # Dev Procedure
 
 ## Command Line Parameters
-`-analyticsDryRun` will send Google Analytics to the validation server instead, providing a list of any errors with the message's json.
+- `-analyticsDryRun` will send Google Analytics to the validation server instead, providing a list of any errors with the message's json.
+- `-language XX-XX` will force the initial use of that language, where XX-XX is a language code. The placeholder language in this project is fa-ke, so `-language fa-ke` is the only way to access the placeholder language.
+- `-forceFailNpc` will cause every NPC generation to fail, triggering the support prompt and the pre-written support email.
 
 ## Versioning
 
@@ -77,3 +79,7 @@ To publish, run PublishAndTag.bat. That script will automatically publish to Dro
 
 Build before Run should be turned off due to text templating used for AssemblyInfo.cs. Otherwise debugging will break because the AssemblyInfo changed just before running. You need to build explicitely and then run explicitely.
 In Visual Studio 2022 go to Tools -> Options -> Projects and Solutions -> Build And Run -> On Run, when projects are out of date: -> Never Build.
+
+## File Encoding
+
+All user input files, such as npc configuration and localization, and output files are in UTF-8.

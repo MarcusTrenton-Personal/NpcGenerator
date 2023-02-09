@@ -174,7 +174,7 @@ namespace Tests
     {
         public TraitSchema Parse(string path)
         {
-            string text = File.ReadAllText(path);
+            string text = File.ReadAllText(path, Constants.TEXT_ENCODING);
             CsvConfigurationParser parser = new CsvConfigurationParser();
             return parser.Parse(text);
         }

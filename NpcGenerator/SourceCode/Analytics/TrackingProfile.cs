@@ -96,7 +96,7 @@ namespace NpcGenerator
         {
             try
             {
-                string text = File.ReadAllText(path);
+                string text = File.ReadAllText(path, Constants.TEXT_ENCODING);
                 TrackingProfile profile = JsonConvert.DeserializeObject<TrackingProfile>(text);
                 profile.Validate();
                 profile.m_savePath = path;

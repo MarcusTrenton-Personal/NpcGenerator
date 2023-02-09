@@ -32,7 +32,7 @@ namespace NpcGenerator
             {
                 ParamUtil.VerifyMatchesPattern(nameof(schemaPath), schemaPath, RegexUtil.ANY_FILE_PATH, schemaPath + " is not a filepath.");
 
-                string schemaText = File.ReadAllText(schemaPath);
+                string schemaText = File.ReadAllText(schemaPath, Constants.TEXT_ENCODING);
                 m_schema = JSchema.Parse(schemaText);
             }
         }

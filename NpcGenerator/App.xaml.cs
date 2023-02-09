@@ -52,7 +52,7 @@ namespace NpcGenerator
             }
 
             LocalFileIO fileIo = new LocalFileIO(filePathProvider);
-            string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath);
+            string LocalizationText = File.ReadAllText(filePathProvider.LocalizationPath, Constants.TEXT_ENCODING);
             Services.Localization localization;
             try
             {
