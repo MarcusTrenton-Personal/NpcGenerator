@@ -45,7 +45,7 @@ namespace Tests
             };
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             //Read the settings.
             UserSettings readSettings = UserSettings.Load(path);
@@ -64,7 +64,7 @@ namespace Tests
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
 
             string json = "{";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -80,7 +80,7 @@ namespace Tests
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
 
             string json = "{}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -130,7 +130,7 @@ namespace Tests
                   'LanguageCode': 'en-ca'
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -152,7 +152,7 @@ namespace Tests
                   'LanguageCode': 'en-ca'
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -175,7 +175,7 @@ namespace Tests
                   'LanguageCode': 'en-ca'
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -197,7 +197,7 @@ namespace Tests
                   'LanguageCode': 'en-ca'
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -220,7 +220,7 @@ namespace Tests
                   'LanguageCode': 'en-ca'
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -242,7 +242,7 @@ namespace Tests
                   'LanguageCode': 'en-ca'
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -265,7 +265,7 @@ namespace Tests
                   'LanguageCode': 1.5
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 
@@ -287,7 +287,7 @@ namespace Tests
                   'AnalyticsConsent': true,
                 }}
             }}";
-            File.WriteAllText(path, json);
+            File.WriteAllText(path, json, Constants.TEXT_ENCODING);
 
             UserSettings settings = UserSettings.Load(path);
 

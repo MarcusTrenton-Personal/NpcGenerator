@@ -37,7 +37,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
             
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -97,7 +97,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -117,7 +117,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -141,7 +141,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -166,7 +166,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -191,7 +191,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -216,7 +216,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -240,7 +240,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -265,7 +265,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -290,7 +290,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -315,7 +315,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -339,7 +339,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -364,7 +364,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -389,7 +389,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -414,7 +414,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -439,7 +439,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -464,7 +464,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -489,7 +489,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -514,7 +514,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 
@@ -538,7 +538,7 @@ namespace Tests
 
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             TrackingProfile readProfile = TrackingProfile.Load(path);
 

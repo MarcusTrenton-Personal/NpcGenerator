@@ -333,7 +333,7 @@ namespace Tests
             StubUserSettings userSettings = new StubUserSettings();
             string path = Path.Combine(TestDirectory, fileNameWithoutDot + ".csv");
             string text = "Empty";
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
             userSettings.ConfigurationPath = path;
             return userSettings;
         }

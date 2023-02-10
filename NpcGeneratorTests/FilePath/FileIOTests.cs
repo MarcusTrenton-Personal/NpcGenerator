@@ -44,7 +44,7 @@ namespace Tests
 
             using (StreamWriter writer = File.CreateText(originalFile))
             {
-                writer.Write(ORIGINAL_CONTENT);
+                writer.Write(ORIGINAL_CONTENT, Constants.TEXT_ENCODING);
                 writer.Close();
             }
 
@@ -68,7 +68,7 @@ namespace Tests
             //Create original file with a read/write lock.
             using (StreamWriter writer = File.CreateText(originalFile))
             {
-                writer.Write(ORIGINAL_CONTENT);
+                writer.Write(ORIGINAL_CONTENT, Constants.TEXT_ENCODING);
 
                 //While writing, cache the original file.
                 string cacheFile = m_fileIO.CacheFile(originalFile);

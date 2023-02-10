@@ -44,7 +44,7 @@ namespace Tests
                         This is some {\b bold} text.\par
                         }";
                     //string text = "";
-                    File.WriteAllText(licensePath, text);
+                    File.WriteAllText(licensePath, text, Constants.TEXT_ENCODING);
 
                     StubFilePathProvider filePathProvider = new StubFilePathProvider()
                     {

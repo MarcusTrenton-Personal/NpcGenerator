@@ -92,7 +92,7 @@ namespace Tests
             string text = "This is text";
             string method = System.Reflection.MethodBase.GetCurrentMethod().Name;
             string path = Path.Combine(TestDirectory, method + FILE_EXTENSION);
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
             original.DefaultConfigurationRelativePath = path;
 
             string json = JsonConvert.SerializeObject(original, Formatting.Indented);

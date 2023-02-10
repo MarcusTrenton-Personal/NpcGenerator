@@ -32,7 +32,7 @@ namespace Tests
             string text = "Colour,Weight\n" +
                 "Green,1\n" +
                 "Red,1";
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
             ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
@@ -49,7 +49,7 @@ namespace Tests
             string fileName = method + ".csv";
             string path = Path.Combine(TestDirectory, fileName);
             string text = string.Empty;
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             StubFormatConfigurationParser stubParser = new StubFormatConfigurationParser();
             ConfigurationParser parser = new ConfigurationParser(new List<FormatParser>() { new FormatParser(".csv", stubParser) });
@@ -99,7 +99,7 @@ namespace Tests
                 "\t\t</item>\n" +
                 "\t</array>\n" +
                 "</trait_categories>";
-            File.WriteAllText(path, text);
+            File.WriteAllText(path, text, Constants.TEXT_ENCODING);
 
             bool threwException = false;
             try

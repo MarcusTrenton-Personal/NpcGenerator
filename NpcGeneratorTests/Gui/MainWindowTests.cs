@@ -54,7 +54,7 @@ namespace Tests
                     string text = "Colour,Weight\n" +
                         "Green,1\n" +
                         "Red,1";
-                    File.WriteAllText(configPath, text);
+                    File.WriteAllText(configPath, text, Constants.TEXT_ENCODING);
 
                     StubUserSettings testUserSettings = new StubUserSettings
                     {
