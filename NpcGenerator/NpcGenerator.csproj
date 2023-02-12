@@ -116,9 +116,9 @@
     <Delete Files="@(Symbols)" />
     <Message Text="Copying Sample Configurations folder" Importance="high" />
     <ItemGroup>
-      <Sample Include="..\Sample Configurations\*.csv;..\Sample Configurations\*.json" />
+      <Sample Include="..\Sample Configurations\**\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations" />
+    <Copy SourceFiles="@(Sample)" DestinationFolder="$(PublishDir)Sample Configurations\%(RecursiveDir)" />
     
     <Message Text="Copying app data" Importance="high" />
     <Copy SourceFiles="@(LegalDocs)" DestinationFolder="$(PublishDir)" />
