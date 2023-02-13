@@ -7,3 +7,4 @@ ExeCache/
 Zipped/
 NpcGenerator/SourceCode/AssemblyInfo.cs
 *.csv#
+*.~lock.*
