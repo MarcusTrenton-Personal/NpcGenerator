@@ -54,7 +54,7 @@ namespace CoupledServices
             }
         }
 
-        public string LicensePath { get; } = "GNU License.rtf";
+        public string LicensePath { get; } = "License.md";
 
         public string LocalizationPath
         {

@@ -29,5 +29,14 @@ namespace WpfServices
             textRange.Load(fileStream, DataFormats.Rtf);
             return flowDocument;
         }
+
+        public static FlowDocument ReadText(string path)
+        {
+            using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FlowDocument flowDocument = new FlowDocument();
+            TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+            textRange.Load(fileStream, DataFormats.Text);
+            return flowDocument;
+        }
     }
 }

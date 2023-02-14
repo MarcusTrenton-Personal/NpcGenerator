@@ -41,7 +41,7 @@ namespace NpcGenerator
 
             try
             {
-                flowViewer.Document = GuiHelper.ReadRtfText(filePathProvider.LicensePath);
+                flowViewer.Document = GuiHelper.ReadText(filePathProvider.LicensePath);
             }
             catch (IOException exception)
             {

@@ -10,7 +10,7 @@
     <ApplicationIcon>SourceAssets\1200px-2-Dice-Icon.svg.ico</ApplicationIcon>
     <Authors>Marcus Trenton</Authors>
     <Company />
-    <Copyright>2022 Marcus Trenton</Copyright>
+    <Copyright>2023 Marcus Trenton</Copyright>
     <Description>GUI for generating Npcs. Intended as an aid for a Storyteller in an RPG game.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>Git</RepositoryType>
@@ -20,7 +20,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
-    <PackageLicenseFile>..\GNU License.rtf</PackageLicenseFile>
+    <PackageLicenseFile>..\License.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TransformOnBuild>true</TransformOnBuild>
@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <LegalDocs Include="..\*.rtf">
+    <LegalDocs Include="..\*.rtf;..\*.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </LegalDocs>
