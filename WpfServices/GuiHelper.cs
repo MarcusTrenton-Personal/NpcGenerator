@@ -23,19 +23,20 @@ namespace WpfServices
     {
         public static FlowDocument ReadRtfText(string path)
         {
-            using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            FlowDocument flowDocument = new FlowDocument();
-            TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-            textRange.Load(fileStream, DataFormats.Rtf);
-            return flowDocument;
+            return ReadText(path, DataFormats.Rtf);
         }
 
         public static FlowDocument ReadText(string path)
         {
+            return ReadText(path, DataFormats.Text);
+        }
+
+        private static FlowDocument ReadText(string path, string format)
+        {
             using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             FlowDocument flowDocument = new FlowDocument();
             TextRange textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-            textRange.Load(fileStream, DataFormats.Text);
+            textRange.Load(fileStream, format);
             return flowDocument;
         }
     }
