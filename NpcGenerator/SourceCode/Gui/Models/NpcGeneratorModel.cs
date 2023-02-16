@@ -39,7 +39,8 @@ namespace NpcGenerator
             in ILocalization localization,
             in IRandom random,
             bool showErrorMessages,
-            bool forceFailNpcGeneration)
+            bool forceFailNpcValidation,
+            bool forceNpcGenerationException)
         {
             m_userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
             m_appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
@@ -51,7 +52,8 @@ namespace NpcGenerator
             m_localization = localization ?? throw new ArgumentNullException(nameof(localization));
             m_random = random ?? throw new ArgumentNullException(nameof(random));
             m_showErrorMessages = showErrorMessages;
-            m_forceFailNpcGeneration = forceFailNpcGeneration;
+            m_forceFailNpcValidation = forceFailNpcValidation;
+            m_forceNpcGenerationException = forceNpcGenerationException;
 
             UpdateUserSettingsWithDefaults();
 
@@ -222,6 +224,11 @@ namespace NpcGenerator
 
         private void ExecuteGenerateNpcs(object _)
         {
+            if (m_forceNpcGenerationException)
+            {
+                throw new Exception("Forced failure");
+            }
+
             LazyParseTraitSchema();
             if (m_traitSchema is null)
             {
@@ -277,7 +284,7 @@ namespace NpcGenerator
         {
             bool areValid = NpcFactory.AreNpcsValid(
                     m_npcGroup, m_traitSchema, replacements, out NpcSchemaViolationCollection violations);
-            if (m_forceFailNpcGeneration)
+            if (m_forceFailNpcValidation)
             {
                 NpcSchemaViolation fakeViolation = new NpcSchemaViolation("Fake Failure Test", NpcSchemaViolation.Reason.CategoryNotFoundInSchema);
                 violations.categoryViolations.Add(fakeViolation);
@@ -364,7 +371,7 @@ namespace NpcGenerator
 
             StringBuilder actionBuilder = new StringBuilder();
             actionBuilder.Append("mailto:" + m_appSettings.SupportEmail);
-            actionBuilder.Append("?subject=" + m_localization.GetText("error_email_subject"));
+            actionBuilder.Append("?subject=" + m_localization.GetText("on_generation_error_email_subject"));
             actionBuilder.Append("&body=");
 
             string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath, Constants.TEXT_ENCODING);
@@ -376,7 +383,7 @@ namespace NpcGenerator
                 actionBuilder.AppendLine("                                                                            ");
             }
 
-            actionBuilder.Append(m_localization.GetText("error_email_body_start"));
+            actionBuilder.Append(m_localization.GetText("on_generation_error_email_body_start"));
 
             actionBuilder.AppendLine(ErrorSectionTitle(errorTitle));
             actionBuilder.AppendLine(errorBody);
@@ -728,7 +735,8 @@ namespace NpcGenerator
         private readonly IRandom m_random;
         private readonly Dictionary<string, INpcExport> m_npcExporters = new Dictionary<string, INpcExport>();
         private readonly bool m_showErrorMessages;
-        private readonly bool m_forceFailNpcGeneration = false;
+        private readonly bool m_forceFailNpcValidation = false;
+        private readonly bool m_forceNpcGenerationException = false;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;

@@ -11,9 +11,13 @@
     "No Parameters": {
       "commandName": "Project"
     },
-    "Force Fail Npc": {
+    "Force Generation Exception": {
       "commandName": "Project",
-      "commandLineArgs": "-forceFailNpc"
+      "commandLineArgs": "-forceNpcGenerationException"
+    },
+    "Force Fail Validation": {
+      "commandName": "Project",
+      "commandLineArgs": "-forceFailNpcValidation"
     }
   }
 }

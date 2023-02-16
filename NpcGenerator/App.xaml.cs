@@ -20,6 +20,7 @@ using Services.Message;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using WpfServices;
@@ -37,13 +38,17 @@ namespace NpcGenerator
         {
             public bool analyticsDryRun;
             public string forcedLanguageCode;
-            public bool forceFailNpcGeneration;
+            public bool forceFailNpcValidation;
+            public bool forceNpcGenerationException;
         }
 
         const string REPAIR_ACTION = "Redownload the application to repair.";
 
         public App()
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
+
             FilePathProvider filePathProvider = new FilePathProvider();
             AppSettings appSettings = LoadAppSettings(filePathProvider);
             if (appSettings is null) //App broken. Abort. Abort.
@@ -88,9 +93,6 @@ namespace NpcGenerator
                  dryRunValidation: parameters.analyticsDryRun);
 
             m_serviceCentre.Messager.Send(sender: this, message: new Services.Message.Login());
-
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
 
             PickLanguage(m_serviceCentre, parameters);
         }
@@ -167,7 +169,8 @@ namespace NpcGenerator
                 localization, 
                 random, 
                 showErrorMessages: true,
-                forceFailNpcGeneration: parameters.forceFailNpcGeneration);
+                forceFailNpcValidation: parameters.forceFailNpcValidation,
+                forceNpcGenerationException: parameters.forceNpcGenerationException);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
@@ -202,7 +205,8 @@ namespace NpcGenerator
             {
                 analyticsDryRun = false,
                 forcedLanguageCode = null,
-                forceFailNpcGeneration = false,
+                forceFailNpcValidation = false,
+                forceNpcGenerationException = false,
             };
 
             string[] commandLineArgs = Environment.GetCommandLineArgs();
@@ -228,9 +232,15 @@ namespace NpcGenerator
                     }
                     break;
 
-                    case "-forceFailNpc":
+                    case "-forceFailNpcValidation":
                     {
-                        parameters.forceFailNpcGeneration = true;
+                        parameters.forceFailNpcValidation = true;
+                    }
+                    break;
+
+                    case "-forceNpcGenerationException":
+                    {
+                        parameters.forceNpcGenerationException = true;
                     }
                     break;
 
@@ -285,11 +295,16 @@ namespace NpcGenerator
             if (e.ExceptionObject is LocalizedTextNotFoundException)
             {
                 LocalizedTextNotFoundException localizationException = e.ExceptionObject as LocalizedTextNotFoundException;
-                ShowMissingLocalizaedTextError(localizationException);
+                ShowMissingLocalizedTextError(localizationException);
+            }
+            else
+            {
+                ShowGenericError(e.ExceptionObject);
+                Current.Shutdown();
             }
         }
 
-        private void ShowMissingLocalizaedTextError(LocalizedTextNotFoundException localizationException)
+        private void ShowMissingLocalizedTextError(LocalizedTextNotFoundException localizationException)
         {
             string language = m_serviceCentre.Localization.CurrentLanguageCode;
             string localizationFile = PathHelper.FullPathOf(m_serviceCentre.FilePathProvider.LocalizationPath);
@@ -304,6 +319,49 @@ namespace NpcGenerator
             {
                 MessageBox.Show("Multiple text entries missing for language " + language + " in localization file " + localizationFile + ".");
             }
+        }
+
+        //TODO: This should be in a helper class for reusability
+        private void ShowGenericError(object exceptionObject)
+        {
+            string exceptionText = exceptionObject.ToString();
+            bool isLocalizationAvailable = m_serviceCentre != null && m_serviceCentre.Localization != null;
+            string errorTitle = isLocalizationAvailable ? m_serviceCentre.Localization.GetText("error", exceptionText) : "Error";
+
+            //TODO: Send an analytics message if available.
+
+            bool isEmailAvailable = m_serviceCentre != null && m_serviceCentre.AppSettings != null;
+            if (isEmailAvailable)
+            {
+                string errorMessage = isLocalizationAvailable ?
+                    m_serviceCentre.Localization.GetText("unexpected_error_call_to_action", exceptionText) :
+                    string.Format("Unexpected exception {0}. Application will exit. Send an error email?", exceptionText);
+
+                MessageBoxResult result = MessageBox.Show(errorMessage, errorTitle, MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SendErrorEmail(errorTitle, errorMessage);
+                }
+            }
+            else
+            {
+                string errorMessage = isLocalizationAvailable ?
+                    m_serviceCentre.Localization.GetText("unexpected_error", exceptionText) :
+                    string.Format("Unexpected exception {0}. Application will exit.", exceptionText);
+                
+                MessageBox.Show(errorMessage);
+            }
+        }
+
+        //TODO: Combine this the NpcGenerator version for a reusable method.
+        private void SendErrorEmail(string errorTitle, string errorBody)
+        {
+            StringBuilder actionBuilder = new StringBuilder();
+            actionBuilder.Append("mailto:" + m_serviceCentre.AppSettings.SupportEmail); //CODE SMELL: NULL CHECK IS OUTSIDE FUNCTION.
+            actionBuilder.Append("?subject=" + errorTitle);
+            actionBuilder.Append("&body=" + errorBody);
+
+            UriHelper.StartEmail(new Uri(actionBuilder.ToString()));
         }
 
         private static AppSettings LoadAppSettings(IFilePathProvider filePathProvider)

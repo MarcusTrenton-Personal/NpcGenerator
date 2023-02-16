@@ -100,7 +100,8 @@ namespace Tests
                             new StubLocalization(), 
                             random, 
                             showErrorMessages: false,
-                            forceFailNpcGeneration: false));
+                            forceFailNpcValidation: false,
+                            forceNpcGenerationException: false));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),
