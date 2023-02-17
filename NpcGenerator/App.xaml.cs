@@ -299,6 +299,7 @@ namespace NpcGenerator
             }
             else
             {
+                SendCrashMessage(e.ExceptionObject as Exception);
                 ShowGenericError(e.ExceptionObject);
                 Current.Shutdown();
             }
@@ -321,14 +322,21 @@ namespace NpcGenerator
             }
         }
 
+        private void SendCrashMessage(Exception e)
+        {
+            bool isMessagerAvailable = m_serviceCentre != null && m_serviceCentre.Messager != null;
+            if (isMessagerAvailable)
+            {
+                m_serviceCentre.Messager.Send(this, new Crash(e));
+            }
+        }
+
         //TODO: This should be in a helper class for reusability
         private void ShowGenericError(object exceptionObject)
         {
             string exceptionText = exceptionObject.ToString();
             bool isLocalizationAvailable = m_serviceCentre != null && m_serviceCentre.Localization != null;
             string errorTitle = isLocalizationAvailable ? m_serviceCentre.Localization.GetText("error", exceptionText) : "Error";
-
-            //TODO: Send an analytics message if available.
 
             bool isEmailAvailable = m_serviceCentre != null && m_serviceCentre.AppSettings != null;
             if (isEmailAvailable)
