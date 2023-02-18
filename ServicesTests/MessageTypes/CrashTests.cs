@@ -13,18 +13,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Services.Message;
 using System;
 
-namespace Services.Message
+namespace Tests
 {
-    public class Crash
+    [TestClass]
+    public class CrashTests
     {
-        public Crash(Exception exception)
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ExceptionIsNull()
         {
-            ParamUtil.VerifyNotNull(nameof(exception), exception);
-
-            Exception = exception;
+            new Crash(null);
         }
-        public Exception Exception { get; private set; }
+
+        [TestMethod]
+        public void ExceptionIsNotNull()
+        {
+            Exception e = new Exception("Test");
+            Crash crash = new Crash(e);
+
+            Assert.AreEqual(e, crash.Exception, "Parsed incorrect number");
+        }
     }
 }
