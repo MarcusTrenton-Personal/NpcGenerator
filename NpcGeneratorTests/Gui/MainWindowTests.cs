@@ -101,7 +101,7 @@ namespace Tests
                             random, 
                             showErrorMessages: false,
                             forceFailNpcValidation: false,
-                            forceNpcGenerationException: false));
+                            forceNpcGenerationUncaughtException: false));
 
                     ServiceCentre serviceCentre = new ServiceCentre(
                         profile: new StubTrackingProfile(),

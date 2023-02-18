@@ -40,7 +40,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -57,7 +57,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -74,7 +74,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -91,7 +91,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -108,7 +108,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -125,7 +125,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
@@ -146,7 +146,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -163,7 +163,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
@@ -180,7 +180,7 @@ namespace Tests
                 random: null,
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
         }
 
         [TestMethod]
@@ -210,7 +210,7 @@ namespace Tests
                 new MockRandom(), 
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             string defaultPath = PathHelper.FullPathOf(appSettings.DefaultConfigurationRelativePath);
             Assert.AreEqual(defaultPath, npcGeneratorModel.ConfigurationPath,
@@ -240,7 +240,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             userSettings.NpcQuantity = QUANTITY1;
             Assert.AreEqual(QUANTITY1, npcGeneratorModel.NpcQuantity, "NpcQuantity is not the one in UserSettings");
@@ -265,7 +265,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false)
+                forceNpcGenerationUncaughtException: false)
             {
                 NpcQuantity = 0
             };
@@ -288,7 +288,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             userSettings.ConfigurationPath = "Bad file";
             bool canGenerateNpcs = npcGeneratorModel.GenerateNpcs.CanExecute(null);
@@ -327,7 +327,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false); 
+                forceNpcGenerationUncaughtException: false); 
 
             const int QUANTITY = 5;
             npcGeneratorModel.NpcQuantity = 5;
@@ -367,7 +367,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             bool canSave = npcGeneratorModel.SaveNpcs.CanExecute(null);
             Assert.IsFalse(canSave, "Can save even though there are no npcs");
@@ -387,7 +387,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -426,7 +426,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -474,7 +474,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -536,7 +536,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -595,7 +595,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -654,7 +654,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false);
+                forceNpcGenerationUncaughtException: false);
 
             IReadOnlyList<ReplacementSubModel> replacements = npcGeneratorModel.Replacements;
 
@@ -967,7 +967,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false)
+                forceNpcGenerationUncaughtException: false)
             {
                 NpcQuantity = 1
             };
@@ -1012,7 +1012,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false)
+                forceNpcGenerationUncaughtException: false)
             {
                 NpcQuantity = 1
             };
@@ -1062,7 +1062,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false)
+                forceNpcGenerationUncaughtException: false)
             {
                 NpcQuantity = 1
             };
@@ -1125,7 +1125,7 @@ namespace Tests
                 new MockRandom(),
                 showErrorMessages: false,
                 forceFailNpcValidation: false,
-                forceNpcGenerationException: false)
+                forceNpcGenerationUncaughtException: false)
             {
                 NpcQuantity = 1
             };

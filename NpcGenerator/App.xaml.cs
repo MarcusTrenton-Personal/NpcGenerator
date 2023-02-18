@@ -39,7 +39,7 @@ namespace NpcGenerator
             public bool analyticsDryRun;
             public string forcedLanguageCode;
             public bool forceFailNpcValidation;
-            public bool forceNpcGenerationException;
+            public bool forceNpcGenerationUncaughtException;
         }
 
         const string REPAIR_ACTION = "Redownload the application to repair.";
@@ -170,7 +170,7 @@ namespace NpcGenerator
                 random, 
                 showErrorMessages: true,
                 forceFailNpcValidation: parameters.forceFailNpcValidation,
-                forceNpcGenerationException: parameters.forceNpcGenerationException);
+                forceNpcGenerationUncaughtException: parameters.forceNpcGenerationUncaughtException);
 
             AboutModel aboutModel = new AboutModel(
                 website: new Uri(appSettings.HomeWebsite), 
@@ -206,7 +206,7 @@ namespace NpcGenerator
                 analyticsDryRun = false,
                 forcedLanguageCode = null,
                 forceFailNpcValidation = false,
-                forceNpcGenerationException = false,
+                forceNpcGenerationUncaughtException = false,
             };
 
             string[] commandLineArgs = Environment.GetCommandLineArgs();
@@ -238,9 +238,9 @@ namespace NpcGenerator
                     }
                     break;
 
-                    case "-forceNpcGenerationException":
+                    case "-forceNpcGenerationUncaughtException":
                     {
-                        parameters.forceNpcGenerationException = true;
+                        parameters.forceNpcGenerationUncaughtException = true;
                     }
                     break;
 

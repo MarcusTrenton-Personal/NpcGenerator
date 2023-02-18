@@ -40,7 +40,7 @@ namespace NpcGenerator
             in IRandom random,
             bool showErrorMessages,
             bool forceFailNpcValidation,
-            bool forceNpcGenerationException)
+            bool forceNpcGenerationUncaughtException)
         {
             m_userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
             m_appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
@@ -53,7 +53,7 @@ namespace NpcGenerator
             m_random = random ?? throw new ArgumentNullException(nameof(random));
             m_showErrorMessages = showErrorMessages;
             m_forceFailNpcValidation = forceFailNpcValidation;
-            m_forceNpcGenerationException = forceNpcGenerationException;
+            m_forceNpcGenerationUncaughtException = forceNpcGenerationUncaughtException;
 
             UpdateUserSettingsWithDefaults();
 
@@ -224,7 +224,7 @@ namespace NpcGenerator
 
         private void ExecuteGenerateNpcs(object _)
         {
-            if (m_forceNpcGenerationException)
+            if (m_forceNpcGenerationUncaughtException)
             {
                 throw new Exception("Forced failure");
             }
@@ -736,7 +736,7 @@ namespace NpcGenerator
         private readonly Dictionary<string, INpcExport> m_npcExporters = new Dictionary<string, INpcExport>();
         private readonly bool m_showErrorMessages;
         private readonly bool m_forceFailNpcValidation = false;
-        private readonly bool m_forceNpcGenerationException = false;
+        private readonly bool m_forceNpcGenerationUncaughtException = false;
 
         private ICommand m_chooseConfigurationCommand;
         private ICommand m_generateNpcsCommand;
