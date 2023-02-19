@@ -37,28 +37,32 @@ namespace NpcGenerator
 
             //Each Google Analytics event must have a name 40 characters or less: 
             //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
+            m_messager.Subscribe<Services.Message.Crash>(OnCrash);
+            m_messager.Subscribe<Message.InvalidNpcs>(OnInvalidNpcs);
+            m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
+            m_messager.Subscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
             m_messager.Subscribe<Services.Message.Login>(OnLogin);
             m_messager.Subscribe<Services.Message.PageView>(OnPageView);
-            m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
-            m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
             m_messager.Subscribe<Message.SaveNpcs>(OnSaveNpcs);
+            m_messager.Subscribe<Message.SelectConfiguration>(OnSelectConfiguration);
             m_messager.Subscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-            m_messager.Subscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
-            m_messager.Subscribe<Message.InvalidNpcs>(OnInvalidNpcs);
         }
 
         ~GoogleAnalyticsMessageGenerator()
         {
             if (m_messager != null)
             {
+                m_messager.Unsubscribe<Services.Message.Crash>(OnCrash);
+                m_messager.Unsubscribe<Message.InvalidNpcs>(OnInvalidNpcs);
+                m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
+                m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
                 m_messager.Unsubscribe<Services.Message.Login>(OnLogin);
                 m_messager.Unsubscribe<Services.Message.PageView>(OnPageView);
-                m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
-                m_messager.Unsubscribe<Message.GenerateNpcs>(OnGenerateNpcs);
                 m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
+                m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
                 m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-                m_messager.Unsubscribe<Services.Message.LanguageSelected>(OnLanguageSelected);
-                m_messager.Unsubscribe<Message.InvalidNpcs>(OnInvalidNpcs);
+                
+                
             }
         }
 
@@ -116,6 +120,39 @@ namespace NpcGenerator
             WriteUserProperty(writer, "os_version", m_trackingProfile.OsVersion);
 
             writer.WriteEnd(); //End of user_properties object
+        }
+
+        private void OnCrash(object sender, Services.Message.Crash crash)
+        {
+            //Consent can change throughout the session
+            if (m_userSettings.AnalyticsConsent)
+            {
+                WriteMessageBody(Callback);
+            }
+
+            void Callback(JsonWriter writer)
+            {
+                WriteCrashEvent(writer, crash);
+            }
+        }
+
+        private void WriteCrashEvent(JsonWriter writer, Services.Message.Crash crash)
+        {
+            writer.WriteStartObject(); //Start of event object
+
+            writer.WritePropertyName("name");
+            writer.WriteValue("crash");
+
+            writer.WritePropertyName("params");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("message");
+            string exceptionString = crash.Exception.ToString();
+            writer.WriteValue(exceptionString);
+
+            writer.WriteEnd(); //End of params object
+
+            writer.WriteEnd(); //End of event object
         }
 
         private void OnLogin(object sender, Services.Message.Login login)

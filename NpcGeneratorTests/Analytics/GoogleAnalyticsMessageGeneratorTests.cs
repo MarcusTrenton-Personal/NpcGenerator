@@ -112,12 +112,7 @@ namespace Tests
         public void EmptyUserSettings()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                TrackingProfile.Load("fakePath"),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             messager.Send(this, new Login());
 
@@ -154,12 +149,7 @@ namespace Tests
         public void NullUserPropertiesNotWritten()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             messager.Send(this, new Login());
 
@@ -229,12 +219,7 @@ namespace Tests
         public void Login()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             messager.Send(this, new Login());
 
@@ -256,12 +241,7 @@ namespace Tests
         public void PageView()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             const string TITLE = "EasterEgg";
             messager.Send(this, new PageView(TITLE));
@@ -284,12 +264,7 @@ namespace Tests
         public void LanguageSelected()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             const string LANGUAGE_CODE = "en-ma"; //Language code is regex-checked, so make it valid.
             messager.Send(this, new LanguageSelected(LANGUAGE_CODE));
@@ -312,12 +287,7 @@ namespace Tests
         public void UserLanguageNotSupported()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             const string LANGUAGE_CODE = "Martian";
             messager.Send(this, new UserLanguageNotSupported(LANGUAGE_CODE));
@@ -362,12 +332,7 @@ namespace Tests
         public void GenerateNpcs(TraitSchema.Features schemaFeaturesUsed)
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             const int QUANTITY = 10;
             messager.Send(this, new GenerateNpcs(QUANTITY, schemaFeaturesUsed));
@@ -401,12 +366,7 @@ namespace Tests
         public void SaveNpcs()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             const string FORMAT = "MorseCode";
             messager.Send(this, new SaveNpcs(FORMAT));
@@ -429,12 +389,7 @@ namespace Tests
         public void SelectConfiguration()
         {
             bool callbackCalled = false;
-            Messager messager = new Messager();
-            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
-                new StubTrackingProfile(),
-                messager,
-                new StubUserSettings(),
-                Callback);
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
 
             messager.Send(this, new SelectConfiguration());
 
@@ -449,6 +404,41 @@ namespace Tests
             }
 
             Assert.IsTrue(callbackCalled, "GoogleAnalyticsMessageGenerator callback not called");
+        }
+
+        [TestMethod]
+        public void Crash()
+        {
+            bool callbackCalled = false;
+            Messager messager = MakeMessagerUsedInGoogleAnalytics(Callback);
+
+            const string MESSAGE = "Test failure";
+            Exception exception = new Exception(MESSAGE);
+            messager.Send(this, new Crash(exception));
+
+            void Callback(string messageBody)
+            {
+                callbackCalled = true;
+
+                JsonBody body = JsonConvert.DeserializeObject<JsonBody>(messageBody);
+                Assert.AreEqual(1, body.events.Count, "Wrong number of events serialized");
+                Assert.AreEqual("crash", body.events[0].name, "Wrong event name");
+                Assert.AreEqual(1, body.events[0].@params.Count, "Wrong number of params");
+                Assert.AreEqual("System.Exception: " + MESSAGE, body.events[0].@params["message"], "Wrong parameter");
+            }
+
+            Assert.IsTrue(callbackCalled, "GoogleAnalyticsMessageGenerator callback not called");
+        }
+
+        private Messager MakeMessagerUsedInGoogleAnalytics(Action<string> callback)
+        {
+            Messager messager = new Messager();
+            GoogleAnalyticsMessageGenerator generator = new GoogleAnalyticsMessageGenerator(
+                new StubTrackingProfile(),
+                messager,
+                new StubUserSettings(),
+                callback);
+            return messager;
         }
     }
 }
