@@ -25,6 +25,13 @@ namespace NpcGenerator
 {
     public class GoogleAnalyticsMessageGenerator
     {
+        //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
+        const int USER_PROPERY_NAME_MAX_LENGTH = 24;
+        const int USER_PROPERY_VALUE_MAX_LENGTH = 36;
+        const int EVENT_NAME_MAX_LENGTH = 40;
+        const int PARAMETER_NAME_MAX_LENGTH = 40;
+        const int PARAMETER_VALUE_MAX_LENGTH = 100;
+
         public GoogleAnalyticsMessageGenerator(in ITrackingProfile trackingProfile,
             in IMessager messager,
             in IUserSettings userSettings,
@@ -35,8 +42,7 @@ namespace NpcGenerator
             m_userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
             m_messageCallback = messageCallback ?? throw new ArgumentNullException(nameof(messageCallback));
 
-            //Each Google Analytics event must have a name 40 characters or less: 
-            //https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=gtag#limitations
+            
             m_messager.Subscribe<Services.Message.Crash>(OnCrash);
             m_messager.Subscribe<Message.InvalidNpcs>(OnInvalidNpcs);
             m_messager.Subscribe<Message.GenerateNpcs>(OnGenerateNpcs);
@@ -61,8 +67,6 @@ namespace NpcGenerator
                 m_messager.Unsubscribe<Message.SaveNpcs>(OnSaveNpcs);
                 m_messager.Unsubscribe<Message.SelectConfiguration>(OnSelectConfiguration);
                 m_messager.Unsubscribe<Services.Message.UserLanguageNotSupported>(OnUserLanguageNotSupported);
-                
-                
             }
         }
 
@@ -96,9 +100,10 @@ namespace NpcGenerator
         {
             if (value != null)
             {
-                Trace.Assert(name.Length <= 24, "User property name " + name + " is longer than the 24 character maximum");
-                Trace.Assert(value.Length <= 36,
-                    "User property value " + value + " is longer than the 36 character maximum");
+                Trace.Assert(name.Length <= USER_PROPERY_NAME_MAX_LENGTH, 
+                    "User property name " + name + " is longer than the " + USER_PROPERY_NAME_MAX_LENGTH + " character maximum");
+                Trace.Assert(value.Length <= USER_PROPERY_VALUE_MAX_LENGTH,
+                    "User property value " + value + " is longer than the " + USER_PROPERY_VALUE_MAX_LENGTH + " character maximum");
 
                 writer.WritePropertyName(name);
 
@@ -122,6 +127,45 @@ namespace NpcGenerator
             writer.WriteEnd(); //End of user_properties object
         }
 
+        private static void WriteEventName(JsonWriter writer, string eventName)
+        {
+            Trace.Assert(eventName.Length <= USER_PROPERY_NAME_MAX_LENGTH,
+                "User property name " + eventName + " is longer than the " + EVENT_NAME_MAX_LENGTH + " character maximum");
+
+            writer.WritePropertyName("name");
+            writer.WriteValue(eventName);
+        }
+
+        private static void WriteParameter(JsonWriter writer, string parameter, string value)
+        {
+            WriteParameterName(writer, parameter);
+
+            Trace.Assert(value.Length <= PARAMETER_VALUE_MAX_LENGTH,
+                "User property name " + value + " is longer than the " + PARAMETER_VALUE_MAX_LENGTH + " character maximum");
+
+            writer.WriteValue(value);
+        }
+
+        private static void WriteParameter(JsonWriter writer, string parameter, bool value)
+        {
+            WriteParameterName(writer, parameter);
+            writer.WriteValue(value);
+        }
+
+        private static void WriteParameter(JsonWriter writer, string parameter, int value)
+        {
+            WriteParameterName(writer, parameter);
+            writer.WriteValue(value);
+        }
+
+        private static void WriteParameterName(JsonWriter writer, string parameter)
+        {
+            Trace.Assert(parameter.Length <= PARAMETER_NAME_MAX_LENGTH,
+                "User property name " + parameter + " is longer than the " + PARAMETER_NAME_MAX_LENGTH + " character maximum");
+
+            writer.WritePropertyName(parameter);
+        }
+
         private void OnCrash(object sender, Services.Message.Crash crash)
         {
             //Consent can change throughout the session
@@ -136,19 +180,18 @@ namespace NpcGenerator
             }
         }
 
-        private void WriteCrashEvent(JsonWriter writer, Services.Message.Crash crash)
+        private static void WriteCrashEvent(JsonWriter writer, Services.Message.Crash crash)
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("crash");
+            WriteEventName(writer, "crash");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("message");
-            string exceptionString = crash.Exception.ToString();
-            writer.WriteValue(exceptionString);
+            //This hacky crash reporter has a very low character limit. This might cover the first function of the call stack.
+            string exceptionString = crash.Exception.ToString()[..PARAMETER_VALUE_MAX_LENGTH];
+            WriteParameter(writer, "message", exceptionString);
 
             writer.WriteEnd(); //End of params object
 
@@ -168,14 +211,12 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("login");
+            WriteEventName(writer, "login");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("method");
-            writer.WriteValue("ClientApp");
+            WriteParameter(writer, "method", "ClientApp");
 
             writer.WriteEnd(); //End of params object
 
@@ -199,14 +240,12 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("page_view");
+            WriteEventName(writer, "page_view");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("title");
-            writer.WriteValue(title);
+            WriteParameter(writer, "title", title);
 
             writer.WriteEnd(); //End of params object
 
@@ -225,8 +264,7 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("select_configuration");
+            WriteEventName(writer, "select_configuration");
 
             writer.WriteEnd(); //End of event object
         }
@@ -248,14 +286,12 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("generate_npcs");
+            WriteEventName(writer, "generate_npcs");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("quantity");
-            writer.WriteValue(quantity);
+            WriteParameter(writer, "quantity", quantity);
 
             WriteSchemaFeatures(writer, features);
 
@@ -270,8 +306,7 @@ namespace NpcGenerator
             {
                 bool hasFeature = (featureValue & (int)features) > 0;
                 string featureName = Enum.GetName(typeof(TraitSchema.Features), featureValue);
-                writer.WritePropertyName(featureName);
-                writer.WriteValue(hasFeature);
+                WriteParameter(writer, featureName, hasFeature);
             }
         }
 
@@ -292,14 +327,12 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("save_npcs");
+            WriteEventName(writer, "save_npcs");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("format");
-            writer.WriteValue(format);
+            WriteParameter(writer, "format", format);
 
             writer.WriteEnd(); //End of params object
 
@@ -323,14 +356,12 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("unsupported_language");
+            WriteEventName(writer, "unsupported_language");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("language_code");
-            writer.WriteValue(languageCode);
+            WriteParameter(writer, "language_code", languageCode);
 
             writer.WriteEnd(); //End of params object
 
@@ -354,14 +385,12 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("language_selected");
+            WriteEventName(writer, "language_selected");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
-            writer.WritePropertyName("language_code");
-            writer.WriteValue(languageCode);
+            WriteParameter(writer, "language_code", languageCode);
 
             writer.WriteEnd(); //End of params object
 
@@ -403,16 +432,14 @@ namespace NpcGenerator
         {
             writer.WriteStartObject(); //Start of event object
 
-            writer.WritePropertyName("name");
-            writer.WriteValue("invalid_npcs");
+            WriteEventName(writer, "invalid_npcs");
 
             writer.WritePropertyName("params");
             writer.WriteStartObject();
 
             foreach (NpcSchemaViolation.Reason reason in violationTypes)
             {
-                writer.WritePropertyName(reason.ToString());
-                writer.WriteValue(true);
+                WriteParameter(writer, reason.ToString(), true);
             }
 
             writer.WriteEnd(); //End of params object
