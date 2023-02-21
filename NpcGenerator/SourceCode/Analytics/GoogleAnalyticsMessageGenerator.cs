@@ -190,12 +190,20 @@ namespace NpcGenerator
             writer.WriteStartObject();
 
             //This hacky crash reporter has a very low character limit. This might cover the first function of the call stack.
-            string exceptionString = crash.Exception.ToString()[..PARAMETER_VALUE_MAX_LENGTH];
-            WriteParameter(writer, "message", exceptionString);
+            string messageString = Truncate(crash.Exception.Message, PARAMETER_VALUE_MAX_LENGTH);
+            WriteParameter(writer, "message", messageString);
+            string callStrackString = Truncate(crash.Exception.StackTrace, PARAMETER_VALUE_MAX_LENGTH);
+            WriteParameter(writer, "call_stack", callStrackString);
 
             writer.WriteEnd(); //End of params object
 
             writer.WriteEnd(); //End of event object
+        }
+
+        private static string Truncate(string original, int maxLength)
+        {
+            string trunacated = original.Length > maxLength ? original[..maxLength] : original;
+            return trunacated;
         }
 
         private void OnLogin(object sender, Services.Message.Login login)
