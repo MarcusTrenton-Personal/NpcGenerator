@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Diagnostics;
+using System.Text;
 
 namespace Services
 {
@@ -40,23 +41,29 @@ namespace Services
             return isValid;
         }
 
-        public static bool StartEmail(Uri uri)
+        public const int MAX_EMAIL_MESSAGE_LENGTH = 36_500; //Obtained by trail and error.
+        public static void WriteEmail(string email, string subject, string body)
         {
-            if (uri is null)
+            ParamUtil.VerifyMatchesPattern(nameof(email), email, RegexUtil.EMAIL, email + " is not an email address");
+            ParamUtil.VerifyHasContent(nameof(subject), subject);
+            ParamUtil.VerifyHasContent(nameof(body), body);
+            
+            if (email.Length + subject.Length + body.Length > MAX_EMAIL_MESSAGE_LENGTH)
             {
-                throw new ArgumentNullException(nameof(uri));
+                throw new ArgumentException("Combination of email, subject, and body exceed maximum length of " + MAX_EMAIL_MESSAGE_LENGTH);
             }
 
-            bool isValid = uri.Scheme == Uri.UriSchemeMailto;
-            if (isValid)
+            StringBuilder actionBuilder = new StringBuilder();
+            actionBuilder.Append("mailto:" + email);
+            actionBuilder.Append("?subject=" + subject);
+            actionBuilder.Append("&body=" + body);
+
+            Uri uri = new Uri(actionBuilder.ToString());
+            Process.Start(new ProcessStartInfo
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = uri.ToString(),
-                    UseShellExecute = true
-                });
-            }
-            return isValid;
+                FileName = uri.ToString(),
+                UseShellExecute = true
+            });
         }
     }
 }

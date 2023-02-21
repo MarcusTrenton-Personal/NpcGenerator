@@ -138,12 +138,15 @@ namespace NpcGenerator
 
         private static void WriteParameter(JsonWriter writer, string parameter, string value)
         {
-            WriteParameterName(writer, parameter);
+            if (!string.IsNullOrEmpty(parameter) && !string.IsNullOrEmpty(value))
+            {
+                WriteParameterName(writer, parameter);
 
-            Trace.Assert(value.Length <= PARAMETER_VALUE_MAX_LENGTH,
-                "User property name " + value + " is longer than the " + PARAMETER_VALUE_MAX_LENGTH + " character maximum");
+                Trace.Assert(value.Length <= PARAMETER_VALUE_MAX_LENGTH,
+                    "User property name " + value + " is longer than the " + PARAMETER_VALUE_MAX_LENGTH + " character maximum");
 
-            writer.WriteValue(value);
+                writer.WriteValue(value);
+            }
         }
 
         private static void WriteParameter(JsonWriter writer, string parameter, bool value)
@@ -190,7 +193,8 @@ namespace NpcGenerator
             writer.WriteStartObject();
 
             //This hacky crash reporter has a very low character limit. This might cover the first function of the call stack.
-            string messageString = Truncate(crash.Exception.Message, PARAMETER_VALUE_MAX_LENGTH);
+            string baseMessageString = crash.Exception.GetType() + ": " + crash.Exception.Message;
+            string messageString = Truncate(baseMessageString, PARAMETER_VALUE_MAX_LENGTH);
             WriteParameter(writer, "message", messageString);
             string callStrackString = Truncate(crash.Exception.StackTrace, PARAMETER_VALUE_MAX_LENGTH);
             WriteParameter(writer, "call_stack", callStrackString);
@@ -202,8 +206,8 @@ namespace NpcGenerator
 
         private static string Truncate(string original, int maxLength)
         {
-            string trunacated = original.Length > maxLength ? original[..maxLength] : original;
-            return trunacated;
+            string truncated = original != null && original.Length > maxLength ? original[..maxLength] : original;
+            return truncated;
         }
 
         private void OnLogin(object sender, Services.Message.Login login)

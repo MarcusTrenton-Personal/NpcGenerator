@@ -348,7 +348,7 @@ namespace NpcGenerator
                 MessageBoxResult result = MessageBox.Show(errorMessage, errorTitle, MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    SendErrorEmail(errorTitle, errorMessage);
+                    UriHelper.WriteEmail(m_serviceCentre.AppSettings.SupportEmail, subject: errorTitle, body: errorMessage);
                 }
             }
             else
@@ -359,17 +359,6 @@ namespace NpcGenerator
                 
                 MessageBox.Show(errorMessage);
             }
-        }
-
-        //TODO: Combine this the NpcGenerator version for a reusable method.
-        private void SendErrorEmail(string errorTitle, string errorBody)
-        {
-            StringBuilder actionBuilder = new StringBuilder();
-            actionBuilder.Append("mailto:" + m_serviceCentre.AppSettings.SupportEmail); //CODE SMELL: NULL CHECK IS OUTSIDE FUNCTION.
-            actionBuilder.Append("?subject=" + errorTitle);
-            actionBuilder.Append("&body=" + errorBody);
-
-            UriHelper.StartEmail(new Uri(actionBuilder.ToString()));
         }
 
         private static AppSettings LoadAppSettings(IFilePathProvider filePathProvider)

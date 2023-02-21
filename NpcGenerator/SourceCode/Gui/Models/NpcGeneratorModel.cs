@@ -366,17 +366,12 @@ namespace NpcGenerator
 
         private void SendErrorEmail(string errorTitle, string errorBody, List<Replacement> replacements)
         {
-            const int MAX_MESSAGE_LENGTH = 36_500; //Obtained by trail and error.
             const int MAX_CONFIGURATION_LENGTH = 34_000;
 
             StringBuilder actionBuilder = new StringBuilder();
-            actionBuilder.Append("mailto:" + m_appSettings.SupportEmail);
-            actionBuilder.Append("?subject=" + m_localization.GetText("on_generation_error_email_subject"));
-            actionBuilder.Append("&body=");
-
             string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath, Constants.TEXT_ENCODING);
             bool isBodyTooLongForEmail = configurationText.Length >= MAX_CONFIGURATION_LENGTH;
-            if (isBodyTooLongForEmail)
+            if (isBodyTooLongForEmail) //TODO: Refactor for clarity.
             {
                 string requestForConfigurationFileText = m_localization.GetText("support_email_attach_configuration");
                 actionBuilder.AppendLine(requestForConfigurationFileText);
@@ -420,13 +415,15 @@ namespace NpcGenerator
             string npcNumberLabelText = m_localization.GetText("npc_quantity_label");
             actionBuilder.AppendLine(ErrorSectionTitle(npcNumberLabelText) + " " + NpcQuantity);
 
-            if (actionBuilder.Length > MAX_MESSAGE_LENGTH)
+            string subject = m_localization.GetText("on_generation_error_email_subject");
+            int totalMessageLength = m_appSettings.SupportEmail.Length + subject.Length + actionBuilder.Length;
+            if (totalMessageLength > UriHelper.MAX_EMAIL_MESSAGE_LENGTH)
             {
-                int excessLength = actionBuilder.Length - MAX_MESSAGE_LENGTH;
-                actionBuilder.Remove(MAX_MESSAGE_LENGTH, excessLength);
+                int excessLength = totalMessageLength - UriHelper.MAX_EMAIL_MESSAGE_LENGTH;
+                actionBuilder.Remove(UriHelper.MAX_EMAIL_MESSAGE_LENGTH, excessLength);
             }
 
-            UriHelper.StartEmail(new Uri(actionBuilder.ToString()));
+            UriHelper.WriteEmail(m_appSettings.SupportEmail, subject, body: actionBuilder.ToString());
         }
 
         private static string ErrorSectionTitle(string titleName)
