@@ -30,7 +30,5 @@ namespace Services
         public static readonly Regex FILE_EXTENSION_WITH_DOT = new Regex(@"^\.[A-Za-z0-9]+$");
         public static readonly Regex FILE_EXTENSION_WITHOUT_DOT = new Regex(@"^[A-Za-z0-9]+$");
         public static readonly Regex LANGUAGE_CODE = new Regex(@"^[A-Za-z]{2}-[A-Za-z]{2}$");
-        //https://www.w3resource.com/javascript/form/email-validation.php#:~:text=To%20get%20a%20valid%20email,%5D%2B)*%24%2F.
-        public static readonly Regex EMAIL = new Regex(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
     }
 }

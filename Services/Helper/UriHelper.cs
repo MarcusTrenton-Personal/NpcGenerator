@@ -42,19 +42,19 @@ namespace Services
         }
 
         public const int MAX_EMAIL_MESSAGE_LENGTH = 36_500; //Obtained by trail and error.
-        public static void WriteEmail(string email, string subject, string body)
+        public static void WriteEmail(string emailAddress, string subject, string body)
         {
-            ParamUtil.VerifyMatchesPattern(nameof(email), email, RegexUtil.EMAIL, email + " is not an email address");
+            ParamUtil.VerifyIsEmailAddress(nameof(emailAddress), emailAddress);
             ParamUtil.VerifyHasContent(nameof(subject), subject);
             ParamUtil.VerifyHasContent(nameof(body), body);
             
-            if (email.Length + subject.Length + body.Length > MAX_EMAIL_MESSAGE_LENGTH)
+            if (emailAddress.Length + subject.Length + body.Length > MAX_EMAIL_MESSAGE_LENGTH)
             {
                 throw new ArgumentException("Combination of email, subject, and body exceed maximum length of " + MAX_EMAIL_MESSAGE_LENGTH);
             }
 
             StringBuilder actionBuilder = new StringBuilder();
-            actionBuilder.Append("mailto:" + email);
+            actionBuilder.Append("mailto:" + emailAddress);
             actionBuilder.Append("?subject=" + subject);
             actionBuilder.Append("&body=" + body);
 

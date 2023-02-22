@@ -15,6 +15,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace Services
@@ -136,6 +137,24 @@ namespace Services
             if (value < minInclusive || value > maxInclusive)
             {
                 throw new ArgumentException(name + "is not in the inclusive range " + minInclusive + " to " + maxInclusive);
+            }
+        }
+
+        public static void VerifyIsEmailAddress(string name, string value)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(name);
+            }
+
+            //Sadly .Net Core 3.1 doesn't have MailAddress.TryCreate(), so exceptions as normal flow are needed.
+            try
+            {
+                new MailAddress(value);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(value + " is not a valid email address");
             }
         }
     }
