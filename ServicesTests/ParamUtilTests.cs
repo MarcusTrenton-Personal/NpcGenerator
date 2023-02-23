@@ -281,18 +281,23 @@ namespace Tests
         [DataRow(@"abcdefghijklmnopqrstuvwxyz@email.com", DisplayName = "Personal Info has lower case ascii")]
         [DataRow(@"ABCDEFGHIJKLMNOPQRSTUVWXYZ@e.a", DisplayName = "Personal Info has upper case ascii")]
         [DataRow(@"a1234567890@e.ca", DisplayName = "Personal Info has numbers")]
-        [DataRow(@"1234567890@e.ca", DisplayName = "Personal Info has start with numbers")]
+        [DataRow(@"¢¥ÆØýЍձףಥᢁશ@e.ca", DisplayName = "Personal Info has unicode")]
+        [DataRow(@"1234567890@e.ca", DisplayName = "Personal Info starts with numbers")]
         [DataRow(@"!#$%&'*+-/=?^_`{|}~()*@e.ca", DisplayName = "Personal Info has special characters !#$%&'*+-/=?^_`{|}~()*")]
         [DataRow("a b@b.com", DisplayName = "Personal Info has space")]
         [DataRow(@"A.b@e.a", DisplayName = "Personal Info has dot in the middle")]
         [DataRow("ab.@b.com", DisplayName = "Personal Info ends with .")]
+        [DataRow("a..b@b.com", DisplayName = "Personal Info has double dots")]
         [DataRow(@"A.b@e", DisplayName = "Top Level Domain does not need a .")]
         [DataRow(@"a@abcdefghijklmnopqrstuvwxyz.com", DisplayName = "Top Level Domain has lower case ascii.")]
         [DataRow(@"a@ABCDEFGHIJKLMNOPQRSTUVWXYZ.com", DisplayName = "Top Level Domain has upper case ascii.")]
         [DataRow(@"a@a1234567890.com", DisplayName = "Top Level Domain has numbers.")]
+        [DataRow(@"a@¢¥ÆØýЍձףಥᢁશ.ca", DisplayName = "Top Level Domain has unicode")]
         [DataRow(@"a@1234567890.com", DisplayName = "Top Level Domain has start with numbers.")]
+        [DataRow("a@b.", DisplayName = "Top Level Domain ends with .")]
         [DataRow(@"a@a-b.com", DisplayName = "Top Level Domain has -.")]
         [DataRow("a@!#$%&'*+-/=?^_`{|}~.com", DisplayName = "Top Level Domain has special characeters !#$%&'*+-/=?^_`{|}~.")]
+        [DataRow("a@b..com", DisplayName = "Top Level Domain has double dots")]
         public void EmailAddressRegexPasses(string pattern)
         {
             ParamUtil.VerifyIsEmailAddress(nameof(pattern), pattern);
@@ -301,14 +306,16 @@ namespace Tests
         [DataTestMethod, ExpectedException(typeof(ArgumentException))]
         [DataRow("", DisplayName = "Empty")]
         [DataRow("a.com", DisplayName = "Missing @")]
+        [DataRow("a@@b.com", DisplayName = "Double @")]
+        [DataRow("a@b@c.com", DisplayName = "Multiple @")]
         [DataRow("a\n@b.com", DisplayName = "Personal Info has new line")]
         [DataRow(".ab@b.com", DisplayName = "Personal Info starts with .")]
         [DataRow("@b.com", DisplayName = "Personal Info is empty")]
-        [DataRow("@b.com", DisplayName = "Top Level Domain is empty")]
-        [DataRow("@b.com", DisplayName = "Top Level Domain starts with .")]
-        [DataRow("@b.com", DisplayName = "Top Level Domain ends with .")]
+        [DataRow("a@", DisplayName = "Top Level Domain is empty")]
+        [DataRow("a@.com", DisplayName = "Top Level Domain starts with .")]
         [DataRow("a@(.com", DisplayName = "Top Level Domain has (.")]
         [DataRow("a@).com", DisplayName = "Top Level Domain has ).")]
+        [DataRow("a@b c.com", DisplayName = "Top Level Domain has space")]
         public void EmailRegexRegexFails(string pattern)
         {
             ParamUtil.VerifyIsEmailAddress(nameof(pattern), pattern);
@@ -320,22 +327,5 @@ namespace Tests
             string pattern = null;
             ParamUtil.VerifyIsEmailAddress(nameof(pattern), pattern);
         }
-
-
-        //        Uppercase(A-Z) and lowercase(a-z) English letters.
-        //Digits(0-9).
-        //Characters ! # $ % & ' * + - / = ? ^ _ ` { | } ~
-        //Character. (period, dot or fullstop) provided that it is not the first or last character and it will not come one after the other.
-        //The domain name [for example com, org, net, in, us, info] part contains letters, digits, hyphens, and dots.
-
-
-        //Spaces
-        //Empty
-        //Unicode
-        //Missing @
-        //Multiple @
-        //Double dots
-        //Top Level Domain starts with .
-        //Top Level Domain mysite123@gmail.b [ ".b" is not a valid tld ]
     }
 }
