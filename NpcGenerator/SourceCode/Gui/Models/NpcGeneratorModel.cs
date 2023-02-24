@@ -366,54 +366,7 @@ namespace NpcGenerator
 
         private void SendErrorEmail(string errorTitle, string errorBody, List<Replacement> replacements)
         {
-            const int MAX_CONFIGURATION_LENGTH = 34_000;
-
-            StringBuilder actionBuilder = new StringBuilder();
-            string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath, Constants.TEXT_ENCODING);
-            bool isBodyTooLongForEmail = configurationText.Length >= MAX_CONFIGURATION_LENGTH;
-            if (isBodyTooLongForEmail) //TODO: Refactor for clarity.
-            {
-                string requestForConfigurationFileText = m_localization.GetText("support_email_attach_configuration");
-                actionBuilder.AppendLine(requestForConfigurationFileText);
-                actionBuilder.AppendLine("                                                                            ");
-            }
-
-            actionBuilder.Append(m_localization.GetText("on_generation_error_email_body_start"));
-
-            actionBuilder.AppendLine(ErrorSectionTitle(errorTitle));
-            actionBuilder.AppendLine(errorBody);
-            actionBuilder.AppendLine();
-
-            string npcsTitle = m_localization.GetText("npcs");
-            actionBuilder.AppendLine(ErrorSectionTitle(npcsTitle));
-            string npcsText = m_npcExporters[NpcToJson.FileExtensionWithoutDotStatic].Export(m_npcGroup);
-            actionBuilder.AppendLine(npcsText);
-            actionBuilder.AppendLine();
-
-            string configurationTitle = m_localization.GetText("choose_configuration_file_label");
-            actionBuilder.AppendLine(ErrorSectionTitle(configurationTitle));
-
-            if (!isBodyTooLongForEmail)
-            {
-                actionBuilder.AppendLine(configurationText);
-            }
-            actionBuilder.AppendLine();
-
-            string replacementTitle = m_localization.GetText("trait_replacement");
-            actionBuilder.AppendLine(ErrorSectionTitle(replacementTitle));
-            foreach (Replacement replacement in replacements)
-            {
-                string replacementText = m_localization.GetText(
-                    "trait_replacement_description",
-                    replacement.OriginalTrait.Name,
-                    replacement.ReplacementTraitName,
-                    replacement.Category.Name);
-                actionBuilder.AppendLine(replacementText);
-            }
-            actionBuilder.AppendLine();
-
-            string npcNumberLabelText = m_localization.GetText("npc_quantity_label");
-            actionBuilder.AppendLine(ErrorSectionTitle(npcNumberLabelText) + " " + NpcQuantity);
+            StringBuilder actionBuilder = GetEmailBody(errorTitle, errorBody, replacements);
 
             string subject = m_localization.GetText("on_generation_error_email_subject");
             int totalMessageLength = m_appSettings.SupportEmail.Length + subject.Length + actionBuilder.Length;
@@ -424,6 +377,93 @@ namespace NpcGenerator
             }
 
             UriHelper.WriteEmail(m_appSettings.SupportEmail, subject, body: actionBuilder.ToString());
+        }
+
+        private StringBuilder GetEmailNpcSection(string errorTitle, string errorBody)
+        {
+            StringBuilder npcText = new StringBuilder();
+
+            npcText.Append(m_localization.GetText("on_generation_error_email_body_start"));
+
+            npcText.AppendLine(ErrorSectionTitle(errorTitle));
+            npcText.AppendLine(errorBody);
+            npcText.AppendLine();
+
+            string npcsTitle = m_localization.GetText("npcs");
+            npcText.AppendLine(ErrorSectionTitle(npcsTitle));
+            string npcsText = m_npcExporters[NpcToJson.FileExtensionWithoutDotStatic].Export(m_npcGroup);
+            npcText.AppendLine(npcsText);
+            npcText.AppendLine();
+
+            string configurationTitle = m_localization.GetText("choose_configuration_file_label");
+            npcText.AppendLine(ErrorSectionTitle(configurationTitle));
+
+            return npcText;
+        }
+
+        private StringBuilder GetMetaConfigurationSection(List<Replacement> replacements)
+        {
+            StringBuilder metaConfigurationText = new StringBuilder();
+
+            string replacementTitle = m_localization.GetText("trait_replacement");
+            metaConfigurationText.AppendLine(ErrorSectionTitle(replacementTitle));
+            foreach (Replacement replacement in replacements)
+            {
+                string replacementText = m_localization.GetText(
+                    "trait_replacement_description",
+                    replacement.OriginalTrait.Name,
+                    replacement.ReplacementTraitName,
+                    replacement.Category.Name);
+                metaConfigurationText.AppendLine(replacementText);
+            }
+            metaConfigurationText.AppendLine();
+
+            string npcNumberLabelText = m_localization.GetText("npc_quantity_label");
+            metaConfigurationText.AppendLine(ErrorSectionTitle(npcNumberLabelText) + " " + NpcQuantity);
+
+            return metaConfigurationText;
+        }
+
+        private StringBuilder GetEmailBody(string errorTitle, string errorBody, List<Replacement> replacements)
+        {
+            StringBuilder npcText = GetEmailNpcSection(errorTitle, errorBody);
+            StringBuilder metaConfigurationText = GetMetaConfigurationSection(replacements);
+
+            string configurationText = File.ReadAllText(m_userSettings.ConfigurationPath, Constants.TEXT_ENCODING);
+            const int MAX_CONFIGURATION_LENGTH = 34_000;
+            bool isBodyTooLongForEmail = configurationText.Length >= MAX_CONFIGURATION_LENGTH;
+            StringBuilder actionBuilder = isBodyTooLongForEmail ?
+                GetAbbreviatedEmailBody(npcText, metaConfigurationText) :
+                GetFullLengthEmailBody(configurationText, npcText, metaConfigurationText);
+            return actionBuilder;
+        }
+
+        private StringBuilder GetAbbreviatedEmailBody(StringBuilder npcText, StringBuilder metaConfigurationText)
+        {
+            StringBuilder actionBuilder = new StringBuilder();
+
+            string requestForConfigurationFileText = m_localization.GetText("support_email_attach_configuration");
+            actionBuilder.AppendLine(requestForConfigurationFileText);
+            actionBuilder.AppendLine("                                                                            ");
+
+            actionBuilder.Append(npcText);
+            actionBuilder.AppendLine();
+
+            actionBuilder.Append(metaConfigurationText);
+
+            return actionBuilder;
+        }
+
+        private StringBuilder GetFullLengthEmailBody(string configurationText, StringBuilder npcText, StringBuilder metaConfigurationText)
+        {
+            StringBuilder actionBuilder = new StringBuilder();
+
+            actionBuilder.Append(npcText);
+            actionBuilder.AppendLine(configurationText);
+            actionBuilder.AppendLine();
+            actionBuilder.Append(metaConfigurationText);
+
+            return actionBuilder;
         }
 
         private static string ErrorSectionTitle(string titleName)
