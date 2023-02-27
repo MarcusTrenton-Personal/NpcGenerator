@@ -43,7 +43,6 @@ namespace Tests
                     string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
                         This is some {\b bold} text.\par
                         }";
-                    //string text = "";
                     File.WriteAllText(licensePath, text, Constants.TEXT_ENCODING);
 
                     StubFilePathProvider filePathProvider = new StubFilePathProvider()
@@ -62,11 +61,11 @@ namespace Tests
                     };
 
                     LicenseWindow licenseWindow = new LicenseWindow(
-                        messager: new StubMessager(), 
+                        messager: new StubMessager(),
                         filePathProvider: filePathProvider,
                         localizationModel: testLocalizationModel);
 
-                    //********* Test Initial Window ********************
+                    //********* Test Window ********************
                     FlowDocumentScrollViewer scrollViewer = (FlowDocumentScrollViewer)licenseWindow.FindName("flowViewer");
                     scrollDocumentExists = scrollViewer.Document != null;
 
@@ -88,6 +87,155 @@ namespace Tests
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(scrollDocumentExists, "License scroll viewer is empty");
+        }
+
+        [TestMethod]
+        public void MessagerIsNull()
+        {
+            bool windowExists = false;
+            Exception uncaughtException = null;
+
+            Thread t = new Thread(new ThreadStart(delegate ()
+            {
+                try
+                {
+                    //********* Setup Variables ********************
+                    const string licenseFileName = "TestLicense.rtf";
+                    string licensePath = Path.Combine(TestDirectory, licenseFileName);
+                    //From https://en.wikipedia.org/wiki/Rich_Text_Format
+                    string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
+                        This is some {\b bold} text.\par
+                        }";
+                    File.WriteAllText(licensePath, text, Constants.TEXT_ENCODING);
+
+                    StubFilePathProvider filePathProvider = new StubFilePathProvider()
+                    {
+                        LicensePath = licensePath
+                    };
+
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
+                    LicenseWindow licenseWindow = new LicenseWindow(
+                        messager: null,
+                        filePathProvider: filePathProvider,
+                        localizationModel: testLocalizationModel);
+
+                    //********* Test Window ********************
+                    windowExists = licenseWindow != null;
+
+                    //********* Clean Up ********************
+                    File.Delete(licensePath);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and explicitly marked as failure.
+                catch (Exception e)
+                {
+                    uncaughtException = e;
+                }
+            }));
+
+            t.SetApartmentState(ApartmentState.STA);
+
+            t.Start();
+            t.Join();
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+            Assert.IsTrue(windowExists, "License scroll viewer is empty");
+        }
+
+        [TestMethod]
+        public void FilePathProviderIsNull()
+        {
+            Exception uncaughtException = null;
+
+            Thread t = new Thread(new ThreadStart(delegate ()
+            {
+                try
+                {
+                    //********* Setup Variables ********************
+
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
+                    new LicenseWindow(
+                        messager: new StubMessager(),
+                        filePathProvider: null,
+                        localizationModel: testLocalizationModel);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
+                catch (Exception e)
+                {
+                    if (!(e is ArgumentNullException))
+                    {
+                        uncaughtException = e;
+                    }
+                }
+            }));
+
+            t.SetApartmentState(ApartmentState.STA);
+
+            t.Start();
+            t.Join();
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+        }
+
+        [TestMethod]
+        public void FileLocalizationIsNull()
+        {
+            Exception uncaughtException = null;
+
+            Thread t = new Thread(new ThreadStart(delegate ()
+            {
+                try
+                {
+                    //********* Setup Variables ********************
+                    const string licenseFileName = "TestLicense.rtf";
+                    string licensePath = Path.Combine(TestDirectory, licenseFileName);
+
+                    StubFilePathProvider filePathProvider = new StubFilePathProvider()
+                    {
+                        LicensePath = licensePath
+                    };
+
+                    new LicenseWindow(
+                        messager: new StubMessager(),
+                        filePathProvider: filePathProvider,
+                        localizationModel: null);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
+                catch (Exception e)
+                {
+                    if (!(e is ArgumentNullException))
+                    {
+                        uncaughtException = e;
+                    }
+                }
+            }));
+
+            t.SetApartmentState(ApartmentState.STA);
+
+            t.Start();
+            t.Join();
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
         }
     }
 }
