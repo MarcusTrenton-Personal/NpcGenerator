@@ -32,7 +32,7 @@ namespace Tests
             bool scrollDocumentExists = false;
             Exception uncaughtException = null;
 
-            Thread t = new Thread(new ThreadStart(delegate ()
+            ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
@@ -78,12 +78,7 @@ namespace Tests
                 {
                     uncaughtException = e;
                 }
-            }));
-
-            t.SetApartmentState(ApartmentState.STA);
-
-            t.Start();
-            t.Join();
+            });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(scrollDocumentExists, "License scroll viewer is empty");
@@ -95,7 +90,7 @@ namespace Tests
             bool windowExists = false;
             Exception uncaughtException = null;
 
-            Thread t = new Thread(new ThreadStart(delegate ()
+            ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
@@ -140,12 +135,7 @@ namespace Tests
                 {
                     uncaughtException = e;
                 }
-            }));
-
-            t.SetApartmentState(ApartmentState.STA);
-
-            t.Start();
-            t.Join();
+            });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(windowExists, "License scroll viewer is empty");
@@ -156,7 +146,7 @@ namespace Tests
         {
             Exception uncaughtException = null;
 
-            Thread t = new Thread(new ThreadStart(delegate ()
+            ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
@@ -186,12 +176,7 @@ namespace Tests
                         uncaughtException = e;
                     }
                 }
-            }));
-
-            t.SetApartmentState(ApartmentState.STA);
-
-            t.Start();
-            t.Join();
+            });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
         }
@@ -201,7 +186,7 @@ namespace Tests
         {
             Exception uncaughtException = null;
 
-            Thread t = new Thread(new ThreadStart(delegate ()
+            ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
@@ -228,12 +213,7 @@ namespace Tests
                         uncaughtException = e;
                     }
                 }
-            }));
-
-            t.SetApartmentState(ApartmentState.STA);
-
-            t.Start();
-            t.Join();
+            });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
         }
