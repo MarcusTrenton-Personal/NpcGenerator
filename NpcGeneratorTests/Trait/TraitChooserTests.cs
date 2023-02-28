@@ -76,7 +76,7 @@ namespace Tests
 
             int headCount = 0;
             int tailCount = 0;
-            const int ROLL_COUNT = 100;
+            const int ROLL_COUNT = 1000;
 
             for (int i = 0; i < ROLL_COUNT; ++i)
             {
