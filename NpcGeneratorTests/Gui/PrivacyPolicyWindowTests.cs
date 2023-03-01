@@ -13,14 +13,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
-using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
-using Services;
-using Services.Message;
 using System;
 using System.IO;
-using System.Threading;
 using System.Windows.Controls;
 
 namespace Tests
@@ -35,7 +31,7 @@ namespace Tests
             bool scrollDocumentExists = false;
             Exception uncaughtException = null;
 
-            Thread t = new Thread(new ThreadStart(delegate ()
+            ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
@@ -46,7 +42,6 @@ namespace Tests
                     string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
                         This is some {\b bold} text.\par
                         }";
-                    //string text = "";
                     File.WriteAllText(privacyPolicyPath, text, Constants.TEXT_ENCODING);
 
                     StubFilePathProvider filePathProvider = new StubFilePathProvider()
@@ -82,15 +77,144 @@ namespace Tests
                 {
                     uncaughtException = e;
                 }
-            }));
-
-            t.SetApartmentState(ApartmentState.STA);
-
-            t.Start();
-            t.Join();
+            });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(scrollDocumentExists, "Privacy Policy scroll viewer is empty");
+        }
+
+        [TestMethod]
+        public void MessagerIsNull()
+        {
+            bool windowExists = false;
+            Exception uncaughtException = null;
+
+            ThreadCreatingTests.StartInUiThread(delegate ()
+            {
+                try
+                {
+                    //********* Setup Variables ********************
+                    const string privacyPolicyFileName = "TestPolicy.rtf";
+                    string privacyPolicyPath = Path.Combine(TestDirectory, privacyPolicyFileName);
+                    //From https://en.wikipedia.org/wiki/Rich_Text_Format
+                    string text = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard
+                        This is some {\b bold} text.\par
+                        }";
+                    File.WriteAllText(privacyPolicyPath, text, Constants.TEXT_ENCODING);
+
+                    StubFilePathProvider filePathProvider = new StubFilePathProvider()
+                    {
+                        PrivacyPolicyPath = privacyPolicyPath
+                    };
+
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
+                    PrivacyPolicyWindow privacyPolicyWindow = new PrivacyPolicyWindow(
+                        messager: null,
+                        filePathProvider: filePathProvider,
+                        localizationModel: testLocalizationModel);
+
+                    //********* Test Window ********************
+                    windowExists = privacyPolicyWindow != null;
+
+                    //********* Clean Up ********************
+                    File.Delete(privacyPolicyPath);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and explicitly marked as failure.
+                catch (Exception e)
+                {
+                    uncaughtException = e;
+                }
+            });
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+            Assert.IsTrue(windowExists, "License scroll viewer is empty");
+        }
+
+        [TestMethod]
+        public void FilePathProviderIsNull()
+        {
+            Exception uncaughtException = null;
+
+            ThreadCreatingTests.StartInUiThread(delegate ()
+            {
+                try
+                {
+                    //********* Setup Variables ********************
+
+                    StubLocalization testLocalization = new StubLocalization
+                    {
+                        SupportedLanguageCodes = new[] { "en-ca" }
+                    };
+
+                    StubLocalizationModel testLocalizationModel = new StubLocalizationModel
+                    {
+                        Localization = testLocalization
+                    };
+
+                    new PrivacyPolicyWindow(
+                        messager: new StubMessager(),
+                        filePathProvider: null,
+                        localizationModel: testLocalizationModel);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
+                catch (Exception e)
+                {
+                    if (!(e is ArgumentNullException))
+                    {
+                        uncaughtException = e;
+                    }
+                }
+            });
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+        }
+
+        [TestMethod]
+        public void FileLocalizationIsNull()
+        {
+            Exception uncaughtException = null;
+
+            ThreadCreatingTests.StartInUiThread(delegate ()
+            {
+                try
+                {
+                    //********* Setup Variables ********************
+                    const string privacyPolicyFileName = "TestPolicy.rtf";
+                    string privacyPolicyPath = Path.Combine(TestDirectory, privacyPolicyFileName);
+
+                    StubFilePathProvider filePathProvider = new StubFilePathProvider()
+                    {
+                        PrivacyPolicyPath = privacyPolicyPath
+                    };
+
+                    new PrivacyPolicyWindow(
+                        messager: new StubMessager(),
+                        filePathProvider: filePathProvider,
+                        localizationModel: null);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
+                catch (Exception e)
+                {
+                    if (!(e is ArgumentNullException))
+                    {
+                        uncaughtException = e;
+                    }
+                }
+            });
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
         }
     }
 }

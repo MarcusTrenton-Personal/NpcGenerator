@@ -13,19 +13,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
-using CoupledServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
-using Services;
-using Services.Message;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace Tests
 {
@@ -33,7 +27,6 @@ namespace Tests
     [TestClass]
     public class MainWindowTests : FileCreatingTests
     {
-        //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
         {
@@ -44,7 +37,7 @@ namespace Tests
 
             StubLocalFileIo fileIO = new StubLocalFileIo();
 
-            Thread t = new Thread(new ThreadStart(delegate ()
+            ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
@@ -149,18 +142,38 @@ namespace Tests
                 {
                     uncaughtException = e;
                 }
-            }));
-
-            t.SetApartmentState(ApartmentState.STA);
-
-            t.Start();
-            t.Join();
+            });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
             Assert.IsTrue(configPathMatches, "Configuration file was changed by Main Window");
             Assert.IsTrue(npcQuantityLabelMachesUserSettings, "NPC Quantity was changed by Main Window");
             Assert.IsTrue(generatedNpcQuantityMatchesUserSettings, "Incorrect number of NPCs generated");
             Assert.IsTrue(fileIO.SaveCalled, "saveNpcsButton did not invoke ILocalFileIO.SaveToPickedFile");
+        }
+
+        [TestMethod]
+        public void NullServiceCentre()
+        {
+            Exception uncaughtException = null;
+
+            ThreadCreatingTests.StartInUiThread(delegate ()
+            {
+                try
+                {
+                    new MainWindow(null);
+                }
+                //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
+                //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
+                catch (Exception e)
+                {
+                    if (!(e is ArgumentNullException))
+                    {
+                        uncaughtException = e;
+                    }
+                }
+            });
+
+            Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
         }
     }
 }

@@ -24,6 +24,8 @@ namespace NpcGenerator
     {   
         public MainWindow(ServiceCentre serviceCentre)
         {
+            ParamUtil.VerifyNotNull(nameof(serviceCentre), serviceCentre);
+
             m_serviceCentre = serviceCentre;
 
             InitializeComponent();

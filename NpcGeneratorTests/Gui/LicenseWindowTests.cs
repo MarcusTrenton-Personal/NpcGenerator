@@ -17,7 +17,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NpcGenerator;
 using System;
 using System.IO;
-using System.Threading;
 using System.Windows.Controls;
 
 namespace Tests
