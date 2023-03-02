@@ -24,7 +24,6 @@ namespace Tests
     [TestClass]
     public class LicenseWindowTests : FileCreatingTests
     {
-        //An aborted test is actually a failure. Run with debug to determine what failed.
         [TestMethod]
         public void EndToEnd()
         {
