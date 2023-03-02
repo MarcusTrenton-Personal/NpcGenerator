@@ -143,6 +143,7 @@ namespace Tests
         public void FilePathProviderIsNull()
         {
             Exception uncaughtException = null;
+            bool caughtExpectedException = false;
 
             ThreadCreatingTests.StartInUiThread(delegate ()
             {
@@ -160,29 +161,36 @@ namespace Tests
                         Localization = testLocalization
                     };
 
-                    new PrivacyPolicyWindow(
-                        messager: new StubMessager(),
-                        filePathProvider: null,
-                        localizationModel: testLocalizationModel);
+                    try
+                    {
+                        new PrivacyPolicyWindow(
+                            messager: new StubMessager(),
+                            filePathProvider: null,
+                            localizationModel: testLocalizationModel);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        caughtExpectedException = true;
+                    }
+                    
                 }
                 //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
                 //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
                 catch (Exception e)
                 {
-                    if (!(e is ArgumentNullException))
-                    {
-                        uncaughtException = e;
-                    }
+                    uncaughtException = e;
                 }
             });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+            Assert.IsTrue(caughtExpectedException, "Failed to catch expected exception");
         }
 
         [TestMethod]
         public void FileLocalizationIsNull()
         {
             Exception uncaughtException = null;
+            bool caughtExpectedException = false;
 
             ThreadCreatingTests.StartInUiThread(delegate ()
             {
@@ -197,23 +205,29 @@ namespace Tests
                         PrivacyPolicyPath = privacyPolicyPath
                     };
 
-                    new PrivacyPolicyWindow(
-                        messager: new StubMessager(),
-                        filePathProvider: filePathProvider,
-                        localizationModel: null);
+                    try
+                    {
+                        new PrivacyPolicyWindow(
+                            messager: new StubMessager(),
+                            filePathProvider: filePathProvider,
+                            localizationModel: null);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        caughtExpectedException = true;
+                    }
+
                 }
                 //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
                 //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
                 catch (Exception e)
                 {
-                    if (!(e is ArgumentNullException))
-                    {
-                        uncaughtException = e;
-                    }
+                    uncaughtException = e;
                 }
             });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+            Assert.IsTrue(caughtExpectedException, "Failed to catch expected exception");
         }
     }
 }

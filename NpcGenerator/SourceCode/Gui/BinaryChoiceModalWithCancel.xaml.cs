@@ -13,17 +13,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.*/
 
+using Services;
 using System;
 using System.ComponentModel;
 using System.Windows;
 
 namespace NpcGenerator
 {
-    public partial class BinaryChoiceModal : Window
+    public partial class BinaryChoiceModalWithCancel : Window
     {
-        public BinaryChoiceModal(
+        public BinaryChoiceModalWithCancel(
             string title, string body, string option1, string option2, Action option1Action, Action option2Action, Action cancelAction)
         {
+            //Title can empty/null
+            ParamUtil.VerifyHasContent(nameof(body), body);
+            ParamUtil.VerifyHasContent(nameof(option1), option1);
+            ParamUtil.VerifyHasContent(nameof(option2), option2);
+            //All actions are optional
+
             m_title = title;
             m_body = body;
             m_option1 = option1;

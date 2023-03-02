@@ -155,25 +155,31 @@ namespace Tests
         public void NullServiceCentre()
         {
             Exception uncaughtException = null;
+            bool caughtExpectedException = false;
 
             ThreadCreatingTests.StartInUiThread(delegate ()
             {
                 try
                 {
-                    new MainWindow(null);
+                    try
+                    {
+                        new MainWindow(null);
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        caughtExpectedException = true;
+                    }
                 }
                 //Any uncaught exception in this thread will deadlock the parent thread, causing the test to abort instead of fail.
                 //Therefore, every exception must be caught and - unless explicitly expected - marked as failure.
                 catch (Exception e)
                 {
-                    if (!(e is ArgumentNullException))
-                    {
-                        uncaughtException = e;
-                    }
+                    uncaughtException = e;
                 }
             });
 
             Assert.IsNull(uncaughtException, "Test failed from uncaught exception: " + uncaughtException ?? uncaughtException.ToString());
+            Assert.IsTrue(caughtExpectedException, "Failed to catch expected exception");
         }
     }
 }
