@@ -214,7 +214,7 @@ namespace NpcGenerator
             }
         }
 
-        private bool CanExecuteGenerateNpcs(object _)
+        private bool CanExecuteGenerateNpcs(in object _)
         {
             bool configurationFileExists = File.Exists(m_userSettings.ConfigurationPath);
             bool isNpcQuantityValid = m_userSettings.NpcQuantity > 0;
@@ -222,7 +222,7 @@ namespace NpcGenerator
             return canExecute;
         }
 
-        private void ExecuteGenerateNpcs(object _)
+        private void ExecuteGenerateNpcs(in object owningWindowObject)
         {
             if (m_forceNpcGenerationUncaughtException)
             {
@@ -244,7 +244,7 @@ namespace NpcGenerator
 
                 SendGenerateNpcsMessage();
                 
-                ValidateNpcs(replacements);
+                ValidateNpcs(replacements, owningWindowObject as Window);
             }
             catch(TooFewTraitsInCategoryException exception)
             {
@@ -280,7 +280,7 @@ namespace NpcGenerator
             NotifyPropertyChanged("ResultNpcs");
         }
 
-        private void ValidateNpcs(List<Replacement> replacements)
+        private void ValidateNpcs(List<Replacement> replacements, Window owner)
         {
             bool areValid = NpcFactory.AreNpcsValid(
                     m_npcGroup, m_traitSchema, replacements, out NpcSchemaViolationCollection violations);
@@ -323,8 +323,7 @@ namespace NpcGenerator
                         cancelAction: null
                     )
                     {
-                        //Need main window as the owner. Need it passed into this model
-                        //Owner = this
+                        Owner = owner
                     };
                     modal.Show();                  
                 }
