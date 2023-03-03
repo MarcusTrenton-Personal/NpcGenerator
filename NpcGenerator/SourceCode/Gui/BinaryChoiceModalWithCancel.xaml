@@ -41,14 +41,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/> .-->
         </ScrollViewer>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Button x:Name="option1" Margin="10" Click="ClickOption1" ClickMode="Press">
-                <TextBlock>
+                <TextBlock Margin="5">
                     <TextBlock.Text>
                         <Binding Path="Option1Text"/>
                     </TextBlock.Text>
                 </TextBlock>
             </Button>
             <Button x:Name="option2" Margin="10" Click="ClickOption2" ClickMode="Press">
-                <TextBlock>
+                <TextBlock Margin="5">
                     <TextBlock.Text>
                         <Binding Path="Option2Text"/>
                     </TextBlock.Text>

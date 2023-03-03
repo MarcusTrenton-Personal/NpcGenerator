@@ -13,54 +13,56 @@ license_window_title		KKKKKK	GNU License	GNU License	License GNU
 exception_maybe_file_deleted	Parameter is an error message with the name of a file that couldn’t be found.	LLLLLLL	{0} Was that file deleted?	{0} Was that file deleted?	{0} Est-ce que ce fichier a été effacé?
 source_code	View source code for this app	MMMMM	Source Code	Source Code	Code Source
 donate	Donate money to the maker of this app	NNNNNN	Donate	Donate	Faire un don
-empty_file	User error message pop-up.	OOOOOO	The file is empty: {0} 	The file is empty: {0} 	
-configuration_file_invalid	User error message pop-up for npc configuration file.	PPPPPP	Error parsing configuration file {0}.	Error parsing configuration file {0}.	Erreur lors de l'analyse du fichier de configuration {0}.
-category_weight_mismatch	User error message pop-up for npc csv configuration file.	QQQQQQ	The configuration file must have an equal number of trait and weight columns with no empty columns in between	The configuration file must have an equal number of trait and weight columns with no empty columns in between	
-empty_category_name	User error message pop-up for npc csv configuration file.	RRRRRR	Trait column is missing a category	Trait column is missing a category	
-trait_has_no_category	User error message pop-up for npc csv configuration file.	SSSSSS	Trait {0} doesn’t have a category name	Trait {0} doesn’t have a category name	
-trait_has_no_weight	User error message pop-up for npc csv configuration file.	TTTTTTT	Category {0}, trait {1} doesn’t have a weight	Category {0}, trait {1} doesn’t have a weight	
-trait_weight_is_not_whole_number	User error message pop-up for npc csv configuration file.	UUUUUU	Category {0}, trait {1} doesn’t have a whole number for the weight: {2}	Category {0}, trait {1} doesn’t have a whole number for the weight	
-mismatched_bonus_selection	User error message pop-up for npc json configuration file.	VVVVVV	Category {0}, trait {1} has a bonus selection in category {2} that does not exist. 	Category {0}, trait {1} has a bonus selection in category {2} that does not exist. 	
-mismatched_replacement_trait	User error message pop-up for npc json configuration file.	WWWWW	Trait {0} doesn’t exist for replacement in category {1}. 	Trait {0} doesn’t exist for replacement in category {1}. 	
-mismatched_replacement_category	User error message pop-up for npc json configuration file.	XXXXXX	Category {0} doesn’t exist in a replacement with trait {1}	Category {0} doesn’t exist in a replacement with trait {1}	
-duplicate_category_name	User error message pop-up for npc json configuration file.	YYYYYY	Categories must have unique names. Duplicate {0} categories found.	Categories must have unique names. Duplicate {0} categories found.	
-too_few_traits_in_category	User error message pop-up for npc json configuration file.	ZZZZZZ	Tried to choose {0} traits from category {1}, but only {2} remained.	Tried to choose {0} traits from category {1} but only {2} remained.	
-requirement_trait_not_found	User error message pop-up for npc json configuration file.	ABABAB	Category {0} requirement references category {1} trait {2} that does not exist.	Configuration’s requirement references category {0} trait {1} that does not exist.	
-unknown_operator	User error message pop-up for npc json configuration file.	ACACAC	Category {0} requirement has logical expression with unknown operator ‘{1}’	Category {0} requirement has logical expression with unknown operator ‘{1}’	
-self_requiring_category	User error message pop-up for npc json configuration file.	ADADAD	Category {0} has an impossible requirement of a trait from itself.	Category {0} has an impossible requirement of a trait from itself.	
-circular_requirements	User error message pop-up for npc json configuration file. Followed by a list.	AEAEAE	Categories have circular requirements that need to be broken:	Categories have circular requirements that need to be broken:	
-circular_requirement_link	User error message pop-up for npc json configuration file.	AFAFAF	Category {0} is required by category {1}.	Category {0} is required by category {1}	
-circular_requirement_link_bonus_selection	User error message pop-up for npc json configuration file.	AGAGAG	Category {0} can create a bonus selection in category {1}.	Category {0} can create a bonus selection in category {1}.	
-unknown_sort_criteria	User error message pop-up for npc json configuration file.	AHAHAH	Unknown sort criteria: {0}	Unknown sort criteria: {0}	
-npcs_generated_incorrectly	Application error when npcs violate their own configuration schema.	AIAIAIAI	Npcs violate their own schema.	Npcs violate their own schema.	
-npc_error_trait_incorrectly_hidden	Application error when npcs violate their own configuration schema.	AJAJAJ	Category {0} trait {1} should be not hidden but is hidden.	Category {0} trait {1} should be hidden but is not.	
-npc_error_trait_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AKAKAK	Category {0} trait {1} should be hidden but is not.	Category {0} trait {1} should be not hidden but is hidden.	
-npc_error_category_incorrectly_hidden	Application error when npcs violate their own configuration schema.	ALALAL	Category {0} should not be hidden but is hidden	Category {0} should not be hidden but is hidden	
-npc_error_category_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AMAMAM	Category {0} should be hidden but is not	Category {0} should be hidden but is not	
-npc_error_trait_in_locked_category	Application error when npcs violate their own configuration schema.	ANANAN	Category {0} should not have trait {1} since category requirements are not met.	Category {0} should not have trait {1} since category requirements are not met.	
-npc_error_too_few_traits_in_category	Application error when npcs violate their own configuration schema.	AOAOAO	Category {0} has too few traits.	Category {0} has too few traits.	
-npc_error_too_many_traits_in_category	Application error when npcs violate their own configuration schema.	APAPAP	Category {0} has too many traits.	Category {0} has too many traits.	
-npc_error_trait_not_found_in_schema	Application error when npcs violate their own configuration schema.	AQAQAQ	Trait {0} of category {1} is not found in the configuration file.	Trait {0} of category {1} is not found in the configuration file.	
-npc_error_category_not_found_in_schema	Application error when npcs violate their own configuration schema.	ARARAR	Category {0} is not found in the configuration file.	Category {0} is not found in the configuration file.	
-npc_error_unused_replacement	Application error when npcs violate their own configuration schema.	ASASAS	Category {0} trait {1} is not replaced when it should be.	Category {0} trait {1} is not replaced when it should be.	
-npc_error_trait_is_locked	Application error when npcs violate their own configuration schema.	ATATAT	Category {0} should not have trait {1} since trait requirements are not met.	Category {0} should not have trait {1} since trait requirements are not met.	
-npc_error_category_order_wrong	Application error when npcs violate their own configuration schema.	AUAUAU	Category {0} is in the wrong order.	Category {0} is in the wrong order.	
-unexpected_error	Unknown application exception is unrecoverable	AVAVAVA	Unexpected exception {0}.Application will exit.	Unexpected exception {0}.Application will exit.	
-unexpected_error_call_to_action	Unknown application exception is unrecoverable	AWAWAW	Unexpected exception {0}.Application will exit. Send an error email?	Unexpected exception {0}.Application will exit. Send an error email?	
-error	Application error	AXAXAX	Error	Error	
-on_generation_error_email_subject	Email subject line	AYAYAY	Error During Npc Generation	Error During Npc Generation	
-on_generation_error_email_body_start	Email body start. Several json text blobs follow.	AZAZAZ	The configuration, replacements, npc errors, and npc text are below.	The configuration, replacements, npc errors, and npc text are below.	
-trait_replacement_description	User operation to replace one trait name with another name.	BABABA	Replace trait {0} with {1} in category {2}.	Replace trait {0} with {1} in category {2}.	
-trait_replacement	User operation to replace one trait name with another name.	BCBCBC	Replacement	Replacement	
-npcs	Non player characters	BDBDBD	Npcs	Npcs	
-support_email_call_to_action	When an application error happens, ask if user wants to send a support email	BEBEBE	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
-support_email_attach_configuration	When an application error happens, asks user to attach configuration file.	BFBFBF	Please attach the NPC configuration file to this email.	Please attach the NPC configuration file to this email.	
-localized_text_not_found	When the GUI needs text that does not exist for the selected language	BGBGBG	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
-self_requiring_trait	User error message pop-up for npc json configuration file.	BHBHBH	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	
-too_few_traits_pass_requirements	User error message pop-up for npc json configuration file.	BIBIBI	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	
-conflicting_output_category_visibility	User error message pop-up for npc json configuration file. Followed by a list.	BJBJBJ	Categories with same output_name have conflicting value for ‘hidden’.	Categories with same output_name have conflicting value for ‘hidden’.	
-conflicting_output_category_visibility_element	User error message pop-up for npc json configuration file.	BKBKBK	Category {0}, output_name {1}, hidden {2}	Category {0}, output_name {1}, hidden {2}	
-duplicate_order_category	User error message pop-up for npc json configuration file.	BLBLBL	Duplicate {0} in category_order	Duplicate {0} in category_order	
-order_category_not_found	User error message pop-up for npc json configuration file.	BMBMBM	Category {0} not found in category_order	Category {0} not found in category_order	
-subschema_not_found	User error message pop-up for npc json configuration file.	BNBNBN	Could not find subschema file at {0}	Could not find subschema file at {0}	
-subschema_category_not_found	User error message pop-up for npc json configuration file.	BOBOBO	Category {0} not found in subschema at {1}	Category {0} not found in subschema at {1}	
+yes		OOOOOO	Yes	Yes	
+no		PPPPPP	No	No	
+empty_file	User error message pop-up.	QQQQQQ	The file is empty: {0} 	The file is empty: {0} 	
+configuration_file_invalid	User error message pop-up for npc configuration file.	RRRRRR	Error parsing configuration file {0}.	Error parsing configuration file {0}.	Erreur lors de l'analyse du fichier de configuration {0}.
+category_weight_mismatch	User error message pop-up for npc csv configuration file.	SSSSSS	The configuration file must have an equal number of trait and weight columns with no empty columns in between	The configuration file must have an equal number of trait and weight columns with no empty columns in between	
+empty_category_name	User error message pop-up for npc csv configuration file.	TTTTTTT	Trait column is missing a category	Trait column is missing a category	
+trait_has_no_category	User error message pop-up for npc csv configuration file.	UUUUUU	Trait {0} doesn’t have a category name	Trait {0} doesn’t have a category name	
+trait_has_no_weight	User error message pop-up for npc csv configuration file.	VVVVVV	Category {0}, trait {1} doesn’t have a weight	Category {0}, trait {1} doesn’t have a weight	
+trait_weight_is_not_whole_number	User error message pop-up for npc csv configuration file.	WWWWW	Category {0}, trait {1} doesn’t have a whole number for the weight: {2}	Category {0}, trait {1} doesn’t have a whole number for the weight	
+mismatched_bonus_selection	User error message pop-up for npc json configuration file.	XXXXXX	Category {0}, trait {1} has a bonus selection in category {2} that does not exist. 	Category {0}, trait {1} has a bonus selection in category {2} that does not exist. 	
+mismatched_replacement_trait	User error message pop-up for npc json configuration file.	YYYYYY	Trait {0} doesn’t exist for replacement in category {1}. 	Trait {0} doesn’t exist for replacement in category {1}. 	
+mismatched_replacement_category	User error message pop-up for npc json configuration file.	ZZZZZZ	Category {0} doesn’t exist in a replacement with trait {1}	Category {0} doesn’t exist in a replacement with trait {1}	
+duplicate_category_name	User error message pop-up for npc json configuration file.	ABABAB	Categories must have unique names. Duplicate {0} categories found.	Categories must have unique names. Duplicate {0} categories found.	
+too_few_traits_in_category	User error message pop-up for npc json configuration file.	ACACAC	Tried to choose {0} traits from category {1}, but only {2} remained.	Tried to choose {0} traits from category {1} but only {2} remained.	
+requirement_trait_not_found	User error message pop-up for npc json configuration file.	ADADAD	Category {0} requirement references category {1} trait {2} that does not exist.	Configuration’s requirement references category {0} trait {1} that does not exist.	
+unknown_operator	User error message pop-up for npc json configuration file.	AEAEAE	Category {0} requirement has logical expression with unknown operator ‘{1}’	Category {0} requirement has logical expression with unknown operator ‘{1}’	
+self_requiring_category	User error message pop-up for npc json configuration file.	AFAFAF	Category {0} has an impossible requirement of a trait from itself.	Category {0} has an impossible requirement of a trait from itself.	
+circular_requirements	User error message pop-up for npc json configuration file. Followed by a list.	AGAGAG	Categories have circular requirements that need to be broken:	Categories have circular requirements that need to be broken:	
+circular_requirement_link	User error message pop-up for npc json configuration file.	AHAHAH	Category {0} is required by category {1}.	Category {0} is required by category {1}	
+circular_requirement_link_bonus_selection	User error message pop-up for npc json configuration file.	AIAIAIAI	Category {0} can create a bonus selection in category {1}.	Category {0} can create a bonus selection in category {1}.	
+unknown_sort_criteria	User error message pop-up for npc json configuration file.	AJAJAJ	Unknown sort criteria: {0}	Unknown sort criteria: {0}	
+npcs_generated_incorrectly	Application error when npcs violate their own configuration schema.	AKAKAK	Npcs violate their own schema.	Npcs violate their own schema.	
+npc_error_trait_incorrectly_hidden	Application error when npcs violate their own configuration schema.	ALALAL	Category {0} trait {1} should be not hidden but is hidden.	Category {0} trait {1} should be hidden but is not.	
+npc_error_trait_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AMAMAM	Category {0} trait {1} should be hidden but is not.	Category {0} trait {1} should be not hidden but is hidden.	
+npc_error_category_incorrectly_hidden	Application error when npcs violate their own configuration schema.	ANANAN	Category {0} should not be hidden but is hidden	Category {0} should not be hidden but is hidden	
+npc_error_category_incorrectly_not_hidden	Application error when npcs violate their own configuration schema.	AOAOAO	Category {0} should be hidden but is not	Category {0} should be hidden but is not	
+npc_error_trait_in_locked_category	Application error when npcs violate their own configuration schema.	APAPAP	Category {0} should not have trait {1} since category requirements are not met.	Category {0} should not have trait {1} since category requirements are not met.	
+npc_error_too_few_traits_in_category	Application error when npcs violate their own configuration schema.	AQAQAQ	Category {0} has too few traits.	Category {0} has too few traits.	
+npc_error_too_many_traits_in_category	Application error when npcs violate their own configuration schema.	ARARAR	Category {0} has too many traits.	Category {0} has too many traits.	
+npc_error_trait_not_found_in_schema	Application error when npcs violate their own configuration schema.	ASASAS	Trait {0} of category {1} is not found in the configuration file.	Trait {0} of category {1} is not found in the configuration file.	
+npc_error_category_not_found_in_schema	Application error when npcs violate their own configuration schema.	ATATAT	Category {0} is not found in the configuration file.	Category {0} is not found in the configuration file.	
+npc_error_unused_replacement	Application error when npcs violate their own configuration schema.	AUAUAU	Category {0} trait {1} is not replaced when it should be.	Category {0} trait {1} is not replaced when it should be.	
+npc_error_trait_is_locked	Application error when npcs violate their own configuration schema.	AVAVAVA	Category {0} should not have trait {1} since trait requirements are not met.	Category {0} should not have trait {1} since trait requirements are not met.	
+npc_error_category_order_wrong	Application error when npcs violate their own configuration schema.	AWAWAW	Category {0} is in the wrong order.	Category {0} is in the wrong order.	
+unexpected_error	Unknown application exception is unrecoverable	AXAXAX	Unexpected exception {0}.Application will exit.	Unexpected exception {0}.Application will exit.	
+unexpected_error_call_to_action	Unknown application exception is unrecoverable	AYAYAY	Unexpected exception {0}.Application will exit. Send an error email?	Unexpected exception {0}.Application will exit. Send an error email?	
+error	Application error	AZAZAZ	Error	Error	
+on_generation_error_email_subject	Email subject line	BABABA	Error During Npc Generation	Error During Npc Generation	
+on_generation_error_email_body_start	Email body start. Several json text blobs follow.	BCBCBC	The configuration, replacements, npc errors, and npc text are below.	The configuration, replacements, npc errors, and npc text are below.	
+trait_replacement_description	User operation to replace one trait name with another name.	BDBDBD	Replace trait {0} with {1} in category {2}.	Replace trait {0} with {1} in category {2}.	
+trait_replacement	User operation to replace one trait name with another name.	BEBEBE	Replacement	Replacement	
+npcs	Non player characters	BFBFBF	Npcs	Npcs	
+support_email_call_to_action	When an application error happens, ask if user wants to send a support email	BGBGBG	Create support email for {0}? You can review before sending.	Create support email for {0}? You can review before sending.	
+support_email_attach_configuration	When an application error happens, asks user to attach configuration file.	BHBHBH	Please attach the NPC configuration file to this email.	Please attach the NPC configuration file to this email.	
+localized_text_not_found	When the GUI needs text that does not exist for the selected language	BIBIBI	Cannot find text {0} in language {1}. Check {2} for missing entries.	Cannot find text {0} in language {1}. Check {2} for missing entries.	
+self_requiring_trait	User error message pop-up for npc json configuration file.	BJBJBJ	Trait {0} of Category {1} requires itself, which is impossible.	Trait {0} of Category {1} requires itself, which is impossible.	
+too_few_traits_pass_requirements	User error message pop-up for npc json configuration file.	BKBKBK	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	Tried to choose {0} traits from category {1}, but only {2} passed trait requirements.	
+conflicting_output_category_visibility	User error message pop-up for npc json configuration file. Followed by a list.	BLBLBL	Categories with same output_name have conflicting value for ‘hidden’.	Categories with same output_name have conflicting value for ‘hidden’.	
+conflicting_output_category_visibility_element	User error message pop-up for npc json configuration file.	BMBMBM	Category {0}, output_name {1}, hidden {2}	Category {0}, output_name {1}, hidden {2}	
+duplicate_order_category	User error message pop-up for npc json configuration file.	BNBNBN	Duplicate {0} in category_order	Duplicate {0} in category_order	
+order_category_not_found	User error message pop-up for npc json configuration file.	BOBOBO	Category {0} not found in category_order	Category {0} not found in category_order	
+subschema_not_found	User error message pop-up for npc json configuration file.	BPBPBP	Could not find subschema file at {0}	Could not find subschema file at {0}	
+subschema_category_not_found	User error message pop-up for npc json configuration file.	BQBQBQ	Category {0} not found in subschema at {1}	Category {0} not found in subschema at {1}	

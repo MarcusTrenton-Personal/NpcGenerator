@@ -305,11 +305,28 @@ namespace NpcGenerator
                 if (m_showErrorMessages)
                 {
                     string errorTitle = m_localization.GetText("error", m_appSettings.SupportEmail);
-                    MessageBoxResult result = MessageBox.Show(message.ToString(), errorTitle, MessageBoxButton.YesNo);
-                    if (result == MessageBoxResult.Yes)
+                    string yes = m_localization.GetText("yes");
+                    string no = m_localization.GetText("no");
+
+                    void OnEmailConsent()
                     {
                         SendErrorEmail(errorTitle, errorBody, replacements);
-                    }                    
+                    }
+
+                    BinaryChoiceModalWithCancel modal = new BinaryChoiceModalWithCancel(
+                        title: errorTitle,
+                        body: message.ToString(),
+                        option1: yes,
+                        option2: no,
+                        option1Action: OnEmailConsent,
+                        option2Action: null,
+                        cancelAction: null
+                    )
+                    {
+                        //Need main window as the owner. Need it passed into this model
+                        //Owner = this
+                    };
+                    modal.Show();                  
                 }
             }
         }
