@@ -331,7 +331,6 @@ namespace NpcGenerator
             }
         }
 
-        //TODO: This should be in a helper class for reusability
         private void ShowGenericError(object exceptionObject)
         {
             string exceptionText = exceptionObject.ToString();
@@ -345,6 +344,8 @@ namespace NpcGenerator
                     m_serviceCentre.Localization.GetText("unexpected_error_call_to_action", exceptionText) :
                     string.Format("Unexpected exception {0}. Application will exit. Send an error email?", exceptionText);
 
+                //Use the built-in Windows messaging because at the point (maybe because of the uncaught exception) a WPF window
+                //cannot be created.
                 MessageBoxResult result = MessageBox.Show(errorMessage, errorTitle, MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
