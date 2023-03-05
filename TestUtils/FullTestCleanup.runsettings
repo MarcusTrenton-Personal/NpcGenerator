@@ -5,6 +5,12 @@
     <!-- Specify timeout in milliseconds. A valid value should be greater than 0 -->
     <TestSessionTimeout>10000</TestSessionTimeout>
     <TreatNoTestsAsError>true</TreatNoTestsAsError>
+    <MSTest>
+      <Parallelize>
+        <Workers>0</Workers>
+        <Scope>MethodLevel</Scope>
+      </Parallelize>
+    </MSTest>
   </RunConfiguration>
   <MSTest>
     <DeleteDeploymentDirectoryAfterTestRunIsComplete>True</DeleteDeploymentDirectoryAfterTestRunIsComplete>
