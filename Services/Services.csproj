@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Authors>Marcus Trenton</Authors>
     <Company />
     <Copyright>2022 Marcus Trenton</Copyright>
