@@ -20,7 +20,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MarcusTrentonPersonalSoftware.pub</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TransformOnBuild>true</TransformOnBuild>
@@ -50,10 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\License.txt"
-                 Link="License.txt"
+    <Content Include="..\License.md"
+                 Link="License.md"
                  Pack="true"
-                 PackagePath="License.txt"/>
+                 PackagePath="License.md"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="SourceAssets\1200px-2-Dice-Icon.svg.png" Pack="true" PackagePath=""/>
@@ -65,11 +65,11 @@
       <PackagePath></PackagePath>
       <Visible>True</Visible>
     </LegalDocs>
-    <None Include="..\README.md">
+        <None Include="SourceAssets\1200px-2-Dice-Icon.svg.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="SourceAssets\1200px-2-Dice-Icon.svg.ico">
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
