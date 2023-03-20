@@ -40,11 +40,11 @@ Add a variable "TextTemplating" for the file path of Microsoft.TextTemplating.ta
 
 ### Release Managers Only
 
-Release Managers will need to setup environmental variables for "SigningKey" file path and "SigningKeyPassword" for the password.
+Release Managers will need to setup environmental variables for "SigningKey" file path, "SigningKeyPassword", and "NugetGitToken".
 
-How do you actually get the signing key and password? Email MarcusTrenton@gmail.com with a good reason why you want to sign software in his name.
+How do you actually get the signing key, password, and token? Email MarcusTrenton@gmail.com with a good reason why you want to sign software in his name.
 
-Without the signing key and password, the publishing targets will not succeed.
+Without these variables, the publishing targets will not succeed.
 
 The public publishing profile will create a zipped file. Junction that folder to wherever you want the output to go (for example `mklink /J "D:\BackThisUp\ProgrammingProjects\Workspace\NpcGenerator\Zipped"  "H:\My Drive\Freeware\NpcGenerator"`. For the original author, the uncompressed files went to beta users in Dropbox while the zipped file was uploaded to Google Drive for public use.
 
