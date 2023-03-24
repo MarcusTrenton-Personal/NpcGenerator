@@ -31,9 +31,17 @@
     <Platforms>AnyCPU;x64</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeContentInPack>true</IncludeContentInPack>
+    
     <!-- TODO: Automate this so it matches the AssemblyVersion -->
-    <VersionPrefix>1.22.0</VersionPrefix>
-  </PropertyGroup>
+    <CurrentYear>$([System.DateTime]::UtcNow.Year)</CurrentYear>
+    <YearsSinceAnchor>$([MSBuild]::Subtract($(CurrentYear), 2020))</YearsSinceAnchor>
+    <YearAsBuildDateNumber>$([MSBuild]::Multiply($(YearsSinceAnchor), 1000))</YearAsBuildDateNumber>
+    <CurrentDayOfYear>$([System.DateTime]::UtcNow.DayOfYear)</CurrentDayOfYear>
+    <!-- The goal is to have an ever increasing build number, not do accurate date math-->
+    <BuildDateNumber>$([MSBuild]::Add($(YearAsBuildDateNumber), $(CurrentDayOfYear)))</BuildDateNumber>
+    <MinutesSinceMidnight>$([System.Convert]::ToUInt32($([System.DateTime]::UtcNow.TimeOfDay.TotalMinutes)))</MinutesSinceMidnight>
+    <VersionPrefix>1.22.$(BuildDateNumber).$(MinutesSinceMidnight)</VersionPrefix>
+</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Services\Services.csproj" />
