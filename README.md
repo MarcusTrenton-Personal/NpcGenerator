@@ -40,7 +40,7 @@ Add a variable "TextTemplating" for the file path of Microsoft.TextTemplating.ta
 
 ### Release Managers Only
 
-Release Managers will need to setup environmental variables for "SigningKey" file path, "SigningKeyPassword", and "NugetGitToken".
+Release Managers will need to setup environmental variables for "SigningKey" file path, "SigningKeyPassword", and "NugetGitToken". The NugetGitToken is only valid for a fixed duration. Afterwards it will need to be regenerated.
 
 How do you actually get the signing key, password, and token? Email MarcusTrenton@gmail.com with a good reason why you want to sign software in his name.
 
