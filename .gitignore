@@ -5,6 +5,5 @@ NpcGenerator.csproj.user
 *.user
 ExeCache/
 Zipped/
-NpcGenerator/SourceCode/AssemblyInfo.cs
 *.csv#
 *.~lock.*

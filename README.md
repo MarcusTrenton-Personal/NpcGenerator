@@ -68,17 +68,10 @@ Successful tests are automatically required before every publish. The publish ac
 Versioning has the format Major.Minor.Day.Minute. 
 - Major: Increment when backwards compatiblity is broken.
 - Minor: Increment for feature additions and bug fixes. Recent to 0 when the Major number increments
-- Day: Part of the build timestamp. It measures days since 2020/01/01. Automatically incremented per build.
-- Minute: Part of the build timestamp. It measures minutes since midnight UTC time. Automatically incremented per build.
-
-All of these are set in NpcGenerator/AssemblyInfo.tt. Set the Major and Minor versions in that file, not in the .csproj.
+- Day: Part of the build timestamp of form XXYYY, where XX is years since 2020 and YYY is the day of the year. For example 2023/01/05 would be 3005. Automatically set per build.
+- Minute: Part of the build timestamp. It measures minutes since midnight UTC time. Automatically set per build.
 
 To publish, run PublishAndTag.bat. That script will automatically publish to Dropbox and tag the last commit.
-
-## IDE Settings
-
-Build before Run should be turned off due to text templating used for AssemblyInfo.cs. Otherwise debugging will break because the AssemblyInfo changed just before running. You need to build explicitely and then run explicitely.
-In Visual Studio 2022 go to Tools -> Options -> Projects and Solutions -> Build And Run -> On Run, when projects are out of date: -> Never Build.
 
 ## File Encoding
 

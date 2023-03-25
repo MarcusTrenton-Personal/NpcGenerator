@@ -22,17 +22,12 @@
     <DelaySign>true</DelaySign>
     <PackageLicenseFile>License.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TransformOnBuild>true</TransformOnBuild>
-    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
-    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
     <StartupObject></StartupObject>
     <PackageProjectUrl>https://drive.google.com/file/d/1-5A_pPaXe5nKoEbQcJ2LQdzfRP2Pk9tH/view?usp=sharing</PackageProjectUrl>
     <Platforms>AnyCPU;x64</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeContentInPack>true</IncludeContentInPack>
     
-    <!-- TODO: Automate this so it matches the AssemblyVersion -->
     <CurrentYear>$([System.DateTime]::UtcNow.Year)</CurrentYear>
     <YearsSinceAnchor>$([MSBuild]::Subtract($(CurrentYear), 2020))</YearsSinceAnchor>
     <YearAsBuildDateNumber>$([MSBuild]::Multiply($(YearsSinceAnchor), 1000))</YearAsBuildDateNumber>
@@ -40,8 +35,10 @@
     <!-- The goal is to have an ever increasing build number, not do accurate date math-->
     <BuildDateNumber>$([MSBuild]::Add($(YearAsBuildDateNumber), $(CurrentDayOfYear)))</BuildDateNumber>
     <MinutesSinceMidnight>$([System.Convert]::ToUInt32($([System.DateTime]::UtcNow.TimeOfDay.TotalMinutes)))</MinutesSinceMidnight>
+    
     <VersionPrefix>1.22.$(BuildDateNumber).$(MinutesSinceMidnight)</VersionPrefix>
-</PropertyGroup>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Services\Services.csproj" />
@@ -60,13 +57,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\License.md"
-                 Link="License.md"
-                 Pack="true"
-                 PackagePath="License.md"/>
+    <Content Include="..\License.md" Link="License.md" Pack="true" PackagePath="License.md" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SourceAssets\1200px-2-Dice-Icon.svg.png" Pack="true" PackagePath=""/>
+    <None Include="SourceAssets\1200px-2-Dice-Icon.svg.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
@@ -91,21 +85,6 @@
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="SourceCode\AssemblyInfo.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="SourceCode\AssemblyInfo.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AssemblyInfo.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <!-- ######## Build Events ######## -->
@@ -167,8 +146,7 @@
     <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ProjectDir)../Zipped/NpcGenerator.zip" Overwrite="true" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
   
     <Message Text="Publishing to Github NuGet" Importance="high" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" />
-    <Exec Command="dotnet nuget push &quot;$(ProjectDir)bin\Release\NpcGenerator.$(VersionPrefix).nupkg&quot; --api-key %NugetGitToken% --source &quot;github&quot;" ConsoleToMsBuild="true" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'"/>
-  
+    <Exec Command="dotnet nuget push &quot;$(ProjectDir)bin\Release\NpcGenerator.$(VersionPrefix).nupkg&quot; --api-key %NugetGitToken% --source &quot;github&quot;" ConsoleToMsBuild="true" Condition="'$(PublishDir)'=='$(Dropbox)\Urthsark\NPC Generator\'" /> 
   </Target>
 
 </Project>
