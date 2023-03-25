@@ -29,6 +29,7 @@
     <IncludeContentInPack>true</IncludeContentInPack>
     
     <CurrentYear>$([System.DateTime]::UtcNow.Year)</CurrentYear>
+    <!-- If somehow this software is in use in 2085 and hit the uint16 limit, just increase the anchor year to beyond 2020.-->
     <YearsSinceAnchor>$([MSBuild]::Subtract($(CurrentYear), 2020))</YearsSinceAnchor>
     <YearAsBuildDateNumber>$([MSBuild]::Multiply($(YearsSinceAnchor), 1000))</YearAsBuildDateNumber>
     <CurrentDayOfYear>$([System.DateTime]::UtcNow.DayOfYear)</CurrentDayOfYear>
