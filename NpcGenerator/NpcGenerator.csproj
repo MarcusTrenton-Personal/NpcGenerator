@@ -24,7 +24,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <StartupObject></StartupObject>
     <PackageProjectUrl>https://drive.google.com/file/d/1-5A_pPaXe5nKoEbQcJ2LQdzfRP2Pk9tH/view?usp=sharing</PackageProjectUrl>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeContentInPack>true</IncludeContentInPack>
     
@@ -70,10 +70,6 @@
       <PackagePath></PackagePath>
       <Visible>True</Visible>
     </LegalDocs>
-        <None Include="SourceAssets\1200px-2-Dice-Icon.svg.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
