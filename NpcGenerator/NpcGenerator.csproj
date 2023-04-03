@@ -37,7 +37,7 @@
     <BuildDateNumber>$([MSBuild]::Add($(YearAsBuildDateNumber), $(CurrentDayOfYear)))</BuildDateNumber>
     <MinutesSinceMidnight>$([System.Convert]::ToUInt32($([System.DateTime]::UtcNow.TimeOfDay.TotalMinutes)))</MinutesSinceMidnight>
     
-    <VersionPrefix>1.22.$(BuildDateNumber).$(MinutesSinceMidnight)</VersionPrefix>
+    <VersionPrefix>1.23.$(BuildDateNumber).$(MinutesSinceMidnight)</VersionPrefix>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
   </PropertyGroup>
 
